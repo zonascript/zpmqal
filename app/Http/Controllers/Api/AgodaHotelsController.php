@@ -37,6 +37,33 @@ class AgodaHotelsController extends Controller
 	}
 
 
+	public function searchHotelByName($cityId, $name)
+	{
+		$hotels = [];
+		
+		if ($cityId != '') {
+			$hotels = AgodaHotelModel::call()->searchHotelByName($cityId, $name);
+		}
+		
+		return $hotels;
+	}
+
+
+	public function searchHotelsByName($cityId, $name)
+	{
+		$hotels = [];
+		
+		if ($cityId != '') {
+			$hotelsData = AgodaHotelModel::call()->searchHotelsByName($cityId, $name);
+			foreach ($hotelsData as $hotelData) {
+				$hotels[] = $hotelData->hotel_name;
+			}
+		}
+		
+		return $hotels;
+	}
+
+
 	public function storeHotelDetail()
 	{
 		$agodaHotel = AgodaHotelModel::select()

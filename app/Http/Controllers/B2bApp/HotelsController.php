@@ -434,4 +434,33 @@ class HotelsController extends Controller
 	}
 
 
+	public function searchHotels($id, Request $request)
+	{
+		$packageHotel = PackageHotelModel::find($id);
+		$cityId = $packageHotel->route->destination_agoda->city_id;
+		$hotelNames = AgodaHotelsController::call()
+									->searchHotelsByName($cityId, $request->term);
+
+		if ($request->format == 'json') {
+			$hotelNames = json_encode($hotelNames);
+		}
+
+		return $hotelNames;
+	}
+
+
+	public function findHotel($id, Request $request)
+	{
+		$packageHotel = PackageHotelModel::find($id);
+		$cityId = $packageHotel->route->destination_agoda->city_id;
+		$hotel = AgodaHotelsController::call()
+						->searchHotelByName($cityId, $request->name);
+		
+		$hotel = json_encode(["hotels" => $hotel]);
+
+		return $hotel;
+	}
+
+
+
 }

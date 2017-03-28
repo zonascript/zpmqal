@@ -191,6 +191,11 @@ Route::group(['middleware' => ['auth']], function(){
 			| packageDbId = packages table index or id
 			|	packageHotelId = package_hotels table or id
 			*/
+			
+				Route::get('dashboard/hotels/search/{id}', 'B2bApp\HotelsController@searchHotels');
+				Route::get('dashboard/hotel/find/a/{id}', 'B2bApp\HotelsController@findHotel');
+				Route::post('dashboard/hotel/find/a/{id}', 'B2bApp\HotelsController@findHotel');
+
 				Route::get('/dashboard/package/builder/hotels/{packageDbId?}', 'B2bApp\HotelsController@getHotelsByPackageId');
 
 				Route::get('/dashboard/package/builder/hotel/{packageHotelId}', 'B2bApp\HotelsController@getHotelView');

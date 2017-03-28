@@ -22,27 +22,31 @@
 	$(document).on('click', '#cancel_req', function() {
 		var text = $('#text_req').val();
 		var showText = $('#show_req').text();
-		if (text.length < 20) {
-			myAlert('Please enter requirements at least 20 words');
-		}else if (showText.length < 20) {
-			myAlert('I think you forgot to save because you have written something but not saved it yet.');
-		}
-		else{
-			$('#container_req').addClass('hide');
-		}
+		// if (text.length < 10) {
+		// 	myAlert('Please enter requirements at least 1 words');
+		// }else if (showText.length < 20) {
+		// 	myAlert('I think you forgot to save because you have written something but not saved it yet.');
+		// }
+		// else{
+		// 	$('#container_req').addClass('hide');
+		// }
+		
+		$('#container_req').addClass('hide');
+
 	});
 
 	$(document).on('click', '#save_req', function() {
 		var text = $('#text_req').val();
-		if (text.length < 20) {
+		/*if (text.length < 20) {
 			myAlert('Please enter requirements at least 20 words');
-		}else{
+		}
+		else{*/
 			$('#show_req').text(text);
 			$('#container_req').addClass('hide');
 			var date = $('#startDate').val();
 			if (date.length < 5) {
 				$('#startDate').click();
-			}
+		/*}*/
 		}
 	});
 

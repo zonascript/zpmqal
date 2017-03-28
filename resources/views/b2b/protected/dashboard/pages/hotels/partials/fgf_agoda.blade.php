@@ -23,13 +23,13 @@
 						$('#'+elem_id).append(html);
 					});
 
-					filter.initFilter(rid);
+					/*filter.initFilter(rid);
 					index = index+1;
-					postFgfAgoda(did, rid, index)
+					postFgfAgoda(did, rid, index)*/
 				}
-				// else{
-				// 	return postFgfAgoda(did, rid, index);
-				// }
+				/*else{
+					return postFgfAgoda(did, rid, index);
+				}*/
 			},
 			error: function(xhr, textStatus) {
 				if(xhr.status == 401){
@@ -43,11 +43,45 @@
 	}
 </script>
 
+<script>
+		function postSearchFgfA(name, did, rid) {
+		var elem_id = "hotel_"+rid;
+		var ids = {
+				'did' : did,
+				'rid' : rid,
+				'name' : name,
+				'elem_id' : elem_id,
+				'_token' : csrf_token
+			};
+
+		$.ajax({
+			type:"post",
+			url: "{{ url('dashboard/hotel/find/a') }}/"+did,
+			data: ids,
+			success: function(responce, textStatus, xhr) {
+				var responce = JSON.parse(responce);
+				var html = '';
+				var hotels = responce.hotels;
+				$('#loging_log').hide();
+
+				if (hotels.length) {
+					$.each(hotels, function(i,v){
+						html = makeFgfAgodaHtml(i, v, ids);
+						html = html.replace('glowing-border', 'glowing-border border-green-2px');
+						$('#'+elem_id).find('.border-green-2px').removeClass('border-green-2px');
+						$('#'+elem_id).prepend(html);
+					});
+				}
+			}
+		});
+	}
+</script>
 
 <script>
 	function makeFgfAgodaHtml(i, obj, ids) {
 		var hotel_id = obj.hotel_id;
 		var uniqueKey = obj.hotel_id+'_fgfa';
+		$('#li_'+obj.hotel_id+'_fgfa').remove();
 		var hotelName = obj.hotel_name;
 		var hotelAddress = obj.address; 
 		hotelAddress = hotelAddress.replace(/, , /g, ', ');

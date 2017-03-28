@@ -24,7 +24,10 @@ class EnquiryController extends Controller
 	public function index()
 	{
 		$clients = ClientController::call()->all();
-		return view('b2b.protected.dashboard.pages.enquiry.index', ['clients' => $clients]);
+		return view(
+							'b2b.protected.dashboard.pages.enquiry.index', 
+							['clients' => $clients]
+						);
 	}
 
 	/**
@@ -66,7 +69,7 @@ class EnquiryController extends Controller
 		$client->fullname = $request->fullname;
 		$client->mobile = $request->mobile;
 		$client->email = $request->email;
-		$client->note = $request->note;
+		// $client->note = $request->note;
 		$client->status = 'active';
 		$client->save();
 

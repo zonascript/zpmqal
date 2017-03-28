@@ -554,8 +554,10 @@
 .border-top-gray{ border-top: 1px solid #ccc; }
 .border-blue-1px{border: 1px solid #337ab7 ! important;}
 .border-blue-2px{border: 2px solid #337ab7 ! important;}
+.border-green-2px{border: 2px solid #388e22 ! important;}
 .border-green-3px{border: 3px solid #34d841 ! important;}
 .border-bottom-gray{ border-bottom: 1px solid #ccc; }
+
 
 .padding-5{ padding: 5px; }
 

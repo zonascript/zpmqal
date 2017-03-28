@@ -37,6 +37,51 @@ class AgodaHotelModel extends Model
 	}
 
 
+	public function searchHotelByName($cityId, $name, $index = 0, $take = 1, $useCol = true)
+	{
+		$columns = [
+				'id', 'hotel_id', 'hotel_name',
+				DB::raw('CONCAT(addressline1, \', \', addressline2, \', \', zipcode,\', \', city, \', \', country) as address'),
+				'star_rating', 'longitude', 'latitude', 'checkin', 'checkout', 
+				'photo1', 'photo2', 'photo3', 'photo4', 'photo5', 'overview'
+			];
+
+		/*if not true*/
+		if (!$useCol) {
+			$columns = '*';
+		}
+
+		$result = $this->select($columns)
+										->skip($index*$take)->take($take)
+										 ->where([
+										 			['city_id', '=', $cityId], 
+										 			['hotel_name', '=', $name]
+										 		])
+										 	->get();
+		return ($result);
+	}
+
+
+	public function searchHotelsByName($cityId, $name, $index = 0, $take = 10, $useCol = true)
+	{
+		$columns = ['hotel_name'];
+
+		/*if not true*/
+		if (!$useCol) {
+			$columns = '*';
+		}
+
+		$result = $this->select($columns)
+										->skip($index*$take)->take($take)
+										 ->where([
+										 			['city_id', '=', $cityId], 
+										 			['hotel_name', 'like', '%'.$name.'%']
+										 		])
+										 	->get();
+		return ($result);
+	}
+
+
 	public function hotelsByCity($city, $useCol = true)
 	{
 		$columns = [

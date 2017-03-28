@@ -117,7 +117,7 @@
 						html = makeSsHtml(i, v, responce.amenities, ids);
 						$('#'+elem_id).append(html);
 					});
-					filter.initFilter(rid);
+					/*filter.initFilter(rid);*/
 				}
 				else{
 					return sshtl(did, rid);

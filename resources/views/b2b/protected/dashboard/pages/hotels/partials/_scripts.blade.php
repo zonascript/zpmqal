@@ -22,70 +22,31 @@
 
 {{-- autocomplete --}}
 <script>
-	$(function() {
-		$(document).on('click', '.input-airport', function(){
-			console.log($(this).attr('placeholder'));
-			$(this).autocomplete({
-				source: '{{ url("dashboard/tools/airport") }}'
-			});
-		});
+	$(document).on('keypress paste{{--keyup  keydown --}}', '#filter_search', function(e) {
+		var name = $(this).val();
+		if (name.length > 2) {
+			var did = $('#tab_menu').find('.active').attr('data-did');
+			url = '{{ url("dashboard/hotels/search/") }}/'+did+'?format=json&_token='+csrf_token;
+			$(this).autocomplete({ source: url });
+		}
 	});
 </script>
-{{-- /autocomplete --}}
 
-{{-- autocomplete --}}
 <script>
-	$(function() {
-		$(document).on('click', '.btn-airport', function(){
+	$(document).on('autocompleteselect', '#filter_search', function (e, ui) {
+		$('#loging_log').show();
 
-			var origin = $('input.origin').val();
-			var destination = $('input.destination').val();
-			var arrival = $('input.arrival').val();
-			var adult = $('input.adult').val();
-			var child = $('input.child').val();
-			var infant = $('input.infant').val();
-
-			var data = {
-					"_token" : "{{ Session::token() }}",
-					"origin" : origin,
-					"destination" : destination,
-					"arrival" : arrival,
-					"adult" : adult,
-					"child" : child,
-					"infant" : infant,
-				}
-
-			console.log(JSON.stringify(data));
-
-			$.ajax({
-				type:"post",
-				url: "",
-				data: data,
-				success: function(responce, textStatus, xhr) {
-					console.log(responce);
-					var responce = JSON.parse(responce);
-         	document.location.href = responce.nextUrl;
-        },
-
-        error: function(xhr, textStatus) {
-					// console.log(textStatus);
-					// console.log(xhr.status);
-					if(xhr.status == 401){
-						window.open("{{ url('login') }}", '_blank');
-					}
-        }
-
-			});
-
-		});
+		var did = $('#tab_menu').find('.active').attr('data-did');
+		var rid = $('#tab_menu').find('.active').attr('data-rid');
+		postSearchFgfA($(this).val(), did, rid);
+    // alert();
 	});
 </script>
 {{-- /autocomplete --}}
 
 {{-- filter List.js--}}
 
-
-<script>
+{{-- <script>
 	var filter = {
 		@foreach ($package->hotelRoutes as $hotelRouteKey => $hotelRoute)
 			'hotel_{{ $hotelRoute->id }}' : '',
@@ -102,7 +63,7 @@
 		}
 	}
 	
-</script>
+</script> --}}
 
 <script>
 
@@ -135,6 +96,7 @@
 	var idObject = {!! json_encode($idObject) !!};
 </script>
 
+{{-- 
 <script>
 	$(document).on('keypress keyup keydown', "#filter_search", function(){
 		var targetList = $('#tab_menu').find('.active').attr('data-list');
@@ -145,9 +107,19 @@
 				filter.hotel_{{ $hotelRoute->id }}.search(search);
 			}
 		@endforeach
+
+		/*if($('.list').children().length === 0) { // Checking if list is empty
+
+			$('.not-found').css('display', 'block'); // Display the Not Found message
+
+		} else {
+
+			$('.not-found').css('display', 'none'); // Hide the Not Found message
+
+		}*/
 	});
 
-</script>
+</script>--}}
 {{-- /filter List.js --}}
 
 
