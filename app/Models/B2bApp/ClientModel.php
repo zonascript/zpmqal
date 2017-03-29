@@ -44,5 +44,17 @@ class ClientModel extends Model
 	}
 
 
+	public function findByMobileEmail($mobile, $email)
+	{
+		$client = $this->select()
+							->where([["status", "<>", "deleted"]])
+								->where(function ($query) use ($mobile, $email){
+										$query->where(["mobile" => $mobile])
+													->orWhere(["email" => $email]);
+									})
+									->first();
+		return $client;
+	}
+
 
 }

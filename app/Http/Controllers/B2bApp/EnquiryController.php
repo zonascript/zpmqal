@@ -40,8 +40,10 @@ class EnquiryController extends Controller
 		$auth = Auth::user();
 
 		$leadVendors = $auth->admin->leadVendors;
+		$request = Session::has('request') ? Session::get('request') : [];
 		$blade = [
 				"leadVendors" => $leadVendors,
+				"request" => $request
 			];
 
 		return view('b2b.protected.dashboard.pages.enquiry.create', $blade);
@@ -55,6 +57,8 @@ class EnquiryController extends Controller
 	 */
 	public function store(Request $request)
 	{
+		Session::flash('request', (object) $request->input());
+
 		$this->validate($request, [
 			'vendor' => 'required',
 			'fullname' => 'required|max:255',
@@ -62,18 +66,24 @@ class EnquiryController extends Controller
 			'email' => 'required|email|max:255',
 		]);
 
-		$auth = Auth::user();
-		$client = ClientController::call()->model();
-		$client->user_id = $auth->id;
-		$client->lead_vendor_id = $request->vendor;
-		$client->fullname = $request->fullname;
-		$client->mobile = $request->mobile;
-		$client->email = $request->email;
-		// $client->note = $request->note;
-		$client->status = 'active';
-		$client->save();
 
-		return redirect(urlPackageAll($client->id));
+		$client = ClientController::call()
+							->model()
+								->findByMobileEmail($request->mobile, $request->mobile);
+		if (is_null($client)) {
+			$auth = Auth::user();
+			$client = ClientController::call()->model();
+			$client->user_id = $auth->id;
+			$client->lead_vendor_id = $request->vendor;
+			$client->fullname = $request->fullname;
+			$client->mobile = $request->mobile;
+			$client->email = $request->email;
+			// $client->note = $request->note;
+			$client->status = 'active';
+			$client->save();
+		}
+
+		return redirect(urlRouteCreate($client->id));
 	}
 
 	/**

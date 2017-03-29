@@ -935,6 +935,12 @@ function urlPackageEvent($routeDbId){
 	return url('/dashboard/package/event/'.$routeDbId);
 }
 
+
+function urlRouteCreate($clientId)
+{
+	return url('/dashboard/package/route/'.$clientId);
+}
+
 /*=================================Package Url=================================*/
 
 function urlPackageAll($id = false, $packageDbId = false){
