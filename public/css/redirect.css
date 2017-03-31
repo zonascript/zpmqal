@@ -3,6 +3,7 @@
 	left: 42.5%;
 	position: fixed;
 	font-size: 210px !important;
+  z-index: 100;
 }
 
 #fgfpreloader {

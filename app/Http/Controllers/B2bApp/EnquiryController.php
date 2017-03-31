@@ -82,6 +82,21 @@ class EnquiryController extends Controller
 			$client->status = 'active';
 			$client->save();
 		}
+		else{
+			$client->fullname = $request->fullname." (".$client->fullname.")";
+
+			if ($client->mobile == $request->mobile) {
+				$client->note = 'Other email: '.$client->email.'.';
+			}
+			elseif ($client->email == $request->email){
+				$client->note = 'Other mob: '.$client->mobile.'.';
+			}
+			
+			$client->mobile = $request->mobile;
+			$client->email = $request->email;
+			$client->status = 'active';
+			$client->save();
+		}
 
 		return redirect(urlRouteCreate($client->id));
 	}

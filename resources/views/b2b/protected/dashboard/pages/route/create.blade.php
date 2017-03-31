@@ -27,11 +27,15 @@
 							<div class="x_title" >
 								<div class="row">
 									<div class="col-md-8 col-sm-8 col-xs-12">
-										<h3><i class="fa fa-road"></i> Define Your Route</h3>
+										<h3>
+											<i class="fa fa-road"></i>
+											Define Your Route
+											<small>(Package Id : {{ $package->uid }})</small>
+										</h3>
 									</div>
 
 									<div class="col-md-4 col-sm-4 col-xs-12 m-top-5">
-										<input type="text" class="form-control has-feedback-left datepicker p-left-10 arrival border-blue-2px" placeholder="Start Date" id="startDate" aria-describedby="inputSuccess2Status3">
+										<input type="text" class="form-control has-feedback-left datepicker p-left-10 arrival border-blue-2px" placeholder="Start Date" id="startDate" aria-describedby="inputSuccess2Status3" data-pid="{{$package->id}}">
 										<i class="fa fa-calendar form-control-feedback right" aria-hidden="true"></i>
 									</div>
 									<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback m-top-10-only">
@@ -48,11 +52,11 @@
 							</div>
 							<div class="x_content nopadding">
 								<div class="form-group">
-									<div id="" class="destinationClass">
-										<div id="destination1" data-destination="1" class="col-md-12 col-sm-12 col-xs-12 form-group-self destinationList">
+									<div class="destinationClass">
+										<div id="destination1" class="col-md-12 col-sm-12 col-xs-12 form-group-self destinationList no-rid" data-destination="1" data-rid="">
 											<div class="col-md-2 col-sm-2 col-xs-12">
-												<select class="form-control nopadding p-left-10 mode" required="" data-parsley-type="value">
-													<option value="" selected>Select Mode</option>
+												<select class="form-control nopadding p-left-10 mode inctv" required="" data-parsley-type="value">
+													<option value="" selected="">Select Mode</option>
 													<option value="flight">Flight</option>
 													<option value="train">Train</option>
 													<option value="hotel">Land</option>
@@ -60,14 +64,18 @@
 													<option value="cruise">Cruise</option>
 												</select>
 											</div>
-											<div class="col-md-10 col-sm-10 col-xs-12">
-												<div class="row location-input-div">
-												</div>
+											<div class="col-md-9 col-sm-9 col-xs-12">
+												<div class="row location-input-div"></div>
+											</div>
+											<div class="col-md-1 col-sm-1 col-xs-12 text-center">
+												<a class="rmv-destlist cursor-pointer">
+													<i class="fa fa-times-circle font-size-30 m-top-2"></i>
+												</a>
 											</div>
 										</div>
 									</div>
 									<div class="col-md-12 col-sm-12 col-xs-12 m-top-10">
-											<a id="btn-addDestination" class="btn-link cursor-pointer">Add Route</a>
+											<a id="btn-addDestination" class="btn-link cursor-pointer" data-count="1">Add Route</a>
 											<span id="pipeSaprDestination" hidden> | </span>
 											<a id="btn-removeDestination" class="btn-link cursor-pointer" hidden>Remove Route</a>
 									</div>

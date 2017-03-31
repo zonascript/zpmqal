@@ -95,35 +95,42 @@ class RouteModel extends Model
 
 	public function getStartDatetimeAttribute()
 	{
-		return Carbon::parse($this->attributes['start_date']);
+		$startDateTime = $this->attributes['start_date'].' '.
+										 $this->attributes['start_time'];
+
+		return Carbon::parse($startDateTime);
 	}
 
 
 	public function getEndDatetimeAttribute()
 	{
 		$startDate = $this->start_datetime;
-		$endDate = Carbon::parse($this->attributes['end_date']);
+		$endDateTime = $this->attributes['end_date'].' '.
+									 $this->attributes['end_time'];
+
+		$endDate = Carbon::parse($endDateTime);
 		$startDate->addDays($this->attributes['nights']);
 		$startDate->hour = $endDate->hour;
 		$startDate->minute = $endDate->minute;
 		$startDate->second = $endDate->second;
+		
 		return $startDate;
 	}
 
 
-	public function getStartDateAttribute()
-	{
-		return $this->start_datetime;
-	}
+	// public function getStartDateAttribute()
+	// {
+	// 	return $this->start_datetime;
+	// }
 
-	public function getEndDateAttribute()
-	{
-		$endDate = $this->attributes['end_date'];
-		if (in_array($this->attributes['mode'], ['hotel', 'land', 'road'])) {
-			$endDate = $this->end_datetime;
-		}
-		return $endDate;
-	}
+	// public function getEndDateAttribute()
+	// {
+	// 	$endDate = $this->attributes['end_date'];
+	// 	if (in_array($this->attributes['mode'], ['hotel', 'land', 'road'])) {
+	// 		$endDate = $this->end_datetime;
+	// 	}
+	// 	return $endDate;
+	// }
 
 
 	public function package()
@@ -203,13 +210,6 @@ class RouteModel extends Model
 		return $result;
 	}
 
-
-	public function getDateTime($dateTime){
-		$dt = new \DateTime($dateTime);
-		$date = $dt->format('Y-m-d');
-		$time = $dt->format('H:i');
-		return (object)["date" => $date, "time" => $time];
-	}
 
 
 }

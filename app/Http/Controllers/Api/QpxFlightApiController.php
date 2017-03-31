@@ -11,7 +11,7 @@ use App\Models\Api\QpxFlightModel;
 
 class QpxFlightApiController extends Controller
 {
-	public $solutions = 250;
+	public $solutions = 500;
 	protected $key = '';
 	protected $qpxUrl = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=";
 
@@ -189,10 +189,68 @@ class QpxFlightApiController extends Controller
 	}
 
 
+
+
+	public function httpPost($url, $array)
+	{
+		$postData = json_encode($array);
+
+		$curl = curl_init();
+
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => "https://content.googleapis.com/qpxExpress/v1/trips/search?key=".$this->key."&alt=json",
+		  CURLOPT_RETURNTRANSFER => true,
+		  CURLOPT_ENCODING => "",
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 30,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => "POST",
+		  CURLOPT_POSTFIELDS => $postData,
+		  CURLOPT_HTTPHEADER => array(
+		    "cache-control: no-cache",
+		    "content-type: application/json",
+		  ),
+		));
+
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+
+		curl_close($curl);
+		return $response;
+	}
+
+
+
+	public function __construct()
+	{
+		$this->key = env('QPX_KEY');
+		// $this->setQpxKey();
+	}
+
+
+	public function setQpxKey()
+	{
+		$qpxKeys = [
+				env('QPX_KEY'), 
+				env('QPX_KEY1'),
+				env('QPX_KEY2'),
+				env('QPX_KEY3'),
+				env('QPX_KEY4')
+			];
+		foreach ($qpxKeys as $qpxKeys) {
+			$todayCalled = QpxLimitModel::call()->todayCalled($qpxKeys);
+			if ($todayCalled->count() < 50) {
+				$this->key = $qpxKeys;
+				break;
+			}
+		}
+	}
+
+
 	/*
 	| This function is for posting http posting request
 	*/
-  public function httpPost($url, $array){
+  public function httpPostOld($url, $array){
 		
 		$postData = json_encode($array);
 
@@ -212,28 +270,5 @@ class QpxFlightApiController extends Controller
 
 		return $results;
 
-	}
-
-	public function __construct()
-	{
-		$this->setQpxKey();
-	}
-
-	public function setQpxKey()
-	{
-		$qpxKeys = [
-				env('QPX_KEY'), 
-				env('QPX_KEY1'),
-				env('QPX_KEY2'),
-				env('QPX_KEY3'),
-				env('QPX_KEY4')
-			];
-		foreach ($qpxKeys as $qpxKeys) {
-			$todayCalled = QpxLimitModel::call()->todayCalled($qpxKeys);
-			if ($todayCalled->count() < 50) {
-				$this->key = $qpxKeys;
-				break;
-			}
-		}
 	}
 }

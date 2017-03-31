@@ -34,87 +34,91 @@ class RouteController extends Controller
 	 */
 	public function create($id)
 	{
-		$bladeData = ["client" => ClientController::call()->info($id)];
-		return view('b2b.protected.dashboard.pages.route.create', $bladeData);
+		$client = ClientController::call()->info($id);
+		$package = PackageController::call()->createTemp($id);
+		$blade = [
+				"client" => $client, 
+				"package" => $package
+			];
+
+		return view('b2b.protected.dashboard.pages.route.create', $blade);
+	}
+
+
+	public function packageUpdate($id, Request $request)
+	{
+
+		$startDate = date_formatter($request->startDate,'d/m/Y');
+
+		// ================Making Data for package inserting row=================
+		$pacakgeData = (object)[
+				"req" => $request->req,
+				"start_date" => $startDate, 
+				"guests_detail" => $request->roomGuests,
+			];
+
+		// =================making package controller new object=================
+		$packageController = new PackageController;
+
+		// ========================updating package here=========================
+		$package = $packageController->packageUpdate($request->pid, $pacakgeData);
+		$nextEvent = $packageController->findEvent($request->pid);
+
+		return $nextEvent;
+	}
+
+
+	public function storeRow($id, Request $request)
+	{
+		$route = null;
+
+		if (isset($request->rid) && $request->rid) {
+			$route = RouteModel::find($request->rid);
+		}
+		else{
+			$route = new RouteModel;
+		}
+
+		$route->package_id = $id;
+		$route->mode = $request->mode;
+		$route->origin = isset($request->origin) ? $request->origin : '';
+		$route->destination = $request->destination;
+		$route->nights = isset($request->nights) ? $request->nights : 0;
+		if (isset($request->origin_time)) {
+			$route->start_time = timeFull($request->origin_time);
+		}
+
+		if (isset($request->destination_time)) {
+			$route->end_time = timeFull($request->destination_time);
+		}
+
+		$route->status = 'active';
+
+		$route->save();
+		return $route->id;
+	}
+
+
+	public function FunctionName($value='')
+	{
+		# code...
 	}
 
 
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store($id, Request $request)
+	public function createPackage($id)
 	{
-  	ClientController::call()->activeClient($id);
+		ClientController::call()->activeClient($id);
 		
-		$request->route = rejson_decode($request->route);
-
-		$nights = 0;
-		// =======================Calculation Total Nights=======================
-		foreach ($request->route as $routeKey => $routeValue) {
-			$nights += isset($routeValue->nights) ? $routeValue->nights : 0;			
-		}
-
-		// ================Making Data for package inserting row=================
-
-		$startDate = date_formatter($request->startDate,'d/m/Y');
-
-		$pacakgeData = (object)[
-				"client_id" => $id, 
-				"start_date" => $startDate, 
-				"end_date" => addDaysinDate($startDate,$nights+1),
-				"guests_detail" => $request->roomGuests,
-				"req" => $request->req
+		$data = (object)[
+				"start_date" => '0000-00-00',
+				"end_date" => '0000-00-00', // init temporary
+				"req" => ""
 			];
 
-		// ========================creating package here=========================
-		$package = PackageController::call()->createNew($id, $pacakgeData);
+		$package = PackageController::call()->createTemp($id, $data);
 
-
-		// =============================initializing=============================
-		$previousNights = 0;
-		$firstRouteDbId = null;
-
-		$this->inactiveByPackageId($package->id);
-		
-		foreach ($request->route as $key => $value) {
-
-			// =============================overwrited=============================
-			$startDate = addDaysinDate($startDate, $previousNights);
-			$startDate = isset($value->origin_time) 
-								 ? $startDate.' '.timeFull($value->origin_time).':00'
-								 : $startDate.' 00:00:00';
-
-			$previousNights = isset($value->nights) ? $value->nights : 0;
-
-			// ============================saving Route============================
-		
-
-			$route = new RouteModel;
-			$route->package_id = $package->id;
-			$route->mode = $value->mode;
-			$route->origin = isset($value->origin) ? $value->origin : '';
-			$route->destination = $value->destination;
-			$route->nights = isset($value->nights) ? $value->nights : 0;
-			$route->start_date = $startDate;
-			$route->end_date = isset($value->destination_time) 
-												 ? '0000-00-00 '.timeFull($value->destination_time).':00'
-												 : '0000-00-00 00:00:00';
-			$route->status = 'active';
-			$route->save();
-			
-
-			// ===================storing first route id here===================
-			if ($firstRouteDbId == null) {
-				$firstRouteDbId =  $route->id;
-			}
-		}
-
-		$nextEvent = PackageController::call()->findEvent($package->id);
-		return $nextEvent;
+		return $package;
 	}
 
 
@@ -249,4 +253,101 @@ class RouteController extends Controller
 		return $shifted;
 	}
 
+
+	public function deleteRow($id)
+	{
+		$this->makeStatusDelete($id);
+		return json_encode(['status' => 200, 'deleted']);
+	}
+
+
+	public function makeStatusDelete($id)
+	{
+		$route = RouteModel::find($id);
+		if (!is_null($route)) {
+			$route->status = 'deleted';
+			$route->save();
+		}
+		return true;
+	}
+
+
+
+	/**
+	 * !!!!!! not in used due to change in route saving every time
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function storeOld($id, Request $request)
+	{
+  	ClientController::call()->activeClient($id);
+		
+		$request->route = rejson_decode($request->route);
+
+		$nights = 0;
+		// =======================Calculation Total Nights=======================
+		foreach ($request->route as $routeKey => $routeValue) {
+			$nights += isset($routeValue->nights) ? $routeValue->nights : 0;			
+		}
+
+		// ================Making Data for package inserting row=================
+
+		$startDate = date_formatter($request->startDate,'d/m/Y');
+
+		$pacakgeData = (object)[
+				"client_id" => $id, 
+				"start_date" => $startDate, 
+				"end_date" => addDaysinDate($startDate,$nights+1),
+				"guests_detail" => $request->roomGuests,
+				"req" => $request->req
+			];
+
+		// ========================creating package here=========================
+		$package = PackageController::call()->createNew($id, $pacakgeData);
+
+
+		// =============================initializing=============================
+		$previousNights = 0;
+		$firstRouteDbId = null;
+
+		$this->inactiveByPackageId($package->id);
+		
+		foreach ($request->route as $key => $value) {
+
+			// =============================overwrited=============================
+			$startDate = addDaysinDate($startDate, $previousNights);
+			$startDate = isset($value->origin_time) 
+								 ? $startDate.' '.timeFull($value->origin_time).':00'
+								 : $startDate.' 00:00:00';
+
+			$previousNights = isset($value->nights) ? $value->nights : 0;
+
+			// ============================saving Route============================
+		
+
+			$route = new RouteModel;
+			$route->package_id = $package->id;
+			$route->mode = $value->mode;
+			$route->origin = isset($value->origin) ? $value->origin : '';
+			$route->destination = $value->destination;
+			$route->nights = isset($value->nights) ? $value->nights : 0;
+			$route->start_date = $startDate;
+			$route->end_date = isset($value->destination_time) 
+												 ? '0000-00-00 '.timeFull($value->destination_time).':00'
+												 : '0000-00-00 00:00:00';
+			$route->status = 'active';
+			$route->save();
+			
+
+			// ===================storing first route id here===================
+			if ($firstRouteDbId == null) {
+				$firstRouteDbId =  $route->id;
+			}
+		}
+
+		$nextEvent = PackageController::call()->findEvent($package->id);
+		return $nextEvent;
+	}
 }

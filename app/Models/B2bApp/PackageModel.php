@@ -3,8 +3,9 @@
 namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
-use DB;
 use App\Http\Controllers\B2bApp\ItineraryController;
+use Carbon\Carbon;
+use DB;
 
 
 class PackageModel extends Model
@@ -109,7 +110,8 @@ class PackageModel extends Model
 	*/
 	public function routes()
 	{
-		return $this->hasMany('App\Models\B2bApp\RouteModel', 'package_id');
+		$routes = $this->hasMany('App\Models\B2bApp\RouteModel', 'package_id');
+		return $routes->where([['status', '<>', 'deleted']]);
 	}
 
 
@@ -212,8 +214,36 @@ class PackageModel extends Model
 	}
 
 
+	public function fixRouteDates()
+	{
+		$routes = $this->routes;
+	
+		if ($routes->count()) {
+			$nextStartDate = '0000-00-00';
+			foreach ($routes as $key => $route) {
 
+				if ($key) {
+					$route->start_date = $nextStartDate;
+				}
+				else{
+					$route->start_date = $this->start_date;
+				}
+				
+				if (in_array($route->mode, ['ferry', 'hotel', 'road', 'cruise', 'train'])) {
+					$endDate = Carbon::parse($route->start_date);
+					$endDate->addDays($route->nights);
+					$nextStartDate = $endDate->format('Y-m-d');
+					$route->end_date = $nextStartDate;
+				}
+				
+				$route->save();
 
+				if ($route->mode == 'flight') { return true; }
+			}
+		}
+	
+		return true;
+	}
 
 
 }

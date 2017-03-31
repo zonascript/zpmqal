@@ -9,29 +9,34 @@
 			singleDatePicker: true,
 			calender_style: "picker_1",
 			format : "DD/MM/YYYY",
-
+			minDate : new Date(),
+			startDate: new Date(),
 		}, function(start, end, label) {
 			// console.log(start.toISOString(), end.toISOString(), label);
 		});
 	});
+
 </script>
 {{-- /bootstrap-daterangepicker --}}
+
+
 
 {{-- requirement --}}
 <script>
 	$(document).on('click', '#cancel_req', function() {
 		var text = $('#text_req').val();
 		var showText = $('#show_req').text();
-		// if (text.length < 10) {
-		// 	myAlert('Please enter requirements at least 1 words');
-		// }else if (showText.length < 20) {
-		// 	myAlert('I think you forgot to save because you have written something but not saved it yet.');
-		// }
-		// else{
-		// 	$('#container_req').addClass('hide');
-		// }
+		/*if (text.length < 10) {
+			myAlert('Please enter requirements at least 1 words');
+		}else if (showText.length < 20) {
+			myAlert('I think you forgot to save because you have written something but not saved it yet.');
+		}
+		else{
+			$('#container_req').addClass('hide');
+		}*/
 		
 		$('#container_req').addClass('hide');
+		$('#startDate').click();
 
 	});
 
@@ -56,52 +61,29 @@
 </script>
 {{-- requirement --}}
 
-{{-- Adding or Removing-room --}}
+
+
 <script>
-	$(document).on('click','#btn-addRoom',function(){
-		var currentRoom = $('#room').children(":visible").length;
-	
-		$('#room_'+(currentRoom+1)).show();
-		
-		if(currentRoom == 1){
-			$('#btn-removeRoom, #pipeSapr').show();
-		}
-		if(currentRoom == 3){
-			$('#btn-addRoom, #pipeSapr').hide();
-		}
-	});
+	$(document).on('click', '.rmv-destlist', function () {
+		var parant = $(this).closest('.destinationList');
+		var rid = $(parant).attr('data-rid');
 
-	$(document).on('click','#btn-removeRoom',function(){
-		var currentRoom = $('#room').children(":visible").length;
-
-		$('#room_'+(currentRoom)).hide();
+		if (rid != '') {
+			postRemoveRoute(rid);
+		}
 		
-		if(currentRoom == 2){
-			$('#btn-removeRoom, #pipeSapr').hide();
-		}
-		if(currentRoom == 4){
-			$('#btn-addRoom, #pipeSapr').show();
-		}
+		$(parant).remove();
 	});
 </script>
-{{-- /Adding or Removing-room --}}
-
 
 
 {{-- Adding or Removing-Destination --}}
 <script>
 	$('#btn-addDestination').click(function(){
-		var totalNights = 12;
-		var selectednights = 1;
-		var nights = (totalNights-selectednights);
-		// console.log('nights = '+nights);
-		if(selectednights == 0 || nights == 0) {
-			myAlert('Please check nights first');
-		}
-		else{
-			var totalDestination = $('.destinationClass').children().length;
+		if (postRoute()) {
+			/*var totalDestination = $('.destinationClass').children().length;*/
 			var destinationListHtml = $('#destinationListHtml').html();
-			var data_destination_count = (totalDestination+1);
+			var data_destination_count = addDestCount();
 			var destinationId = 'destination'+data_destination_count;
 			var inputDestinationId = 'inputDestination'+data_destination_count;
 
@@ -113,20 +95,12 @@
 			
 			$('.destinationClass').append(destinationListHtml);
 			
-			if(totalDestination == 1){
+			/*if(totalDestination == 1){
 				$('#btn-removeDestination, #pipeSaprDestination').show();
-			}
+			}*/
 		}
 	});
 
-	$('#btn-removeDestination').click(function(){
-		var totalDestination = $('.destinationClass').children().length;
-		$('#destination'+totalDestination).remove();
-
-		if(totalDestination == 2){
-			$('#btn-removeDestination, #pipeSaprDestination').hide();
-		}
-	});
 </script>
 {{-- /Adding or Removing-Destination --}}
 
@@ -151,6 +125,12 @@
 			}
 
 			$(parent).find('.mode').removeClass('border-red');
+			
+			if ($(this).attr('data-match') != $(this).val()) {
+				$(this).addClass('inctv');
+				changeInRoute(parent);
+			}
+
 			$(this).autocomplete({ source: url });
 			
 		}else{
@@ -158,205 +138,137 @@
 		}
 	});
 </script>
+
+<script>
+	$(document).on('autocompleteselect', '.location', function (e, ui) {
+		$(this).attr('data-match', $(this).val());
+		$(this).removeClass('inctv');
+		$(this).removeClass('border-red');
+	});
+</script>
 {{-- /autocomplete --}}
+
+
+<script>
+	$(document).on('change', '.nights', function () {
+		var nights = $(this).val();
+
+		if (nights == '') {
+			$(this).addClass('inctv border-red');
+			var parent = $(this).closest('.destinationList');
+			changeInRoute(parent);
+		}
+		else{
+			$(this).removeClass('inctv');
+			$(this).removeClass('border-red');
+		}
+	});
+</script>
 
 {{-- changing mode --}}
 <script>
 	$(document).on('change', '.mode', function(){
-		var thisVal = $(this).val();
-		var parentId = $(this).parents().eq(1).attr('id');
-		
-		$('#'+parentId).find('.location-input-div').html('');
+		if(checkStartDate()){
+			var thisVal = $(this).val();
+			var parent = $(this).closest('.destinationList');
+			changeInRoute(parent);
 
-		if (thisVal == 'flight') {
-			var originHtml = $('#originFlightTemp').html();
-			var destinationTemp = $('#destinationTemp').html();
+			$(parent).find('.location-input-div').html('');
+			
+			if (thisVal == '') {
+				$(this).addClass('inctv border-red');
+			}
+			else{
+				$(this).removeClass('inctv');
+				$(this).removeClass('border-red');
+			}
 
-			$('#'+parentId).find('.location-input-div').append(originHtml);
-			$('#'+parentId).find('.location-input-div').append(destinationTemp);
+			if (thisVal == 'flight') {
+				var originHtml = $('#originFlightTemp').html();
+				var destinationTemp = $('#destinationTemp').html();
+
+				$(parent).find('.location-input-div').append(originHtml);
+				$(parent).find('.location-input-div').append(destinationTemp);
+			}
+			else if (thisVal == 'hotel' || thisVal == 'cruise') {
+				var destinationTemp = $('#destinationTemp').html();
+				var nightTemp = $('#nightTemp').html();
+
+				$(parent).find('.location-input-div').append(destinationTemp);
+				$(parent).find('.location-input-div').append(nightTemp);
+			}
+			else if (thisVal == 'ferry' || thisVal == 'train') {
+				var destinationTemp = $('#destinationWithDatetimeTemp').html();
+				var appendHtml = destinationTemp.replace(/temp-class/g, 'origin').replace(/"Location"/g, '"Origin"');
+				appendHtml += destinationTemp.replace(/temp-class/g, 'destination').replace(/"Location"/g, '"Destination"');;
+				$(parent).find('.location-input-div').append(appendHtml);
+				$(parent).find('.datetimepicker').wickedpicker({now: "12:30"});
+				/*$(parent).find('.datetimepicker').timepicker();*/
+
+				/*$(parent).find('.datetimepicker').datetimepicker({
+					formatDate:'d/m/Y',
+					formatTime:'H:i',
+					minDate: 0,
+				});*/
+			}
+
+			// $(parent).find('.location').val('');
 		}
-		else if (thisVal == 'hotel' || thisVal == 'cruise') {
-			var destinationTemp = $('#destinationTemp').html();
-			var nightTemp = $('#nightTemp').html();
-
-			$('#'+parentId).find('.location-input-div').append(destinationTemp);
-			$('#'+parentId).find('.location-input-div').append(nightTemp);
-		}
-		else if (thisVal == 'ferry' || thisVal == 'train') {
-			var destinationTemp = $('#destinationWithDatetimeTemp').html();
-			var appendHtml = destinationTemp.replace(/temp-class/g, 'origin').replace(/"Location"/g, '"Origin"');
-			appendHtml += destinationTemp.replace(/temp-class/g, 'destination').replace(/"Location"/g, '"Destination"');;
-			$('#'+parentId).find('.location-input-div').append(appendHtml);
-			$('#'+parentId).find('.datetimepicker').wickedpicker({now: "12:30"});
-			/*$('#'+parentId).find('.datetimepicker').timepicker();*/
-
-			/*$('#'+parentId).find('.datetimepicker').datetimepicker({
-				formatDate:'d/m/Y',
-				formatTime:'H:i',
-				minDate: 0,
-			});*/
-		}
-
-		// $('#'+parentId).find('.location').val('');
 	});
 </script>
 {{-- /changing mode --}}
 
-<script>
-	function initDateTime(elem) {
-		$(elem).datetimepicker({
-			formatDate:'d/m/Y',
-			formatTime:'H:i',
-			minDate: 0,
-		});
-	}
-</script>
-
 
 {{-- form submition --}}
-
 <script>
 	$(document).on('click','#formSubmit', function(){
-		var startDate = $('#startDate').val();
-
-		if(startDate != ''){
-			$('#startDate').addClass('border-blue-2px');
-			$('#startDate').removeClass('border-red');
+		if(postRoute()){
+			showWaitingLogo();
+			var startDate = $('#startDate').val();
+			var pid = $('#startDate').attr('data-pid');
 
 			var roomGuests = $('.roomGuest:visible').map(function() {
-				
 				var childAge = $(this).find('.age-elem').map(function() {
 					return $(this).val();
 				}).get();
-
 				return {
 					'NoOfAdults': $(this).find('.noOfAdult').val(),
 					'ChildAge': JSON.stringify(childAge),
 				}
-
 			}).get();
 
-			var route = getRoute();
-			console.log(route);
-			if (route && route.length > 0) {
-				$(this).addClass('disabled');
-				$(this).prop('disabled', true);
-				var req = $('#show_req').text();
-				var data = {
-					"_token" : csrf_token,
-					"startDate" : startDate,
-					"req" : req,
-					"route" : route,
-					"roomGuests" : roomGuests
-				}
-
-				$.ajax({
-					type:"post",
-					url: "{{ Request::url() }}", 
-					data: data,
-					success: function(responce, textStatus, xhr) {
-						if(xhr.status == 200){
-							responce_obj = JSON.parse(responce);
-							console.log(responce_obj.nextUrl);
-							document.location.href = responce_obj.nextUrl;
-						}
-	        },
-	        error: function(xhr, textStatus) {
-						if(xhr.status == 401){
-							window.open("{{ url('login') }}", '_blank');
-						}
-	        },
-
-				});
+			$(this).addClass('disabled');
+			$(this).prop('disabled', true);
+			var req = $('#show_req').text();
+			var data = {
+				"_token" : csrf_token,
+				"pid" : pid,
+				"req" : req,
+				"startDate" : startDate,
+				"roomGuests" : roomGuests
 			}
-		}
-		else{
-			$('#startDate').addClass('border-red');
-			$('#startDate').removeClass('border-blue-2px');
-			myAlert('Please select start date...');
-		}
 
+			$.ajax({
+				type:"post",
+				url: "{{ Request::url() }}/u", 
+				data: data,
+				success: function(responce, textStatus, xhr) {
+					if(xhr.status == 200){
+						responce_obj = JSON.parse(responce);
+						console.log(responce_obj);
+						document.location.href = responce_obj.nextUrl;
+					}
+        },
+        error: function(xhr, textStatus) {
+					if(xhr.status == 401){
+						window.open("{{ url('login') }}", '_blank');
+					}
+        }
+			});
+		}
 	});
 </script>
 {{-- /form submition --}}
-
-{{-- route function --}}
-<script>
-	function getRoute() {
-		var route = []; 
-		var routeCount = $('.destinationList').length;
-
-		$('.destinationList').each(function(){
-			var mode = $(this).find('.mode').val();
-			if (mode == '') {
-				$(this).find('.mode').addClass('border-red');
-				myAlert('I think you forgot to select mode. it\'s vary easy just click on mode and select.');
-				return false;
-			}else{
-				$(this).find('.mode').removeClass('border-red');
-			}
-
-			var origin = $(this).find('.origin').val();
-			if (origin == '' && mode == 'flight') {
-				$(this).find('.origin').addClass('border-red');
-				myAlert('You forgot to write origin.');
-				return false;
-			}
-			if((mode == 'flight' || mode == 'train' || mode == 'ferry') && origin.indexOf(', ') == -1){
-				$(this).find('.origin').addClass('border-red');
-				myAlert('You forgot to write origin.');
-				return false;
-			}
-			else{
-				$(this).find('.origin').removeClass('border-red');
-			}
-
-			var destination = $(this).find('.destination').val();
-			if (destination == '') {
-				$(this).find('.destination').addClass('border-red');
-				myAlert('You forgot to write destination.');
-				return false;
-			}if(destination.indexOf(', ')  == -1){
-				$(this).find('.destination').addClass('border-red');
-				myAlert('You forgot to write destination.');
-				return false;
-			}else{
-				$(this).find('.destination').removeClass('border-red');
-			}
-
-			var nights = $(this).find('.nights').val();
-			if (nights == '') {
-				$(this).find('.nights').addClass('border-red');
-				myAlert('You forgot to select nights.');
-				return false;
-			}else{
-				$(this).find('.nights').removeClass('border-red');
-			}
-
-			var origin_time = $(this).find('.origin-time').val();
-			var destination_time = $(this).find('.destination-time').val();
-
-			var routeData = {
-				"mode" : mode,
-				"origin" : origin,
-				"origin_time" : origin_time,
-				"destination" : destination,
-				"destination_time" : destination_time,
-				"nights" : nights,
-			};
-
-			route.push(routeData);
-		});
-		if (route.length == routeCount) {
-			return route;
-		}else{
-			return false;
-		}
-	
-	}
-</script>
-{{-- /route function --}}
-
 
 
 {{-- Adults-Child-button --}}
@@ -464,3 +376,6 @@
 	});
 </script>
 {{-- /Adults-Child-button --}}
+
+@include('b2b.protected.dashboard.pages.route.create_partials.post_route')
+@include('b2b.protected.dashboard.pages.route.create_partials.js_function')

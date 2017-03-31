@@ -6,6 +6,43 @@ use Illuminate\Http\Request;
 
 class TestController extends Controller
 {
+
+	public function testCode()
+	{
+
+		$curl = curl_init();
+
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => "https://content.googleapis.com/qpxExpress/v1/trips/search?key=AIzaSyB1AiUDyhG1GDosrt5Qe9Ee-rUTgA2SEmU&alt=json",
+		  CURLOPT_RETURNTRANSFER => true,
+		  CURLOPT_ENCODING => "",
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 30,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => "POST",
+		  CURLOPT_POSTFIELDS => "{\"request\":{\"slice\":[{\"origin\":\"DEL\",\"destination\":\"SIN\",\"date\":\"2017-04-27\"}],\"passengers\":{\"adultCount\":2,\"infantInLapCount\":0,\"infantInSeatCount\":0,\"childCount\":0,\"seniorCount\":0},\"solutions\":250,\"refundable\":false}}",
+		  CURLOPT_HTTPHEADER => array(
+		    "cache-control: no-cache",
+		    "content-type: application/json",
+		    "postman-token: 5cc34775-8ae1-7e33-8e34-ebe197703e39"
+		  ),
+		));
+
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+
+		curl_close($curl);
+
+		if ($err) {
+		  echo "cURL Error #:" . $err;
+		} else {
+		  echo $response;
+		}
+
+		// $date = \Carbon\Carbon::parse('00:00:00');
+		// dd($date);
+	}
+
 	public function test()
 	{
 

@@ -4,6 +4,7 @@ Auth::routes();
 
 Route::get('/', 'B2bApp\PagesController@getIndex');
 Route::get('/pickme', 'B2bApp\PagesController@getPickMe');
+Route::get('/test/code', 'TestController@testCode');
 Route::get('/test/showfile', 'TestController@showfile');
 Route::get('/test/agoda', 'TestController@getAgodaHtml');
 Route::get('/hellotravel/{id}', 'TestController@helloTravel');
@@ -129,8 +130,11 @@ Route::group(['middleware' => ['auth']], function(){
 			/*-------------------------New enquiry creation will-------------------------*/
 				// this route is gui to get information
 				Route::get('/dashboard/package/route/{id}', 'B2bApp\RouteController@create');
+				Route::post('/dashboard/package/route/{id}/r', 'B2bApp\RouteController@storeRow');
+				Route::post('/dashboard/package/route/{id}/d', 'B2bApp\RouteController@deleteRow');
+				Route::post('/dashboard/package/route/{id}/u', 'B2bApp\RouteController@packageUpdate');
 				// this route will store the information into DB
-				Route::post('/dashboard/package/route/{id}', 'B2bApp\RouteController@store');
+				Route::post('/dashboard/package/route/{id}/', 'B2bApp\RouteController@store');
 				// this for finding next event
 				Route::get('/dashboard/package/event/{routeDbId}', 'B2bApp\PackageController@getEvent');
 				Route::get('/dashboard/package/builder/event/{packageDbId}/{current}', 'B2bApp\PackageController@findNextEvent');

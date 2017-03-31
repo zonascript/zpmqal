@@ -101,6 +101,54 @@ class PackageController extends Controller
     return $package;
   }
 
+  public function packageUpdate($packageDbId, $request)
+  {
+
+    $package = PackageModel::find($packageDbId);
+
+    if (!is_null($package)) {
+    	if (isset($request->start_date)) $package->start_date = $request->start_date;
+    	if (isset($request->end_date)) $package->end_date = $request->end_date;
+    	if (isset($request->req)) $package->req = $request->req;
+    	$package->route_status = 1;
+	    $package->save();
+    	$package->fixRouteDates();
+
+	    // ==============this function is to save multiple room data=============
+			$guestsDetail = [
+					"packageDbId" => $package->id, 
+					"roomGuest" => json_decodeMulti($request->guests_detail),
+				];
+
+			$costParams = (object)["currency" => "INR", "netCost" => 0, "margin" => 0];
+			PackageCostsController::call()->createNew($package->id, $costParams);
+			RoomGuestsController::call()->createNewMulti($guestsDetail);
+    }
+
+	  return $package;
+  }
+
+
+  public function createTemp($id, $request = [])
+  {
+  	$auth = Auth::user();
+    $package = new PackageModel;
+    $package->user_id= $auth->id;
+    $package->client_id = $id;
+    $package->start_date = isset($request->start_date) 
+    										 ? $request->start_date 
+    										 : '0000-00-00';
+
+    $package->end_date = isset($request->end_date)
+    									 ? $request->end_date
+    									 : '0000-00-00';
+
+    $package->req = isset($request->req) ? $request->req : '';
+    $package->status = 'active';
+    $package->save();
+    $package = $package->find($package->id);
+    return $package;
+  }
 
   public function storeGuestsDetail($id, $guestsDetail)
   {
