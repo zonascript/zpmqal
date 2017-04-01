@@ -15,7 +15,7 @@ Route::post('hellotravel/{id}/save', 'TestController@saveHelloTravel');
 Route::get('a/l/htdetail', 'Api\AgodaHotelsController@loopHotelDetails');
 Route::get('insert/batch/hotel/b', 'HotelApp\ManageDataController@update');
 
-/*==========================Temporary Route==========================*/
+/*======================Temporary Route======================*/
 // Route::get('fix/booking/data', 'TestController@fixData');
 
 // This for package html
@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('contact', 'B2bApp\PagesController@getContact');
 	Route::get('services', 'B2bApp\PagesController@getServices');
 
-	// =========================Images Controller=========================
+	// =====================Images Controller=====================
 	Route::post('image/upload', 'B2bApp\ImagesController@upload');
 
 	
@@ -64,9 +64,9 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('redirect/{hashId}', 'Common\RedirectController@redirectNow');
 
 	/*
-	|===========================================================================
+	|=======================================================
 	| Start Dashboard Routes
-	|===========================================================================
+	|=======================================================
 	*/
 
 		/*------------------------------index Route------------------------------*/
@@ -98,9 +98,9 @@ Route::group(['middleware' => ['auth']], function(){
 
 		
 		/*
-		|===========================================================================
+		|=======================================================
 		| Start Package Builder Routes
-		|===========================================================================
+		|=======================================================
 		*/
 
 			/*---------------------------Package all Route---------------------------*/
@@ -184,7 +184,7 @@ Route::group(['middleware' => ['auth']], function(){
 
 
 
-			//====================================Flights====================================
+			//============================Flights============================
 
 				Route::get('dashboard/package/builder/flights/{packageDbId?}', 'B2bApp\FlightsController@getFlightsByPackageId');
 				Route::get('dashboard/package/builder/flight/result/{flightDbId?}', 'B2bApp\FlightsController@getFlightsResult');
@@ -198,7 +198,7 @@ Route::group(['middleware' => ['auth']], function(){
 
 
 
-			/* =================================Package Hotel=================================
+			/* =========================Package Hotel=========================
 			| id = Clients table index or id
 			| packageDbId = packages table index or id
 			|	packageHotelId = package_hotels table or id
@@ -221,7 +221,7 @@ Route::group(['middleware' => ['auth']], function(){
 				Route::post('dashboard/package/builder/hotel/room/book/{packageHotelId}', 'B2bApp\HotelsController@postBookHotelRoom');
 
 
-			/* ====================================Cruise====================================
+			/* ============================Cruise============================
 			| id = Clients table index or id
 			| packageDbId = packages table index or id
 			|	packageCruiseId = package_cruises table or id
@@ -237,7 +237,7 @@ Route::group(['middleware' => ['auth']], function(){
 				Route::post('dashboard/package/builder/cruise/cabin/book/{id}/{packageDbId}/{packageCrusiesId}', 'B2bApp\CruisesController@postBookCrusieCabin');
 
 
-			//===================================Activities===================================
+			//===========================Activities===========================
 				Route::get('dashboard/package/builder/activities/{packageDbId}', 'B2bApp\ActivitiesController@getActivitiesByPackageId');
 				Route::post('dashboard/package/builder/activities/{packageDbId}', 'B2bApp\ActivitiesController@postActivities');
 				
@@ -246,7 +246,7 @@ Route::group(['middleware' => ['auth']], function(){
 
 
 
-			// =====================================Cars======================================
+			// =============================Cars==============================
 				Route::get('dashboard/package/builder/car/{packageDbId}', 'B2bApp\CarsController@create');
 
 				Route::post('dashboard/package/builder/car/{packageDbId}', 'B2bApp\CarsController@postCar');
@@ -258,7 +258,7 @@ Route::group(['middleware' => ['auth']], function(){
 				Route::delete('dashboard/package/builder/car/{packageDbId}', 'B2bApp\CarsController@destroy');
 
 
-			//======================================Cabs======================================
+			//==============================Cabs==============================
 				Route::get('dashboard/package/builder/cab/auth', 'Api\UberApiController@auth');
 				Route::get('dashboard/package/builder/cab/auth/token', 'Api\UberApiController@getToken');
 				Route::get('dashboard/package/builder/cab/current', 'Api\UberApiController@testCurrentRequest');
@@ -271,15 +271,15 @@ Route::group(['middleware' => ['auth']], function(){
 
 
 		/*
-		|===========================================================================
+		|=======================================================
 		| End Package Builder Routes
-		|===========================================================================
+		|=======================================================
 		*/
 
 	/*
-	|===========================================================================
+	|=======================================================
 	| End Dashboard Routes
-	|===========================================================================
+	|=======================================================
 	*/
 	
 	Route::get('dashboard/uber/request', 'Api\UberApiController@testRequestRide');
@@ -293,19 +293,19 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('dashboard/api/cruise/cabin', 'Api\CruiseController@cruiseCabin');
 	
 	/*
-	|===========================================================================
+	|=======================================================
 	| Api Request
-	|===========================================================================
+	|=======================================================
 	*/
 
-	// =================================Flights=================================
+	// =========================Flights=========================
 	Route::get('qpx/flights/result/{id}', 'B2bApp\FlightsController@postQpxFlightResult');
 	Route::post('qpx/flights/result/{id}', 'B2bApp\FlightsController@postQpxFlightResult');
 	
 	Route::get('ss/flights/result/{id}', 'B2bApp\FlightsController@postSkyscannerFlightResult');
 	Route::post('ss/flights/result/{id}', 'B2bApp\FlightsController@postSkyscannerFlightResult');
 
-	// =================================hotels==================================
+	// =========================hotels==========================
 	// Route::get('ss/hotels/result/{id}', 'B2bApp\HotelsController@postSkyscannerHotelResult');
 	
 	Route::post('t/hotels/result/{id}', 'B2bApp\HotelsController@postTbtqHotelResult');
@@ -321,14 +321,14 @@ Route::group(['middleware' => ['auth']], function(){
 
 
 
-	// ===================================cruise===================================
+	// ===========================cruise===========================
 	Route::get('f/cruises/result/{id}', 'B2bApp\CruisesController@postFgfCruiseResult');
 	Route::post('f/cruises/result/{id}', 'B2bApp\CruisesController@postFgfCruiseResult');
 	Route::get('f/cruises/cabin/{id}', 'B2bApp\CruisesController@postFgfCruiseCabin');
 	Route::post('f/cruises/cabin/{id}', 'B2bApp\CruisesController@postFgfCruiseCabin');
 
 
-	// =================================Activities=================================
+	// =========================Activities=========================
 	Route::get('uni/activities/result/{id}', 'B2bApp\ActivitiesController@postUnionActivitiesResult');
 	Route::post('uni/activities/result/{id}', 'B2bApp\ActivitiesController@postUnionActivitiesResult');
 	// Route::get('vtr/activities/result/{id}', 'B2bApp\ActivitiesController@postViatorActivitiesResult');

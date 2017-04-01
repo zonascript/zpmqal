@@ -162,7 +162,7 @@ function nested_jsonDecode($string, $is_array = false){
 
 }
 
-/*================This code is not working and has some bug ====================
+/*==========This code is not working and has some bug ==============
 
 function nestedJsonDecode($string, $is_array = false){
 
@@ -222,10 +222,10 @@ function implode_kv($array){
 */
 function getInrCost($array){
 
-	/*===========================if object===========================*/
+	/*==================if object==================*/
 	$array = is_object($array) ? rejson_decode($array, true) : $array;
 
-	/*====================Initializing $cost here====================*/
+	/*==============Initializing $cost here==============*/
 	$cost = 0;
 	
 	if (bool_array($array)) {
@@ -234,7 +234,7 @@ function getInrCost($array){
 			$rate = 1;
 			if ($key != 'INR') {
 
-				/*=================trying to get exchange into five attempt=================*/
+				/*===========trying to get exchange into five attempt===========*/
 
 				for ($attempt = 1; $attempt <= 5 ; $attempt++) { 
 					$exchange = currencyExchange($key,'INR');
@@ -317,7 +317,7 @@ function currencyExchange($From, $To){
 
 	$url = 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22'.$From.$To.'%22)&env=store://datatables.org/alltableswithkeys';
 
-	/*===================================== this url for demo =====================================
+	/*========================= this url for demo =========================
 	$url = 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22USDEUR%22,%20%22USDJPY%22,%20%22USDBGN%22,%20%22USDCZK%22,%20%22USDDKK%22,%20%22USDGBP%22,%20%22USDHUF%22,%20%22USDLTL%22,%20%22USDLVL%22,%20%22USDPLN%22,%20%22USDRON%22,%20%22USDSEK%22,%20%22USDCHF%22,%20%22USDNOK%22,%20%22USDHRK%22,%20%22USDRUB%22,%20%22USDTRY%22,%20%22USDAUD%22,%20%22USDBRL%22,%20%22USDCAD%22,%20%22USDCNY%22,%20%22USDHKD%22,%20%22USDIDR%22,%20%22USDILS%22,%20%22USDINR%22,%20%22USDKRW%22,%20%22USDMXN%22,%20%22USDMYR%22,%20%22USDNZD%22,%20%22USDPHP%22,%20%22USDSGD%22,%20%22USDTHB%22,%20%22USDZAR%22,%20%22USDISK%22)&env=store://datatables.org/alltableswithkeys';*/
 
 	$response = httpGet($url);
@@ -736,22 +736,22 @@ function pdfHotelDesc($html){
 function echoLocation($origin = '', $destination = '')
 {
 	$location = '';
-	// ==============================if origin is null============================
+	// =====================if origin is null===================
 	if ($origin == '') {
 		$location = $destination;
 	}
 	
-	// ===========================if destination is null==========================
+	// ==================if destination is null=================
 	elseif ($destination == '') {
 		$location = $origin;
 	}
 
-	// ===================if origin same as destination is null===================
+	// =============if origin same as destination is null=============
 	elseif ($origin == $destination) {
 		$location = $origin;
 	}
 
-	// ===================if origin and destination is not same===================
+	// =============if origin and destination is not same=============
 	else{
 		$location = $origin.' - '.$destination;
 	}
@@ -778,7 +778,7 @@ function do_get_request($url)
 | Helper function for Url
 */
 
-/*=================================Redirect Url=================================*/
+/*=====================Redirect Url=====================*/
 function newRedirectUrl($url){
 
 	$newUrlObj = new \App\Http\Controllers\Common\RedirectController;
@@ -787,7 +787,7 @@ function newRedirectUrl($url){
 
 }
 
-/*===================================follow-ups==================================*/
+/*=======================follow-ups======================*/
 
 function followUps(){
 	$followUpsObj = new \App\Http\Controllers\B2bApp\FollowUpController;
@@ -795,7 +795,7 @@ function followUps(){
 	return $followUps;
 }
 
-/*===================================follow-ups==================================*/
+/*=======================follow-ups======================*/
 function toDo(){
 	$toDoObj = new \App\Http\Controllers\B2bApp\ToDoController;
 	$toDo = $toDoObj->all();
@@ -803,14 +803,14 @@ function toDo(){
 }
 
 
-/*===================================follow-ups==================================*/
+/*=======================follow-ups======================*/
 function pendingLeads(){
 	$leadsObj = new \App\Http\Controllers\B2bApp\ClientController;
 	$leads = $leadsObj->pendingClients();
 	return $leads;
 }
 
-/*=================================default image=================================*/
+/*=====================default image=====================*/
 
 function urlImage($path = '')
 {
@@ -914,7 +914,7 @@ function  urlImageAirline($airlineCode='')
 	return urlImage('images/airlineImages/'.$airlineCode.'.gif');
 }
 
-/*=================================Itinerary Url=================================*/
+/*=====================Itinerary Url=====================*/
 function urlHotelsIti($id = 0, $packageDbId = 0 ){
 	return url('/dashboard/package/itinerary/hotels/'.$id.'/'.$packageDbId);
 }
@@ -935,7 +935,7 @@ function urlCopyHotelIti($id = 0, $packageDbId = 0 ){
 	return url('/dashboard/package/itinerary/activities/copytohotel/'.$id.'/'.$packageDbId);
 }
 
-/*==================================Event Url==================================*/
+/*======================Event Url======================*/
 
 function urlPackageEvent($routeDbId){
 	return url('/dashboard/package/event/'.$routeDbId);
@@ -947,7 +947,7 @@ function urlRouteCreate($clientId)
 	return url('/dashboard/package/route/'.$clientId);
 }
 
-/*=================================Package Url=================================*/
+/*=====================Package Url=====================*/
 
 function urlPackageAll($id = false, $packageDbId = false){
 	return url('dashboard/package/all/'.$id.'/'.$packageDbId);
@@ -958,10 +958,11 @@ function urlSavePackageCost($id = 0, $packageDbId = 0){
 }
 
 
-/*=================================Hotel Url=================================*/
+/*=====================Hotel Url=====================*/
 function urlAllHotelsBuilder($packageDbId = 0){
 	return url('dashboard/package/builder/hotels/'.$packageDbId);
 }
+
 
 function urlHotelsBuilder($firstCartId = 0){
 	return url('dashboard/package/builder/hotel/'.$firstCartId);
@@ -986,7 +987,7 @@ function urlSsResult($firstCartId = "")
 	return url('/ss/hotels/result/'.$firstCartId);
 }
 
-/*=================================Cruises Url=================================*/
+/*=====================Cruises Url=====================*/
 
 function urlCruisesBuilder($id = 0, $packageDbId = 0, $firstCartId = 0){
 	return url('dashboard/package/builder/cruise/'.$firstCartId);
@@ -1001,7 +1002,7 @@ function urlCruisesCabinBookBuilder($id = 0, $packageDbId = 0, $firstCartId = 0)
 }
 
 
-/*=================================Flights Url=================================*/
+/*=====================Flights Url=====================*/
 function urlFlightsBuilder($packageDbId = 0){
 	return url('dashboard/package/builder/flights/'.$packageDbId);
 }
@@ -1021,7 +1022,7 @@ function urlFlightBook($flightDbId='')
 }
 
 
-/*=================================Activities Url=================================*/
+/*=====================Activities Url=====================*/
 
 function urlActivitiesBuilder($packageDbId = 0){
 	return url('dashboard/package/builder/activities/'.$packageDbId);
@@ -1029,7 +1030,7 @@ function urlActivitiesBuilder($packageDbId = 0){
 
 
 
-/*=================================Car Url=================================*/
+/*=====================Car Url=====================*/
 
 function urlCarsBuilder($packageDbId = 0){
 	return url('dashboard/package/builder/car/'.$packageDbId);
@@ -1037,14 +1038,13 @@ function urlCarsBuilder($packageDbId = 0){
 
 
 
-/*=====================================Pdf Url=====================================*/
+/*=========================Pdf Url=========================*/
 
 function urlPdfPacakge($packageDbId){
 	return url('dashboard/package/pdf/'.$packageDbId);
 }
 
-
-/*================================= Responce Json =================================*/
+/*===================== Responce Json =====================*/
 
 function jsonError($error = null){
 	return json_encode(error500($error));
@@ -1060,7 +1060,7 @@ function error500($error='')
 	return ["status" => 500, "error" => $error];
 }
 
-/*================================Activity Function================================*/
+/*====================Activity Function====================*/
 /*
 | this function is return price if sic price is available the it return 
 | sic price eles it return private price id not private then it return 0
@@ -1099,7 +1099,7 @@ function sortBySeatingCapacity($x, $y) {
 
 
 
-// =================================common asset url=================================
+// =====================common asset url=====================
 
 function commonAsset($path){
 	return asset('common/'.$path);

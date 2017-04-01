@@ -37,9 +37,9 @@
 							</div>
 							<span class="font-size-13">
 								 | <b>Check In : </b>
-								{{ date_formatter($hotelRoute->start_date,'Y-m-d H:i:s','d-M-Y') }}
+								{{ $hotelRoute->start_datetime->format('d-M-Y') }}
 								 | <b>Check Out : </b>
-								{{ date_formatter($hotelRoute->end_date,'Y-m-d H:i:s','d-M-Y') }}
+								{{ $hotelRoute->end_datetime->format('d-M-Y') }}
 							</span>
 						</div>
 						<div class="col-md-12 col-sm-12 col-xs-12 m-top-5 font-size-13">

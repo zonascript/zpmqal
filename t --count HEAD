@@ -1,0 +1,41 @@
+[33mcommit ebdba46e22ea56215f82ca22195afb3d2eb4c0f3[m
+Author: Ajay Kumar <ajay@flygoldfinch.com>
+Date:   Sat Apr 1 18:09:45 2017 +0530
+
+    fixed some bugs in hotels area
+
+[33mcommit 42fb1b313c49be744167bde20d78881b04fc6e2a[m
+Author: Ajay Kumar <ajay@flygoldfinch.com>
+Date:   Sat Apr 1 17:49:54 2017 +0530
+
+    fixed fligth date and route date issue
+
+[33mcommit 3d4f2f3017d324780037480d99edf385b04b505c[m
+Author: Ajay Kumar <ajay@flygoldfinch.com>
+Date:   Fri Mar 31 12:42:54 2017 +0530
+
+    fixed route save row every time when create new row in route page
+
+[33mcommit 5d553551260fa6abef73d35cb28af206cebc4068[m
+Author: Ajay Kumar <ajay@flygoldfinch.com>
+Date:   Wed Mar 29 14:10:08 2017 +0530
+
+    made some changes in enquiery crud
+
+[33mcommit 7faeea0ffc54087dd08ffd461eecd8e0ba429306[m
+Author: Ajay Kumar <ajay@flygoldfinch.com>
+Date:   Tue Mar 28 22:58:08 2017 +0530
+
+    fixed hotel search option and optimized load time
+
+[33mcommit 8d3418d1270890983cd30d70f8246321b626129d[m
+Author: Ajay Kumar <ajay@flygoldfinch.com>
+Date:   Mon Mar 27 21:59:51 2017 +0530
+
+    deleted some unwanted file
+
+[33mcommit 0483cda6f88b24c668a635de78d034fff2c42252[m
+Author: Ajay Kumar <ajay@flygoldfinch.com>
+Date:   Mon Mar 27 21:53:13 2017 +0530
+
+    date:2017-03-27 site init and first pushed over git b2b.trawish.com's site
