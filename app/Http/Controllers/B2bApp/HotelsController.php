@@ -196,19 +196,20 @@ class HotelsController extends Controller
 
 		if (!is_null($data)) {
 
-			$startDate = date_formatter($data->route->start_date, 'Y-m-d H:i:s');
-			$endDate =  addDaysinDate($startDate, $data->route->nights);
+			$startDate = $data->route->start_datetime->format('d/m/Y');
+			$endDate =  $data->route->end_datetime->format('d/m/Y');
 
 			// this is global request array
 			$request = [
-				"Destination" => $data->route->location_hotel,
-				"RoomGuests" => $data->route->package->roomGuest,
-				"Dates" => [
-					"CheckInDate" => $startDate,
-					"CheckOutDate" => $endDate,
-				],
-				"PreferredCurrency" => "INR",
-			];
+					"Destination" => $data->route->location_hotel,
+					"RoomGuests" => $data->route->package->roomGuest,
+					"Nights" => $data->route->nights,
+					"PreferredCurrency" => "INR",
+					"Dates" => [
+							"CheckInDate" => $startDate,
+							"CheckOutDate" => $endDate,
+						],
+				];
 
 			$request = rejson_decode($request);
 		}

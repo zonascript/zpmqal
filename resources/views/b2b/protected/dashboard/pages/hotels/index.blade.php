@@ -16,11 +16,6 @@
 		<div id="fgfpreloader" class="fixed-top"></div>
 		<i id="logo" class="s-icon-fgf font-big fixed-top"></i>
 	</div>
-
-		<div id="loging_log">
-		<div id="fgfpreloader" class="fixed-top"></div>
-		<i id="logo" class="s-icon-fgf font-big fixed-top"></i>
-	</div>
 	<div id="hotels_result" class="row">
 		<div class="col-md-3 col-md-3 col-xs-12">
 			<div class="row">	

@@ -52,20 +52,20 @@ class TbtqHotelApiController extends Controller
 			$params = [
 					"TokenId" => $auth->TokenId, // Got after Authenticate
 					"EndUserIp" => $_SERVER['REMOTE_ADDR'],
-					"CheckInDate" => date_formatter($request->Dates->CheckInDate, null, 'd/m/Y'), // DD/MM/YYYY
-					"NoOfNights" => date_differences($request->Dates->CheckOutDate, $request->Dates->CheckInDate), // 3
+					"CheckInDate" => $request->Dates->CheckInDate, // DD/MM/YYYY
+					"NoOfNights" => $request->Nights, // 3
 					"CountryCode" => $request->Destination->tbtq_countrycode, // SG
 					"CityId" => $request->Destination->tbtq_destinationcode, // 14343
 					"ResultCount" => 1000, // 1000
-					"PreferredCurrency" => $request->PreferredCurrency, // INR
-					"GuestNationality" => "IN", // IN
 					"NoOfRooms" => $NoOfRooms, // = count(RoomGuests);
 					"RoomGuests" => $RoomGuests,
 					"PreferredHotel" => "", // name of hotel
 					"MaxRating" => 5, // like 5
 					"MinRating" => 3, // like 3
 					"ReviewScore" => 0, // like 4
+					"PreferredCurrency" => $request->PreferredCurrency, // INR
 					"IsNearBySearchAllowed" => 0, // boolen 
+					"GuestNationality" => "IN", // IN
 					// "SortBy" => "",// like "Sort by Price, Star Rating"
 					// "Order" => "",// int like "Ascending or Descending Order"
 				];
