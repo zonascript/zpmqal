@@ -139,44 +139,19 @@ class QpxFlightApiController extends Controller
 		$return = false;
 
 		if (!is_null($flight)) {
-			// this is result in json which is got from calling qpx flight api 
-			$flightDetail = $flight->result;
 			// putting index in selected_index column in db 
 			$flight->selected_index  =  $index;
 			// saving data here
 			$flight->save();
 
-			$tripOption = $flightDetail->trips->tripOption[$index];
-
-			// finding Start Date here
-			$startDate = isset($tripOption->slice[0]->segment[0]->leg[0]->departureTime)
-								 ? getDefaultDateTime($tripOption->slice[0]->segment[0]->leg[0]->departureTime)
-								 : '0000-00-00 00:00:00';
-
-			// finding sliceCount, segmentCount and legCount here
-			$sliceCount = count($tripOption->slice)-1;
-			$segmentCount = count($tripOption->slice[$sliceCount]->segment)-1;
-			$legCount = count($tripOption
-									->slice[$sliceCount]
-										->segment[$segmentCount]
-											->leg)-1;
-
-			// finding end Date here
-			$endDate = getDefaultDateTime($tripOption
-								->slice[$sliceCount]
-									->segment[$segmentCount]
-										->leg[$legCount]
-											->arrivalTime);
-
 			// this array have to be return,
 			$return = (object)[
-					"startDate" => $startDate,
-					"endDate" => $endDate,
+					"startDateTime" => $flight->departureDateTime,
+					"endDateTime" => $flight->arrivalDateTime,
 					"vendor" => 'qpx',
-					"tripOption" => $tripOption
 				];
-			
 		}
+		
 		return $return;
 	}
 
@@ -187,8 +162,6 @@ class QpxFlightApiController extends Controller
 		$qpxLimit->key = $this->key;
 		$qpxLimit->save();
 	}
-
-
 
 
 	public function httpPost($url, $array)
@@ -221,11 +194,6 @@ class QpxFlightApiController extends Controller
 
 
 
-	public function __construct()
-	{
-		$this->key = env('QPX_KEY');
-		// $this->setQpxKey();
-	}
 
 
 	public function setQpxKey()
@@ -271,4 +239,12 @@ class QpxFlightApiController extends Controller
 		return $results;
 
 	}
+
+	public function __construct()
+	{
+		// $this->key = env('QPX_KEY');
+		$this->setQpxKey();
+	}
+
+
 }

@@ -34,7 +34,10 @@
 						<ul id="tab_menu" class="nav nav-pills">
 							@foreach ($package->flightRoutes as $flightRouteKey => $flightRoute)
 								<li class="col-md-2 col-sm-2 col-xs-12 text-center {{ $flightRouteKey == 0 ? 'active' : ''}}" data-list="flight_{{ $flightRoute->id }}_div">
-									<a id="a_flight_{{ $flightRoute->id }}" href="#flight_{{ $flightRoute->id }}_div" data-toggle="tab">
+									<a id="a_flight_{{ $flightRoute->id }}" 
+										href="#flight_{{ $flightRoute->id }}_div" 
+										class="a_tab_menu" data-toggle="tab" 
+										data-rid="{{ $flightRoute->id }}">
 										{{ $flightRoute->origin_code }} → {{ $flightRoute->destination_code }}
 									</a>
 								</li>
@@ -43,7 +46,7 @@
 						<div class="tab-content main-flight-detail clearfix">
 							@foreach ($package->flightRoutes as $flightRouteKey => $flightRoute)
 								<div id="flight_{{ $flightRoute->id }}_div" class="tab-pane {{ $flightRouteKey == 0 ? 'active' : ''}}">
-										<ul id="flight_{{ $flightRoute->id }}" class="list list-unstyled">
+										<ul id="flight_{{ $flightRoute->id }}" class="list list-unstyled" data-ispulled="0">
 											<li></li>
 										</ul>
 								</div>

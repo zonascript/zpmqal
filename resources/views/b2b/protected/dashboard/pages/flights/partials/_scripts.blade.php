@@ -11,8 +11,8 @@
 			console.log(start.toISOString(), end.toISOString(), label);
 		});
 
-		postSsFlight({{$package->flightRoutes[0]->flight->id}}, {{$package->flightRoutes[0]->id}}, 1);
-		postQpxFlight({{$package->flightRoutes[0]->flight->id}}, {{$package->flightRoutes[0]->id}});
+		/*postSsFlight({{$package->flightRoutes[0]->id}});*/
+		postQpxFlight({{$package->flightRoutes[0]->id}});
 
 	});
 </script>
@@ -20,67 +20,62 @@
 
 {{-- autocomplete --}}
 <script>
-	$(function() {
-		$(document).on('click', '.input-airport', function(){
-			console.log($(this).attr('placeholder'));
-			$(this).autocomplete({
-				source: '{{ url("dashboard/tools/airport") }}'
-			});
+	$(document).on('keyup keypress keydown paste', '.input-airport', function(){
+		$(this).autocomplete({
+			source: '{{ url("dashboard/tools/airport") }}'
 		});
 	});
 </script>
 {{-- /autocomplete --}}
 
-{{-- autocomplete --}}
+{{-- modify search --}}
 <script>
-	$(function() {
-		$(document).on('click', '.btn-airport', function(){
+	$(document).on('click', '#modify_search', function(){
+		$('#loging_log').show();
+		var rid = $(this).attr('data-rid');
+		var origin = $('input.origin').val();
+		var destination = $('input.destination').val();
+		changeTabMenu(rid, origin, destination);
 
-			var origin = $('input.origin').val();
-			var destination = $('input.destination').val();
-			var arrival = $('input.arrival').val();
-			var adult = $('input.adult').val();
-			var child = $('input.child').val();
-			var infant = $('input.infant').val();
+		idObject['flight_'+rid].origin = origin;
+		idObject['flight_'+rid].destination = destination;
+		
+		{{--var arrival = $('input.arrival').val();
+		var adult = $('input.adult').val();
+		var child = $('input.child').val();
+		var infant = $('input.infant').val();--}}
 
-			var data = {
-					"_token" : csrf_token,
-					"origin" : origin,
-					"destination" : destination,
-					"arrival" : arrival,
-					"adult" : adult,
-					"child" : child,
-					"infant" : infant,
-				};
+		var data = {
+				"_token" : csrf_token,
+				"origin" : origin,
+				"destination" : destination,
+				{{--"arrival" : arrival,
+				"adult" : adult,
+				"child" : child,
+				"infant" : infant,--}}
+			};
 
-			console.log(JSON.stringify(data));
-
-			$.ajax({
-				type:"post",
-				url: "",
-				data: data,
-				success: function(responce, textStatus, xhr) {
-					console.log(responce);
-					var responce = JSON.parse(responce);
-         	document.location.href = responce.nextUrl;
-        },
-
-        error: function(xhr, textStatus) {
-					if(xhr.status == 401){
-						window.open("{{ url('login') }}", '_blank');
-					}
-        }
-
-			});
-
+		$.ajax({
+			type:"post",
+			url: "{{url('dashboard/package/route/update/')}}/"+rid+"?format=json",
+			data: data,
+			success: function(response) {
+				var response = JSON.parse(response);
+				/*console.log(response);*/
+				if (response.status == 200) {
+					$('#flight_'+rid).empty();
+					postQpxFlight(rid);
+					/*postSsFlight(rid);*/
+				}
+      }
 		});
 	});
 </script>
-{{-- /autocomplete --}}
+{{-- /modify search --}}
+
+@include('b2b.protected.dashboard.pages.flights.partials.js_objects')
 
 {{-- filter List.js--}}
-
-
 <script>
 	var filter = {
 		@foreach ($package->flightRoutes as $flightRouteKey => $flightRoute)
@@ -97,40 +92,8 @@
 			@endforeach
 		}
 	}
-	
+
 </script>
-
-<script>
-
-	<?php 
-		$rid =  [];
-		$did =  [];
-		$idObject = [];
-		foreach ($package->flightRoutes as $flightRouteKey  => $flightRoute) {
-
-			$idObject['flight_'.$flightRoute->id] = [
-					'did' => $flightRoute->flight->id,
-					'rid' => $flightRoute->id,
-				];
-			$idObject['flight_'.$flightRoute->id]['next_did'] = 'NaN';
-			$idObject['flight_'.$flightRoute->id]['next_rid'] = 'NaN';
-
-			if ($flightRouteKey+1 < $package->flightRoutes->count()) {
-				$idObject['flight_'.$flightRoute->id]['next_did'] = $package->flightRoutes[$flightRouteKey+1]->flight->id;
-				$idObject['flight_'.$flightRoute->id]['next_rid'] = $package->flightRoutes[$flightRouteKey+1]->id;
-			}
-
-			$rid[] = $flightRoute->id;
-			$did[] = $flightRoute->flight->id;
-		}
-
-		$idObject['did'] = $did;
-		$idObject['rid'] = $rid;
-		$idObject = rejson_decode($idObject);
-	?>
-	var idObject = {!! json_encode($idObject) !!};
-</script>
-
 <script>
 	$(document).on('keypress keyup keydown', "#filter_search", function(){
 		var targetList = $('#tab_menu').find('.active').attr('data-list');
@@ -142,7 +105,6 @@
 			}
 		@endforeach
 	});
-
 </script>
 {{-- /filter List.js --}}
 
@@ -153,20 +115,23 @@
 		$('#loging_log').show();
 
 		$(this).addClass('btn-danger');
-		$(this).addClass('btn-primary');
+		$(this).removeClass('btn-primary');
 		$(this).text('Delete');
 
-		/*$('.btn-addtocart.btn-primary').addClass('btn-dark');
-		$('.btn-addtocart.btn-primary').prop('disabled', false);
-		$('.btn-addtocart.btn-primary').addClass('btn-primary');*/
+		var parent = $(this).closest('.tab-pane');
+		$(parent).find('.btn-addtocart.btn-primary').addClass('btn-dark');
+		$(parent).find('.btn-addtocart.btn-primary').removeClass('btn-primary');
+		{{-- $('.btn-addtocart.btn-primary').prop('disabled', false); --}}
 
 		var id = $(this).attr('data-id');
 		var did = $(this).attr('data-did');
+		var rid = $(this).attr('data-rid');
 		var vendor = $(this).attr('data-vendor');
-		var elemId = $(this).attr('data-elemid');
-		var rid = idObject[elemId].rid;
-		var next_did = idObject[elemId].next_did;
-		var next_rid = idObject[elemId].next_rid;
+		var elemId = 'flight_'+rid;
+		var ridObject = getRidObject(rid);
+		var next_did = ridObject.next_did;
+		var next_rid = ridObject.next_rid;
+
 		var data = {
 				"_token" : csrf_token,
 				"did" : did,
@@ -180,9 +145,14 @@
 		$(this).closest('.main-list-item').prependTo("#"+elemId);
 
 		if (next_rid != "NaN") {
-			setTimeout(function () {   
-				/*postQpxFlight(next_did, next_rid, true);*/
-				postSsFlight(next_did, next_rid, true);
+			setTimeout(function () {
+				console.log(isPulled(next_rid));
+				if (isPulled(next_rid) == 0) {
+					postQpxFlight(next_rid);
+					/*postSsFlight(next_rid);*/
+				}else{
+					$('#loging_log').hide();
+				}
 		  }, 3000)
 		}else{
 			setTimeout(function () {    
@@ -194,33 +164,33 @@
 {{-- /Book Flight --}}
 
 
-{{-- Model PopUp --}}
 <script>
-	$(document).on('click', "[data-toggle='modal']", function(){
-		var popupTarget = $(this).attr('data-target');
-		var popupTitle = $(this).attr('data-title');
-		var popupButton = $(this).attr('data-button');
-		var popupBodyId = $(this).attr('data-bodyid');
-		var popupBody = $('#'+popupBodyId).html();
-		var popupSize = '';
-		
-		if(popupTarget == '.bs-example-modal-sm'){
-			popupSize = '2';
-		}
-
-		$('#myModalLabel'+popupSize).html(popupTitle);
-		$('#myModalBody'+popupSize).empty();
-		$('#myModalBody'+popupSize).html(popupBody);
-		
-		if(popupButton == 'false'){
-			$('#myModalButton'+popupSize).hide();
-		}
-	})
+	$(document).on('click', '.a_tab_menu',function () {
+		var rid = $(this).attr('data-rid');
+		var ridObject = getRidObject(rid);
+		var origin = ridObject.origin;
+		var destination = ridObject.destination;
+		$('#modify_origin').val(origin);
+		$('#modify_destination').val(destination);
+		$('#modify_search').attr('data-rid', rid);
+	});
 </script>
-{{-- /model PopUp --}}
 
-@include('b2b.protected.dashboard.pages.flights.partials.qpx_script')
-@include('b2b.protected.dashboard.pages.flights.partials.ss_script')
+{{-- refreash flights --}}
+<script>
+	$(document).on('click', '.refreash-flights', function() {
+		var vendor = $(this).attr('data-vendor');
+		var did = $(this).attr('data-did');
+		var rid = $(this).attr('data-rid');
+		if (vendor == 'qpx') {
+			postQpxFlight(rid);
+		}
+		else if (vendor == 'ss') {
+			postSsFlight(rid);
+		}
+	});
+</script>
+{{-- /refreash flights --}}
 
 {{-- Adults-Child-button --}}
 <script>
@@ -326,67 +296,4 @@
 </script>
 {{-- /Adults-Child-button --}}
 
-<script>
-	$(document).on('click', '.refreash-flights', function() {
-		var vendor = $(this).attr('data-vendor');
-		var did = $(this).attr('data-did');
-		var rid = $(this).attr('data-rid');
-		if (vendor == 'qpx') {
-			postQpxFlight(did, rid);
-		}
-		else if (vendor == 'ss') {
-			postSsFlight(did, rid);
-		}
-
-	});
-</script>
-
-<script>
-	function postAddtoCartFlight(data) {
-		/*Object must be like this 
-		var data = {
-			"_token" : csrf_token,
-			"did" : did,
-			"index" :id,
-			"vendor" : vendor
-		}*/
-		$.ajax({
-			type:"post",
-			url: "{{ urlFlightBook()}}"+data.did,
-			data: data,
-			success : function(responce){
-				responce = JSON.parse(responce);
-				if (responce.status == 200) {
-					$('#a_flight_'+data.next_rid).click();
-				}else{
-					alert('Something went wrong please try again.');
-				}
-			},
-			error: function(xhr, textStatus) {
-				if(xhr.status == 401){
-					window.open("{{ url('login') }}", '_blank');
-				}
-				alert('Something went wrong please try again.');
-			}
-		});
-	}
-</script>
-
-
-<script>
-	function getDate(datetime) {
-		return moment(datetime).format("DD-MM-YYYY");
-	}
-
-	function getTime(datetime) {
-		return moment(datetime).format("HH:mm");
-	}
-</script>
-
-
-<script>
-	function refreashFlights(ids) {
-		$('#loging_log').show();
-		$('#'+ids.elem_id).html('<div id="sorry_error" class="m-top-20"><h1>Sorry Something went wrong<h1><div class="row"><div class="col-md-6 col-sm-6 col-xs-12 offset-col-md-3"><button data-vendor="'+ids.vendor+'" data-did="'+ids.did+'" data-rid="'+ids.rid+'" class="btn btn-primary btn-block refreash-flights">Refreash</button></div></div></div>');
-	}
-</script>
+@include('b2b.protected.dashboard.pages.flights.partials.js_function')

@@ -99,12 +99,24 @@ class RouteController extends Controller
 	}
 
 
-	public function FunctionName($value='')
+	public function updateRoute($id, Request $request)
 	{
-		# code...
+		$route = RouteModel::find($id);
+		if (isset($request->origin)) { $route->origin = $request->origin; }
+		if (isset($request->destination)) { 
+				$route->destination = $request->destination; 
+		}
+
+		$route->save();
+
+		$return = $route->id;
+
+		if ($request->format == 'json') {
+			$return = json_encode(["status" => 200, "response" => "route updated"]);
+		}
+
+		return $return;
 	}
-
-
 
 	public function createPackage($id)
 	{
@@ -202,55 +214,6 @@ class RouteController extends Controller
 									])
 								->get();
 		return $result;
-	}
-
-
-
-
-	/*
-	| this function is for shifting date and 
-	| there is two params is needed package table id and route table id 
-	*/
-	public function shiftDates($packageDbId, $routeDbId){
-		/*
-		| this function is finding all route 
-		| after given route id with include this route id 
-		*/
-		$routes = $this->findAfterRouteId($packageDbId, $routeDbId);
-		
-		$shifted = false;
-
-		if (isset($routes[0])) {
-
-			$firstRouteEndDate = date_formatter($routes[0]->end_date, 'Y-m-d H:i:s');
-
-			foreach ($routes as $routeKey => $route) {
-				if ($routeKey) {
-					
-					$routeStartDate =	date_formatter($route->start_date, 'Y-m-d H:i:s');
-
-					if ($routeStartDate == $firstRouteEndDate) {
-						break;
-					}
-					else{
-						$shifted = true;
-						$route->start_date = $firstRouteEndDate.substr($route->start_date, 10);
-						$routeEndDate = addDaysinDate($firstRouteEndDate, $route->nights);
-						$route->end_date  = $routeEndDate.substr($route->end_date, 10);
-						$route->save();
-						$firstRouteEndDate = $routeEndDate;
-					}
-				}
-			}	
-		}
-		
-		// if ($shifted) {
-		// 	ActivitiesController::call()->delete($packageDbId);
-		// }
-
-		PackageController::call()->setDates($packageDbId);
-		
-		return $shifted;
 	}
 
 

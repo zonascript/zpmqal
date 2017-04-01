@@ -210,6 +210,46 @@ class RouteModel extends Model
 		return $result;
 	}
 
+	public function fixDates($routeId=null)
+	{
+		$routes = null;
 
+		$where = [['status', '<>', 'deleted']];
+
+		if (!is_null($routeId)) { 
+			$where[] = ['id', '>', $routeId];
+		}
+
+		$routes = $this->select()->where($where)->get();
+
+		if ($routes->count()) {
+			$nextStartDate = '0000-00-00';
+
+			foreach ($routes as $key => $route) {
+
+				if ($key) {
+					$route->start_date = $nextStartDate;
+				}
+				else{
+					if ($routeId) {
+						$route->start_date = $this->end_date;
+					}else{
+						$route->start_date = $this->package->start_date;
+					}
+				}
+				
+				if (in_array($route->mode, ['ferry', 'hotel', 'road', 'cruise', 'train'])) {
+					$endDate = Carbon::parse($route->start_date);
+					$endDate->addDays($route->nights);
+					$nextStartDate = $endDate->format('Y-m-d');
+					$route->end_date = $nextStartDate;
+				}
+				
+				$route->save();
+
+				if ($route->mode == 'flight') { return true; }
+			}
+		}
+	}
 
 }

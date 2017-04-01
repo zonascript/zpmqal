@@ -3,6 +3,7 @@
 namespace App\Models\Api;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class SkyscannerFlightsModel extends Model
 {
@@ -10,12 +11,16 @@ class SkyscannerFlightsModel extends Model
 	protected $appends = [
 			'places_formatted', 
 			'carriers_formatted',
-			'leg', 'segments'
+			'leg', 'segments',
+			'departureDateTime',
+			'arrivalDateTime'
 		];
 	protected $casts = [
 			'request' => 'object',
 			'result' => 'object'
 		];
+
+
 
 	public function getPlacesFormattedAttribute()
 	{
@@ -78,5 +83,42 @@ class SkyscannerFlightsModel extends Model
 
 		return $segments; 
 	}
+
+
+	// public function getDepartureDateTimeAttribute(){
+	// 	$dateTime = (object)['date' => '0000-00-00', 'time' => '00:00'];
+	// 	$check = (
+	// 			isset($this->leg->SegmentIds) && 
+	// 			isset($this->result->Segments[$segmentIds[0]]->DepartureDateTime)
+	// 		);
+
+	// 	if ($check) {
+	// 		$segmentIds = $this->leg->SegmentIds;
+	// 		$departureDateTime = Carbon::parse($this->result
+	// 																	->Segments[$segmentIds[0]]
+	// 																		->DepartureDateTime);
+	// 		$dateTime->date = $departureDateTime->format('Y-m-d');
+	// 		$dateTime->time = $departureDateTime->format('H:i');
+	// 	}
+
+	// 	return $dateTime;		
+	// }
+
+
+	// public function getArrivalDateTimeAttribute(){
+	// 	$dateTime = (object)['date' => '0000-00-00', 'time' => '00:00'];
+
+	// 	$check = (
+	// 			isset($this->leg->SegmentIds) && 
+	// 			isset(
+	// 					$this->result
+	// 								->Segments[count((array)$segmentIds)-1]
+	// 									->DepartureDateTime
+	// 				)
+	// 		);
+
+	// 	$endDate = $flightDetail->Segments[]->ArrivalDateTime;
+	// 	$endDate = str_replace('T', ' ', $endDate);
+	// }
 
 }

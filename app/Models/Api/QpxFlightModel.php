@@ -3,12 +3,16 @@
 namespace App\Models\Api;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use DB;
 
 class QpxFlightModel extends Model
 {
 	protected $table = 'qpx_flights';
-	protected $appends = ['airlines', 'cities', 'slices', 'legs', 'segments'];
+	protected $appends = [
+			'airlines', 'cities', 'slices', 'legs', 'segments',
+			'departureDateTime', 'arrivalDateTime'
+		];
 	protected $casts = [
 			'request' => 'object', 
 			'result' => 'object'
@@ -33,6 +37,48 @@ class QpxFlightModel extends Model
 			$cityCode[$city->code] = $city->name;
 		}
 		return (object) $cityCode;
+	}
+
+
+
+	public function getDepartureDateTimeAttribute()
+	{
+		$dateTime = (object)['date' => '0000-00-00', 'time' => '00:00'];
+		if (isset($this->slices[0]->segment[0]->leg[0]->departureTime)) {
+			$departureDateTime = Carbon::parse($this->slices[0]
+																	 ->segment[0]->leg[0]
+																		 ->departureTime);
+			$dateTime->date = $departureDateTime->format('Y-m-d');
+			$dateTime->time = $departureDateTime->format('H:i');
+		}
+
+		return $dateTime;
+	}
+
+
+	public function getArrivalDateTimeAttribute()
+	{
+		$dateTime = (object)['date' => '0000-00-00', 'time' => '00:00'];
+
+		$sliceCount = count($this->slices)-1;
+		if (isset($this->slices[$sliceCount]->segment)) {
+			$segmentCount = count($this->slices[$sliceCount]->segment)-1;
+
+			if (isset($this->slices[$sliceCount]->segment[$segmentCount]->leg)) {
+				$legCount = count($this->slices[$sliceCount]
+																 ->segment[$segmentCount]->leg)-1;
+
+				// finding end Date here
+				$arrivalDateTime = Carbon::parse($this->slices[$sliceCount]
+													->segment[$segmentCount]->leg[$legCount]
+														->arrivalTime);
+
+				$dateTime->date = $arrivalDateTime->format('Y-m-d');
+				$dateTime->time = $arrivalDateTime->format('H:i');
+			}
+		}
+
+		return $dateTime;
 	}
 
 
@@ -77,6 +123,11 @@ class QpxFlightModel extends Model
 		return $segments; 
 	}
 
+
+	public function tripOption()
+	{
+		return $this->result->trips->tripOption[$this->selected_index];
+	}
 
 
 	public function flightDetail()

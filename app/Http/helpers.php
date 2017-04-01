@@ -113,7 +113,9 @@ function echoHtml($html)
 
 function trimHtml($html)
 {
-	return trim( preg_replace('/\s+/', ' ', preg_replace('/\t+/', '',$html)));
+	$html = trim( preg_replace('/\s+/', ' ', preg_replace('/\t+/', '',$html)));
+	$html = str_replace('> <', '><', $html);
+	return $html;
 }
 
 function proper($Word){
@@ -542,7 +544,11 @@ function totalRoomGuest($roomGuests){
 function secToDay($sec)
 {
 	return $sec/(60*60*24);
+}
 
+function carbonParse($date = "0000-00-00")
+{
+	return \Carbon\Carbon::parse($date);
 }
 
 function date_differences($EndDate,$StartDate, $format = 'Y-m-d'){

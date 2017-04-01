@@ -148,8 +148,8 @@ class SkyscannerFlightsApiController extends Controller
 
 			// this array have to be return,
 			$return = (object)[
-					"startDate" => $startDate,
-					"endDate" => $endDate,
+					"startDateTime" => getDateTime($startDate),
+					"endDateTime" => getDateTime($endDate),
 					"vendor" => 'ss',
 				];
 			

@@ -297,25 +297,19 @@ class FlightsController extends Controller
 			$packageFlight->status = "complete";
 			$packageFlight->save();
 
-			if (isset($bookedFlightDetail->startDate) && isset($bookedFlightDetail->endDate)) {
-				// ==================finding route here using route table id ==================
-				$route->start_date = $bookedFlightDetail->startDate;
-				$route->end_date = $bookedFlightDetail->endDate;
+			if (isset($bookedFlightDetail->startDateTime) && isset($bookedFlightDetail->endDateTime)) {
+				// =============finding route here using route table id =============
+				$route->start_date = $bookedFlightDetail->startDateTime->date;
+				$route->start_time = $bookedFlightDetail->startDateTime->time;
+				$route->end_date = $bookedFlightDetail->endDateTime->date;
+				$route->end_time = $bookedFlightDetail->endDateTime->time;
 				$route->status = 'complete';
 				$route->save();
-
-				/* =============================shifting dates here=============================
-				| this function is required two params 
-				| 1. package table id
-				| 2. route table id 
-				*/ 
-				RouteController::call()->shiftDates($route->package_id, $route->id);
+				$route->fixDates($route->id);
 
 				$returnArray = [ 
 					"status" => 200,
 					"responce" => 'data saved successfully'
-					// "packageUrl" => newRedirectUrl(urlPackageAll($clientId, $packageDbId)),
-					// "nextUrl" => newRedirectUrl(urlPackageEvent($routeDbId)),
 				];
 
 			}
@@ -328,66 +322,6 @@ class FlightsController extends Controller
 		
 		return json_encode($returnArray);
 	
-	}
-
-	public function bookFlightsResult($flightDbId, Request $request){
-
-		$packageFlight = PackageFlightModel::call()->usersFind($flightDbId);
-		$packageDbId = $packageFlight->package->id; 
-		$clientId = $packageFlight->package->client->id;
-		
-		if (!is_null($packageFlight)) {
-
-			// =================Gettting result after booked the flight=================
-			$bookedFlightDetail = [];
-
-			// =============================qpx flight here=============================
-			if ($request->vendor == 'qpx') {
-				// storing package's selected_flights_vendor column value
-				$packageFlight->qpx_flight_id = $packageFlight->qpx_temp_flight_id;
-				$packageFlight->selected_flight_vendor = 'qpx';
-
-				// booking flight here with respective vendor
-				$bookedFlightDetail = QpxFlightApiController::call()
-														->book($packageFlight->qpx_flight_id, $request->index);	
-			}//---if there is other fight service provider then use elseid here---
-
-			// route id storing in 
-			$routeDbId = $packageFlight->route_id;
-			
-			$packageFlight->status = "complete";
-			$packageFlight->save();
-			if (isset($bookedFlightDetail->startDate) && isset($bookedFlightDetail->endDate)) {
-				// ==================finding route here using route table id ==================
-				$route = RouteController::call()->find($routeDbId);
-				$route->start_date = $bookedFlightDetail->startDate;
-				$route->end_date = $bookedFlightDetail->endDate;
-				$route->status = 'complete';
-				$route->save();
-			}
-
-
-			/* =============================shifting dates here=============================
-			| this function is required three params 
-			| 1. package table id
-			| 2. route table id 
-			*/ 
-			RouteController::call()->shiftDates($packageDbId, $routeDbId);
-
-			$returnArray = [ 
-				"status" => 200,
-				"packageUrl" => newRedirectUrl(urlPackageAll($clientId, $packageDbId)),
-				"nextUrl" => newRedirectUrl(urlPackageEvent($routeDbId)),
-			];
-
-			return json_encode($returnArray);
-		}
-		else{
-			return json_encode([
-					"status" => 500, 
-					"responce" => "Something Went Wrong please try again later."
-				]);
-		}
 	}
 
 
@@ -403,8 +337,7 @@ class FlightsController extends Controller
 
 	public function postQpxFlightResult($id)
 	{
-		// return $result = file_get_contents(public_path('faker/qpx.json'));
-		// dd(json_decode($result));
+		// return $result = file_get_contents(storage_path('mylocal/faker/qpx.json'));
 
 		$packageFlight = PackageFlightModel::find($id);
 		

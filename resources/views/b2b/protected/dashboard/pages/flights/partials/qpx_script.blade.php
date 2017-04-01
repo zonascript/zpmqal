@@ -1,80 +1,10 @@
-<?php
-
-$html = 'var searchWord = \'\';
-	appendHtml += \'<li class="min-height-110px">
-	<div class="x_panel glowing-border">
-		<div class="col-md-10 col-sm-10 col-xs-12">\';
-		$.each(tripOption.slice, function(sliceKey,slice){
-			$.each(slice.segment, function(segmentKey,segment){
-				searchWord += airlines[segment.flight.carrier] +\' \'+segment.flight.carrier + segment.flight.number;
-				appendHtml += \'<div class="row">
-					<div class="col-md-5 col-sm-5 col-xs-12">
-						<div class="row m-tb-10px text-left">
-							<div class="col-md-3 col-sm-3 col-xs-12">
-								<div class="row">
-									<img src="'.urlImage('images/airlineImages/').'\'+segment.flight.carrier+\'.gif" alt="">
-								</div>
-							</div>
-							<div class="col-md-9 col-sm-9 col-xs-12">
-								<div class="flightName font-size-15">\'
-									+airlines[segment.flight.carrier]+
-								\'</div>
-								<div>
-									<small>\'+segment.flight.carrier + segment.flight.number+\'</small>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-7 col-sm-7 col-xs-12">\';
-						$.each(segment.leg, function(legKey,leg){
-							appendHtml += \'<div class="row">
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<div class="text-center">
-										<h2>
-											<span>\'+getTime(leg.departureTime)+\'</span>
-											<small>(\'+getDate(leg.departureTime)+\')</small>
-										</h2>
-										<div>\'+leg.origin+\'</div>
-									</div>
-								</div>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<div class="text-center">
-										<h2>
-											<span>\'+getTime(leg.arrivalTime)+\'</span>
-											<small>(\'+getDate(leg.arrivalTime)+\')</small>
-										</h2>
-										<div>\'+leg.destination+\'</div>
-									</div>
-								</div>		
-							</div>\';
-						});
-					appendHtml += \'</div>
-				</div>\';
-			});
-		});
-		appendHtml += \'</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
-				<h2 class="flightPrice text-center">'.
-					// {{-- <i class="fa fa-rupee"></i> --}}
-					// {{-- <span>{{ ifset($tripOption->saleTotal) }}</span> --}}
-					// {{-- <span>/-</span> --}}
-				'</h2>
-				<div class="search-word" hidden>\'+searchWord+\'</div>
-				<div class="row m-tb-20px">
-					<button class="btn btn-primary btn-block btn-addtocart" data-elemid="\'+ids.elem_id+\'" data-did="\'+ids.did+\'" data-id="\'+tripOptionKey+\'" data-vendor="qpx">Select</button>
-				</div>
-			</div>
-		</div>
-	</li>\';';
-
-	$html = trim( preg_replace('/\s+/', ' ', preg_replace('/\t+/', '',$html))); 
-
-?>
 
 {{-- did == db id --}}
 <script>
-	function postQpxFlight(did = '', rid ='') {
+	function postQpxFlight(rid ='') {
+		var ridObject = getRidObject(rid);
 		var elem_id = "flight_"+rid;
+		var did = ridObject.did;
 		var ids = {
 				'did' : did,
 				'rid' : rid,
@@ -100,7 +30,7 @@ $html = 'var searchWord = \'\';
 					}else{
 						/*refreashFlights(ids);*/
 					}
-
+					dataIsPulled(rid);					
 					filter.initFilter(rid);
 					
 					$('#loging_log').hide();
@@ -125,17 +55,43 @@ $html = 'var searchWord = \'\';
 	function makeQpxHtml(tripOptionKey, tripOption, data, ids) {
 		var appendHtml = '';
 		var airlines = data.airlines;
-		<?php echo $html; ?> 
-		return appendHtml;
-	}
+		var cities = data.cities;
+		var stacks = [];
 
-	function getDate(datetime) {
-		return moment(datetime).format("DD-MM-YYYY");
-	}
+		$.each(tripOption.slice, function(sliceKey,slice){
+			$.each(slice.segment, function(segmentKey,segment){
+				var stack = {};
+				stack['name'] = airlines[segment.flight.carrier].replace('Limited', '');
+				stack['code'] =	segment.flight.carrier;
+				stack['flightNumber'] = segment.flight.number;
 
-	function getTime(datetime) {
-		return moment(datetime).format("HH:mm");
+				$.each(segment.leg, function(legKey,leg){
+					var departureDateTime = qpxDateTime(leg.departureTime);
+					stack['departureTime'] = departureDateTime.time;
+					stack['departureDate'] = departureDateTime.date;			
+					
+					var arrivalDateTime = qpxDateTime(leg.arrivalTime);
+					stack['arrivalTime'] = arrivalDateTime.time;
+					stack['arrivalDate'] = arrivalDateTime.date;
+
+					stack['origin'] = cities[leg.origin];
+					stack['originCode'] = leg.origin;
+					stack['destination'] = cities[leg.destination];
+					stack['destinationCode'] = leg.destination;
+				});
+				stacks.push(stack);
+			});
+		});
+
+		var flight = {
+				'index' : tripOptionKey,
+				'vendor_id': data.db.id,
+				'stacks' : stacks, 
+				'vendor' : 'qpx',
+				'ids' : ids
+			};
+
+		return getFlightStack(flight);
 	}
-	
 </script>
 

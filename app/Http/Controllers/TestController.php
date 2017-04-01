@@ -10,7 +10,22 @@ class TestController extends Controller
 	public function testCode()
 	{
 
-		$curl = curl_init();
+		pre_echo(carbonParse('2017-04-28T14:55')->format('H:i'));
+		dd(carbonParse('2017-04-28T14:05'));
+
+		dd(httpGet('https://www.cleartrip.com/flights/international/results?from=SIN&to=DPS&depart_date=27/04/2017&adults=1&childs=0&infants=0&class=Economy&airline=&carrier=&intl=y&sd=1490978924381&page=loaded'));
+
+		$timestamp = 1491065325;
+								 // 1490979882
+		// echo date('d/m/Y', $timestamp);
+		$datetimeFormat = 'Y-m-d H:i:s';
+
+		$date = new \DateTime();
+		$date->setTimestamp($timestamp);
+		echo $date->format($datetimeFormat);
+
+
+		/*$curl = curl_init();
 
 		curl_setopt_array($curl, array(
 		  CURLOPT_URL => "https://content.googleapis.com/qpxExpress/v1/trips/search?key=AIzaSyB1AiUDyhG1GDosrt5Qe9Ee-rUTgA2SEmU&alt=json",
@@ -37,10 +52,14 @@ class TestController extends Controller
 		  echo "cURL Error #:" . $err;
 		} else {
 		  echo $response;
-		}
+		}*/
+		
 
-		// $date = \Carbon\Carbon::parse('00:00:00');
-		// dd($date);
+	}
+
+	public function testClearTrip()
+	{
+		return view('test.cleartrip');
 	}
 
 	public function test()
@@ -87,7 +106,7 @@ class TestController extends Controller
 		return $output;
 	}
 
-	function geocode($city){
+	public function geocode($city){
 
    $details_url = "http://maps.googleapis.com/maps/api/geocode/json?address=" . str_replace (" ", "+", $city) . "&sensor=false";
 

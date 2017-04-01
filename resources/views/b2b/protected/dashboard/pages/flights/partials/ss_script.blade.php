@@ -1,8 +1,10 @@
 
 {{-- did == db id --}}
 <script>
-	function postSsFlight(did = '', rid ='') {
+	function postSsFlight(rid ='') {
+		var ridObject = getRidObject(rid);
 		var elem_id = "flight_"+rid;
+		var did = ridObject.did;
 		var ids = {
 				'did' : did,
 				'rid' : rid,
@@ -30,7 +32,7 @@
 
 					}
 					else{
-						postSsFlight(did, rid);
+						postSsFlight(rid);
 						/*refreashFlights(ids);*/
 					}
 
@@ -50,25 +52,41 @@
 	}
 </script>
 
-
-<script>
-	function ssDateTime(datetime) {
-		var datetime = datetime.split('T');
-		var time =  datetime[1].substring(0, 5);
-		return {'date':datetime[0], 'time':time};
-	}
-</script>
-
 <script>
 	function makeSsHtml(legKey,leg, data, ids) {
-
 		if (leg.hasOwnProperty('SegmentIds') && data.hasOwnProperty('Segments')) {
+			var stacks = [];
 			var segmentsIds = leg.SegmentIds;
-			var appendHtml = '';
-			var airlines = data.airlines;
-			var searchWord = '';
-			@include('b2b.protected.dashboard.pages.flights.partials.ss_partials.html')
-			return appendHtml;
+			$.each(segmentsIds, function (segmentsId, segmentsVal) {
+				if (data.Segments.hasOwnProperty(segmentsVal)) {
+					var stack = {};
+					var segment = data.Segments[segmentsVal];
+					var departureDateTime = ssDateTime(segment.DepartureDateTime);
+					var arrivalDateTime = ssDateTime(segment.ArrivalDateTime);
+
+					stack[flightNumber] = segment.FlightNumber;
+					stack[arrivalDate] = arrivalDateTime.time;
+					stack[arrivalTime] = arrivalDateTime.date;
+					stack[departureTime] = departureDateTime.time;
+					stack[departureDate] = departureDateTime.date;
+					stack[name] = data.Carriers[segment.Carrier].Name;
+					stack[code] = data.Carriers[segment.Carrier].Code;
+					stack[origin] = data.Places[segment.OriginStation].name;
+					stack[originCode] = data.Places[segment.OriginStation].code;
+					stack[destination] = data.Places[segment.DestinationStation].name;
+					stack[destinationCode] = data.Places[segment.DestinationStation].code;
+
+					stacks.push(stack);
+				}
+			});
+
+			var flight = {
+				'index' : legKey,
+				'stacks' : stacks, 
+				'vendor' : 'ss',
+				'ids' : ids
+			};
+			return getFlightStack(flight);
 		}
 	}
 </script>
