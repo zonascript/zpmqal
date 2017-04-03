@@ -16,6 +16,12 @@ class PackageFlightModel extends Model
 
 
 
+	public function setStatusAttribute($value)
+	{
+		$this->attributes['status'] = strtolower($value);
+	}
+
+
 	/*
 	| this function to find hotal's data from db behalf of logged in user or agent
 	*/

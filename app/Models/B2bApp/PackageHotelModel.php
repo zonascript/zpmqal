@@ -15,6 +15,12 @@ class PackageHotelModel extends Model
 		];
 
 
+	public function setStatusAttribute($value)
+	{
+		$this->attributes['status'] = strtolower($value);
+	}
+
+
 	public static function call(){
 		return new PackageHotelModel;
 	}

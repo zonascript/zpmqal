@@ -38,6 +38,11 @@ class RouteModel extends Model
 		'created_at', 'updated_at',
 	];
 
+	public function setStatusAttribute($value)
+	{
+		$this->attributes['status'] = strtolower($value);
+	}
+
 	public function getLocationHotelAttribute()
 	{
 		return DestinationController::call()->search($this->attributes['destination']);

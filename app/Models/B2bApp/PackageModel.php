@@ -12,9 +12,7 @@ class PackageModel extends Model
 {
 	protected $table = 'packages';
 	protected $append = ['uid', 'cost', 'nights', 'pax_detail', 'itinerary'];
-	protected $hidden = [
-			'created_at', 'updated_at',
-		];
+	protected $hidden = ['created_at', 'updated_at'];
 
 
 	public static function call(){

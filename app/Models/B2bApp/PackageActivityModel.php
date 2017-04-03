@@ -23,6 +23,13 @@ class PackageActivityModel extends Model
 		return new PackageActivityModel;
 	}
 
+
+	public function setStatusAttribute($value)
+	{
+		$this->attributes['status'] = strtolower($value);
+	}
+
+	
 	public function setSelectedActivitiesAttribute($value)
 	{
 		if (is_array($value) || is_object($value)) {

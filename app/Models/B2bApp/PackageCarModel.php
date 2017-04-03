@@ -12,6 +12,11 @@ class PackageCarModel extends Model
 			];
 
 
+	public function setStatusAttribute($value)
+	{
+		$this->attributes['status'] = strtolower($value);
+	}
+
 	/*
 	| this function is for getting package data 
 	| from package table behalf of package_id

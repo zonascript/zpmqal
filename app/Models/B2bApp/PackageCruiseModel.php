@@ -12,6 +12,14 @@ class PackageCruiseModel extends Model
 		return new PackageFlightModel;
 	}
 
+
+	public function setStatusAttribute($value)
+	{
+		$this->attributes['status'] = strtolower($value);
+	}
+
+
+	
 	/*
 	| this function is for getting route of that route
 	*/
@@ -35,8 +43,4 @@ class PackageCruiseModel extends Model
 		return $this->belongsTo('App\Models\Api\FgfCruiseModel', 'fgf_temp_cruise_id');		
 	}
 
-
-  public function book($id){
-		DB::update("UPDATE `package_cruises` SET `fgf_cruise_result` = `temp_fgf_cruise_result`, `fgf_cabin_result` = `temp_fgf_cabin_result` WHERE `id` = $id");
-	}
 }

@@ -17,6 +17,12 @@ class RedirectUrlModel extends Model
   }
 
 
+  public function setStatusAttribute($value)
+  {
+    $this->attributes['status'] = strtolower($value);
+  }
+
+
   public function findByHashId($hashId){
     // $auth = Auth::user();
   	$result = $this->select(["id", "hash_id", "token", "url"])
