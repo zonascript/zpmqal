@@ -9,7 +9,8 @@ class TestController extends Controller
 
 	public function testCode()
 	{
-
+		saveInStorage('this is text', 'agoda_rooms', 'html', 'mylocal/testnew');
+		dd();
 		pre_echo(carbonParse('2017-04-28T14:55')->format('H:i'));
 		dd(carbonParse('2017-04-28T14:05'));
 

@@ -16,6 +16,7 @@ use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\B2bApp\FgfActivitiesController;
 use App\Http\Controllers\B2bApp\UnionActivitiesController;
 use App\Http\Controllers\B2bApp\ViatorActivitiesController;
+use App\Http\Controllers\B2bApp\SelectedActivitiesController;
 
 // =================================Models=================================
 use App\Models\B2bApp\PackageActivityModel;
@@ -362,6 +363,7 @@ class ActivitiesController extends Controller
 	public function saveActivities($id, Request $request)
 	{
 		$packageActivities = PackageActivityModel::find($id);
+
 		$selectedIndex = isset($request->activities)
 									 ? $request->activities
 									 : [];
@@ -387,9 +389,40 @@ class ActivitiesController extends Controller
 			$packageActivities->union->save();
 		}
 
-		$packageActivities->selected_activities = $selectedIndex;
+		$selectedIndex = $this->arrayForBulkInsert($selectedIndex, $id);
+
+		SelectedActivitiesController::call()->inactiveOld($id)
+																					->bulkInsert($selectedIndex, $id);
 		$packageActivities->save();
+
 		return json_encode(['saved' => true]);
+	}
+
+
+	public function arrayForBulkInsert($data, $packageActivityId)
+	{
+		$selectedActivities = [];
+		foreach ($data as $activity) {
+			$activity = (object) $activity;
+			$code = $activity->activityCode;
+			
+			if ($activity->vendor == 'f') {
+				$code = str_replace('ACTV', '', $code);
+			}
+
+			$selectedActivities[] = [
+					"package_activity_id" => $packageActivityId,
+					"code" => $code,
+					"mode" => $activity->mode,
+					"date" => date_formatter($activity->date, 'd/m/Y'),
+					"vendor" => $activity->vendor,
+					"timing" => $activity->timing,
+					"created_at" => date('Y-m-d H:i:s'),
+					"updated_at" => date('Y-m-d H:i:s') 
+				]; 
+		}
+
+		return $selectedActivities;
 	}
 
 }

@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\ViatorController;
 use App\Http\Controllers\Api\ViatorDestinationController;
 
 // ==============================Model==============================
-use App\Models\Api\ViatorActivityModel;
+use App\Models\B2bApp\ViatorActivityModel;
 
 
 

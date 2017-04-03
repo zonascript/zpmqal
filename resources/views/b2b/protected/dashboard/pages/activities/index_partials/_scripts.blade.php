@@ -302,7 +302,7 @@
 					cache: false,
 					success: function(html) { 
 						if (next_rid == "NaN") {
-							document.location.href = "{{ urlPackageAll($package->client->id, $package->id) }}";
+							/*document.location.href = "{{ urlPackageAll($package->client->id, $package->id) }}";*/
 						}else{
 							$('#a_activities_'+next_rid).click();
 						}

@@ -169,7 +169,7 @@ class PackageController extends Controller
 		$package = PackageModel::call()->usersFind($packageDbId);
 		TrackPackageController::call()->inactiveOld($packageDbId);
 
-		if (!is_null($package->client) && $package->client->id == $id) {
+		if (isset($package->client->id) && $package->client->id == $id) {
 			$bladeData = ["package" => $package];
 			return view('b2b.protected.dashboard.pages.package.show',$bladeData);
 		}
@@ -289,29 +289,6 @@ class PackageController extends Controller
 									->createNew($package->id, $costParams);
 
 		return json_encode(["status" => 200, "responce" => "saved successfully..."]);
-	}
-
-
-
-	public function saveCostOld($id, $packageDbId, Request $request)
-	{
-		
-		$auth = Auth::user();
-		$package = PackageModel::find($packageDbId);
-		
-		if ($auth->id == $package->user_id) {
-			$oldtotalCost = $this->moveToOldCost($package->total_cost);
-			$totalCost = $request->input();
-			$totalCost['date'] = date('m/d/Y h:i:s A', time());
-			$totalCost['old'] = $oldtotalCost;
-			$package->total_cost = 	$totalCost;
-			$package->save();
-
-			return json_encode(["status" => 200, "responce" => "saved successfully..."]);
-		}
-		else{
-			return jsonError('invalid package');
-		}
 	}
 
 

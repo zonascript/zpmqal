@@ -80,7 +80,11 @@ class AgodaHotelRoomsController extends Controller
 			}
 		}
 
-		$filePath = saveInStorage($html, 'agoda_rooms', 'html', 'agoda');
+		if (!file_exists(storage_path('mylocal/agoda'))) {
+			mkdir(storage_path('mylocal/agoda'), 0777);
+		}
+
+		$filePath = saveInStorage($html, 'agoda_rooms', 'html', 'mylocal/agoda');
 
 		return (object)["html" => $html, "filePath" => $filePath];
 	}

@@ -3,14 +3,11 @@
 <div class="width-95p m-10x-auto">
 	@foreach ($package->hotelRoutes as $hotelRoute)
 		<?php 
-			$activities = isset($hotelRoute->activities->activities_detail) 
-									? $hotelRoute->activities->activities_detail 
-									: [];
-									
-			$location = $hotelRoute->location_hotel;
+			$location = $hotelRoute->destination_detail;
+			$selectedActivities = $hotelRoute->activities->selectedActivities;
 		?>
-		@foreach ($activities as $activity)
-			@include('b2b.protected.dashboard.pages.package.pdf_partials.activities_partials.union')
+		@foreach ($selectedActivities as $selectedActivity)
+			@include('b2b.protected.dashboard.pages.package.pdf_partials.activities_partials.index')
 		@endforeach
 	@endforeach
 </div>

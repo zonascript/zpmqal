@@ -35,9 +35,9 @@ class RoomGuestsController extends Controller
 		foreach ($params->ChildAge as $childAge) {
 			$childAgeParams[] = [
 					'room_guest_id' => $roomGuest->id, 
-					'age'=> $childAge,
-					'created_at'=>date('Y-m-d H:i:s'),
-					'updated_at'=> date('Y-m-d H:i:s') 
+					'age' => $childAge,
+					'created_at' => date('Y-m-d H:i:s'),
+					'updated_at' => date('Y-m-d H:i:s') 
 				];
 		}
 

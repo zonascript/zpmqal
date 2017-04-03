@@ -4,15 +4,24 @@ namespace App\Models\Api;
 
 use Illuminate\Database\Eloquent\Model;
 use Auth;
+use DB;
 class AgentActivityModel extends Model
 {
 	protected $table = 'agent_activities';
+	protected $appends = ['vendor'];
 	protected $connection = 'mysql2';
 
-	public function call()
+	public static function call()
 	{
 		return new AgentActivityModel;
 	}
+
+
+	public function getVendorAttribute()
+	{
+		return 'own';
+	}
+
 
 	public function setAdminIdAttribute($value)
 	{
@@ -27,5 +36,21 @@ class AgentActivityModel extends Model
 		}
 		
 		$this->attributes['admin_id'] = $adminId;
+	}
+
+
+	public function findByCode($id)
+	{
+		
+		$columns = [
+				'id', 'id as code', 
+				'destination_code as destinationCode', 
+				DB::raw('\'INR\' as currency'), 
+				'title as name', 'description', 
+				'status', DB::raw('\'0\' as rank'),
+				DB::raw('CONCAT(\''.urlImage().'\', image_path) as image')
+			];
+
+		return $this->select($columns)->where(['id' => $id])->first();
 	}
 }

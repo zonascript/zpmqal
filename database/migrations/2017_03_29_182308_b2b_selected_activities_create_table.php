@@ -13,13 +13,15 @@ class B2bSelectedActivitiesCreateTable extends Migration
      */
     public function up()
     {
-        Schema::create('selected_activites', function (Blueprint $table) {
+        Schema::create('selected_activities', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('package_activity_id')->unsigned()->nullable();
             $table->string('code')->nullable();
             $table->string('mode')->nullable();
-            $table->datetime('date')->nullable();
+            $table->date('date')->nullable();
             $table->string('vendor')->nullable();
+            $table->string('timing')->nullable();
+            $table->integer('is_active')->default(1);
             $table->timestamps();
         });
     }

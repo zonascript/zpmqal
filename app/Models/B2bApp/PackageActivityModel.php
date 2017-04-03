@@ -93,14 +93,12 @@ class PackageActivityModel extends Model
 	}
 
 
-
-	// ======================Below code is not required to use======================
-
-	/*
-	| this function is to copy package_hotels table's data into package_activities  
-	*/
-	public function copyHotelIti($packageDbId){
-		DB::insert("INSERT INTO `package_activities`(`package_id`, `city_id`, `start_date`, `end_date`, `location`, `pax`, `status`, `user_id`, `created_at`, `updated_at`) SELECT `package_id`, `city_id`, `check_in_date`, `check_out_date`, `location`, `room_guests`, `status`, `user_id`, `created_at`, `updated_at` FROM `package_hotels` WHERE `package_id` = '$packageDbId'");
+	public function selectedActivities()
+	{
+		$result = $this->hasMany('App\Models\B2bApp\SelectedActivityModel', 'package_activity_id');
+		return $result->where([['is_active', '>', 0]])->orderBy('date', 'asc');
 	}
+
+
 
 }

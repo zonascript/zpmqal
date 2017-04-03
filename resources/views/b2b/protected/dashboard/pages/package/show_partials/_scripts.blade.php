@@ -59,9 +59,9 @@
 <script>
 	$(document).on('click', '#btnSaveCost', function() {
 		var netCost = parseInt($('#netCost').val());
-		var profitCost = parseInt($('#profitCost').val());
+		var profitCost = parseInt($('#profitCost').val());		
 		var totalCost = (netCost + profitCost);
-		
+
 		var data = {
 				"_token" : csrf_token,
 				"netCost" : netCost,
@@ -84,8 +84,8 @@
 					window.open("{{ url('login') }}", '_blank');
 				}
       }
-
 		});
+		$("#totalCost").attr('data-ischanged', 0);
 	});
 </script>
 {{-- /save Cost --}}
@@ -94,8 +94,6 @@
 <script>
 	$(document).ready(function() {
 	    //this calculates values automatically 
-	    calculateSum();
-
 	    $(".inputCalc").on("keydown keyup", function() {
 	        calculateSum();
 	    });
@@ -116,6 +114,7 @@
 	  });
 
 		$("#totalCost").text(sum.toFixed(2));
+		$("#totalCost").attr('data-ischanged', 1);
 	}
 </script>
 {{-- calculate auto while typing --}}
@@ -162,29 +161,33 @@
 
 <script>
 	$(document).on('click', '#run_pdf', function() {
-		
-		var data = {"_token" : csrf_token}
+		var ischanged = $("#totalCost").attr('data-ischanged');
+		if (ischanged == 0) {
+			var data = {"_token" : csrf_token}
 
-		$.ajax({
-			type:"get",
-			url: "{{ url('/dashboard/package/html/'.$package->id) }}",
-			data: data,
-			success: function(responce, textStatus, xhr) {
-				responce = JSON.parse(responce);
-				if (responce.status == 200) {
-					var pdfUrl = '{{ url('/dashboard/package/pdf/') }}/'+responce.hash_id;
-					var htmlUrl = '{{url('/your/package/detail/')}}/'+responce.hash_id;
-					$('#btn_pdf').attr('href', pdfUrl);
-					$('#show_html_link').val(htmlUrl);
-					window.open(pdfUrl, '_blank');
-				}
-      },
-      error: function(xhr, textStatus) {
-				if(xhr.status == 401){
-					window.open("{{ url('login') }}", '_blank');
-				}
-      }
+			$.ajax({
+				type:"get",
+				url: "{{ url('/dashboard/package/html/'.$package->id) }}",
+				data: data,
+				success: function(responce, textStatus, xhr) {
+					responce = JSON.parse(responce);
+					if (responce.status == 200) {
+						var pdfUrl = '{{ url('/dashboard/package/pdf/') }}/'+responce.hash_id;
+						var htmlUrl = '{{url('/your/package/detail/')}}/'+responce.hash_id;
+						$('#btn_pdf').attr('href', pdfUrl);
+						$('#show_html_link').val(htmlUrl);
+						window.open(pdfUrl, '_blank');
+					}
+	      },
+	      error: function(xhr, textStatus) {
+					if(xhr.status == 401){
+						window.open("{{ url('login') }}", '_blank');
+					}
+	      }
 
-		});
+			});
+		}else{
+			myAlert('You have changed in cost save cost first');
+		}
 	});
 </script>

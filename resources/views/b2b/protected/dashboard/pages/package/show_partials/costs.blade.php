@@ -42,7 +42,9 @@
 						<h2>
 							<span>Total Cost : </span>
 							<i class="fa fa-rupee"></i> 
-							<span id="totalCost"></span>
+							<span id="totalCost" data-ischanged="0">
+								{{ $package->cost->totalCost }}.00
+							</span>
 						</h2>
 					</div>
 				</div>
@@ -56,7 +58,7 @@
 			</div>
 			<div class="row m-top-20">
 				<div class="col-md-12 col-sm-12 col-xs-12">
-					<input id="show_html_link" type="text">
+					<input class="btn-block" id="show_html_link" type="text">
 				</div>
 			</div>
 		</div>

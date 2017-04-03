@@ -21,7 +21,6 @@ class PackageModel extends Model
 		return new PackageModel;
 	}
 
-
 	public function setStatusAttribute($value)
 	{
 		$this->attributes['status'] = strtolower($value);
@@ -34,10 +33,19 @@ class PackageModel extends Model
 
 	public function getNightsAttribute()
 	{
-		return date_differences(
-								$this->attributes['end_date'], 
-								$this->attributes['start_date']
-							);
+		return $this->routes->sum('nights');
+	}
+
+	public function getStartDateAttribute($value)
+	{
+		return Carbon::parse($value);
+	}
+
+	public function getEndDateAttribute()
+	{
+		$startDate = $this->start_date;
+		$startDate->addDays($this->nights);
+		return $startDate;
 	}
 
 	public function getItineraryAttribute()
@@ -244,6 +252,7 @@ class PackageModel extends Model
 	
 		return true;
 	}
+
 
 
 }

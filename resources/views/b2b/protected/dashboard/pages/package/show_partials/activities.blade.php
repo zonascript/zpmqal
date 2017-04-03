@@ -15,26 +15,10 @@
 		<div class="x_content">
 			@foreach ($package->hotelRoutes as $hotelRoutes)
 				<?php 
-					$activity = $hotelRoutes->activities;
 					$location = $hotelRoutes->location_hotel;
-					$selectedActivities = $activity->selected_activities;
-					
-					$unionActivities = null;
-					if (!is_null($activity->union)) {
-						$unionActivities = $activity->union;
-					}
-					// $fgfActivities = null;
-					// if (!is_null($activity->fgf)) {
-					// 	$fgfActivities = json_decode($activity->fgf->result);
-					// }
-
-					// $viatorActivities = null;
-					// if (!is_null($activity->viator)) {
-					// 	$viatorActivities = json_decode($activity->viator->result);
-					// }
-
+					$selectedActivities = $hotelRoutes->activities->selectedActivities;
 				?>
-				@if (!is_null($selectedActivities))
+				@if ($selectedActivities->count())
 				<div class="row">
 					<div class="x_panel">
 						<div class="x_title">
@@ -58,13 +42,8 @@
 						<div class="x_content">
 							<div class="row">
 								<ul class="list list-unstyled">
-									@foreach ($unionActivities->result as $unionActivityKey => $unionActivity)
-										<?php 
-											$activityCode = $unionActivity->code; 
-										?>
-										@if (isset($selectedActivities->$activityCode))
-											@include('b2b.protected.dashboard.pages.package.show_partials.activities_partials.union')
-										@endif
+									@foreach ($selectedActivities as $selectedActivity)
+										@include('b2b.protected.dashboard.pages.package.show_partials.activities_partials.index')
 									@endforeach
 								</ul>
 							</div>

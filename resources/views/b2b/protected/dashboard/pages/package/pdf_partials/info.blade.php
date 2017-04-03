@@ -35,8 +35,8 @@
 							<table>
 								<tr><td>Date of Travel: </td></tr>
 								<tr><td>
-									{{ date_formatter($package->start_date, 'Y-m-d', 'd-M-Y') }} to 
-									{{ date_formatter($package->end_date, 'Y-m-d', 'd-M-Y') }}
+									{{ $package->start_date->format('d-M-Y') }} to 
+									{{ $package->end_date->format('d-M-Y') }}
 								</td></tr>
 							</table>
 						</td>

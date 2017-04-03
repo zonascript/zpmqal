@@ -3,21 +3,28 @@
 namespace App\Models\Api;
 
 use Illuminate\Database\Eloquent\Model;
-use DB;
-use Auth;
 
+// =============================Models=============================
 use App\Models\Api\DestinationModel;
-use App\Http\Controllers\MyLibrary\MysqlController;
-
+use Auth;
+use DB;
 
 class ActivityModel extends Model
 {
 	protected $table = 'activities';
+	protected $appends = ['vendor'];
 	protected $connection = 'mysql2';
 
 	public static function call(){
 		return new ActivityModel;
 	}
+
+
+	public function getVendorAttribute()
+	{
+		return 'f';
+	}
+
 
 	public function getActivities($cityId, $date){
 
@@ -88,8 +95,6 @@ class ActivityModel extends Model
 		$result = DB::connection('mysql2')->select(DB::raw($sqlQuery));
 		$result = json_decodeMulti($result, true);
 		// dd_pre_echo($result);
-
-		// $result = MysqlController::call()->execute($sql, false); // old Code
 
 		if (is_array($result) && count($result) > 0) {
 			foreach ($result as $key => &$value) {
@@ -333,6 +338,24 @@ class ActivityModel extends Model
 																->orderBy('rank', 'desc')
 																	->get();
 		return $finalActivities;
+	}
+
+	/*
+	| code is the index(id) of this table
+	*/
+	public function findByCode($id)
+	{
+		$columns  = [
+				'id', 'id as code', 
+				'destinationCode', 'currency', 'name', 
+				'description', 'status', 'rank',
+				DB::raw('(select CONCAT(\''.urlImage().'\', imagePath) 
+					from images 
+					where relationId = CONCAT(prefix, id)  
+					order by id asc limit 2) as image')
+			];
+
+		return $this->select($columns)->where(['id' => $id])->first();
 	}
 
 }

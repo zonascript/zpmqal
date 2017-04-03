@@ -1,5 +1,5 @@
 @if (!is_null($hotelRoute->hotel_detail))
-	<div class="{{-- height-{{ $hotelKey == 0 ? 980 : 1000 }} px --}} p-5">
+	<div class="{{-- height-{{ $hotelRouteKey == 0 ? 980 : 1000 }} px --}} p-5">
 		<div>
 			<div class="box-stack">
 				<img src="{{ $hotelRoute->hotel_detail->image }}" class="img-thmb">
@@ -17,7 +17,7 @@
 			</div>
 		</div>       
 	</div>
-	@if ($hotelRoute->count()-1 != $hotelKey)
+	@if ($hotelRoute->count()-1 != $hotelRouteKey)
 		<hr {{-- class="hr-gold" --}}>
 	@endif
 @endif

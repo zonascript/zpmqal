@@ -707,6 +707,11 @@ function saveInFile($data = 'NoData', $name = '', $extn = 'txt', $path = 'test/S
 
 function saveInStorage($data = 'NoData', $name = '', $extn = 'txt', $path = 'test/SaveInFile'){
 	$path = storage_path($path);
+
+	if (!file_exists($path)) {
+		mkdir($path, 0777);
+	}
+
 	$filePath = $path.'/'.$name.'_'.timestamp().".".$extn;
 	$myfile = fopen($filePath, "w") or die("Unable to open file!");
 	fwrite($myfile, $data);

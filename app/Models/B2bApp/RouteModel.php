@@ -236,7 +236,7 @@ class RouteModel extends Model
 					}else{
 						$route->start_date = $this->package->start_date;
 					}
-				}
+				} // <- this is for every mode route
 				
 				if (in_array($route->mode, ['ferry', 'hotel', 'road', 'cruise', 'train'])) {
 					$endDate = Carbon::parse($route->start_date);
