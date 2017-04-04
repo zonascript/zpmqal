@@ -10,17 +10,19 @@
 <link rel="shortcut icon" href="{{ asset('favicon.png') }}" >
 
 <!-- Bootstrap -->
-<link href="{{ asset('common/dashboard/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ commonAsset('dashboard/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
 <!-- Font Awesome -->
-<link href="{{ asset('common/dashboard/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+<link href="{{ commonAsset('dashboard/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
 <!-- NProgress -->
-<link href="{{ asset('common/dashboard/vendors/nprogress/nprogress.css') }}" rel="stylesheet">
+<link href="{{ commonAsset('dashboard/vendors/nprogress/nprogress.css') }}" rel="stylesheet">
 <!-- iCheck -->
-<link href="{{ asset('common/dashboard/vendors/iCheck/skins/flat/green.css') }}" rel="stylesheet">
+<link href="{{ commonAsset('dashboard/vendors/iCheck/skins/flat/green.css') }}" rel="stylesheet">
 <!-- bootstrap-progressbar -->
-<link href="{{ asset('common/dashboard/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css') }}" rel="stylesheet">
+<link href="{{ commonAsset('dashboard/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css') }}" rel="stylesheet">
 
-<link href="{{ asset('common/dashboard/vendors/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+<link href="{{ commonAsset('dashboard/vendors/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+
+<link href="{{ commonAsset('dashboard/vendors/jquery-confirm-master/dist/jquery-confirm.min.css') }}" rel="stylesheet">
 
 @yield('css')
 

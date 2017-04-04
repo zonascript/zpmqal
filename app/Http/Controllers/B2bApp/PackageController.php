@@ -93,7 +93,11 @@ class PackageController extends Controller
 				"roomGuest" => json_decodeMulti($request->guests_detail),
 			];
 
-		$costParams = (object)["currency" => "INR", "netCost" => 0, "margin" => 0];
+		$costParams = (object)[
+											"currency" => "INR", "visaCost" => 0, 
+											"netCost" => 0, "margin" => 0
+										];
+
 		PackageCostsController::call()->createNew($package->id, $costParams);
 
 		RoomGuestsController::call()->createNewMulti($guestsDetail);
@@ -120,7 +124,11 @@ class PackageController extends Controller
 					"roomGuest" => json_decodeMulti($request->guests_detail),
 				];
 
-			$costParams = (object)["currency" => "INR", "netCost" => 0, "margin" => 0];
+			$costParams = (object)[
+												"currency" => "INR", "visaCost" => 0, 
+												"netCost" => 0, "margin" => 0
+											];
+
 			PackageCostsController::call()->createNew($package->id, $costParams);
 			RoomGuestsController::call()->createNewMulti($guestsDetail);
     }
@@ -275,6 +283,7 @@ class PackageController extends Controller
 	{
 		$costParams = (object)[
 				"currency" => "INR", 
+				"visaCost" => $request->visaCost,
 				"netCost" => $request->netCost, 
 				"margin" => $request->margin
 			];

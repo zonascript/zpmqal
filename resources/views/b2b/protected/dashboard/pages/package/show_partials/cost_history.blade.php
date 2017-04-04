@@ -13,6 +13,7 @@
 				<tr>
 					<th>#</th>
 					<th>Currency</th>
+					<th>Visa Cost</th>
 					<th>Net Cost</th>
 					<th>Profit</th>
 					<th>Total</th>
@@ -25,10 +26,11 @@
 						<tr>
 							<th scope="row">{{ $packageCostKey+1 }}</th>
 							<td>{{$packageCost->currency}}</td>
+							<td>{{$packageCost->visa_cost}}</td>
 							<td>{{$packageCost->net_cost}}</td>
 							<td>{{$packageCost->margin}}</td>
 							<td>{{$packageCost->total_cost}}</td>
-							<th>{{$packageCost->created_at}}</th>
+							<th>{{$packageCost->created_at->format('d-M-Y H:i')}}</th>
 						</tr>
 					@endforeach
 				@endif

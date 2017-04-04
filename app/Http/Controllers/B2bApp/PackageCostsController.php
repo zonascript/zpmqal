@@ -25,6 +25,7 @@ class PackageCostsController extends Controller
 		$packageCost = new PackageCostModel;
 		$packageCost->package_id = $packageDbId;
 		$packageCost->currency = $request->currency;
+		$packageCost->visa_cost = $request->visaCost;
 		$packageCost->net_cost = $request->netCost;
 		$packageCost->margin = $request->margin;
 		$packageCost->save();
