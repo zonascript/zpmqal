@@ -90,7 +90,9 @@
 {{-- Activity Select Button --}}
 <script>
 	$(document).on('click', '.btn-activitySelect', function(){
+		$('#loging_log').show();
 		selectActivity(this);
+		$('#loging_log').hide();
 	});
 </script>
 {{-- /Activity Select Button --}}

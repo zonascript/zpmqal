@@ -52,6 +52,21 @@
 			success : function(responce){
 				responce = JSON.parse(responce);
 				if (responce.status == 200) {
+					if (data.next_rid != "NaN") {
+						setTimeout(function () {
+							console.log(isPulled(data.next_rid));
+							if (isPulled(data.next_rid) == 0) {
+								postQpxFlight(data.next_rid);
+								/*postSsFlight(next_rid);*/
+							}else{
+								$('#loging_log').hide();
+							}
+					  }, 2000)
+					}else{
+						setTimeout(function () {    
+							document.location.href = "{{ url('/dashboard/package/builder/event/'.$package->id.'/flight') }}";
+					  }, 2000)
+					}
 					$('#a_flight_'+data.next_rid).click();
 				}else{
 					alert('Something went wrong please try again.');
