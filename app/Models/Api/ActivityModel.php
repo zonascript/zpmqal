@@ -336,9 +336,117 @@ class ActivityModel extends Model
 														->unionAll($viatorActivities)
 															->unionAll($agentActivities)
 																->orderBy('rank', 'desc')
-																	->get();
+																	->offset(0)
+                										->limit(50)
+																			->get();
 		return $finalActivities;
 	}
+
+
+	public function searchActivitiesByName($params, $index = 0, $take = 10)
+	{
+
+		$auth = Auth::user();
+		$name = $params['name'];
+		$fgfCityId = $params['fgf_city_id'];
+		$viatorCityId = $params['viator_city_id'];
+
+		$viatorActivities = DB::connection('mysql2')->table('viator_activities')
+												->select(['title as name', 'rank'])
+													->where([
+															'primaryDestinationId' => $viatorCityId,
+															['title', 'like', '%'.$name.'%']
+														]);
+
+		$agentActivities = DB::connection('mysql2')->table('agent_activities')
+												->select(['title as name', DB::raw('\'0\' as rank')])
+													->where([
+																'admin_id' => $auth->admin->id,
+																'destination_code' => $fgfCityId,
+																['title', 'like', '%'.$name.'%']
+															]);
+
+		$finalActivities = DB::connection('mysql2')->table('activities')
+											->select(['name', 'rank'])
+													->where([
+															'destinationCode' => $fgfCityId,
+															['name', 'like', '%'.$name.'%']
+														])
+														->unionAll($viatorActivities)
+															->unionAll($agentActivities)
+																->orderBy('rank', 'desc')
+																	->skip($index*$take)
+																		->take($take)
+																			->get();
+
+		return $finalActivities;
+	}
+
+
+	public function searchActivityByName($params, $index = 0, $take = 10)
+	{
+
+		$auth = Auth::user();
+		$activityNames = [];
+		$name = $params['name'];
+		$fgfCityId = $params['fgf_city_id'];
+		$viatorCityId = $params['viator_city_id'];
+
+		$viatorActivities = DB::connection('mysql2')->table('viator_activities')
+												->select([
+																'viator_activities.id', 'code', DB::raw('\'v\' as vendor'), 
+																'primaryDestinationId as  destinationCode', 
+																'currencyCode as currency', 
+																'title as name', 
+																'shortDescription as  description', 
+																'status', 'rank', 'thumbnailURL as image'
+															])
+													->where([
+															'primaryDestinationId' => $viatorCityId,
+															'title' => $name
+														]);
+
+		$agentActivities = DB::connection('mysql2')->table('agent_activities')
+												->select([
+																'agent_activities.id', DB::raw('CONCAT(\'OWN\', agent_activities.id) AS code, \'OWN\' as vendor'), 
+																'destination_code as  destinationCode', 
+																DB::raw('\'INR\' as currency'), 
+																'title as name', 'description', 
+																'status', DB::raw('\'0\' as rank'),
+																DB::raw('CONCAT(\''.urlImage().'\', image_path) as image')
+															])
+													->where([
+																'admin_id' => $auth->admin->id,
+																'destination_code' => $fgfCityId,
+																'title' => $name
+															]);
+
+		$finalActivities = DB::connection('mysql2')->table('activities')
+											->select([
+															'activities.id', DB::raw('CONCAT(prefix, activities.id) AS code, \'f\' as vendor'), 
+															'destinationCode', 'currency', 'name', 
+															'description', 'activities.status', 'rank',
+															DB::raw(
+																'(select CONCAT(\''.urlImage().'\', imagePath) 
+																	from images 
+																	where relationId = CONCAT(activities.prefix, activities.id)  
+																	order by id asc limit 1) as image'
+															)
+														])
+													->where([
+															'destinationCode' => $fgfCityId,
+															'name' => $name
+														])
+														->unionAll($viatorActivities)
+															->unionAll($agentActivities)
+																->orderBy('rank', 'desc')
+																	->skip($index*$take)
+																		->take($take)
+																			->get();
+		
+		return $finalActivities;
+	}
+
 
 	/*
 	| code is the index(id) of this table

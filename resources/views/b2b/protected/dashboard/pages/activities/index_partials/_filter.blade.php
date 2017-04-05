@@ -8,7 +8,12 @@
 			<div class="form-group">
 				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback m-top-10-only">
 					<input type="text" v-model="search" id="filter_search" class="search form-control" placeholder="Search hotel name..">
-					<i class="fa fa-plane form-control-feedback right-1 right" aria-hidden="true"></i>
+					<i class="fa fa-futbol-o form-control-feedback right-1 right" aria-hidden="true"></i>
+				</div>
+				<div class="row">
+					<div class="col-md-4 col-sm-4 col-xs-12">
+						<button id="btn_filter_search" class="btn btn-success btn-block m-top-10">Find</button>
+					</div>
 				</div>
 
 				{{-- <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback m-top-10-only">

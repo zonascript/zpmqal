@@ -6,6 +6,7 @@ Route::get('', 'B2bApp\PagesController@getIndex');
 Route::get('pickme', 'B2bApp\PagesController@getPickMe');
 
 Route::get('test/code', 'TestController@testCode');
+Route::get('test/decode', 'TestController@decode');
 Route::get('test/showfile', 'TestController@showfile');
 Route::get('test/agoda', 'TestController@getAgodaHtml');
 Route::get('test/cleartrip', 'TestController@testClearTrip');
@@ -238,6 +239,10 @@ Route::group(['middleware' => ['auth']], function(){
 
 
 			//===========================Activities===========================
+				Route::get('dashboard/activities/search/{id}', 'B2bApp\ActivitiesController@searchActivities');
+				Route::post('dashboard/hotel/find/uni/{id}', 'B2bApp\ActivitiesController@findActivity');
+
+
 				Route::get('dashboard/package/builder/activities/{packageDbId}', 'B2bApp\ActivitiesController@getActivitiesByPackageId');
 				Route::post('dashboard/package/builder/activities/{packageDbId}', 'B2bApp\ActivitiesController@postActivities');
 				
@@ -331,6 +336,8 @@ Route::group(['middleware' => ['auth']], function(){
 	// =========================Activities=========================
 	Route::get('uni/activities/result/{id}', 'B2bApp\ActivitiesController@postUnionActivitiesResult');
 	Route::post('uni/activities/result/{id}', 'B2bApp\ActivitiesController@postUnionActivitiesResult');
+	Route::get('uni/activities/result/{id}/sel', 'B2bApp\ActivitiesController@postSelectedActivities');
+	Route::post('uni/activities/result/{id}/sel', 'B2bApp\ActivitiesController@postSelectedActivities');
 	// Route::get('vtr/activities/result/{id}', 'B2bApp\ActivitiesController@postViatorActivitiesResult');
 	// Route::post('fgf/activities/result/{id}', 'B2bApp\ActivitiesController@postFgfActivitiesResult');
 	// Route::post('vtr/activities/result/{id}', 'B2bApp\ActivitiesController@postViatorActivitiesResult');

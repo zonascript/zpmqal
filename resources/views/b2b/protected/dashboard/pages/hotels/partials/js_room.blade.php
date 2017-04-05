@@ -220,7 +220,7 @@
 
 		postAddtoCartHotel(data);
 
-		$(this).closest('.main-list-item').prependTo("#"+elem_id);
+		$(this).closest('.list.list-unstyled').prependTo("#"+elem_id);
 
 		$('#loging_log').hide();
 

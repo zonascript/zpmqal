@@ -10,13 +10,7 @@ class PackageActivityModel extends Model
 
 	protected $table  = 'package_activities';
 	protected $appends = ['activities_detail'];
-	protected $casts = [
-			'selected_activities' => 'object'
-		];
-
-	protected $hidden = [
-			'created_at', 'updated_at',
-		];
+	protected $hidden = ['created_at', 'updated_at'];
 
 
 	public static function call(){

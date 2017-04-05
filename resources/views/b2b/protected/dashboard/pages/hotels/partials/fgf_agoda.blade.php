@@ -44,7 +44,7 @@
 </script>
 
 <script>
-		function postSearchFgfA(name, did, rid) {
+	function postSearchFgfA(name, did, rid) {
 		var elem_id = "hotel_"+rid;
 		var ids = {
 				'did' : did,

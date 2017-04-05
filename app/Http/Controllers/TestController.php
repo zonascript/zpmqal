@@ -152,10 +152,17 @@ class TestController extends Controller
 
 	public function showfile()
 	{
-		$file = file_get_contents(storage_path('bookings/test.txt'));
+		$file = file_get_contents(storage_path('mylocal/bookings/test.txt'));
 		dd($file);
 		dd_pre_echo(json_decode($file));
 		dd(json_decode($file));
+	}
+
+
+	public function decode()
+	{
+		$file = file_get_contents(storage_path('mylocal/test/file.json'));
+		dd_pre_echo(json_decode($file));
 	}
 
 	public function getAgodaHtml()

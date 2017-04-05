@@ -73,9 +73,7 @@ class PackageHotelModel extends Model
 
 	public function activities()
 	{
-		return $this->hasOne('App\Models\B2bApp\PackageActivityModel', 'package_hotel_id')
-									->with('fgf')
-										->with('viator');		
+		return $this->hasOne('App\Models\B2bApp\PackageActivityModel', 'package_hotel_id');		
 	}
 
 

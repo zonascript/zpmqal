@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Auth;
 
 // =============================Api Controller=============================
+use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\AgentActivitiesController;
 
 // =============================B2b Controller=============================
@@ -14,9 +15,9 @@ use App\Http\Controllers\B2bApp\ClientController;
 use App\Http\Controllers\B2bApp\HotelsController;
 use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\B2bApp\FgfActivitiesController;
-use App\Http\Controllers\B2bApp\UnionActivitiesController;
 use App\Http\Controllers\B2bApp\ViatorActivitiesController;
 use App\Http\Controllers\B2bApp\SelectedActivitiesController;
+// use App\Http\Controllers\B2bApp\UnionActivitiesController;
 
 // =================================Models=================================
 use App\Models\B2bApp\PackageActivityModel;
@@ -300,6 +301,33 @@ class ActivitiesController extends Controller
 		return $result;
 	}
 
+	public function postSelectedActivities($id)
+	{
+		$packageActivity = PackageActivityModel::find($id);
+		$selectedActivities = $packageActivity->selectedActivities;
+		$activities = [];
+		foreach ($selectedActivities as $selectedActivity) {
+			$activities[] = [
+					"id" => $selectedActivity->detail->id,
+					"code" => $selectedActivity->code,
+					"vendor" => $selectedActivity->vendor,
+					"date" => $selectedActivity->date->format('Y-m-d'),
+					"mode" => $selectedActivity->mode,
+					"code" => $selectedActivity->code,
+					"timing" => $selectedActivity->timing,
+					"destinationCode" => $selectedActivity->detail->destinationCode,
+					"currency" => $selectedActivity->detail->currency,
+					"name" => $selectedActivity->detail->name,
+					"description" => $selectedActivity->detail->description,
+					"status" => $selectedActivity->detail->status,
+					"rank" => $selectedActivity->detail->rank,
+					"image" => $selectedActivity->detail->image
+				];
+		}
+		// dd_pre_echo(["activities" => $activities]);
+		return json_encode(["activities" => $activities]);
+	}
+
 
 	/*
 	| this function is to pull data from tbtq api using TbtqHotelApiController
@@ -308,10 +336,7 @@ class ActivitiesController extends Controller
 	public function postUnionActivitiesResult($id)
 	{
 		$packageActivity = PackageActivityModel::find($id);
-		$result = (object)[
-				'selected' => $packageActivity->selected_activities,
-				'activities' => ''
-			];
+		$result = (object)['activities' => ''];
 
 		$fgfCityId = isset($packageActivity->route->location_hotel->fgf_destinationcode)
 							 ? $packageActivity->route->location_hotel->fgf_destinationcode
@@ -327,8 +352,8 @@ class ActivitiesController extends Controller
 				"viator_city_id" => $viatorCityId
 			];
 
-		$activities = UnionActivitiesController::call()->activities($params);
-		$packageActivity->union_temp_activity_id = $activities->db->id;
+		$activities = ActivityController::call()->model()->unionActivities($params);
+		// $packageActivity->union_temp_activity_id = $activities->db->id;
 		$packageActivity->save();
 		$result->activities =  $activities;
 		return json_encode($result);
@@ -368,25 +393,17 @@ class ActivitiesController extends Controller
 									 ? $request->activities
 									 : [];
 									 
-		$packageActivities->union_activity_id = $packageActivities
-																						->union_temp_activity_id;
-
 		if (isset($request->own_activities)) {
 			$destinationId = $packageActivities->route
 												->location_hotel->fgf_destinationcode;
 
 			$agentActivities = AgentActivitiesController::call()
-													->insertOwnActivities(
-																$request->own_activities, $destinationId
-															);
-			$result = $packageActivities->union->result;
-			if (!is_null($result)) {
-				$result = array_merge($result, $agentActivities['actvities']);
-				$selectedIndex = array_merge($selectedIndex, $agentActivities['selectedIndex']);
-			}
+												->insertOwnActivities(
+															$request->own_activities, 
+															$destinationId
+														);
 
-			$packageActivities->union->result = $result;
-			$packageActivities->union->save();
+			$selectedIndex = array_merge($selectedIndex, $agentActivities['selectedIndex']);
 		}
 
 		$selectedIndex = $this->arrayForBulkInsert($selectedIndex, $id);
@@ -424,5 +441,68 @@ class ActivitiesController extends Controller
 
 		return $selectedActivities;
 	}
+
+
+	public function searchActivities($id, Request $request)
+	{
+		$packageActivity = PackageActivityModel::find($id);
+
+		$fgfCityId = isset($packageActivity->route->location_hotel->fgf_destinationcode)
+							 ? $packageActivity->route->location_hotel->fgf_destinationcode
+							 : '';
+
+		$viatorCityId = isset($packageActivity->route->location_viator->destinationId)
+									? $packageActivity->route->location_viator->destinationId
+									: '';
+
+		$params = [
+				"name" => $request->term,
+				"fgf_city_id" => $fgfCityId,
+				"viator_city_id" => $viatorCityId
+			];
+
+		$activities = ActivityController::call()->model()
+									->searchActivitiesByName($params);
+
+		$activityNames = [];
+		foreach ($activities as $activity) {
+			$activityNames[] = $activity->name;
+		}
+
+
+		if ($request->format == 'json') {
+			$activityNames = json_encode($activityNames);
+		}
+
+		return $activityNames;
+	}
+
+
+	public function findActivity($id, Request $request)
+	{
+		$packageActivity = PackageActivityModel::find($id);
+
+		$fgfCityId = isset($packageActivity->route->location_hotel->fgf_destinationcode)
+							 ? $packageActivity->route->location_hotel->fgf_destinationcode
+							 : '';
+
+		$viatorCityId = isset($packageActivity->route->location_viator->destinationId)
+									? $packageActivity->route->location_viator->destinationId
+									: '';
+
+		$params = [
+				"name" => $request->name,
+				"fgf_city_id" => $fgfCityId,
+				"viator_city_id" => $viatorCityId
+			];
+
+		$activity = ActivityController::call()->model()->searchActivityByName($params);
+		$activity = ["activities" => $activity];
+		$activity = json_encode($activity);
+
+		return $activity;
+	}
+
+
 
 }
