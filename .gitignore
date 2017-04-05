@@ -1,6 +1,6 @@
 /node_modules
 /public/storage
-/public/tests
+/public/test
 /vendor
 /.idea
 Homestead.json
@@ -8,4 +8,4 @@ Homestead.yaml
 .env
 /stackOverflow
 /storage/mylocal
-/resources/views/b2b/protected/dashboard/pages/junk 
+/resources/views/b2b/protected/dashboard/pages/junk
