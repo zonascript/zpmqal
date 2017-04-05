@@ -82,6 +82,8 @@
 	}
 </script>
 
+
+
 <script>
 	function getFlightStack(flight) {
 		var appendHtml = '';
