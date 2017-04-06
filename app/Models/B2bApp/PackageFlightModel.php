@@ -26,10 +26,10 @@ class PackageFlightModel extends Model
 	public function getFlightDetailsAttribute()
 	{
 		$result = null;
-		if ($this->selected_flight_vendor = 'qpx') {
+		if ($this->selected_flight_vendor = 'qpx' && !is_null($this->qpxFlight)) {
 			$result = $this->qpxFlight->flightDetail();
 		}
-		elseif ($this->selected_flight_vendor == 'ss') {
+		elseif ($this->selected_flight_vendor == 'ss' && !is_null($this->ssFlight)) {
 			$result = $this->ssFlight->flightDetail();
 		}
 
