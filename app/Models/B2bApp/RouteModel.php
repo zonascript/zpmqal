@@ -109,17 +109,18 @@ class RouteModel extends Model
 
 	public function getEndDatetimeAttribute()
 	{
-		$startDate = $this->start_datetime;
+		// $startDate = $this->start_datetime;
 		$endDateTime = $this->attributes['end_date'].' '.
 									 $this->attributes['end_time'];
 
-		$endDate = Carbon::parse($endDateTime);
+		return $endDate = Carbon::parse($endDateTime);
+		/*$endDate = Carbon::parse($endDateTime);
 		$startDate->addDays($this->attributes['nights']);
 		$startDate->hour = $endDate->hour;
 		$startDate->minute = $endDate->minute;
 		$startDate->second = $endDate->second;
 		
-		return $startDate;
+		return $startDate;*/
 	}
 
 
