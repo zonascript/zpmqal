@@ -13,7 +13,7 @@ class SkyscannerFlightsModel extends Model
 			'carriers_formatted',
 			'leg', 'segments',
 			'departureDateTime',
-			'arrivalDateTime'
+			'arrivalDateTime',
 		];
 	protected $casts = [
 			'request' => 'object',
@@ -82,6 +82,37 @@ class SkyscannerFlightsModel extends Model
 		}
 
 		return $segments; 
+	}
+
+	public function flightDetail()
+	{
+		$leg = $this->leg;
+		$segmentIds = $leg->SegmentIds;
+		$result = $this->result;
+		$result->Segments;
+		$flightDetails = [];
+
+		foreach ($segmentIds as $segmentId) {
+			$segment = $result->Segments[$segmentId];
+			$DepartureDateTime = getDateTime($segment->DepartureDateTime);
+			$ArrivalDateTime = getDateTime($segment->ArrivalDateTime);
+
+			$flightDetails[] = (object)[
+				"name" => $this->carriers_formatted[$segment->Carrier]->Name,
+				"code" => $this->carriers_formatted[$segment->Carrier]->Code,
+				"flightNumber" => $segment->FlightNumber,
+				"departureTime" => $DepartureDateTime->time,
+				"departureDate" => $DepartureDateTime->date,
+				"arrivalTime" => $ArrivalDateTime->time,
+				"arrivalDate" => $ArrivalDateTime->date,
+				"origin" => $this->places_formatted[$segment->OriginStation]->Name,
+				"originCode" => $this->places_formatted[$segment->OriginStation]->Code,
+				"destination" => $this->places_formatted[$segment->DestinationStation]->Name,
+				"destinationCode" => $this->places_formatted[$segment->DestinationStation]->Code
+			];
+		}
+
+		return $flightDetails; 
 	}
 
 

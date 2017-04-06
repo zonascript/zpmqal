@@ -23,10 +23,9 @@
 		</div>
 		<div class="x_content">
 			@foreach ($package->flightRoutes as $flightRoute)
-				@if ($flightRoute->flight->selected_flight_vendor == 'qpx')
-					@include('b2b.protected.dashboard.pages.package.show_partials.flight_partials.qpx')
-				@elseif($flightRoute->flight->selected_flight_vendor == 'ss')
-					@include('b2b.protected.dashboard.pages.package.show_partials.flight_partials.ss')
+				@if (isset($flightRoute->flight->flight_details) && 
+				!is_null($flightRoute->flight->flight_details))
+					@include('b2b.protected.dashboard.pages.package.show_partials.flight_partials.index')
 				@endif
 			@endforeach
 		</div>

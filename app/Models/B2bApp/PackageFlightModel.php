@@ -8,6 +8,7 @@ use Auth;
 class PackageFlightModel extends Model
 {
 	protected $table = 'package_flights';
+	protected $appends = ['flight_details'];
 
 	public static function call(){
 		return new PackageFlightModel;
@@ -19,6 +20,20 @@ class PackageFlightModel extends Model
 	public function setStatusAttribute($value)
 	{
 		$this->attributes['status'] = strtolower($value);
+	}
+
+
+	public function getFlightDetailsAttribute()
+	{
+		$result = null;
+		if ($this->selected_flight_vendor = 'qpx') {
+			$result = $this->qpxFlight->flightDetail();
+		}
+		elseif ($this->selected_flight_vendor == 'ss') {
+			$result = $this->ssFlight->flightDetail();
+		}
+
+		return $result;
 	}
 
 
@@ -58,5 +73,8 @@ class PackageFlightModel extends Model
 	{
 		return $this->belongsTo('App\Models\Api\SkyscannerFlightsModel', 'skyscanner_flight_id');
 	}
+
+
+
 
 }

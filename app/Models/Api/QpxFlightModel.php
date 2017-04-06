@@ -124,78 +124,63 @@ class QpxFlightModel extends Model
 	}
 
 
+	public function flightDetail()
+	{
+		$slices = $this->slices;
+		$cities = $this->cities;
+		$airlines = $this->airlines;
+		$flightDetails = [];
+		foreach ($slices as $slice) {
+			foreach ($slice->segment as  $segment) {
+				$carrier = $segment->flight->carrier;
+				
+				$flightDetail = (object)[
+						"name" => $airlines->$carrier,
+						"code" => $segment->flight->carrier,
+						"flightNumber" => $segment->flight->number,
+						"departureTime" => '',
+						"departureDate" => '',
+						"arrivalTime" => '',
+						"arrivalDate" => '',
+						"origin" => '',
+						"originCode" => '',
+						"destination" => '',
+						"destinationCode" => ''
+					];
+
+				foreach ($segment->leg as $leg) {
+					$departureDateTime = getDateTime($leg->departureTime);
+					$arrivalDateTime = getDateTime($leg->arrivalTime);
+
+					$flightDetail->departureDate = $departureDateTime->date;
+					$flightDetail->departureTime = $departureDateTime->time;
+					
+					$flightDetail->arrivalDate = $arrivalDateTime->date;
+					$flightDetail->arrivalTime = $arrivalDateTime->time;
+
+					$originCode = $leg->origin;
+					$flightDetail->originCode = $originCode;
+					$flightDetail->origin = isset($cities->$originCode) 
+																? $cities->$originCode
+																: $originCode;
+
+					$destinationCode = $leg->destination;
+					$flightDetail->destinationCode = $destinationCode;
+					$flightDetail->destination = isset($cities->$destinationCode)
+																		 ? $cities->$destinationCode
+																		 : $destinationCode;
+				}
+
+				$flightDetails[] = $flightDetail;
+			}
+		}
+		return $flightDetails;
+	}
+
 	public function tripOption()
 	{
 		return $this->result->trips->tripOption[$this->selected_index];
 	}
-
-
-	public function flightDetail()
-	{
-
-		$qpxFlight = $this->result_object;
-
-		$tripOption = null;
-		if (isset($qpxFlight->trips->tripOption[$this->selected_index])) {
-			$tripOption = $qpxFlight->trips->tripOption[$this->selected_index];
-		}
-
-
-		$stops = [];
-		$timings = [];
-		$carriers = [];
-
-		$loopCount = 1;
-
-		foreach ($tripOption->slice as $slice) {
-			foreach ($slice->segment as $segment) {
-				$carrierCode = ifset($segment->flight->carrier);
-				$carrierNumber = ifset($segment->flight->number);
-				$carrierName = ifset($this->airlines->$carrierCode);
-				$carriers[$carrierCode]['name'] = $carrierName;
-				$carriers[$carrierCode]['codeNumber'][] = $carrierCode.$carrierNumber;
-
-				foreach ($segment->leg as $leg) {
-					$origin = $leg->origin;
-					$destination = $leg->destination;
-					
-					if ($loopCount == 1) {
-						$stops[] = ['cityCode' => $origin, "city" => ifset($this->cities->$origin)];
-						$stops[] = [
-								"cityCode" => $destination, 
-								"city" => ifset($this->cities->$destination)
-							];
-					}
-					else{
-						$stops[] = [
-								"cityCode" => $destination, 
-								"city" => ifset($this->cities->$destination)
-							];
-					}
-					$loopCount++;
-
-					$departureDateTime = getDateTime($leg->departureTime);
-					$arrivalDateTime = getDateTime($leg->arrivalTime);
-					
-					$timings[] = [
-							"departureDateTime" => $departureDateTime,
-							"arrivalDateTime"		=> $arrivalDateTime
-						];
-				}
-			}
-		}
-
-
-		$result = [
-				"stops" => $stops,
-				"timings" => $timings,
-				"carriers" => $carriers
-			];
-
-		return rejson_decode($result);
-
-	}
-
 
 
 	public function __construct()

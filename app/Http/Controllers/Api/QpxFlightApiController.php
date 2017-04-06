@@ -31,7 +31,7 @@ class QpxFlightApiController extends Controller
 						[
 							"origin" => $packageFlight->route->origin_code,
 							"destination" => $packageFlight->route->destination_code,
-							"date" => $packageFlight->route->start_datetime->format('Y-m-d'),
+							"date" => $packageFlight->route->start_date,
 						]
 					],
 					"passengers" => [

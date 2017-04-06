@@ -1,13 +1,8 @@
-<?php 
-	$flight = $flightRoute->flight;
-	$segments = $flight->ssFlight->segments;
-?>
-
 <ul class="list list-unstyled">
 	<li class="min-height-110px">
 		<div class="x_panel glowing-border">
 			<div class="col-md-10 col-sm-10 col-xs-12">
-				@foreach ($segments as $segment)
+				@foreach ($flightRoute->flight->flight_details as $flightDetail)
 					<div class="row">
 						<div class="col-md-5 col-sm-5 col-xs-12">
 							<div class="row m-tb-10px">
@@ -15,16 +10,16 @@
 									<div class="row">
 										<div class="col-md-3 col-sm-3 col-xs-12">
 											<div class="row">
-												<img src="{{ urlImage('images/airlineImages/'.$segment->CarrierDetail->Code.'.gif') }}" alt="">
+												<img src="{{ urlImage('images/airlineImages/'.$flightDetail->code.'.gif') }}" alt="">
 											</div>
 										</div>
 										<div class="col-md-9 col-sm-9 col-xs-12">
 											<div class="flightName font-size-15">
-												{{ str_replace('Limited', '', $segment->CarrierDetail->Name)  }}
+												{{ str_replace('Limited', '', $flightDetail->name)  }}
 											</div>
 											<div>
 												<small>
-													{{ $segment->CarrierDetail->Code.$segment->CarrierDetail->Name }}
+													{{ $flightDetail->code.$flightDetail->flightNumber }}
 												</small>
 											</div>
 										</div>
@@ -37,24 +32,24 @@
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<div class="text-center">
 										<h2>
-											{{ $segment->DepartureTiming->time }} 
-											<small>({{ $segment->DepartureTiming->date }})</small>
+											{{ $flightDetail->departureTime }} 
+											<small>({{ $flightDetail->departureDate }})</small>
 										</h2>
 										<div>
-											{{ $segment->Origin->Name }} 
-											<small>({{ $segment->Origin->Code }})</small>
+											{{ $flightDetail->origin }} 
+											<small>({{ $flightDetail->originCode }})</small>
 										</div>
 									</div>
 								</div>
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<div class="text-center">
 										<h2>
-											{{ $segment->ArrivalTiming->time }} 
-											<small>({{ $segment->ArrivalTiming->date }})</small>
+											{{ $flightDetail->arrivalTime }} 
+											<small>({{ $flightDetail->arrivalDate }})</small>
 										</h2>
 										<div>
-											{{ $segment->Destination->Name }} 
-											<small>({{ $segment->Destination->Code }})</small>
+											{{ $flightDetail->destination }} 
+											<small>({{ $flightDetail->destinationCode }})</small>
 										</div>
 									</div>
 								</div>		
@@ -69,9 +64,9 @@
 					{{-- <span>{{ ifset($tripOption->saleTotal) }}</span> --}}
 					{{-- <span>/-</span> --}}
 				</h2>
-				<div class="row m-tb-20px">
-					<a href="{{ urlFlightsResult($flight->id) }}" class="btn btn-primary btn-block btn-bookFlight">Change</a>
-				</div>
+				{{-- <div class="row m-tb-20px">
+					<a href="{{ urlFlightsResult($flightRoute->flight->id) }}" class="btn btn-primary btn-block btn-bookFlight">Change</a>
+				</div> --}}
 			</div>
 		</div>
 	</li>

@@ -1,9 +1,6 @@
-<?php 
-	$segments = $flight->qpxFlight->segments;
-?>
 <div class="border-gray m-top-20px">
 	<table width="100%">
-	@foreach ($segments as $segment)
+	@foreach ($flightRoute->flight->flight_details as $flightDetail)
 		<tr>
 			<td width="40%">
 				<table width="100%">
@@ -11,18 +8,18 @@
 							<td width="30%">
 								<div>
 									<img 
-										src="{{ urlImageAirline($segment->airline->carrier) }}" 
-										alt="{{$segment->airline->carrier}}" 
+										src="{{ urlImageAirline($flightDetail->code) }}" 
+										alt="{{ $flightDetail->name }}" 
 										style="height: 50px; width:50px;"
 									>
 								</div>
 							</td>
 							<td width="70%">
 								<div>
-									<div>{{ $segment->airline->name }}</div>
+									<div>{{ $flightDetail->name }}</div>
 									<div>
 										<small class="m-top-10px">
-											{{ $segment->airline->carrier.$segment->airline->number }}
+											{{ $flightDetail->code.$flightDetail->flightNumber }}
 										</small>
 									</div>
 								</div>
@@ -34,18 +31,18 @@
 				<table width="100%">
 						<tr>
 							<td>
-								<div>{{ $segment->departureDateTime->time }}</div>
+								<div>{{ $flightDetail->departureTime }}</div>
 								<div class="{{-- m-top-10px --}}">
 									<small>
-										{{ date_formatter($segment->departureDateTime->date, null, 'd/m/Y') }}
+										{{ date_formatter($flightDetail->departureDate, null, 'd/m/Y') }}
 									</small>
 								</div>
 							</td>
 							<td>
-								<div>{{ $segment->arrivalDateTime->time }}</div>
+								<div>{{ $flightDetail->arrivalTime }}</div>
 								<div class="{{-- m-top-10px --}}">
 									<small>
-										{{ date_formatter($segment->arrivalDateTime->date, null, 'd/m/Y') }}
+										{{ date_formatter($flightDetail->arrivalDate, null, 'd/m/Y') }}
 									</small>
 								</div>
 							</td>
@@ -53,7 +50,7 @@
 				</table>
 			</td>
 			<td>
-				<span>{{$segment->origin}} → {{$segment->destination}}</span>
+				<span>{{ $flightDetail->originCode }} → {{ $flightDetail->destinationCode }}</span>
 			</td>
 		</tr>
 	@endforeach

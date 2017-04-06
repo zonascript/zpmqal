@@ -144,21 +144,7 @@
 
 		$(this).closest('.main-list-item').prependTo("#"+elemId);
 
-		if (next_rid != "NaN") {
-			setTimeout(function () {
-				console.log(isPulled(next_rid));
-				if (isPulled(next_rid) == 0) {
-					postQpxFlight(next_rid);
-					/*postSsFlight(next_rid);*/
-				}else{
-					$('#loging_log').hide();
-				}
-		  }, 3000)
-		}else{
-			setTimeout(function () {    
-				document.location.href = "{{ url('/dashboard/package/builder/event/'.$package->id.'/flight') }}";
-		  }, 10000)
-		}
+
 	});
 </script>
 {{-- /Book Flight --}}
