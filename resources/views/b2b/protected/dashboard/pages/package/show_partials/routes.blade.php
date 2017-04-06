@@ -22,6 +22,7 @@
 			<thead>
 				<tr>
 					<th>#</th>
+					{{-- <th>id</th> --}}
 					<th>Mode</th>
 					<th>Start</th>
 					<th>End</th>
@@ -40,9 +41,10 @@
 						?>
 						<tr>
 							<th scope="row">{{ $routeKey+1 }}</th>
+							{{-- <td>{{$route->id}}</td> --}}
 							<td>{{proper($route->mode)}}</td>
 							<td>{{$route->start_datetime->format($dateFormat)}}</td>
-							<td>{{$route->end_datetime->format($dateFormat)}}</td>
+							<td>{{$route->status == 'active' ? '?' : $route->end_datetime->format($dateFormat)}}</td>
 							<td>{{$route->origin == '' ? '-' : proper($route->origin)}}</td>
 							<td>{{proper($route->destination)}}</td>
 							<td>{{$route->pick_up == '' ? '-' : proper($route->pick_up)}}</td>

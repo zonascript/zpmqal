@@ -219,15 +219,17 @@ class RouteModel extends Model
 	public function fixDates($routeId=null)
 	{
 		$routes = null;
-
-		$where = [['status', '<>', 'deleted']];
+		$where = [
+				['status', '<>', 'deleted'], 
+				['package_id', '=', $this->package_id]
+			];
 
 		if (!is_null($routeId)) { 
 			$where[] = ['id', '>', $routeId];
 		}
 
 		$routes = $this->select()->where($where)->get();
-
+		
 		if ($routes->count()) {
 			$nextStartDate = '0000-00-00';
 
