@@ -87,17 +87,16 @@ class AgodaHotelsController extends Controller
 
 	public function loopHotelDetails()
 	{
-		// ini_set('max_execution_time', 3600);
+		ini_set('max_execution_time', 3600);
 
-		// if (!isLocalhost()) {
-		// 	for ($i=1; $i > 0; $i++) { 
-		// 		$result = $this->storeHotelDetail();
-		// 		if (is_null($result)) {
-		// 			break;
-		// 		}
-		// 	}
-		// }
-		
+		if (!isLocalhost()) {
+			for ($i=1; $i > 0; $i++) { 
+				$result = $this->storeHotelDetail();
+				if (is_null($result)) {
+					break;
+				}
+			}
+		}
 	}
 	
 }

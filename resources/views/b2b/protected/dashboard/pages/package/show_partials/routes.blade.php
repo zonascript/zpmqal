@@ -39,7 +39,7 @@
 						<?php 
 							$dateFormat = $route->mode == 'hotel' ? 'd-M-Y' : 'd-M-Y H:i';
 						?>
-						<tr>
+						<tr class="{{$route->status == 'active' ? 'font-dark-red' : ''}}">
 							<th scope="row">{{ $routeKey+1 }}</th>
 							{{-- <td>{{$route->id}}</td> --}}
 							<td>{{proper($route->mode)}}</td>
