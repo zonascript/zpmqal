@@ -36,7 +36,7 @@
 				@if($package->routes->count())
 					@foreach($package->routes as $routeKey => $route)
 						<?php 
-							$dateFormat = $route->mode == 'hotel' ? 'd-M-Y' : 'd-M-Y  H:i';
+							$dateFormat = $route->mode == 'hotel' ? 'd-M-Y' : 'd-M-Y H:i';
 						?>
 						<tr>
 							<th scope="row">{{ $routeKey+1 }}</th>
