@@ -6,7 +6,7 @@
 		</ul>
 		<div class="clearfix"></div>
 	</div>
-	<div class="x_content scroll-auto scroll-bar height-75vh" >
+	<div class="x_content scroll-auto scroll-bar height-71vh" >
 		<div class="dashboard-widget-content">
 			<div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<div class="tile-stats">

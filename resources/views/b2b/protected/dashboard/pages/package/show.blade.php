@@ -22,6 +22,9 @@
 			</div>
 		</div>
 	
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			@include('b2b.protected.dashboard.pages.package.show_partials.routes')
+		</div>
 
 		{{-- Flights List --}}
 		<a name="flights"></a>
