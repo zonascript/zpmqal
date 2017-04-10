@@ -222,31 +222,31 @@ class PackageModel extends Model
 
 	public function fixRouteDates()
 	{
-		$routes = $this->routes;
+		$routes = $this->routes[0]->fixDates();
 	
-		if ($routes->count()) {
-			$nextStartDate = '0000-00-00';
-			foreach ($routes as $key => $route) {
+		// if ($routes->count()) {
+		// 	$nextStartDate = '0000-00-00';
+		// 	foreach ($routes as $key => $route) {
 
-				if ($key) {
-					$route->start_date = $nextStartDate;
-				}
-				else{
-					$route->start_date = $this->start_date;
-				}
+		// 		if ($key) {
+		// 			$route->start_date = $nextStartDate;
+		// 		}
+		// 		else{
+		// 			$route->start_date = $this->start_date;
+		// 		}
 				
-				if (in_array($route->mode, ['ferry', 'hotel', 'road', 'cruise', 'train'])) {
-					$endDate = Carbon::parse($route->start_date);
-					$endDate->addDays($route->nights);
-					$nextStartDate = $endDate->format('Y-m-d');
-					$route->end_date = $nextStartDate;
-				}
+		// 		if (in_array($route->mode, ['ferry', 'hotel', 'road', 'cruise', 'train'])) {
+		// 			$endDate = Carbon::parse($route->start_date);
+		// 			$endDate->addDays($route->nights);
+		// 			$nextStartDate = $endDate->format('Y-m-d');
+		// 			$route->end_date = $nextStartDate;
+		// 		}
 				
-				$route->save();
+		// 		$route->save();
 
-				if ($route->mode == 'flight') { return true; }
-			}
-		}
+		// 		if ($route->mode == 'flight') { return true; }
+		// 	}
+		// }
 	
 		return true;
 	}
