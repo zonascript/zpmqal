@@ -1,18 +1,19 @@
-
-
 <script>
-	function postFgfCruise(did, rid) {
+	function postFgfCruise(rid) {
+
+		var ridObj = getRidObject(rid);
+		var did = ridObj.did;
 		var elem_id = "cruise_"+rid;
 		var ids = {
 				"_token" : csrf_token,
+				'elem_id' : elem_id,
 				'did' : did,
-				'rid' : rid,
-				'elem_id' : elem_id
+				'rid' : rid
 			};
 
 		$.ajax({
 			type:"post",
-			url: "{{ url('/f/cruises/result/') }}/"+did,
+			url: "{{ url('/fo/cruises/result/') }}/"+did,
 			data: ids,
 			success: function(responce, textStatus, xhr) {
 				var responce = JSON.parse(responce);
@@ -26,6 +27,9 @@
 					$.each(cruises, function(i,v){
 						html = makeFgfHtml(i, v, ids);
 						$('#'+elem_id).append(html);
+						$('#'+elem_id).find('input').iCheck({
+							checkboxClass: 'icheckbox_flat-green'
+						});
 					});
 					filter.initFilter(rid);
 				}
@@ -48,20 +52,80 @@
 
 <script>
 	function makeFgfHtml(i, obj, ids) {
-		var uniqueKey = obj.cruiseCode;
-		var cruiseName = obj.cruiseName;
-		var cruiseAddress = obj.address; 
-		var sortcruiseAddress = cruiseAddress.substring(0, 40);
-		var cruiseDescription = obj.description;
-		var sortcruiseDescription = cruiseDescription.substring(0, 120);
-		var starRating = obj.star_rating;
-		var starRatingHtml = star_Rating(starRating);
-		var cruiseImage = obj.images[0];
+		var cruiseImage = isset(obj.images, 0) 
+										? obj.images[0].url 
+										: '{{ urlDefaultImageCruise() }}';
 
-		<?php 
-			$html = view('b2b.protected.dashboard.pages.cruises.partials.fgf_html')->render();
-			$html = trimHtml($html);
-		?>
-		return '{!! $html !!}';
+		var cabins = insertCabinImage(obj.cabins, obj.images);
+
+		var cabinsObj = {
+				'cabins' : cabins, 
+				'did' : ids.did,
+				'rid' : ids.rid,
+				'vendor' : 'fgf'
+			}
+
+		var cruise = {
+				"id" : obj.vendor_detail_id,
+				"name" : proper(obj.name),
+				"image" : cruiseImage,
+				"starRating" : obj.star_rating,
+				"starRatingHtml" : star_Rating(obj.star_rating),
+				"imagesHtml" : imagesHtml(obj.images),
+				"cabinsHtml" : cabinsHtml(cabinsObj),
+				"description" : obj.description,
+				"address" : obj.address,
+				"vendor" : "fgf"
+			};
+
+		return getCruiseStack(cruise);
+	}
+</script>
+
+<script>
+	function insertCabinImage(cabins, images) {
+		var result = [];
+		var imageKey = 0;
+
+		$.each(cabins, function(cabinKey, cabin) {
+			cabin['image'] = isset(images, imageKey) 
+										 ? images[imageKey].url
+										 : '{{ urlDefaultImageCruise() }}';
+
+			if (imageKey < images.length-1) {
+				imageKey = imageKey+1;
+			}else{
+				imageKey = 0;
+			}
+			result.push(cabin);
+		});
+		return result;
+	}
+</script>
+
+<script>
+	function imagesHtml(images) {
+		var imagesHtml = '';
+		$.each(images, function(imageKey, image) {
+			imagesHtml += '<div class="height-160px width-48-p">'+
+				'<img class="width-100-p height-100p" src="'+image.url+'" />'+
+			'</div>'
+		})
+		return imagesHtml;
+	}
+</script>
+
+<?php
+	$cabinsHtml = view('b2b.protected.dashboard.pages.cruises.partials.cabin_partials.cabin')->render();
+	$cabinsHtml = trimHtml($cabinsHtml);
+?>
+
+<script>
+	function cabinsHtml(cabins) {
+		var cabinsHtml = '';
+		$.each(cabins.cabins, function (cabinKey, cabin) {
+			cabinsHtml += '{!! $cabinsHtml !!}';
+		})
+		return cabinsHtml;
 	}
 </script>

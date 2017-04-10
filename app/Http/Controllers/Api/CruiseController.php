@@ -86,11 +86,9 @@ class CruiseController extends Controller
 
 	public function cruises($params=[])
 	{
-		$params = ['date' => '2017-04-16', 'cityId' => '16532', 'nights' => '5'];
+		// $params = ['date' => '2017-04-16', 'cityId' => '16532', 'nights' => '5'];
 
 		$cruises = CruiseOnlyDateModel::call()->cruises($params);
-
-		dd_pre_echo(rejson_decode($cruises));
-
+		return $cruises;
 	}
 }

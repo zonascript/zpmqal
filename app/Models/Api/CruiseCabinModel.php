@@ -8,5 +8,5 @@ class CruiseCabinModel extends Model
 {
 	protected $connection = 'mysql2';
 	protected $table = 'cruise_cabins';
-	protected $hidden = ['id', 'vendor_detail_id', 'created_at', 'updated_at'];
+	protected $hidden = ['vendor_detail_id', 'created_at', 'updated_at'];
 }

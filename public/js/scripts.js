@@ -41,3 +41,33 @@ function hidePopUp() {
   $('.popup-model').fadeOut();
 }
 
+
+function isset(obj, key) {
+  var result = false;
+  
+  if (obj.hasOwnProperty(key)) {
+    result = true;
+  }
+
+  return result;
+}
+
+
+function star_Rating(count){
+  var stars = '';
+  for (var i = 0; i < 5; i++) {
+    if (i <= count) {
+      stars += '<i class="fa fa-star font-gold font-size-13"></i>';
+    }else{
+      stars += '<i class="fa fa-star font-size-13"></i>';
+    }
+  }
+  return stars;
+}
+
+function proper(str) {
+  str = str.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+      return letter.toUpperCase();
+  });
+  return str;
+}

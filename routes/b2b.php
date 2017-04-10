@@ -228,15 +228,9 @@ Route::group(['middleware' => ['auth']], function(){
 			|	packageCruiseId = package_cruises table or id
 			*/
 				Route::get('dashboard/package/builder/cruises/{packageDbId?}', 'B2bApp\CruisesController@getCruisesByPackageId');
-
-				Route::get('dashboard/package/builder/cruise/{id}/{packageDbId}/{packageCrusiesId}', 'B2bApp\CruisesController@getCruises');
-				Route::post('dashboard/package/builder/cruise/search/{id}/{packageDbId}/{packageCrusiesId}', 'B2bApp\CruisesController@storeSearch');
-				// Fatch Cruise Room 
-				Route::post('dashboard/package/builder/cruise/cabin/{id}/{packageDbId}/{packageCrusiesId}', 'B2bApp\CruisesController@getCruiseCabin');
-
 				// Book Cruise Room
-				Route::post('dashboard/package/builder/cruise/cabin/book/{id}/{packageDbId}/{packageCrusiesId}', 'B2bApp\CruisesController@postBookCrusieCabin');
-
+				Route::post('dashboard/package/builder/cruise/cabin/book/{packageCruiseId}', 'B2bApp\CruisesController@postBookCrusieCabin');
+				
 
 			//===========================Activities===========================
 				Route::get('dashboard/activities/search/{id}', 'B2bApp\ActivitiesController@searchActivities');
@@ -329,6 +323,8 @@ Route::group(['middleware' => ['auth']], function(){
 
 	// ===========================cruise===========================
 	Route::get('o/cruises/result', 'Api\CruiseController@cruises');
+	Route::get('fo/cruises/result/{id}', 'B2bApp\CruisesController@postFgfOnlyCruise');
+	Route::post('fo/cruises/result/{id}', 'B2bApp\CruisesController@postFgfOnlyCruise');
 	Route::get('f/cruises/result/{id}', 'B2bApp\CruisesController@postFgfCruiseResult');
 	Route::get('f/cruises/result/{id}', 'B2bApp\CruisesController@postFgfCruiseResult');
 	Route::post('f/cruises/result/{id}', 'B2bApp\CruisesController@postFgfCruiseResult');

@@ -266,18 +266,3 @@
 	});
 </script>
 {{-- /Adults-Child-button --}}
-
-
-<script>
-	function star_Rating(count){
-		var stars = '';
-		for (var i = 0; i < 5; i++) {
-			if (i <= count) {
-				stars += '<i class="fa fa-star font-gold font-size-13"></i>';
-			}else{
-				stars += '<i class="fa fa-star font-size-13"></i>';
-			}
-		}
-		return stars;
-	}
-</script>

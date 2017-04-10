@@ -27,17 +27,12 @@ class CruiseOnlyDateModel extends Model
 				$this->table.'.date',$this->table.'.cruise_night_id', 
 				'cruise_nights.nights', 'cruise_nights.vendor_detail_id',
 				DB::raw('CONCAT(vendor_details.prefix,vendor_details.id) as vuid'),
-				'vendor_details.destination_code', 'vendor_details.preferred_currency', 
-				'vendor_details.contact_person', 'vendor_details.company_type', 
-				'vendor_details.company_name', 'vendor_details.company_URL', 
-				'vendor_details.star_rating', 'vendor_details.description', 
-				'vendor_details.promotion', 'vendor_details.policy', 
+				'vendor_details.company_name as name', 'vendor_details.star_rating', 
+				'vendor_details.description', 'vendor_details.policy', 
 				'vendor_details.contact_number', 'vendor_details.fax_number', 
 				'vendor_details.email', 'vendor_details.address', 'vendor_details.pincode', 
 				'vendor_details.latitude', 'vendor_details.longitude', 
-				'vendor_details.special_instructions', 'vendor_details.trip_advisor_rating', 
-				'vendor_details.trip_advisor_review_URL', 'vendor_details.smoking_preference', 
-				'vendor_details.cancellation_allowed',
+				'vendor_details.special_instructions' 
 			];
 
 		$cruises = $this->select($columns)
@@ -49,7 +44,7 @@ class CruiseOnlyDateModel extends Model
 									'vendor_details', 'vendor_details.id',
 									'=', 'cruise_nights.vendor_detail_id'
 								)
-								->with('images', 'cabin')
+								->with('images', 'cabins')
 									->where([
 											[$this->table.'.date', '=', $params->date],
 											['cruise_nights.nights', '=', $params->nights],
@@ -72,8 +67,9 @@ class CruiseOnlyDateModel extends Model
 		return $this->hasMany('App\Models\Api\ImageModel', 'relationId', 'vuid');
 	}
 
-	public function cabin()
+	public function cabins()
 	{
+		$images = $this->images;
 		return $this->hasMany('App\Models\Api\CruiseCabinModel', 'vendor_detail_id', 'vendor_detail_id');
 	}
 

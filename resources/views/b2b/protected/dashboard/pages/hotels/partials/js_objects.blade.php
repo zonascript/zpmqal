@@ -3,32 +3,32 @@
 	$rid =  [];
 	$did =  [];
 	$idObject = [];
-	foreach ($package->flightRoutes as $flightRouteKey  => $flightRoute) {
-		$objectKey = 'flight_'.$flightRoute->id;
+	foreach ($package->hotelRoutes as $hotelRouteKey  => $hotelRoute) {
+		$objectKey = 'hotel_'.$hotelRoute->id;
 
 		$idObject[$objectKey] = [
-				'did' => $flightRoute->flight->id,
-				'rid' => $flightRoute->id,
+				'did' => $hotelRoute->hotel->id,
+				'rid' => $hotelRoute->id,
 				'next_did' => 'NaN',
 				'next_rid' => 'NaN',
-				'origin' => $flightRoute->origin,
-				'destination' => $flightRoute->destination,
+				'origin' => $hotelRoute->origin,
+				'destination' => $hotelRoute->destination,
 			];
 
-		$nestFlightRouteKey = $flightRouteKey+1;
+		$nesthotelRouteKey = $hotelRouteKey+1;
 		
-		if ($nestFlightRouteKey < $package->flightRoutes->count()) {
+		if ($nesthotelRouteKey < $package->hotelRoutes->count()) {
 
 			$idObject[$objectKey]['next_did'] = $package
-																					->flightRoutes[$nestFlightRouteKey]
-																						->flight->id;
+																					->hotelRoutes[$nesthotelRouteKey]
+																						->hotel->id;
 
 			$idObject[$objectKey]['next_rid'] = $package
-																					->flightRoutes[$nestFlightRouteKey]->id;
+																					->hotelRoutes[$nesthotelRouteKey]->id;
 		}
 
-		$rid[] = $flightRoute->id;
-		$did[] = $flightRoute->flight->id;
+		$rid[] = $hotelRoute->id;
+		$did[] = $hotelRoute->hotel->id;
 	}
 
 	$idObject['did'] = $did;
