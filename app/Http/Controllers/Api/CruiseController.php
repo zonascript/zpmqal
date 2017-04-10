@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\CruisePriceController;
 
 // =============================Models=============================
 use App\Models\Api\FgfCruiseModel;
+use App\Models\Api\CruiseOnlyDateModel;
 use App\Models\Api\FgfCruiseDetailModel;
 
 
@@ -80,5 +81,16 @@ class CruiseController extends Controller
 		$fgfCruiseDetail->save();
 		$result->db = (object)['id' => $fgfCruiseDetail->id];
 		return $result;
+	}
+
+
+	public function cruises($params=[])
+	{
+		$params = ['date' => '2017-04-16', 'cityId' => '16532', 'nights' => '5'];
+
+		$cruises = CruiseOnlyDateModel::call()->cruises($params);
+
+		dd_pre_echo(rejson_decode($cruises));
+
 	}
 }

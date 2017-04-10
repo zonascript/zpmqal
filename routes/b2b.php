@@ -309,6 +309,7 @@ Route::group(['middleware' => ['auth']], function(){
 	
 	Route::get('ss/flights/result/{id}', 'B2bApp\FlightsController@postSkyscannerFlightResult');
 	Route::post('ss/flights/result/{id}', 'B2bApp\FlightsController@postSkyscannerFlightResult');
+	Route::get('tp/flights/result', 'Api\TravelportAirController@index');
 
 	// =========================hotels==========================
 	// Route::get('ss/hotels/result/{id}', 'B2bApp\HotelsController@postSkyscannerHotelResult');
@@ -327,6 +328,8 @@ Route::group(['middleware' => ['auth']], function(){
 
 
 	// ===========================cruise===========================
+	Route::get('o/cruises/result', 'Api\CruiseController@cruises');
+	Route::get('f/cruises/result/{id}', 'B2bApp\CruisesController@postFgfCruiseResult');
 	Route::get('f/cruises/result/{id}', 'B2bApp\CruisesController@postFgfCruiseResult');
 	Route::post('f/cruises/result/{id}', 'B2bApp\CruisesController@postFgfCruiseResult');
 	Route::get('f/cruises/cabin/{id}', 'B2bApp\CruisesController@postFgfCruiseCabin');
@@ -371,3 +374,4 @@ Route::group(['middleware' => ['auth']], function(){
 
 
 });
+

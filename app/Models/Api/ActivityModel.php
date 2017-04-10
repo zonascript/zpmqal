@@ -459,8 +459,9 @@ class ActivityModel extends Model
 				'description', 'status', 'rank',
 				DB::raw('(select CONCAT(\''.urlImage().'\', imagePath) 
 					from images 
-					where relationId = CONCAT(prefix, id)  
-					order by id asc limit 2) as image')
+					where relationId = CONCAT(prefix, id)
+					limit 1) as image'
+				)
 			];
 
 		return $this->select($columns)->where(['id' => $id])->first();
