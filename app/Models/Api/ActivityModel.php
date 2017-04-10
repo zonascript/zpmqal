@@ -453,13 +453,13 @@ class ActivityModel extends Model
 	*/
 	public function findByCode($id)
 	{
-		$columns  = [
+		$columns = [
 				'id', 'id as code', 
 				'destinationCode', 'currency', 'name', 
 				'description', 'status', 'rank',
 				DB::raw('(select CONCAT(\''.urlImage().'\', imagePath) 
 					from images 
-					where relationId = CONCAT(prefix, id)
+					where relationId = CONCAT(activities.prefix, activities.id)
 					limit 1) as image'
 				)
 			];
