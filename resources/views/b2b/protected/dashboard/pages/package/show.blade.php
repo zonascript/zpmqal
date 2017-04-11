@@ -44,6 +44,15 @@
 			</div>
 		</div>
 		{{-- /Hotels List --}}
+
+		{{-- Hotels List --}}
+		<a name="cruises"></a>
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="row">
+				@include('b2b.protected.dashboard.pages.package.show_partials.cruises')
+			</div>
+		</div>
+		{{-- /Hotels List --}}
 		
 		{{-- Hotels List --}}
 		<a name="cabs"></a>

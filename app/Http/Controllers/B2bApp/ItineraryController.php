@@ -88,13 +88,14 @@ class ItineraryController extends Controller
 					}
 				}
 			}
-			elseif (in_array($route->mode,['hotel', 'land', 'road'])) {
+			elseif (in_array($route->mode,['hotel', 'land', 'road', 'cruise'])) {
 				$hotel = $route->hotel;
 				$nights = $route->nights;
 				$hotelDate = $route->start_datetime->format('Y-m-d');
 				$hotelLocation = $route->location_hotel;
+				$hotelImages = $route->images();
 
-				$hotelImages = [];
+				/*$hotelImages = [];
 				if ($hotel->selected_hotel_vendor == 'tbtq') {
 					$tbtqImages = $hotel->tbtqHotel
 												->tbtqDetail->result
@@ -108,10 +109,11 @@ class ItineraryController extends Controller
 					$hotelImages = array_merge($hotelImages, $ssImages);
 				}elseif ($hotel->selected_hotel_vendor == 'a') {
 					$hotelImages = array_merge($hotelImages, $hotel->agodaHotel->images);
-				}
+				}*/
 
-				for ($i=1; $i <= $nights+1; $i++) { 
-					$itinerary[$hotelDate]['hotel'] = true;
+				for ($i=1; $i <= $nights+1; $i++) {
+					$mode = $route->mode;
+					$itinerary[$hotelDate][$mode] = true;
 					// $itinerary[$hotelDate]['location'][] = $hotelLocation->country;
 					$itinerary[$hotelDate]['location'][] = $hotelLocation->destination;
 
@@ -120,17 +122,17 @@ class ItineraryController extends Controller
 							$itinerary[$hotelDate]['body'][] = 'Pick Up from '.$route->pick_up;
 						}
 
-						$itinerary[$hotelDate]['body'][] = 'Then transfer to the hotel arrive at the hotel after check in, take some rest.';
+						$itinerary[$hotelDate]['body'][] = 'Then transfer to the '.$mode.' arrive at the '.$mode.' after check in, take some rest.';
 					}
 					elseif ($i > $nights) {
 						if ($route->is_drop_off) {
 							$itinerary[$hotelDate]['body'][] = 'Drop to '.$route->drop_off;
 						}
 						
-						$itinerary[$hotelDate]['body'][] = 'Check out from hotel';
+						$itinerary[$hotelDate]['body'][] = 'Check out from '.$mode;
 					}
 					else{
-						$itinerary[$hotelDate]['body'][] = 'Breakfast will be served at the hotel';
+						$itinerary[$hotelDate]['body'][] = 'Breakfast will be served at the '.$mode;
 					}
 
 
@@ -298,8 +300,6 @@ class ItineraryController extends Controller
 			$day++;
 		}
 		
-		// dd($itineraries);
-
 		return rejson_decode($itineraries);
 	}
 

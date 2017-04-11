@@ -18,7 +18,6 @@ class RouteModel extends Model
 	protected $appends = [
 			'geo_code',
 			'origin_code', 
-			'hotel_detail',
 			'end_datetime',
 			'origin_detail', 
 			'start_datetime', 
@@ -181,41 +180,12 @@ class RouteModel extends Model
 
 
 
-	public function getHotelDetailAttribute()
-	{
-		$hotel = $this->hotel;
-		$result = null;
-		if ($this->attributes['mode'] == 'hotel') {
-			$result = (object)[
-					"nights" => $this->attributes['nights'],
-					"location" => $this->destination_detail->location,
-					"endDate" => $this->end_datetime->format('d-M-Y'),
-					"startDate" => $this->start_datetime->format('d-M-Y'),
-				];
-
-			if ($hotel->selected_hotel_vendor == 'a') {
-				$result->name = $hotel->agodaHotel->hotel_name;
-				$result->image = $hotel->agodaHotel->photo1;
-				$result->description = $hotel->agodaHotel->overview;
-				$result->starRating = getStarImage($hotel->agodaHotel->star_rating, 15, 15);
-			}
-			elseif ($hotel->selected_hotel_vendor == 'ss') {
-				$result->name = $hotel->skyscannerHotel->name;
-				$result->image = $hotel->skyscannerHotel->hotelDetail->images[0];
-				$result->description = $hotel->skyscannerHotel
-															->hotelDetail->result->hotels[0]->description;
-				$result->starRating = getStarImage($hotel->skyscannerHotel->star_rating, 15, 15);
-			}
-			elseif ($hotel->selected_hotel_vendor == 'tbtq') {
-				$result->name = $hotel->tbtqHotel->hotel->HotelName;
-				$result->image = $hotel->tbtqHotel->hotel->HotelPicture;
-				$result->image = $hotel->tbtqHotel->hotel->HotelDescription;
-				$result->starRating = getStarImage($hotel->tbtqHotel->hotel->StarRating, 15, 15);
-			}
-		}
-		return $result;
-	}
-
+	/*
+	| this function is to fix date 
+	| like every date is invalid when making package
+	| need to be fix and if in package has flight the 
+	| it is possiblity to dates can be change
+	*/
 	public function fixDates($routeId=null)
 	{
 		$routes = null;
@@ -258,6 +228,20 @@ class RouteModel extends Model
 				if ($route->mode == 'flight') { return true; }
 			}
 		}
+	}
+
+	public function images()
+	{
+		$images = [];
+
+		if ($this->mode == 'hotel') {
+			$images = $this->hotel->images();
+		}
+		elseif ($this->mode = 'cruise') {
+			$images = $this->cruise->images();
+		}
+
+		return $images;
 	}
 
 }

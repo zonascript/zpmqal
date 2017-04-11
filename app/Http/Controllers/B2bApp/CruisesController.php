@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\DestinationController;
 
 // =====================================Model======================================
 use App\Models\B2bApp\PackageCruiseModel;
+use App\Models\Api\CruiseOnlyDateModel;
 
 use Auth;
 
@@ -242,6 +243,13 @@ class CruisesController extends Controller
 	{
 		PackageCruiseModel::where('route_id', $routeDbId)->update(["status" => "Inactive"]);
 		return true;
+	}
+
+	public function itinerary()
+	{
+		$params = ['date' => '2017-04-16', 'vendor_detail_id' => 1, 'nights' => '5'];
+
+		CruiseOnlyDateModel::call()->vendorDetial($params);	
 	}
 
 

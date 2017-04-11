@@ -73,4 +73,48 @@ class CruiseOnlyDateModel extends Model
 		return $this->hasMany('App\Models\Api\CruiseCabinModel', 'vendor_detail_id', 'vendor_detail_id');
 	}
 
+
+	/*
+	| params = ['date' => Y-m-d, 'vendor_detail_id' => '', 'nights' => '5'];
+	*/
+	public function detail(Array $params)
+	{
+
+		$params = (object)$params;
+		$columns = [
+				$this->table.'.date',$this->table.'.cruise_night_id', 
+				'cruise_nights.nights', 'cruise_nights.vendor_detail_id',
+				DB::raw('CONCAT(vendor_details.prefix,vendor_details.id) as vuid'),
+				'vendor_details.company_name as name', 'vendor_details.star_rating', 
+				'vendor_details.description', 'vendor_details.policy', 
+				'vendor_details.contact_number', 'vendor_details.fax_number', 
+				'vendor_details.email', 'vendor_details.address', 'vendor_details.pincode', 
+				'vendor_details.latitude', 'vendor_details.longitude', 
+				'vendor_details.special_instructions' 
+			];
+
+		$cruises = $this->select($columns)
+					->join(
+								'cruise_nights', 'cruise_nights.id', 
+								'=', $this->table.'.cruise_night_id'
+							)
+						->join(
+									'vendor_details', 'vendor_details.id',
+									'=', 'cruise_nights.vendor_detail_id'
+								)
+							->with('images', 'cabins', 'itinerary')
+								->where([
+										[$this->table.'.date', '=', $params->date],
+										['cruise_nights.nights', '=', $params->nights],
+										['vendor_details.id','=', $params->vendor_detail_id],
+									])
+									->first();
+		return $cruises;
+	}
+
+	public function itinerary()
+	{
+		return $this->hasMany('App\Models\Api\CruiseItineraryModel', 'cruise_night_id', 'cruise_night_id');
+	}
+
 }

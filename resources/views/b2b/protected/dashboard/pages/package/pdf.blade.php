@@ -49,6 +49,12 @@
 			@include('b2b.protected.dashboard.pages.package.pdf_partials.hotels')
 			{{-- /Hotels And Detail --}}
 		</div>
+
+		<div>
+			{{-- Hotels And Detail --}}
+			@include('b2b.protected.dashboard.pages.package.pdf_partials.cruises')
+			{{-- /Hotels And Detail --}}
+		</div>
 		
 		<div>
 			{{-- activities --}}

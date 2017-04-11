@@ -322,7 +322,8 @@ Route::group(['middleware' => ['auth']], function(){
 
 
 	// ===========================cruise===========================
-	Route::get('o/cruises/result', 'Api\CruiseController@cruises');
+	// Route::get('o/cruises/result', 'Api\CruiseController@cruises');
+	// Route::get('check/cruises/result', 'B2bApp\CruisesController@itinerary');
 	Route::get('fo/cruises/result/{id}', 'B2bApp\CruisesController@postFgfOnlyCruise');
 	Route::post('fo/cruises/result/{id}', 'B2bApp\CruisesController@postFgfOnlyCruise');
 	Route::get('f/cruises/result/{id}', 'B2bApp\CruisesController@postFgfCruiseResult');

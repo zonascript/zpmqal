@@ -1,13 +1,13 @@
-@if ($package->hotelRoutes->count())
+@if ($package->cruiseRoutes->count())
 <div class="col-md-12 col-sm-12 col-xs-12">
 	<div class="x_panel">
 		<div class="x_title">
 			<div class="row">
 				<div class="col-md-8 col-sm-8 col-xs-12">
-					<h1>Hotel List</h1>
+					<h1>Cruise List</h1>
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-12 m-top-10">
-					<a href="{{ urlAllHotelsBuilder($package->id) }}" class="btn btn-success btn-block">Modify All Hotels</a>
+					<a href="{{ urlAllCruisesBuilder($package->id) }}" class="btn btn-success btn-block">Modify All Hotels</a>
 				</div>
 				{{-- <div class="col-md-1 col-sm-1 col-xs-12 m-top-10">
 					<ul class="nav navbar-right panel_toolbox panel_toolbox1">
@@ -22,8 +22,8 @@
 			<div class="clearfix"></div>
 		</div>
 		<div class="x_content">
-			@foreach ($package->hotelRoutes as $hotelRoute)
-				@include('b2b.protected.dashboard.pages.package.show_partials.hotel_partials.index')
+			@foreach ($package->cruiseRoutes as $cruiseRoute)
+				@include('b2b.protected.dashboard.pages.package.show_partials.cruise_partials.index')
 			@endforeach
 		</div>
 	</div>

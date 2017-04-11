@@ -994,6 +994,10 @@ function urlSsResult($firstCartId = "")
 
 /*=====================Cruises Url=====================*/
 
+function urlAllCruisesBuilder($packageDbId = 0){
+	return url('dashboard/package/builder/cruises/'.$packageDbId);
+}
+
 function urlCruisesBuilder($id = 0, $packageDbId = 0, $firstCartId = 0){
 	return url('dashboard/package/builder/cruise/'.$firstCartId);
 }

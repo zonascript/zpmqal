@@ -8,7 +8,7 @@ class AgodaHotelModel extends Model
 {
 	protected $connection = 'mysql2';
 	protected $table = 'agoda_hotels';
-	protected $appends = ['images'];
+	protected $appends = ['images', 'address'];
 
 	public static function call()
 	{
@@ -135,6 +135,15 @@ class AgodaHotelModel extends Model
 			}
 		}
 		return $images;
+	}
+
+
+	public function getAddressAttribute()
+	{
+		$address = $this->addressline1.', '.$this->addressline2.', '.
+								$this->city.' - '.$this->zipcode.', '.$this->country;
+		$address = str_replace(', ,', ',', $address);
+		return $address;
 	}
 
 }

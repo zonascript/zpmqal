@@ -1,19 +1,22 @@
-@if (!is_null($hotelRoute->hotel_detail))
+@if (!is_null($hotelRoute->hotel->detail))
+<?php
+	$hotelDetail = $hotelRoute->hotel->detail;
+?>
 	<div class="{{-- height-{{ $hotelRouteKey == 0 ? 980 : 1000 }} px --}} p-5">
 		<div>
 			<div class="box-stack">
-				<img src="{{ $hotelRoute->hotel_detail->image }}" class="img-thmb">
-				<b  class="font-size-20px">{{ $hotelRoute->hotel_detail->name }}</b>
+				<img src="{{ $hotelDetail->image }}" class="img-thmb">
+				<b  class="font-size-20px">{{ $hotelDetail->name }}</b>
 				<span>
-					{!! $hotelRoute->hotel_detail->starRating !!}
+					{!! $hotelDetail->starRatingHtml !!}
 				</span>
 				<hr/>
-				<i>Check In : {{ $hotelRoute->hotel_detail->startDate }} | Check Out : {{ $hotelRoute->hotel_detail->endDate }}</i>
+				<i>Check In : {{ $hotelDetail->startDate }} | Check Out : {{ $hotelDetail->endDate }}</i>
 				<br/>
-				<span><b>Location: </b>{{ $hotelRoute->hotel_detail->location }}</span>
+				<span><b>Location: </b>{{ $hotelDetail->location }}</span>
 				<br/><br/>
 				<b>About Hotel : </b>
-				<span>{!! $hotelRoute->hotel_detail->description !!}</span>
+				<span>{!! $hotelDetail->description !!}</span>
 			</div>
 		</div>       
 	</div>

@@ -186,13 +186,6 @@ class PackageModel extends Model
 	{
 		$result = $this->hasMany('App\Models\B2bApp\RouteModel', 'package_id');
 		return $result->where(['mode' => 'hotel', 'status' => 'active']);
-
-		/* this is no longer used because hotel and cruise are saperated
-		return $result->where(['status' => 'active'])
-											->where(function ($query) {
-						                $query->orWhere('mode', '=', 'hotel')
-						                      ->orWhere('mode', '=', 'cruise');
-						            });*/
 	}
 
 
@@ -220,34 +213,19 @@ class PackageModel extends Model
 	}
 
 
+	public function accomoRoutes()
+	{
+		$result = $this->hasMany('App\Models\B2bApp\RouteModel', 'package_id');
+		return $result->where(function ($query) {
+					                $query->orWhere('mode', '=', 'hotel')
+					                      ->orWhere('mode', '=', 'cruise');
+						            });
+	}
+
+
 	public function fixRouteDates()
 	{
 		$routes = $this->routes[0]->fixDates();
-	
-		// if ($routes->count()) {
-		// 	$nextStartDate = '0000-00-00';
-		// 	foreach ($routes as $key => $route) {
-
-		// 		if ($key) {
-		// 			$route->start_date = $nextStartDate;
-		// 		}
-		// 		else{
-		// 			$route->start_date = $this->start_date;
-		// 		}
-				
-		// 		if (in_array($route->mode, ['ferry', 'hotel', 'road', 'cruise', 'train'])) {
-		// 			$endDate = Carbon::parse($route->start_date);
-		// 			$endDate->addDays($route->nights);
-		// 			$nextStartDate = $endDate->format('Y-m-d');
-		// 			$route->end_date = $nextStartDate;
-		// 		}
-				
-		// 		$route->save();
-
-		// 		if ($route->mode == 'flight') { return true; }
-		// 	}
-		// }
-	
 		return true;
 	}
 
