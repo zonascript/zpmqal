@@ -125,11 +125,10 @@ class ItineraryController extends Controller
 						$itinerary[$hotelDate]['body'][] = 'Then transfer to the '.$mode.' arrive at the '.$mode.' after check in, take some rest.';
 					}
 					elseif ($i > $nights) {
+						$itinerary[$hotelDate]['body'][] = 'Check out from '.$mode;
 						if ($route->is_drop_off) {
 							$itinerary[$hotelDate]['body'][] = 'Drop to '.$route->drop_off;
 						}
-						
-						$itinerary[$hotelDate]['body'][] = 'Check out from '.$mode;
 					}
 					else{
 						$itinerary[$hotelDate]['body'][] = 'Breakfast will be served at the '.$mode;
