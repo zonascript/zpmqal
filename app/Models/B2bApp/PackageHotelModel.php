@@ -155,7 +155,7 @@ class PackageHotelModel extends Model
 			$tempImg = $this->skyscannerHotel->hotelDetail->images;
 			$images = array_merge($images, $tempImg);
 		}
-		elseif ($hotel->selected_hotel_vendor == 'a') {
+		elseif ($this->selected_hotel_vendor == 'a') {
 			$images = array_merge($images, $this->agodaHotel->images);
 		}
 

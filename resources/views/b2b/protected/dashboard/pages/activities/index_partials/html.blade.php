@@ -1,7 +1,7 @@
 <li class="min-height-110px">
 	<div class="row">
-		<div id="container_'+activity.code+'" 
-			class="x_panel glowing-border activityContainer '+activity.isSelectedBorder+'" 
+		<div
+			class="x_panel glowing-border activityContainer '+activity.code+' '+activity.isSelectedBorder+'" 
 			data-did="'+activity.did+'" 
 			data-rid="'+activity.rid+'" 
 			data-code="'+activity.code+'" 
@@ -21,7 +21,7 @@
 							<h2 class="search-word">'+activity.name+'</h2>
 						</div>
 						<div class="col-md-12 col-sm-12 col-xs-12">
-							<span id="activitySortDescription_'+activity.code+'">
+							<span class="activitySortDescription">
 								'+activity.sortDescription+'
 							</span>
 							<button id="btn-descriptionMore_'+activity.code+'" 
@@ -29,15 +29,15 @@
 								data-toggle="modal" 
 								data-target=".bs-example-modal-lg" 
 								data-title="'+activity.name+' : Description" 
-								data-bodyid="activityFullDescription_'+activity.code+'" 
+								data-bodyid="activityFullDescription_'+activity.rid+'_'+activity.code+'" 
 								data-button="false" 
 								data-index="'+activity.code+'">More
 							</button>
-							<div id="activityFullDescription_'+activity.code+'" hidden>
+							<div id="activityFullDescription_'+activity.rid+'_'+activity.code+'" class="activityFullDescription" hidden>
 								'+activity.description+'
 							</div>
 						</div>
-						<div id="inputContainer_'+activity.code+'" '+activity.dateStyle+'>
+						<div class="inputContainer_'+activity.code+'" '+activity.dateStyle+'>
 							<div>
 								<div class="col-md-4 col-sm-4 col-xs-12">
 									<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback m-top-10-only">

@@ -307,13 +307,17 @@ class ActivitiesController extends Controller
 		$selectedActivities = $packageActivity->selectedActivities;
 		$activities = [];
 		foreach ($selectedActivities as $selectedActivity) {
+			$code = $selectedActivity->code;
+			if ($selectedActivity->vendor == 'f') {
+				$code = 'ACTV'.$code;
+			}
+
 			$activities[] = [
 					"id" => $selectedActivity->detail->id,
-					"code" => $selectedActivity->code,
+					"code" => $code,
 					"vendor" => $selectedActivity->vendor,
 					"date" => $selectedActivity->date->format('Y-m-d'),
 					"mode" => $selectedActivity->mode,
-					"code" => $selectedActivity->code,
 					"timing" => $selectedActivity->timing,
 					"destinationCode" => $selectedActivity->detail->destinationCode,
 					"currency" => $selectedActivity->detail->currency,

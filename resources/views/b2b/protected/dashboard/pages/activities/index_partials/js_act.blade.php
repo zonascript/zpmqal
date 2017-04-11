@@ -35,10 +35,13 @@
 						$('#loging_log').hide();
 
 						$.each(responce.activities, function(i,v){
-							var isExits = $('#container_'+v.code).length;
+							console.log($('#'+elem_id).find('.'+v.code));
+							var isExits = $('#'+elem_id).find('.'+v.code).length;
+							console.log(isExits);
 							if (isExits == 0) {
 								var IsSelected = which == 0 ? 1 : 0;
 								html = makeUniHtml(i, v, IsSelected, ids);
+								// console.log($('#'+elem_id));
 								$('#'+elem_id).append(html);
 							}
 						});

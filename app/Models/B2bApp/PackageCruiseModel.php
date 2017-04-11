@@ -70,8 +70,9 @@ class PackageCruiseModel extends Model
 		return $result->itinerary;
 	}
 
-		public function getDetailAttribute()
+	public function getDetailAttribute()
 	{
+		$roomType  = isset($this->cabin->cabin) ? $this->cabin->cabin : '';
 		$result = (object)[
 				"code" => '',
 				"vendor" => '',
@@ -80,7 +81,7 @@ class PackageCruiseModel extends Model
 				"location" => $this->route->destination_detail->location,
 				"endDate" => $this->route->end_datetime->format('d-M-Y'),
 				"startDate" => $this->route->start_datetime->format('d-M-Y'),
-				"roomType" => $this->cabin->cabin,
+				"roomType" => $roomType,
 				"address" => '',
 				"image" => '',
 				"address" => '',

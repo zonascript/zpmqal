@@ -71,11 +71,10 @@
 			$(this).addClass('btn-danger');
 			$(this).removeClass('btn-primary');
 			$(this).attr('data-isadd', 1);
-			$(this).text('Delete');
+			$(this).text('Selected');
 			$('#'+elemid).find('.btn-chooseRoom.btn-primary').addClass('btn-dark');
 			$('#'+elemid).find('.btn-chooseRoom.btn-primary').prop('disabled', true);
 			$('#'+elemid).find('.btn-chooseRoom.btn-primary').removeClass('btn-primary');
-
 			
 			var rid = idObject[elemid].rid;
 			var next_did = idObject[elemid].next_did;
@@ -226,7 +225,7 @@
 
 		if (next_rid == "NaN") {
 			setTimeout(function () {    
-				document.location.href = "{{url('dashboard/package/builder/activities/'.$package->id)}}";
+				document.location.href = "{{url('dashboard/package/builder/event/'.$package->id.'/hotel')}}";
 		  }, 5000)
 		}
 		// else{

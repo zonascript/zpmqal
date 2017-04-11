@@ -70,12 +70,6 @@ class HotelsController extends Controller
 
 
 
-
-	public function book($id){
-		PackageHotelModel::call()->book($id);
-	}
-
-
 	/* 
 	| this function is to insert or create new row in db
 	*/
@@ -309,8 +303,9 @@ class HotelsController extends Controller
 			$returnArray = [ 
 				"status" => 200,
 				"packageUrl" => newRedirectUrl(urlPackageAll($getCurrentCart->route->package->client->id, $getCurrentCart->route->package->id)),
-				"nextUrl" => newRedirectUrl(urlPackageEvent($routeDbId)),
+				"nextUrl" => newRedirectUrl(url('dashboard/package/builder/event/'.$getCurrentCart->route->package->id.'/hotel')),
 			];
+			dd($returnArray);
 
 			return json_encode($returnArray);
 		}

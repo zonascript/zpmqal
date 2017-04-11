@@ -467,13 +467,13 @@ class PackageController extends Controller
 
 	/*
 	| this function is to get next event using get request from browser
-	*/
-	public function getEvent($routeDbId)
+	public function getEvent($packageDbId)
 	{
 		$result = $this->nextEvent($routeDbId);
 		$result = json_decode($result);
 		return redirect($result->nextUrl);
 	}
+	*/
 
 
 

@@ -75,11 +75,15 @@
 {{-- select activity --}}
 <script>
 	function selectActivity(thisObj) {
+		var parent = $(thisObj).closest('.activityContainer');
 		var code = $(thisObj).attr('data-code');
 		var isSelected = $(thisObj).attr('data-selected');
-		var activityDescription = $('#activityFullDescription_'+code).text().trim();
 		var did = $(thisObj).attr('data-did');
 		var rid = $(thisObj).attr('data-rid');
+		var activityDescription = $('.activityFullDescription').text().trim();
+		console.log(activityDescription);
+		console.log($(parent).find('.activitySortDescription'));
+
 		if (isSelected == 0) {
 
 			$('#saveActivities').attr({ "data-did":did, "data-rid":rid });
@@ -88,10 +92,11 @@
 			$(thisObj).text('Remove');
 			$(thisObj).addClass('btn-danger');
 			$(thisObj).removeClass('btn-primary');
-			$('#container_'+code).addClass('border-green-3px');
-			$('#inputContainer_'+code).show();
+			$(parent).addClass('border-green-3px');
+			$(parent).find('.inputContainer_'+code).show();
+
 			activityDescription.length > 0 
-			? $('#activitySortDescription_'+code).text(activityDescription.substring(0,90)+'...')
+			? $(parent).find('.activitySortDescription').text(activityDescription.substring(0,90)+'...')
 			: '';
 
 		}else{
@@ -99,10 +104,10 @@
 			$(thisObj).text('Add');
 			$(thisObj).addClass('btn-primary');
 			$(thisObj).removeClass('btn-danger');
-			$('#container_'+code).removeClass('border-green-3px');
-			$('#inputContainer_'+code).hide();
+			$(parent).removeClass('border-green-3px');
+			$(parent).find('.inputContainer_'+code).hide();
 			activityDescription.length > 0 
-			? $('#activitySortDescription_'+code).text(activityDescription.substring(0,350)+'...') 
+			? $(parent).find('.activitySortDescription').text(activityDescription.substring(0,350)+'...')
 			: '';
 		}
 	}

@@ -15,8 +15,4 @@ class CruiseCabinModel extends Model
 		return $this->belongsTo('App\Models\Api\VendorDetailModel', 'vendor_detail_id');
 	}
 
-	public function images()
-	{
-		
-	}
 }
