@@ -72,6 +72,6 @@
 @endsection
 
 @section('scripts')
-	@include('b2b.protected.dashboard.pages.hotels.partials._scripts')
+	@include('b2b.protected.dashboard.pages.hotels.partials.scripts._scripts')
 @endsection
 

@@ -9,6 +9,15 @@ class TestController extends Controller
 
 	public function testCode()
 	{
+
+		dd(httpGet('https://maps.googleapis.com/maps/api/geocode/json?address=auckland+new+zealand'));
+		for ($i=1; $i < 990; $i++) { 
+		$lessId = $i*100;
+		$longId = ($i+1)*100;
+		echo 'mysql -u aashwinjain -p\'Aashwin123#\' -e \'UPDATE `booking_destinations` SET `city_hotel` = (SELECT `city_hotel` FROM booking_hotels WHERE booking_hotels.city_unique = booking_destinations.city_unique LIMIT 1 ) WHERE id > '.$lessId.' AND id <= '.$longId.';'."' trawish_hotels\n\n";
+		}
+
+		dd();
 		saveInStorage('this is text', 'agoda_rooms', 'html', 'mylocal/testnew');
 		dd();
 		pre_echo(carbonParse('2017-04-28T14:55')->format('H:i'));
@@ -56,6 +65,13 @@ class TestController extends Controller
 		}*/
 		
 
+	}
+	// https://www.booking.com/hotel/za/house-of-house-guest-house.html
+
+	public function testBookingHtml()
+	{
+		$html = httpGet('https://www.booking.com/hotel/za/house-of-house-guest-house.html');
+		dd($html);
 	}
 
 	public function testClearTrip()

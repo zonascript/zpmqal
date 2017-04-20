@@ -37,15 +37,11 @@
 						<div class="col-md-12 col-sm-12 col-xs-12 m-top-5 font-size-13">
 							{{ $hotelDetail->shortDescription }}
 							<button 
-								id="btn-amenitiesMore" 
 								class="btn-link cursor-pointer btn-model" 
-								data-toggle="modal" 
-								data-target=".bs-example-modal-lg"
 								data-title="{{ $hotelDetail->name }} : Description" 
-								data-bodyid="hotelDescription{{ $uniqueKey}}" 
-								data-button="false">More
+								data-bodyid="hotelDescription_{{ $uniqueKey}}">More
 							</button>
-							<div id="hotelDescription{{ $uniqueKey }}" hidden>
+							<div id="hotelDescription_{{ $uniqueKey }}" hidden>
 								{!! $hotelDetail->htmlDescription !!}
 							</div>
 						</div>

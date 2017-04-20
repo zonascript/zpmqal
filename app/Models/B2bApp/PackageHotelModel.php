@@ -62,18 +62,18 @@ class PackageHotelModel extends Model
 	}
 
 
-	public function agodaHotel()
+	public function bookingHotelRoom()
 	{
 		return $this->belongsTo(
-											'App\Models\Api\AgodaHotelModel', 
-											'agoda_hotel_id', 'hotel_id'
+											'App\Models\HotelApp\BookingHotelRoomModel', 
+											'booking_hotel_room_id', 'id'
 										);
 	}
 
 	public function agodaHotelRoom()
 	{
 		return $this->belongsTo(
-											'App\Models\Api\AgodaHotelRoomModel', 
+											'App\Models\HotelApp\AgodaHotelRoomModel', 
 											'agoda_hotel_room_id'
 										);
 	}
@@ -105,15 +105,28 @@ class PackageHotelModel extends Model
 				"htmlDescription" => '',
 			];
 		if ($this->selected_hotel_vendor == 'a') {
+			$agodaHotel = $this->agodaHotelRoom->agodaHotel;
 			$result->vendor = 'agoda';
-			$result->code = $this->agodaHotel->id;
-			$result->name = proper($this->agodaHotel->hotel_name);
-			$result->image = $this->agodaHotel->photo1;
-			$result->address = $this->agodaHotel->address;
+			$result->code = $agodaHotel->id;
+			$result->name = proper($agodaHotel->hotel_name);
+			$result->image = $agodaHotel->photo1;
+			$result->address = $agodaHotel->address;
 			$result->roomType = $this->agodaHotelRoom->roomtype;
-			$result->description = $this->agodaHotel->overview;
-			$result->starRating = $this->agodaHotel->star_rating;
-			$result->htmlDescription = $this->agodaHotel->hotelDetail->details;
+			$result->description = $agodaHotel->overview;
+			$result->starRating = $agodaHotel->star_rating;
+			$result->htmlDescription = $agodaHotel->hotelDetail->details;
+		}
+		elseif ($this->selected_hotel_vendor == 'b') {
+			$bookingHotel = $this->bookingHotelRoom->bookingHotel;
+			$result->vendor = 'booking';
+			$result->code = $bookingHotel->id;
+			$result->name = proper($bookingHotel->name);
+			$result->image = $bookingHotel->photo_url;
+			$result->address = $bookingHotel->address;
+			$result->roomType = $this->bookingHotelRoom->roomtype;
+			$result->description = $bookingHotel->desc_en;
+			$result->starRating = $bookingHotel->class;
+			$result->htmlDescription = $bookingHotel->desc_en;
 		}
 		elseif ($this->selected_hotel_vendor == 'ss') {
 			$result->name = proper($this->skyscannerHotel->name);

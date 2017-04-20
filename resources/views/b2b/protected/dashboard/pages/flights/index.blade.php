@@ -79,6 +79,6 @@
 @endsection
 
 @section('scripts')
-	@include('b2b.protected.dashboard.pages.flights.partials._scripts')
+	@include('b2b.protected.dashboard.pages.flights.partials.scripts._scripts')
 @endsection
 

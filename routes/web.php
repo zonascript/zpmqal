@@ -9,12 +9,9 @@
 | to using a Closure or controller method. Build something great!
 |
 */
-
-
-Route::get('/test/run', 'TestController@test');
-Route::get('show-duplicate', 'ShowDuplicate@show');
-Route::get('show-delete-duplicate', 'ShowDuplicate@delete');
-
+if (isLocalHost()) {
+	include('temp.php');
+}
 
 	
 //==================================server==================================

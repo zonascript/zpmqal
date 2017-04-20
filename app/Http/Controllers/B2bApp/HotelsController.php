@@ -14,14 +14,16 @@ use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\B2bApp\ActivitiesController;
 use App\Http\Controllers\B2bApp\DestinationController;
 
+// ==============================HotelApp Controller===============================
+use App\Http\Controllers\HotelApp\HotelsController as DbHotelsController;
+/*use App\Http\Controllers\HotelApp\BookingHotelsController;
+use App\Http\Controllers\HotelApp\AgodaHotelsController;
+use App\Http\Controllers\HotelApp\AgodaHotelRoomsController;
+use App\Http\Controllers\HotelApp\AgodaHotelDetailsController;*/
+
 // =================================Api Controller=================================
-use App\Http\Controllers\Api\AgodaHotelsController;
 use App\Http\Controllers\Api\TbtqHotelApiController;
-use App\Http\Controllers\Api\AgodaHotelRoomsController;
-use App\Http\Controllers\Api\AgodaHotelDetailsController;
 use App\Http\Controllers\Api\SkyscannerHotelApiController;
-
-
 
 // =====================================Model======================================
 use App\Models\B2bApp\PackageHotelModel;
@@ -216,31 +218,14 @@ class HotelsController extends Controller
 	*/
 	public function postHotelRoom($packageHotelId, Request $request)
 	{
-		$getCurrentCart = PackageHotelModel::call()->usersFind($packageHotelId);
-		$hotelRoom = null;
+		$packageHotel = PackageHotelModel::call()->usersFind($packageHotelId);
+		$params = [
+				"id" => $request->hid,
+				"vendor" => $request->vdr
+			];
 
-		if (!is_null($getCurrentCart)) {
-			if ($request->vendor == 'tbtq') {
-				$hotelRoom = TbtqHotelApiController::call()
-										->hotelRoom($getCurrentCart->tbtq_temp_hotel_id, $request->index);
-
-			}
-			elseif ($request->vendor == 'ss') {
-				$hotelRoom = SkyscannerHotelApiController::call()
-										->hotelDetail($getCurrentCart->skysacanner_temp_hotel_id, $request->index);
-			}
-			
-			$bladeData = [
-					"requestIndex" => $request->index, 
-					"vendor" => $request->vendor,
-					"hotelRoom" => $hotelRoom,
-				];
-
-			return view('b2b.protected.dashboard.pages.hotel.post_hotel_room', $bladeData);
-		}
-		else{
-			return "Something Went Wrong please try again later.";
-		}
+		$rooms = DbHotelsController::call()->hotelRooms($params);
+		return json_encode($rooms);
 	}
 
 
@@ -289,8 +274,10 @@ class HotelsController extends Controller
 									->book($getCurrentCart->skysacanner_temp_hotel_id, $request);
 			}
 			elseif($request->vdr == 'a'){
-				$getCurrentCart->agoda_hotel_id =  $request->hid;
 				$getCurrentCart->agoda_hotel_room_id =  $request->rmid;
+			}
+			elseif($request->vdr == 'b'){
+				$getCurrentCart->booking_hotel_room_id = $request->rmid;
 			}// if there is another api provider then using elseif here to define next 
 
 			$routeDbId = $getCurrentCart->route_id;
@@ -305,7 +292,6 @@ class HotelsController extends Controller
 				"packageUrl" => newRedirectUrl(urlPackageAll($getCurrentCart->route->package->client->id, $getCurrentCart->route->package->id)),
 				"nextUrl" => newRedirectUrl(url('dashboard/package/builder/event/'.$getCurrentCart->route->package->id.'/hotel')),
 			];
-			dd($returnArray);
 
 			return json_encode($returnArray);
 		}
@@ -400,6 +386,50 @@ class HotelsController extends Controller
 	| this function is to pull data from fgf database's agoda hotels data using 
 	| AgodaHotelsController and it can be call using http post request
 	*/
+	public function postHotelFromDb($id, $index = 0)
+	{
+		$packageHotel = PackageHotelModel::call()->usersFind($id);
+		$location = $packageHotel->route->dbDestination();
+		$params = [
+				'latitude' => $location->latitude, 
+				'longitude' => $location->longitude, 
+				'max_rating' => 5,
+				'min_rating' => 0
+			];
+		$hotels = DbHotelsController::call()->hotels($params); 
+		$result = (object)['hotels' => $hotels];
+		return json_encode($result);
+	}
+
+	/*
+	| this function is to pull data from fgf database's agoda hotels data using 
+	| AgodaHotelsController and it can be call using http post request
+	*/
+	public function postHotelFromRename($id, Request $request)
+	{
+		$packageHotel = PackageHotelModel::call()->usersFind($id);
+		$location = $packageHotel->route->dbDestination();
+		$result = (object)['hotels' => []];
+
+		if (strlen($request->name) > 3) {
+			$params = [
+					'name' => $request->name,
+					'latitude' => $location->latitude, 
+					'longitude' => $location->longitude, 
+					'max_rating' => 5,
+					'min_rating' => 0,
+				];
+			$result->hotels = DbHotelsController::call()->hotels($params); 
+		}
+
+		return json_encode($result);
+	}
+
+
+	/*
+	| this function is to pull data from fgf database's agoda hotels data using 
+	| AgodaHotelsController and it can be call using http post request
+	*/
 	public function postFgfAgodaHotelResult($id, $index = 0)
 	{
 		$packageHotel = PackageHotelModel::call()->usersFind($id);
@@ -433,9 +463,41 @@ class HotelsController extends Controller
 	public function searchHotels($id, Request $request)
 	{
 		$packageHotel = PackageHotelModel::find($id);
-		$cityId = $packageHotel->route->destination_agoda->city_id;
-		$hotelNames = AgodaHotelsController::call()
-									->searchHotelsByName($cityId, $request->term);
+		$location = $packageHotel->route->dbDestination();
+		$params = [
+					'name' => $request->name,
+					'latitude' => $location->latitude, 
+					'longitude' => $location->longitude, 
+					'max_rating' => 5,
+					'min_rating' => 0,
+				];
+				
+		$hotelNames = DbHotelsController::call()
+									->searchHotels($params);
+		$result = ['hotels' => $hotelNames];
+
+		if ($request->format == 'json') {
+			$result = json_encode($result);
+		}
+
+		return $result;
+	}
+
+	public function searchHotelNames($id, Request $request)
+	{
+		$packageHotel = PackageHotelModel::find($id);
+		$location = $packageHotel->route->dbDestination();
+		$params = [
+					'name' => $request->term,
+					'latitude' => $location->latitude, 
+					'longitude' => $location->longitude, 
+					'max_rating' => 5,
+					'min_rating' => 0,
+					'is_name' => 1
+				];
+				
+		$hotelNames = DbHotelsController::call()
+									->searchHotelsByName($params);
 
 		if ($request->format == 'json') {
 			$hotelNames = json_encode($hotelNames);

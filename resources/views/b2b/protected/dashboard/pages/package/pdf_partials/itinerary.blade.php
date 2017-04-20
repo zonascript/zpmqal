@@ -22,16 +22,18 @@
 				<table width="100%">
 					<tbody>
 						<tr>
-							<?php $itiImageCount = 0; ?>
-							@foreach ($itinerary->images as $itiImage)
-								<?php 
-									$itiImageCount++; 
-								?>
-								@break($itiImageCount > 3)
-								<td width="33.333%">
-									<img src="{{ $itiImage }}" style="width: 250px; height: 200px;">
-								</td>
-							@endforeach
+							@if (count($itinerary->images) > 2)
+								<?php $itiImageCount = 0; ?>
+								@foreach ($itinerary->images as $itiImage)
+									<?php 
+										$itiImageCount++; 
+									?>
+									@break($itiImageCount > 3)
+									<td width="33.333%">
+										<img src="{{ $itiImage }}" style="width: 250px; height: 200px;">
+									</td>
+								@endforeach
+							@endif
 						</tr>
 					</tbody>
 				</table>

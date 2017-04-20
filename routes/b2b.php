@@ -1,27 +1,10 @@
 <?php
 
 Auth::routes();
-
 Route::get('', 'B2bApp\PagesController@getIndex');
-Route::get('pickme', 'B2bApp\PagesController@getPickMe');
-
-Route::get('test/code', 'TestController@testCode');
-Route::get('test/decode', 'TestController@decode');
-Route::get('test/showfile', 'TestController@showfile');
-Route::get('test/agoda', 'TestController@getAgodaHtml');
-Route::get('test/cleartrip', 'TestController@testClearTrip');
-Route::get('hellotravel/{id}', 'TestController@helloTravel');
-Route::post('hellotravel/{id}/save', 'TestController@saveHelloTravel');
-
-Route::get('a/l/htdetail', 'Api\AgodaHotelsController@loopHotelDetails');
-Route::get('insert/batch/hotel/b', 'HotelApp\ManageDataController@update');
-
-/*======================Temporary Route======================*/
-// Route::get('fix/booking/data', 'TestController@fixData');
 
 // This for package html
 Route::get('your/package/detail/{hashId}', 'B2bApp\PdfHtmlController@htmlByHashIdWithTrack');
-
 
 
 Route::group(['middleware' => ['auth']], function(){
@@ -205,7 +188,13 @@ Route::group(['middleware' => ['auth']], function(){
 			|	packageHotelId = package_hotels table or id
 			*/
 			
+
+				Route::get('dashboard/hotels/search/name/{id}', 'B2bApp\HotelsController@searchHotelNames');
+
 				Route::get('dashboard/hotels/search/{id}', 'B2bApp\HotelsController@searchHotels');
+
+				Route::post('dashboard/hotels/search/{id}', 'B2bApp\HotelsController@searchHotels');
+
 				Route::get('dashboard/hotel/find/a/{id}', 'B2bApp\HotelsController@findHotel');
 				Route::post('dashboard/hotel/find/a/{id}', 'B2bApp\HotelsController@findHotel');
 
@@ -217,6 +206,8 @@ Route::group(['middleware' => ['auth']], function(){
 				Route::post('dashboard/package/builder/hotel/remove/{packageHotelId}', 'B2bApp\HotelsController@postRemoveHotelRoom');
 
 				// Fatch Hotel Room 
+				Route::get('dashboard/package/builder/hotel/room/{packageHotelId}', 'B2bApp\HotelsController@postHotelRoom');
+
 				Route::post('dashboard/package/builder/hotel/room/{packageHotelId}', 'B2bApp\HotelsController@postHotelRoom');
 				// Book Hotel Room
 				Route::post('dashboard/package/builder/hotel/room/book/{packageHotelId}', 'B2bApp\HotelsController@postBookHotelRoom');
@@ -306,18 +297,25 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('tp/flights/result', 'Api\TravelportAirController@index');
 
 	// =========================hotels==========================
-	// Route::get('ss/hotels/result/{id}', 'B2bApp\HotelsController@postSkyscannerHotelResult');
-	
+	Route::post('fatch/hotels/result/{id}', 'B2bApp\HotelsController@postHotelFromDb');
+	Route::post('search/hotels/result/{id}', 'B2bApp\HotelsController@postHotelFromRename');
+	Route::get('search/hotels/result/{id}', 'B2bApp\HotelsController@searchHotels');
+
+	// Api Tbtq
 	Route::post('t/hotels/result/{id}', 'B2bApp\HotelsController@postTbtqHotelResult');
+
+	// Api Skyscanner
 	Route::post('ss/hotels/result/{id}', 'B2bApp\HotelsController@postSkyscannerHotelResult');
 	
-	Route::get('a/hotels/result/{id}/{index?}', 'B2bApp\HotelsController@postFgfAgodaHotelResult');
+	// Agoda
 	Route::post('a/hotels/result/{id}/{index?}', 'B2bApp\HotelsController@postFgfAgodaHotelResult');
-	Route::get('a/hotel/rooms/{id}', 'B2bApp\HotelsController@postFgfAgodaHotelRoomResult');
 	Route::post('a/hotel/rooms/{id}', 'B2bApp\HotelsController@postFgfAgodaHotelRoomResult');
-
-	Route::get('a/hotel/detail/{id}', 'B2bApp\HotelsController@postFgfAgodaHotelDetail');
 	Route::post('a/hotel/detail/{id}', 'B2bApp\HotelsController@postFgfAgodaHotelDetail');
+
+	// Booking Hotels 
+	Route::get('b/hotels/result/{id}', 'B2bApp\HotelsController@postHotelFromDb');
+	Route::get('b/hotel/rooms/{id}', 'HotelApp\BookingHotelRoomsController@hotelRoom');
+
 
 
 

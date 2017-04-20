@@ -3,19 +3,55 @@
 namespace App\Models\api;
 
 use Illuminate\Database\Eloquent\Model;
-use DB;
 
+use App\Http\Controllers\Api\GoogleMapController;
+use DB;
 
 class DestinationModel extends Model
 {
 	protected $connection = 'mysql2';
 	protected $table = 'destinations';
+	protected $casts = ['geocode' => 'object'];
 	protected $appends = ['location', 'echo_location'];
+	protected $hidden = ['created_at', 'updated_at'];
 
-	protected $hidden = [
-		'created_at', 'updated_at',
-	];
+	public function getLatitudeAttribute($value)
+	{
+		if (is_null($value)) {
+			$value = $this->pullGeocode();
+			$value = isset($value->results[0]->geometry->location->lat)
+						 ? $value->results[0]->geometry->location->lat 
+						 : null;
+		}
+
+		return $value;
+	}
 	
+
+	public function getLongitudeAttribute($value)
+	{
+		if (is_null($value)) {
+			$value = $this->pullGeocode();
+			$value = isset($value->results[0]->geometry->location->lng)
+						 ? $value->results[0]->geometry->location->lng 
+						 : null;
+		}
+
+		return $value;
+	}
+
+	public function getGeocodeAttribute($value)
+	{
+		if (is_null($value)) {
+			$value = $this->pullGeocode();
+		}
+		else{
+			$value = json_decode($value);
+		}
+
+		return $value;
+	}
+
 
 	public function getLocationAttribute()
 	{
@@ -42,6 +78,20 @@ class DestinationModel extends Model
 						 : '';
 
 		return echoLocation($destination, $country);
+	}
+
+	public function pullGeocode()
+	{
+		$value = GoogleMapController::call()->geoCode($this->location);
+
+		if (isset($value->results[0]->geometry->location->lat) && isset($value->results[0]->geometry->location->lng)) {
+			$this->latitude = $value->results[0]->geometry->location->lat;
+			$this->longitude = $value->results[0]->geometry->location->lng;
+			$this->geocode = $value;
+			$this->save();
+		}
+
+		return $value;
 	}
 
 	public static function call(){

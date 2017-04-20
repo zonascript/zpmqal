@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 // ===============================Controller=============================== 
 use App\Http\Controllers\Api\GoogleMapController;
 use App\Http\Controllers\B2bApp\DestinationController;
-use App\Models\Api\AgodaDestinationModel;
+use App\Models\HotelApp\AgodaDestinationModel;
 use Carbon\Carbon;
 
 
@@ -68,6 +68,8 @@ class RouteModel extends Model
 		$destination = $this->location_hotel->destination;
 		return AgodaDestinationModel::call()->searchFirst($destination);
 	}
+
+
 
 	public function getGeoCodeAttribute()
 	{
@@ -136,6 +138,20 @@ class RouteModel extends Model
 	// 	}
 	// 	return $endDate;
 	// }
+
+
+	public function dbDestination()
+	{
+		return DestinationController::call()
+						->search($this->attributes['destination']);
+	}
+
+
+	public function dbOrigin()
+	{
+		return DestinationController::call()
+						->search($this->attributes['origin']);
+	}
 
 
 	public function package()
