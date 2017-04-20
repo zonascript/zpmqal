@@ -1,7 +1,3 @@
-<script type="text/javascript">
-  $('#search_form').parsley();
-</script>
-
 {{-- bootstrap-daterangepicker --}}
 <script>
 	$(document).ready(function() {
@@ -377,5 +373,4 @@
 </script>
 {{-- /Adults-Child-button --}}
 
-@include('b2b.protected.dashboard.pages.route.create_partials.post_route')
-@include('b2b.protected.dashboard.pages.route.create_partials.js_function')
+@include('b2b.protected.dashboard.pages.route.create_partials.function')
