@@ -113,8 +113,9 @@
 {{-- run pdf --}}
 <script>
 	function runPdf() {
-		var ischanged = $("#totalCost").data('ischanged');
-		var costError = $('#totalCost').data('error');
+		var ischanged = $("#totalCost").attr('data-ischanged');
+		var costError = $('#totalCost').attr('data-error');
+		console.log(ischanged);
 		
 		if (costError == 1) {
 			$.alert({

@@ -25,7 +25,7 @@ class PackageCostsController extends Controller
 		$packageCost = new PackageCostModel;
 		$packageCost->package_id = $packageDbId;
 		$packageCost->currency = $request->currency;
-		$packageCost->is_visa = $request->isVisa;
+		$packageCost->is_visa = isset($request->isVisa) ? $request->isVisa : 0;
 		$packageCost->visa_cost = $request->visaCost;
 		$packageCost->net_cost = $request->netCost;
 		$packageCost->margin = $request->margin;

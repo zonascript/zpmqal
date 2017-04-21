@@ -128,7 +128,9 @@ class PackageController extends Controller
 				];
 
 			$costParams = (object)[
-												"currency" => "INR", "visaCost" => 0, 
+												"currency" => "INR", 
+												"isVisa" => 0,
+												"visaCost" => 0, 
 												"netCost" => 0, "margin" => 0
 											];
 
