@@ -193,7 +193,7 @@
 				$(parent).find('.location-input-div').append(destinationTemp);
 				$(parent).find('.location-input-div').append(nightTemp);
 			}
-			else if (thisVal == 'ferry' || thisVal == 'train') {
+			else if (thisVal == 'ferry' || thisVal == 'train' || thisVal == 'bus') {
 				var destinationTemp = $('#destinationWithDatetimeTemp').html();
 				var appendHtml = destinationTemp.replace(/temp-class/g, 'origin').replace(/"Location"/g, '"Origin"');
 				appendHtml += destinationTemp.replace(/temp-class/g, 'destination').replace(/"Location"/g, '"Destination"');;

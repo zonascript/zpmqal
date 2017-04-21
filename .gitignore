@@ -11,6 +11,7 @@ Homestead.yaml
 /App/Http/Controllers/.unused
 /resources/views/b2b/protected/dashboard/pages/junk
 /resources/views/b2b/protected/dashboard/pages/flights/partials/.unused
+/resources/views/b2b/protected/dashboard/pages/hotels/partials/.unused
 /resources/views/b2b/protected/dashboard/pages/package/pdf_partials/.trash
 /resources/views/b2b/protected/dashboard/pages/package/show_partials/.trash
 /resources/views/b2b/protected/dashboard/pages/route/.trash

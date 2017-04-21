@@ -60,6 +60,7 @@
 													<option value="flight">Flight</option>
 													<option value="train">Train</option>
 													<option value="hotel">Land</option>
+													<option value="bus">Bus</option>
 													<option value="ferry">Ferry</option>
 													<option value="cruise">Cruise</option>
 												</select>
