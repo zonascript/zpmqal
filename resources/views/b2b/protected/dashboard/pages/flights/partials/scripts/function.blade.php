@@ -194,5 +194,5 @@
 </script>
 
 
-@include('b2b.protected.dashboard.pages.flights.partials.qpx_script')
-@include('b2b.protected.dashboard.pages.flights.partials.ss_script')
+@include('b2b.protected.dashboard.pages.flights.partials.scripts.qpx')
+@include('b2b.protected.dashboard.pages.flights.partials.scripts.ss')

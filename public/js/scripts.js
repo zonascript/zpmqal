@@ -71,3 +71,11 @@ function proper(str) {
   });
   return str;
 }
+
+
+
+function invokeIcheck(elem) {
+  $(elem).find('input').iCheck({
+    checkboxClass: 'icheckbox_flat-green'
+  });
+}

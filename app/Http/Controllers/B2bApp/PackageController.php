@@ -283,6 +283,7 @@ class PackageController extends Controller
 	{
 		$costParams = (object)[
 				"currency" => "INR", 
+				"isVisa" => $request->visa,
 				"visaCost" => $request->visaCost,
 				"netCost" => $request->netCost, 
 				"margin" => $request->margin

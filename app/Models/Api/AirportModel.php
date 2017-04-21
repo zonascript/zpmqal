@@ -24,7 +24,7 @@ class AirportModel extends Model
 	public function getLocation($search)
 	{
 		$result = DB::connection('mysql2')->select(
-			DB::raw("SELECT CONCAT(a.`airport_code`, ', ', a.`airport_name`, ', ' , a.`city`, ', ', a.`country`,' | ', d.`destination`, ', ', d.`country`) AS `airports` FROM `airports` a JOIN `destinations` d ON d.`fgf_countrycode` LIKE a.`country_code` AND d.`destination` LIKE a.`city` OR a.`city` LIKE d.`destination` WHERE a.`airport_code` = '$search' OR CONCAT(a.`airport_code`, ', ', a.`airport_name`, ', ', a.`city`, ', ', a.`country`) LIKE '%$search%' OR CONCAT(a.`airport_code`, ' ', a.`airport_name`, ' ', a.`city`, ' ', a.`country`) LIKE '%$search%'")
+			DB::raw("SELECT CONCAT(a.`airport_code`, ', ', a.`airport_name`, ', ' , a.`city`, ', ', a.`country`,' | ', d.`destination`, ', ', d.`country`) AS `airports` FROM `airports` a JOIN `destinations` d ON d.`country_code` LIKE a.`country_code` AND d.`destination` LIKE a.`city` OR a.`city` LIKE d.`destination` WHERE a.`airport_code` = '$search' OR CONCAT(a.`airport_code`, ', ', a.`airport_name`, ', ', a.`city`, ', ', a.`country`) LIKE '%$search%' OR CONCAT(a.`airport_code`, ' ', a.`airport_name`, ' ', a.`city`, ' ', a.`country`) LIKE '%$search%'")
 		);
 		
 		return $result;
@@ -50,7 +50,7 @@ class AirportModel extends Model
 			  `airports` a
 			LEFT JOIN
 			  `destinations` d 
-			  ON d.`fgf_countrycode` = a.`country_code` 
+			  ON d.`country_code` = a.`country_code` 
 			  AND (d.`destination` LIKE a.`city` OR a.`city` LIKE d.`destination`)
 			WHERE "
 		);

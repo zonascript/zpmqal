@@ -423,17 +423,6 @@
 {{-- /invoke map --}}
 
 
-{{-- invoke Icheck --}}
-<script>
-	function invokeIcheck(elem) {
-		$(elem).find('input').iCheck({
-			checkboxClass: 'icheckbox_flat-green'
-		});
-	}
-</script>
-{{-- /invoke Icheck --}}
-
-
 <script>
 	function postSearchHotel() {
 		hideSpinIcon();

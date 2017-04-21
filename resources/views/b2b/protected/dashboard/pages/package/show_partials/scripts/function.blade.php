@@ -58,6 +58,8 @@
 {{-- save cost --}}
 <script>
 	function saveCost() {
+		var visa = $('#visaCostCheckbox').is(':checked');
+		visa = visa ? 1 : 0;
 		var costError = $('#totalCost').attr('data-error');
 		if (costError == 1) {
 			$.alert({
@@ -74,6 +76,7 @@
 
 			var data = {
 					"_token" : csrf_token,
+					"visa" : visa,
 					"visaCost" : visaCost,
 					"netCost" : netCost,
 					"margin" : profitCost,
@@ -98,7 +101,10 @@
 					}
 				}
 			});
-			$("#totalCost").attr('data-ischanged', 0);
+
+			$("#totalCost").attr('data-ischanged', 0)
+											.attr('data-error', 0);
+
 		}
 	}
 </script>
@@ -155,11 +161,11 @@
 {{-- visa confirmation --}}
 <script>
 	function alertVisa() {
-		// var isChecked = $('#visaCostCheckbox').is(':checked');
+		var isChecked = $('#visaCostCheckbox').is(':checked');
 		var yes = $('#visaCost').attr('data-yes');
 		var no = $('#visaCost').attr('data-no');
 		var result = true;
-		if (yes == 0 && no == 0) {
+		if (yes == 0 && no == 0 && !isChecked) {
 			result = false;
 			$.confirm({
 				title  : 'Visa',

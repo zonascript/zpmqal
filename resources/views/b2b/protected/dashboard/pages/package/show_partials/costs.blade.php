@@ -13,19 +13,18 @@
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="row">
 				<div class="col-md-6 col-sm-6 col-xs-12 font-size-15">
-					<label for="">Visa Applicable : </label>
-					{{-- <div class="visa checkbox">
+					<div class="visa checkbox nomargin">
 						<label class="nopadding width-100-p">
 							<div class="row">
 								<div class="col-md-2 col-sm-2 col-xs-1">
-									<input id="visaCostCheckbox" type="checkbox" class="flat" data-type="visa">
+									<input id="visaCostCheckbox" type="checkbox" class="flat" data-type="visa" {{$package->cost->is_visa ? 'checked' : ''}}>
 								</div>
 								<div class="col-md-9 col-sm-9 col-xs-10">
 									<b>Visa Applicable : </b>
 								</div>
 							</div>
 						</label>
-					</div> --}}
+					</div>
 				</div>
 				<div class="col-md-6 col-sm-6 col-xs-12">
 					<input type="text" id="visaCost" data-yes="0" data-no="0" class="inputCalc form-control has-feedback-left p-left-10" placeholder="Visa Cost" aria-describedby="inputSuccess2Status3" name="TotalHotelsCost" value="{{ isset($package->cost->visa_cost) ? $package->cost->visa_cost : 0 }}">
