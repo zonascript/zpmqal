@@ -232,6 +232,18 @@ class BookingHotelModel extends Model
 	}
 
 
+	public function images()
+	{
+		$images = [];
+
+		if ($this->hotelImages->count()) {
+			foreach ($this->hotelImages as $image) {
+				$images[] = $image->thumb_url;
+			}
+		}
+		return $images;
+	}
+
 
 	/*
 	| this function is not used but it is for observe

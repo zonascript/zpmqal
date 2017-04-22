@@ -169,9 +169,11 @@ class PackageHotelModel extends Model
 			$images = array_merge($images, $tempImg);
 		}
 		elseif ($this->selected_hotel_vendor == 'a') {
-			$images = array_merge($images, $this->agodaHotel->images);
+			$images = array_merge($images, $this->agodaHotelRoom->agodaHotel->images());
 		}
-
+		elseif ($this->selected_hotel_vendor == 'b') {
+			$images = array_merge($images, $this->bookingHotelRoom->bookingHotel->images());
+		}
 		return $images;
 	}
 

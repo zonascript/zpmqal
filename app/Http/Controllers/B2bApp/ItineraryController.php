@@ -298,7 +298,6 @@ class ItineraryController extends Controller
 			$itineraries[] = $itineraryValue;
 			$day++;
 		}
-		
 		return rejson_decode($itineraries);
 	}
 
