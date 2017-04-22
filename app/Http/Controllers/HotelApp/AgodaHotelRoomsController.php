@@ -200,7 +200,6 @@ class AgodaHotelRoomsController extends Controller
 			$tdTexts = $html->find('td[class=room_col]', 0);
 			if (is_null($tdTexts)) {
 				return $this->getHttpRoomHtml()->extractRooms();
-				break;
 			}
 
 			foreach($html->find('tr') as $row) {
