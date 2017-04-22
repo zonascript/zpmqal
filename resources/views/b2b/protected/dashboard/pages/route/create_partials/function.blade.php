@@ -38,7 +38,7 @@
 	function postRemoveRoute(rid) {
 		$.ajax({
 			type:"post",
-			url: "{{ url('dashboard/package/route/'.$package->id.'/d') }}",
+			url: "{{ url('dashboard/package/route') }}/"+rid+"/d",
 			data: {"_token" : csrf_token}
 		});
 	}
