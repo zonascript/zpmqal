@@ -1,4 +1,4 @@
-@if(!is_null($hotelRoute->hotel->detail))
+@if(isset($hotelRoute->hotel->detail) && !is_null($hotelRoute->hotel->detail))
 <?php
 	$hotelDetail = $hotelRoute->hotel->detail;
 	$uniqueKey = $hotelDetail->vendor.'_'.$hotelDetail->code;

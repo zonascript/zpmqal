@@ -155,9 +155,10 @@ class AgodaHotelRoomsController extends Controller
 		$html = file_get_html($this->path);
 		$titleObj = $html->find('title', 0);
 		$title = isset($titleObj->plaintext) ? $titleObj->plaintext : '';
+		$roomCol = $html->find('td[class=room_col]',0);
 
 		$result = false;
-		if (findWord('Object moved', $title)) {
+		if (findWord('Object moved', $title) && $this->attmpt) {
 			$newUrlObj = $html->find('a', 0);
 			$this->url = $newUrlObj->href;
 			$this->agodaHotel->old_url = $this->agodaHotel->old_url;
@@ -166,6 +167,11 @@ class AgodaHotelRoomsController extends Controller
 			$result = true;
 			rename($this->path, $this->trashPath());
 			$this->path = null;
+			$this->attmpt = $this->attmpt-1;
+		}
+		elseif (is_null($roomCol) && $this->attmpt) {
+			$result = true;
+			$this->attmpt = $this->attmpt-1;
 		}
 
 		return $result;

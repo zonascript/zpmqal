@@ -9,6 +9,13 @@ class TestController extends Controller
 
 	public function testCode()
 	{
+		// $path = public_path('test/agoda/html/singapore-sg_1492877215.html');
+		$path = public_path('test/agoda/html/singapore-sg_1492877425.html');
+		// singapore-sg_1492877215.html
+		// singapore-sg_1492877425.html
+		$this->extractHtml($path);
+
+
 
 		dd(httpGet('https://maps.googleapis.com/maps/api/geocode/json?address=auckland+new+zealand'));
 		for ($i=1; $i < 990; $i++) { 
@@ -67,6 +74,24 @@ class TestController extends Controller
 
 	}
 	// https://www.booking.com/hotel/za/house-of-house-guest-house.html
+
+
+	public function extractHtml($path)
+	{
+		include_once app_path('MyLibrary/simple_html_dom.php');
+
+		$html = file_get_html($path);
+		$titleObj = $html->find('td[class=room_col]',0);
+		dd($titleObj);
+		$title = isset($titleObj->plaintext) ? $titleObj->plaintext : '';
+
+		$result = false;
+		if (findWord('Object moved', $title)) {
+			$newUrlObj = $html->find('a', 0);
+		}
+
+		return $result;
+	}
 
 	public function testBookingHtml()
 	{
