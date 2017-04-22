@@ -33,5 +33,11 @@ class PackageCostsController extends Controller
 		return $packageCost;
 	}
 
+	public function inactiveByPackageId($pid)
+	{
+		PackageCostModel::where(['package_id' => $pid])->update(['is_current' => 0]);
+		return $this;
+	}
+
 
 }

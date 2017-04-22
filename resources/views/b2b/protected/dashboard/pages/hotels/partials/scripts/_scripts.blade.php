@@ -14,7 +14,7 @@
 		@foreach ($package->hotelRoutes as $hotelRouteKey => $hotelRoute)
 			postHotels({{$hotelRoute->id}});
 			{{-- tbtq({{$hotelRoute->hotel->id}}, {{$hotelRoute->id}});
-									sshtl({{$hotelRoute->hotel->id}}, {{$hotelRoute->id}}); --}}
+			sshtl({{$hotelRoute->hotel->id}}, {{$hotelRoute->id}}); --}}
 		@endforeach
 
 	});

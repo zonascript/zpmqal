@@ -295,13 +295,9 @@ class PackageController extends Controller
 			];
 
 		$package = PackageModel::find($packageDbId);
-		if (isset($package->cost)) {
-			$package->cost->is_current = 0;
-			$package->cost->save();
-		}
-
 		$packageCost = PackageCostsController::call()
-									->createNew($package->id, $costParams);
+									->inactiveByPackageId($package->id)
+										->createNew($package->id, $costParams);
 
 		return json_encode(["status" => 200, "responce" => "saved successfully..."]);
 	}

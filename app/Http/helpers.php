@@ -524,10 +524,14 @@ function timeEnd($timeStart = null)
 }
 
 // this function to get full 24 hr time from am to pm
-function timeFull($time='')
-{
+function timeFull($time='', $full = true)
+{	
 	$time =  str_replace(' : ', ':', $time);
-	return date("H:i", strtotime($time));
+	if (!$full) {
+		$time = date("H:i", strtotime($time));
+	}
+
+	return $time;
 }
 
 function addDaysinDate($date,$days, $format = "Y-m-d"){

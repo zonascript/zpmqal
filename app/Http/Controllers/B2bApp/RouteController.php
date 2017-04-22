@@ -32,10 +32,19 @@ class RouteController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create($id)
+	public function create($id, $pid = null)
 	{
 		$client = ClientController::call()->info($id);
-		$package = PackageController::call()->createTemp($id);
+		$packageController = new PackageController;
+
+		if (is_null($pid)) {
+			$package = $packageController->createTemp($id);
+			return redirect('dashboard/package/route/'.$id.'/'.$package->id);
+		}
+		else{
+			$package = $packageController->model()->find($pid);
+		}
+
 		$blade = [
 				"client" => $client, 
 				"package" => $package
@@ -118,19 +127,24 @@ class RouteController extends Controller
 		return $return;
 	}
 
+
+	/*
+	| this function is to return json 
+	| after creating package
+	*/
 	public function createPackage($id)
 	{
 		ClientController::call()->activeClient($id);
 		
-		$data = (object)[
+		/*$data = (object)[
 				"start_date" => '0000-00-00',
 				"end_date" => '0000-00-00', // init temporary
 				"req" => ""
-			];
+			];*/
 
-		$package = PackageController::call()->createTemp($id, $data);
+		$package = PackageController::call()->createTemp($id);
 
-		return $package;
+		return json_encode(['id' => $package->id]);
 	}
 
 

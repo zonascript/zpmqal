@@ -24,7 +24,11 @@ class QpxFlightApiController extends Controller
 	public function flights($packageFlight)
 	{
 		$flights = [];
-
+		
+		/*$adult = $packageFlight->route->package->pax_detail->adult;
+		$infant = $packageFlight->route->package->pax_detail->infant;
+		$child = $packageFlight->route->package->pax_detail->child;*/
+		
 		$params = [
 				"request" => [
 					"slice" => [
@@ -35,10 +39,10 @@ class QpxFlightApiController extends Controller
 						]
 					],
 					"passengers" => [
-						"adultCount" => $packageFlight->route->package->pax_detail->adult,
-						"infantInLapCount" => $packageFlight->route->package->pax_detail->infant,
+						"adultCount" => 2,
+						"infantInLapCount" => 0,
 						"infantInSeatCount" => 0,
-						"childCount" => $packageFlight->route->package->pax_detail->child,
+						"childCount" => 0,
 						"seniorCount" => 0
 					],
 					"solutions" => $this->solutions,

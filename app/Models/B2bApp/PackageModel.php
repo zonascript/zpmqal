@@ -147,7 +147,8 @@ class PackageModel extends Model
 	*/
 	public function costs()
 	{
-		return $this->hasMany('App\Models\B2bApp\PackageCostModel', 'package_id');
+		$result = $this->hasMany('App\Models\B2bApp\PackageCostModel', 'package_id');
+		return $result->where([['net_cost', '>', 0]]);
 	}
 
 

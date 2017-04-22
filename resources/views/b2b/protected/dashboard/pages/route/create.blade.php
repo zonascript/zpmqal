@@ -33,9 +33,12 @@
 											<small>(Package Id : {{ $package->uid }})</small>
 										</h3>
 									</div>
-
 									<div class="col-md-4 col-sm-4 col-xs-12 m-top-5">
-										<input type="text" class="form-control has-feedback-left datepicker p-left-10 arrival border-blue-2px" placeholder="Start Date" id="startDate" aria-describedby="inputSuccess2Status3" data-pid="{{$package->id}}">
+										<input type="text" class="form-control has-feedback-left datepicker p-left-10 arrival border-blue-2px" placeholder="Start Date" id="startDate" aria-describedby="inputSuccess2Status3" data-pid="{{$package->id}}" 
+										@if ($package->start_date->format('Y') != '-0001')
+											value="{{ $package->start_date->format('d/m/Y') }}"
+										@endif
+										>
 										<i class="fa fa-calendar form-control-feedback right" aria-hidden="true"></i>
 									</div>
 									<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback m-top-10-only">
@@ -53,27 +56,11 @@
 							<div class="x_content nopadding">
 								<div class="form-group">
 									<div class="destinationClass">
-										<div id="destination1" class="col-md-12 col-sm-12 col-xs-12 form-group-self destinationList no-rid" data-destination="1" data-rid="">
-											<div class="col-md-2 col-sm-2 col-xs-12">
-												<select class="form-control nopadding p-left-10 mode inctv" required="" data-parsley-type="value">
-													<option value="" selected="">Select Mode</option>
-													<option value="flight">Flight</option>
-													<option value="train">Train</option>
-													<option value="hotel">Land</option>
-													<option value="bus">Bus</option>
-													<option value="ferry">Ferry</option>
-													<option value="cruise">Cruise</option>
-												</select>
-											</div>
-											<div class="col-md-9 col-sm-9 col-xs-12">
-												<div class="row location-input-div"></div>
-											</div>
-											<div class="col-md-1 col-sm-1 col-xs-12 text-center">
-												<a class="rmv-destlist cursor-pointer">
-													<i class="fa fa-times-circle font-size-30 m-top-2"></i>
-												</a>
-											</div>
-										</div>
+										@if ($package->routes->count())
+											@include('b2b.protected.dashboard.pages.route.create_partials.non_empty')
+										@else
+											@include('b2b.protected.dashboard.pages.route.create_partials.empty')
+										@endif
 									</div>
 									<div class="col-md-12 col-sm-12 col-xs-12 m-top-10">
 											<a id="btn-addDestination" class="btn-link cursor-pointer" data-count="1">Add Route</a>
@@ -92,7 +79,7 @@
 								<div id="room">
 									@for ($room = 1; $room <= 8 ; $room++)
 										{{-- expr --}}
-									<div id="room_{{ ($room+1)/2 }}" {{ $room != 1 ? 'hidden' : '' }} class="roomGuest">
+									<div id="room_{{ ($room+1)/2 }}" {{ $room != 1 ? 'hidden' : '' }} class="room-guest">
 										<div class="col-md-12 col-sm-12 col-xs-12 p-bottom-1 m-bottom-n-5 form-group has-feedback">
 											<label for="">Room : {{ ($room+1)/2 }}</label>
 										</div>
@@ -108,7 +95,7 @@
 													</span>
 													<span class="form-control text-center nopadding-right">
 														<span id="a_value">
-															<input type="text" name="quant_{{ $room }}" class="width-10 nostyle input-number noOfAdult" value="2" min="1" max="4" disabled="disabled" required="" data-parsley-type="integer" data-parsley-gt="0">
+															<input type="text" name="quant_{{ $room }}" class="width-10 nostyle input-number adults" value="2" min="1" max="4" disabled="disabled" required="" data-parsley-type="integer" data-parsley-gt="0">
 														</span>
 														<span id="a_word" name="quant_{{ $room }}">Adult</span>
 													</span>
@@ -134,7 +121,7 @@
 													</span>
 													<span class="form-control text-center nopadding-right">
 														<span id="a_value">
-															<input type="text" name="quant_{{ $room }}" class="width-10 nostyle input-number noOfChild" value="0" min="0" max="2" disabled="disabled">
+															<input type="text" name="quant_{{ $room }}" class="width-10 nostyle input-number children" value="0" min="0" max="2" disabled="disabled">
 														</span>
 														<span id="c_word" name="quant_{{ $room }}">Child</span>
 													</span>

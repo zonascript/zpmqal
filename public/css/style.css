@@ -29,6 +29,10 @@
   z-index: 2;
 }
 
+.wickedpicker{
+	z-index: 50;
+}
+
 .alert-pop-up-base{
 	background-color : rgba(0,0,0,0.2); 
 	z-index: 499;

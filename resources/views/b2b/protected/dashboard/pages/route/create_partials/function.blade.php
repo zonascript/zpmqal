@@ -1,5 +1,20 @@
 
 <script>
+	function initTimePicker(elem, option = {}){
+		var option = $.extend({}, {twentyFour: true}, option);
+		$(elem).wickedpicker(option);
+
+		/*$(parent).find('.datetimepicker').timepicker();*/
+
+		/*$(parent).find('.datetimepicker').datetimepicker({
+			formatDate:'d/m/Y',
+			formatTime:'H:i',
+			minDate: 0,
+		});*/
+	}
+</script>
+
+<script>
 	function initDateTime(elem) {
 		$(elem).datetimepicker({
 			formatDate:'d/m/Y',
@@ -23,12 +38,11 @@
 	function postRemoveRoute(rid) {
 		$.ajax({
 			type:"post",
-			url: "{{ url('dashboard/package/route') }}/"+rid+"/d", 
+			url: "{{ url('dashboard/package/route/'.$package->id.'/d') }}",
 			data: {"_token" : csrf_token}
 		});
 	}
 </script>
-
 
 <script>
 	function checkStartDate() {
@@ -51,7 +65,6 @@
 	}
 </script>
 
-
 <script>
 	function checkMode() {
 		var mode = $('.destinationList').find('.mode.inctv');
@@ -65,7 +78,6 @@
 		}
 	}
 </script>
-
 
 <script>
 	function checkLocation() {
@@ -187,35 +199,34 @@
 	}
 </script>
 
-
 <script>
 	function postRoute() {
 		if (checkInputs()) {
 			$('.destinationList.no-rid').each(function(){
+				var thisElem = $(this);
 				var rid = $(this).attr("data-rid");
 				var mode = $(this).find('.mode').val();
 				var origin = $(this).find('.origin').val();
-				var destination = $(this).find('.destination').val();
 				var nights = $(this).find('.nights').val();
+				var destination = $(this).find('.destination').val();
 				var origin_time = $(this).find('.origin-time').val();
 				var destination_time = $(this).find('.destination-time').val();
 				var pid = $('#startDate').attr('data-pid');
-				var thisElem = $(this);
 
 				var data = {
-					"_token" : csrf_token,
 					"rid" : rid,
 					"mode" : mode,
 					"origin" : origin,
+					"nights" : nights,
+					"_token" : csrf_token,
 					"origin_time" : origin_time,
 					"destination" : destination,
-					"destination_time" : destination_time,
-					"nights" : nights,
+					"destination_time" : destination_time
 				};
 
 				$.ajax({
 					type:"post",
-					url: "{{ url('dashboard/package/route') }}/"+pid+"/r", 
+					url: "{{ url('dashboard/package/route/'.$package->id.'/r') }}",
 					data: data,
 					success : function (rid) {
 						$(thisElem).attr('data-rid', rid);
@@ -229,6 +240,56 @@
 		}
 		else{
 			return false;
+		}
+	}
+</script>
+
+<script>
+	function formSubmit(thisObj) {
+		if(postRoute()){
+			showWaitingLogo();
+			var startDate = $('#startDate').val();
+			var pid = $('#startDate').attr('data-pid');
+
+			var roomGuests = $('.room-guest:visible').map(function() {
+
+				var childAge = $(this).find('.age-elem').map(function() {
+					return $(thisObj).val();
+				}).get();
+
+				return {
+					'NoOfAdults': $(this).find('.adults').val(),
+					'ChildAge': JSON.stringify(childAge),
+				}
+			}).get();
+
+			$(thisObj).addClass('disabled');
+			$(thisObj).prop('disabled', true);
+			var req = $('#show_req').text();
+			var data = {
+				"_token" : csrf_token,
+				"pid" : pid,
+				"req" : req,
+				"startDate" : startDate,
+				"roomGuests" : roomGuests
+			}
+
+			$.ajax({
+				type:"post",
+				url: "{{ url('dashboard/package/route/'.$package->id.'/u') }}",
+				data: data,
+				success: function(responce, textStatus, xhr) {
+					if(xhr.status == 200){
+						responce_obj = JSON.parse(responce);
+						document.location.href = responce_obj.nextUrl;
+					}
+				},
+				error: function(xhr, textStatus) {
+					if(xhr.status == 401){
+						window.open("{{ url('login') }}", '_blank');
+					}
+				}
+			});
 		}
 	}
 </script>

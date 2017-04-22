@@ -10,10 +10,60 @@
 		}, function(start, end, label) {
 			// console.log(start.toISOString(), end.toISOString(), label);
 		});
-	});
 
+		$('.datetimepicker').each(function () {
+			var time = $(this).val();
+			initTimePicker(this, {now: time});
+		});
+
+	});
 </script>
 {{-- /bootstrap-daterangepicker --}}
+
+
+{{-- Adding or Removing-room --}}
+<script>
+	$(document).on('click','#btn-addRoom',function(){
+		var currentRoom = $('#room').children(":visible").length;
+	
+		$('#room_'+(currentRoom+1)).show();
+		
+		if(currentRoom == 1){
+			$('#btn-removeRoom, #pipeSapr').show();
+		}
+		if(currentRoom == 3){
+			$('#btn-addRoom, #pipeSapr').hide();
+		}
+	});
+
+	$(document).on('click','#btn-removeRoom',function(){
+		var currentRoom = $('#room').children(":visible").length;
+
+		$('#room_'+(currentRoom)).hide();
+		
+		if(currentRoom == 2){
+			$('#btn-removeRoom, #pipeSapr').hide();
+		}
+		if(currentRoom == 4){
+			$('#btn-addRoom, #pipeSapr').show();
+		}
+	});
+</script>
+{{-- /Adding or Removing-room --}}
+
+
+{{-- remove destination button --}}
+<script>
+	$('#btn-removeDestination').click(function(){
+		var totalDestination = $('.destinationClass').children().length;
+		$('#destination'+totalDestination).remove();
+
+		if(totalDestination == 2){
+			$('#btn-removeDestination, #pipeSaprDestination').hide();
+		}
+	});
+</script>
+{{-- /remove destination button --}}
 
 
 
@@ -100,6 +150,7 @@
 </script>
 {{-- /Adding or Removing-Destination --}}
 
+
 {{-- autocomplete --}}
 <script>
 	$(document).on('keyup keypress keydown paste', '.location', function(e) {
@@ -116,7 +167,8 @@
 			}
 			else if(mode == 'cruise'){
 				url = '{{ url("dashboard/tools/destination") }}?tags=cruise';
-			}else{
+			}
+			else{
 				url = '{{ url("dashboard/tools/destination") }}';
 			}
 
@@ -137,9 +189,9 @@
 
 <script>
 	$(document).on('autocompleteselect', '.location', function (e, ui) {
-		$(this).attr('data-match', $(this).val());
-		$(this).removeClass('inctv');
-		$(this).removeClass('border-red');
+		$(this).attr('data-match', $(this).val())
+						.removeClass('inctv')
+							.removeClass('border-red');
 	});
 </script>
 {{-- /autocomplete --}}
@@ -198,70 +250,24 @@
 				var appendHtml = destinationTemp.replace(/temp-class/g, 'origin').replace(/"Location"/g, '"Origin"');
 				appendHtml += destinationTemp.replace(/temp-class/g, 'destination').replace(/"Location"/g, '"Destination"');;
 				$(parent).find('.location-input-div').append(appendHtml);
-				$(parent).find('.datetimepicker').wickedpicker({now: "12:30"});
-				/*$(parent).find('.datetimepicker').timepicker();*/
-
-				/*$(parent).find('.datetimepicker').datetimepicker({
-					formatDate:'d/m/Y',
-					formatTime:'H:i',
-					minDate: 0,
-				});*/
+				initTimePicker($(parent).find('.datetimepicker'), {now: "12:30"});
 			}
-
 			// $(parent).find('.location').val('');
 		}
 	});
 </script>
 {{-- /changing mode --}}
 
+<script>
+	$(document).on('keypress', '.datetimepicker', function(event) {
+		event.preventDefault();
+	});
+</script>
 
 {{-- form submition --}}
 <script>
 	$(document).on('click','#formSubmit', function(){
-		if(postRoute()){
-			showWaitingLogo();
-			var startDate = $('#startDate').val();
-			var pid = $('#startDate').attr('data-pid');
-
-			var roomGuests = $('.roomGuest:visible').map(function() {
-				var childAge = $(this).find('.age-elem').map(function() {
-					return $(this).val();
-				}).get();
-				return {
-					'NoOfAdults': $(this).find('.noOfAdult').val(),
-					'ChildAge': JSON.stringify(childAge),
-				}
-			}).get();
-
-			$(this).addClass('disabled');
-			$(this).prop('disabled', true);
-			var req = $('#show_req').text();
-			var data = {
-				"_token" : csrf_token,
-				"pid" : pid,
-				"req" : req,
-				"startDate" : startDate,
-				"roomGuests" : roomGuests
-			}
-
-			$.ajax({
-				type:"post",
-				url: "{{ Request::url() }}/u", 
-				data: data,
-				success: function(responce, textStatus, xhr) {
-					if(xhr.status == 200){
-						responce_obj = JSON.parse(responce);
-						console.log(responce_obj);
-						document.location.href = responce_obj.nextUrl;
-					}
-        },
-        error: function(xhr, textStatus) {
-					if(xhr.status == 401){
-						window.open("{{ url('login') }}", '_blank');
-					}
-        }
-			});
-		}
+		formSubmit(this);
 	});
 </script>
 {{-- /form submition --}}

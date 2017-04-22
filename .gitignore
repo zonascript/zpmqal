@@ -9,6 +9,7 @@ Homestead.yaml
 /stackOverflow
 /storage/mylocal
 /App/Http/Controllers/.unused
+/routes/unused.php
 /resources/views/b2b/protected/dashboard/pages/junk
 /resources/views/b2b/protected/dashboard/pages/flights/partials/.unused
 /resources/views/b2b/protected/dashboard/pages/hotels/partials/.unused

@@ -115,8 +115,11 @@ Route::group(['middleware' => ['auth']], function(){
 
 
 			/*-------------------------New enquiry creation will-------------------------*/
+				// this route is to create package 
+				Route::get('dashboard/package/route/{id}/n', 'B2bApp\RouteController@createPackage');
+				
 				// this route is gui to get information
-				Route::get('dashboard/package/route/{id}', 'B2bApp\RouteController@create');
+				Route::get('dashboard/package/route/{id}/{pid?}', 'B2bApp\RouteController@create');
 				Route::post('dashboard/package/route/{id}/r', 'B2bApp\RouteController@storeRow');
 				Route::post('dashboard/package/route/{id}/d', 'B2bApp\RouteController@deleteRow');
 				Route::post('dashboard/package/route/{id}/u', 'B2bApp\RouteController@packageUpdate');
@@ -130,41 +133,6 @@ Route::group(['middleware' => ['auth']], function(){
 				// this for finding next event
 				Route::get('dashboard/package/event/{routeDbId}', 'B2bApp\PackageController@getEvent');
 				Route::get('dashboard/package/builder/event/{packageDbId}/{current}', 'B2bApp\PackageController@findNextEvent');
-
-
-			/*--------------------------Package Itinerary Maker--------------------------*/
-			/*
-			| here all branch will show mean what you want in your package 
-			| like Hotels, Flights, Cabs, Activities and more.
-			| this will carry (htt../dashboard/package/create/{id}) Routes
-			| date and room guests detail and that will never change if you want to change 
-			| for that you have to create new package using [build new package] button 
-			*/
-				Route::get('dashboard/package/itinerary/all/{id}/{packageDbId}', 'B2bApp\PackageBuilderController@show');
-
-				/*------------------------here individual sector targeted------------------------*/
-				/*
-				| this route is for arranging order destination and loaction for the specific sector 
-				| for example hotel Route::get('...itinerary/hotels/{id}' is for Hotels
-				| after getting the information for saving this will point save route 
-				| using post request then in the return back it will give a redirect like in json 
-				| like:- {"nestUrl":"http...builder/hotel/{id}/{packageDbId}/{packageHotelId}"}
-				| so using ajax and jquery this will redirect
-				*/
-
-				// Get Request 
-				Route::get('dashboard/package/itinerary/cabs/{id}/{packageDbId}', 'B2bApp\ItineraryController@getCabs');
-				Route::get('dashboard/package/itinerary/hotels/{id}/{packageDbId}', 'B2bApp\ItineraryController@getHotels');
-				Route::get('dashboard/package/itinerary/flights/{id}/{packageDbId}', 'B2bApp\ItineraryController@getFlights');
-				Route::get('dashboard/package/itinerary/activities/{id}/{packageDbId}', 'B2bApp\ItineraryController@getActivities');
-				
-				// Post Request
-				Route::post('dashboard/package/itinerary/cabs/{id}/{packageDbId}', 'B2bApp\ItineraryController@postCabs');
-				Route::post('dashboard/package/itinerary/hotels/{id}/{packageDbId}', 'B2bApp\ItineraryController@postHotels');
-				Route::post('dashboard/package/itinerary/flights/{id}/{packageDbId}', 'B2bApp\ItineraryController@postFlights');
-				Route::post('dashboard/package/itinerary/activities/{id}/{packageDbId}', 'B2bApp\ItineraryController@postActivities');
-				Route::post('dashboard/package/itinerary/activities/copytohotel/{id}/{packageDbId}', 'B2bApp\ItineraryController@postCopyHotelIti');
-
 
 
 
