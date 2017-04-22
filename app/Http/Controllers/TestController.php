@@ -9,8 +9,8 @@ class TestController extends Controller
 
 	public function testCode()
 	{
-		// $path = public_path('test/agoda/html/singapore-sg_1492877215.html');
-		$path = public_path('test/agoda/html/singapore-sg_1492877425.html');
+		$path = public_path('test/agoda/html/singapore-sg_1492877215.html');
+		// $path = public_path('test/agoda/html/singapore-sg_1492877425.html');
 		// singapore-sg_1492877215.html
 		// singapore-sg_1492877425.html
 		$this->extractHtml($path);
@@ -81,7 +81,7 @@ class TestController extends Controller
 		include_once app_path('MyLibrary/simple_html_dom.php');
 
 		$html = file_get_html($path);
-		$titleObj = $html->find('td[class=room_col]',0);
+		$titleObj = $html->find('td[class=room_col]');
 		dd($titleObj);
 		$title = isset($titleObj->plaintext) ? $titleObj->plaintext : '';
 
