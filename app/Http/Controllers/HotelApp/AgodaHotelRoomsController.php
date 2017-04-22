@@ -215,6 +215,10 @@ class AgodaHotelRoomsController extends Controller
 
 					$rooms[] = ['roomtype' => $roomtype, 'image' => $img];
 				}
+				else{
+					return $this->getHttpRoomHtml()->extractRooms();
+					break;
+				}
 			}
 
 			$this->storeRooms($rooms);
