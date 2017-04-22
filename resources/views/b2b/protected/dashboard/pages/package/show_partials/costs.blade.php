@@ -17,7 +17,7 @@
 						<label class="nopadding width-100-p">
 							<div class="row">
 								<div class="col-md-2 col-sm-2 col-xs-1">
-									<input id="visaCostCheckbox" type="checkbox" class="flat" data-type="visa" {{$package->cost->is_visa ? 'checked' : ''}}>
+									<input id="visaCostCheckbox" type="checkbox" class="flat" data-type="visa" {{isset($package->cost->is_visa) && $package->cost->is_visa ? 'checked' : ''}}>
 								</div>
 								<div class="col-md-9 col-sm-9 col-xs-10">
 									<b>Visa Applicable : </b>
@@ -62,7 +62,7 @@
 						<h2>
 							<i class="fa fa-rupee"></i> 
 							<span id="totalCost" data-ischanged="0" data-error="0">
-								{{ $package->cost->totalCost }}.00
+								{{ isset($package->cost->totalCost) && $package->cost->totalCost ? $package->cost->totalCost : 0  }}.00
 							</span>
 						</h2>
 					</div>
