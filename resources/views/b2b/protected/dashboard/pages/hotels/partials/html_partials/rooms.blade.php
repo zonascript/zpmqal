@@ -1,3 +1,16 @@
+<?php
+	$transfers = [
+			"airport" => "Airport",
+			"bus" => "Bus/Coach",
+			"hotel" => "Hotel",
+			"cruise" => "Cruise/Ferry",
+		];
+
+	$transfersHtml = '';
+	foreach ($transfers as $transferKey => $transfer) {
+		$transfersHtml .= '<option value="'.$transferKey.'">'.$transfer.'</option>';
+	}
+?>
 <div class="row padding-10 border-gray m-top-5">
 	<div class="col-md-12 col-sm-12 col-xs-12 room-container">
 		<div class="row">
@@ -33,9 +46,7 @@
 										<select class="btn-block border-gray padding-5 h-pick-up"
 											data-selected="0">
 											<option value="">Pick-Up From?</option>
-											<option value="airport">Airport</option>
-											<option value="hotel">Hotel</option>
-											<option value="cruise">Cruise/Ferry</option>
+											{!! $transfersHtml !!}
 										</select>
 									</div>
 								</div>
@@ -54,9 +65,7 @@
 										<select class="btn-block border-gray padding-5 h-drop-off" 
 											data-selected="0">
 											<option value="">Drop Off To?</option>
-											<option value="airport">Airport</option>
-											<option value="hotel">Hotel</option>
-											<option value="cruise">Cruise/Ferry</option>
+											{!! $transfersHtml !!}
 										</select>
 									</div>
 								</div>
