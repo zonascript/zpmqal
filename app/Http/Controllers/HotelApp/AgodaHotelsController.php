@@ -74,7 +74,7 @@ class AgodaHotelsController extends Controller
 		$agodaHotel = AgodaHotelModel::select()
 									->where(['is_stored_room' => 0])
 										->first();
-										
+
 		if (!is_null($agodaHotel)) {
 			$rooms = AgodaHotelRoomsController::call()->rooms($agodaHotel->hotel_id);
 		}
