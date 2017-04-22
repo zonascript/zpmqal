@@ -217,7 +217,7 @@ class PackageModel extends Model
 	public function accomoRoutes()
 	{
 		$result = $this->hasMany('App\Models\B2bApp\RouteModel', 'package_id');
-		return $result->where(['status', '<>', 'deleted'])
+		return $result->where([['status', '<>', 'deleted']])
 										->where(function ($query) {
 												$query->orWhere('mode', '=', 'hotel')
 															->orWhere('mode', '=', 'cruise');
