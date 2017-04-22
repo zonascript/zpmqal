@@ -193,7 +193,7 @@ class PackageModel extends Model
 	public function hotelRoutes()
 	{
 		$result = $this->hasMany('App\Models\B2bApp\RouteModel', 'package_id');
-		return $result->where(['mode' => 'hotel']);
+		return $result->where(['mode' => 'hotel',  ['status', '<>', 'deleted']]);
 	}
 
 
