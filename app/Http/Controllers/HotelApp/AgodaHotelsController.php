@@ -76,25 +76,18 @@ class AgodaHotelsController extends Controller
 										->first();
 										
 		if (!is_null($agodaHotel)) {
-			$agodaHotelId = $agodaHotel->hotel_id;
-			$url = 'https://www.agoda.com'.$agodaHotel->url;
-			$rooms = AgodaHotelRoomsController::call()->extractRoomDetails($url,true);
-			AgodaHotelRoomsController::call()->storeRooms($rooms->rooms, $agodaHotelId);
-			AgodaHotelImagesController::call()->bulkInsert($rooms->images, $agodaHotelId);
-			AgodaHotelDetailsController::call()->hotelDetail($agodaHotelId);
-			$agodaHotel->is_stored_room = 1;
-			$agodaHotel->save();
+			$rooms = AgodaHotelRoomsController::call()->rooms($agodaHotel->hotel_id);
 		}
 
 		return $agodaHotel;
-
 	}
+
 
 	public function loopHotelDetails()
 	{
 		ini_set('max_execution_time', 3600);
 
-		if (!isLocalhost()) {
+		if (!env('IS_LOCALHOST')) {
 			for ($i=1; $i > 0; $i++) { 
 				$result = $this->storeHotelDetail();
 				if (is_null($result)) {
