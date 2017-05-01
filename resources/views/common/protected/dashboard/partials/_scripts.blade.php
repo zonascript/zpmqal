@@ -1,4 +1,4 @@
-<!-- jQuery -->
+{{-- jQuery --}}
 
 @yield('jquery', '<script src="'.asset('common/dashboard/vendors/jquery/dist/jquery.min.js').'"></script>')
 

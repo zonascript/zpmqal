@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class AgodaHotelRoomModel extends Model
 {
 	protected $connection = 'mysql4';
+	protected $appends = ['vdr'];
 	protected $table = 'agoda_hotel_rooms';
 
 	public static function call()
@@ -14,11 +15,17 @@ class AgodaHotelRoomModel extends Model
 		return new AgodaHotelRoomModel;
 	}
 
+	public function getVdrAttribute()
+	{
+		return 'a';
+	}
+
 	public function findByHotelId($hotelId)
 	{
 		return $this->select(['id', 'roomtype', 'image'])
 										->where(["hotel_id" => $hotelId])
-											->get();
+											->groupby('roomtype')
+												->get();
 	}
 
 

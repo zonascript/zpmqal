@@ -16,12 +16,6 @@
 	@include('b2b.protected.dashboard.partials._nav_top')
 @endsection
 
-@section('once_scripts')
-	<script>
-		var csrf_token = $('[name="csrf_token"]').attr('content');
-	</script>
-@endsection
-
 @section('b2b_scripts')
 	@include('b2b.protected.dashboard.partials._scripts')
 @endsection

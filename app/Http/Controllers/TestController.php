@@ -1,14 +1,32 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use App\MyLibrary\Verdant\XML2Array;
+use App\Http\Controllers\B2bApp\RoutePackageModesController;
+use App\Models\HotelApp\HotelModel;
 
 class TestController extends Controller
 {
 
 	public function testCode()
 	{
+		dd(array_diff( [312, 401, 1599, 3], [401] ));
+		// $hotel = HotelModel::find(1);
+		// dd($hotel->vendor);
+		$modes = RoutePackageModesController::call()->model()->find(4);
+		dd($modes->mode);
+
+		dd(alpha2num('aa'));
+		// include_once app_path('MyLibrary/Verdant/XML2Array.php');
+
+		$xmlPath  = file_get_contents(mylocal_path('test/rsp.xml'));
+		$xml2array = XML2Array::createArray($xmlPath);
+		ddp($xml2array);
+		$obj = simplexml_load_string($xmlPath);
+
+
+		dd($obj);
 		$path = public_path('test/agoda/html/singapore-sg_1492877215.html');
 		// $path = public_path('test/agoda/html/singapore-sg_1492877425.html');
 		// singapore-sg_1492877215.html

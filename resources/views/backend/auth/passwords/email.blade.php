@@ -1,6 +1,6 @@
 @extends('backend.layout.auth')
 
-<!-- Main Content -->
+{{-- Main Content --}}
 @section('content')
 <div class="container">
     <div class="row">

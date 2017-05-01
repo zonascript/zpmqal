@@ -1,7 +1,7 @@
 @extends('b2b.protected.dashboard.main')
 
 @section('css')
-		<!-- Datatables -->
+		{{-- Datatables --}}
 		<link href="{{ commonAsset('dashboard/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
 @endsection
 

@@ -1,7 +1,6 @@
 @include('b2b.protected.dashboard.pages.hotels.partials.scripts.objects')
-
-{{-- bootstrap-daterangepicker --}}
 <script>
+	{{-- bootstrap-daterangepicker --}}
 	$(document).ready(function() {
 		$('.datepicker').daterangepicker({
 			singleDatePicker: true,
@@ -13,16 +12,13 @@
 		});
 		@foreach ($package->hotelRoutes as $hotelRouteKey => $hotelRoute)
 			postHotels({{$hotelRoute->id}});
-			{{-- tbtq({{$hotelRoute->hotel->id}}, {{$hotelRoute->id}});
+				{{-- tbtq({{$hotelRoute->hotel->id}}, {{$hotelRoute->id}});
 			sshtl({{$hotelRoute->hotel->id}}, {{$hotelRoute->id}}); --}}
 		@endforeach
-
 	});
-</script>
-{{-- /bootstrap-daterangepicker --}}
+	{{-- /bootstrap-daterangepicker --}}
 
-{{-- autocomplete --}}
-<script>
+	{{-- autocomplete --}}
 	$(document).on('keypress paste', '#filter_search', function(e) {
 		var key = e.which;
 		if(key == 13){ /*the enter key code*/
@@ -38,54 +34,54 @@
 			}
 		}
 	});
-</script>
 
-<script>
+
 	$(document).on('autocompleteselect', '#filter_search', function (e, ui) {
 		postSearchHotel();
 	});
-</script>
+	{{-- /autocomplete --}}
 
-{{-- /autocomplete --}}
-
-{{-- search hotel --}}
-<script>
+	{{-- search hotel --}}
 	$(document).on('click', '#btn_filter_search', function() {
 		postSearchHotel();
 	});
-</script>
-{{-- /search hotel --}}
+	{{-- /search hotel --}}
 
-{{-- check box chenge --}}
-<script>
+	{{-- check box chenge --}}
 	$(document).on('ifChanged', 'input', function() {
 		checkChange(this);
 	});
-</script>
-{{-- /check box chenge --}}
+	{{-- /check box chenge --}}
 
-{{-- Choose Room --}}
-<script>
+	{{-- Choose Room --}}
 	$(document).on('click','.btn-chooseRoom', function(){
 		chooseRoom(this);
-	})
-</script>
-{{-- /Choose Room --}}
+	});
+	{{-- /Choose Room --}}
 
-{{-- Book hotel --}}
-<script>
+	{{-- Book hotel --}}
 	$(document).on('click', '.btn-bookRoom', function(){
 		bookRoom(this);
 	});
-</script>
-{{-- /Book hotel --}}
+	{{-- /Book hotel --}}
 
-{{-- Model PopUp --}}
-<script>
+	{{-- Model PopUp --}}
 	$(document).on('click', ".btn-link.description", function(){
 		showDescription(this);
-	})
+	});
+	{{-- /model PopUp --}}
+
+	{{-- click on tab menu button --}}
+	$(document).on('click', '.a_tab_menu',function () {
+		clickAtab(this);
+	});
+	{{-- click on tab menu button --}}
+
+	{{-- next button --}}
+	$(document).on('click', '#btn_next', function () {
+		nextHotelEvent(this);		
+	});
+	{{-- /next button --}}
 </script>
-{{-- /model PopUp --}}
 
 @include('b2b.protected.dashboard.pages.hotels.partials.scripts.function')

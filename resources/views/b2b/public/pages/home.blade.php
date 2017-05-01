@@ -38,12 +38,12 @@
 			</div>
 
 		</div>
-		<!-- /.container -->
+		{{-- /.container --}}
 
 	</div>
-	<!-- /.intro-header -->
+	{{-- /.intro-header --}}
 
-	<!-- Page Content -->
+	{{-- Page Content --}}
 
 	<a  name="services"></a>
 	<div class="content-section-a">
@@ -68,10 +68,10 @@
 			</div>
 
 		</div>
-		<!-- /.container -->
+		{{-- /.container --}}
 
 	</div>
-	<!-- /.content-section-a -->
+	{{-- /.content-section-a --}}
 
 	<div class="content-section-b">
 
@@ -98,10 +98,10 @@
 			</div>
 
 		</div>
-		<!-- /.container -->
+		{{-- /.container --}}
 
 	</div>
-	<!-- /.content-section-b -->
+	{{-- /.content-section-b --}}
 
 	<div class="content-section-a">
 
@@ -122,10 +122,10 @@
 			</div>
 
 		</div>
-		<!-- /.container -->
+		{{-- /.container --}}
 
 	</div>
-	<!-- /.content-section-a -->
+	{{-- /.content-section-a --}}
 	
 	<a name="about"></a>
 	<div class="content-section-b">
@@ -149,7 +149,7 @@
 			</div>
 
 		</div>
-		<!-- /.container -->
+		{{-- /.container --}}
 
 	</div>
 
@@ -187,8 +187,8 @@
 			</div>
 
 		</div>
-		<!-- /.container -->
+		{{-- /.container --}}
 
 	</div>
-	<!-- /.banner -->
+	{{-- /.banner --}}
 @endsection()

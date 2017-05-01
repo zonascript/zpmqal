@@ -62,6 +62,6 @@
 @endsection
 
 @section('js')
-	<!-- Custom Js  -->
+	{{-- Custom Js  --}}
 	<script src="{{ asset('js/custom-file-input.js') }}"></script>
 @endsection

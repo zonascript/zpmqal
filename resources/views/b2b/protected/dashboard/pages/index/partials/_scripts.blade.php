@@ -1,5 +1,5 @@
 
-	<!-- Clock -->
+	{{-- Clock --}}
 	{{-- 	<script>
 		function startTime() {
 				var today = new Date();
@@ -17,9 +17,9 @@
 				return i;
 		}
 	</script> --}}
-	<!-- Clock -->
+	{{-- Clock --}}
 
-	<!-- Chart.js -->
+	{{-- Chart.js --}}
 	<script>
 
 		$(document).ready(function () {
@@ -109,4 +109,4 @@
 			});
 		}
 	</script>
-	<!-- /Chart.js -->
+	{{-- /Chart.js --}}

@@ -5,14 +5,18 @@ namespace App\Models\B2bApp;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\B2bApp\ItineraryController;
 use Carbon\Carbon;
+use Auth;
 use DB;
 
 
 class PackageModel extends Model
 {
 	protected $table = 'packages';
-	protected $append = ['uid', 'cost', 'nights', 'pax_detail', 'itinerary'];
 	protected $hidden = ['created_at', 'updated_at'];
+	protected $append = [
+								'uid', 'cost', 'nights', 'pax_detail',
+								'itinerary', 'package_lock_id'
+							];
 
 
 	public static function call(){
@@ -24,9 +28,15 @@ class PackageModel extends Model
 		$this->attributes['status'] = strtolower($value);
 	}
 
+	public function setTokenAttribute()
+	{
+		$this->attributes['token'] = md5(uniqid($this->count(), true));
+	}
+
 	public function getUidAttribute()
 	{
-		return $this->prefix.str_pad($this->id, 5, '0', STR_PAD_LEFT);
+		$prefix = $this->client->user->admin->prefix;
+		return $prefix.str_pad($this->package_code, 7, '0', STR_PAD_LEFT);
 	}
 
 	public function getNightsAttribute()
@@ -91,6 +101,44 @@ class PackageModel extends Model
 		return $result;
 	}
 
+	public function modifiedCount($code)
+	{
+		return $this->where('package_code', $code)->count();
+	}
+
+
+	public function findOrExit($id)
+	{
+		$package = $this->usersFind($id);
+		if (is_null($package)) {
+			$this->exitView();
+		}
+		return $package;
+	}
+
+
+	public function findByToken($token)
+	{
+		return $this->select()->where(['token' => $token])->first();
+	}
+
+
+	public function findByTokenOrExit($token)
+	{
+		$result = $this->findByToken($token);
+		$auth = Auth::user();
+
+		if (is_null($result) && $result->user_id != $auth->id) {
+			$this->exitView();
+		}
+		return $result;
+	}
+
+	public function exitView()
+	{
+		$blade = ["url" => urlReport()];
+		exit(view('b2b.protected.dashboard.404_main', $blade)->render());
+	}
 
 	public function user()
 	{
@@ -173,9 +221,10 @@ class PackageModel extends Model
 	}
 
 
-	public function flightRoutes($value='')
+	public function flightRoutes()
 	{
-		$result = $this->hasMany('App\Models\B2bApp\RouteModel', 'package_id');
+		$result = $this->hasMany('App\Models\B2bApp\RouteModel', 'package_id')
+						->select('*', DB::raw("'".$this->package_lock_id.'\' as package_lock_id'));
 		return $result->where(['mode' => 'flight', ['status', '<>', 'deleted']]);
 	}
 
@@ -232,6 +281,22 @@ class PackageModel extends Model
 	}
 
 
+	public function packageLock()
+	{
+		return $this->hasOne('App\Models\B2bApp\PackageLockModel', 'package_id');
+	}
+	
+
+	public function packageLocks()
+	{
+		return $this->hasMany('App\Models\B2bApp\PackageLockModel', 'package_id');
+	}
+
+	public function __construct(array $attributes = array())
+	{
+		$this->setTokenAttribute();
+		parent::__construct($attributes);
+	}
 
 }
 

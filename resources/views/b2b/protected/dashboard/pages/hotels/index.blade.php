@@ -25,6 +25,11 @@
 			</div>
 			@include('b2b.protected.dashboard.pages.hotels.partials._filter')
 			{{-- @include('b2b.protected.dashboard.pages.hotels.partials._search') --}}
+			<div class="row m-top-70" align="center">
+				<div id="btn_next" class="circle-big bg-blue glowing-green-border cursor-pointer" data-rid="{{ $package->hotelRoutes[0]->id }}">
+					<div class="circle-in text-center font-size-20">Next <i class="fa fa-arrow-right"></i></div>
+				</div>
+			</div>
 		</div>
 		<div class="col-md-9 col-sm-9 col-xs-12">
 			<div class="row">
@@ -32,19 +37,24 @@
 					<div id="exTab1" class="container">
 						<ul id="tab_menu" class="nav nav-pills">
 							@foreach ($package->hotelRoutes as $hotelRouteKey => $hotelRoute)
-								<li class="col-md-2 col-sm-2 col-xs-12 text-center li-menu-dest {{ $hotelRouteKey == 0 ? 'active' : ''}}" data-list="hotel_{{ $hotelRoute->id }}_div" data-did="{{ $hotelRoute->hotel->id }}" data-rid="{{ $hotelRoute->id }}">
-									<a id="a_hotel_{{ $hotelRoute->id }}" href="#hotel_{{ $hotelRoute->id }}_div" data-toggle="tab">
-										{{ $hotelRoute->location_hotel->destination.', '.$hotelRoute->location_hotel->country }}
+								<li class="col-md-2 col-sm-2 col-xs-12 text-center li-menu-dest 
+									{{ $hotelRouteKey == 0 ? 'active' : ''}}" 
+									data-list="hotel_{{ $hotelRoute->id }}_div">
+									<a id="a_hotel_{{ $hotelRoute->id }}" 
+										href="#hotel_{{ $hotelRoute->id }}_div" 
+										data-rid="{{ $hotelRoute->id }}"
+										class="a_tab_menu"
+										data-toggle="tab">
+										{{ $hotelRoute->destination_detail->destination.', '.$hotelRoute->destination_detail->country }}
 									</a>
 								</li>
 							@endforeach
 						</ul>
 						<div class="tab-content main-flight-detail clearfix">
 							@foreach ($package->hotelRoutes as $hotelRouteKey => $hotelRoute)
-								<div id="hotel_{{ $hotelRoute->id }}_div" class="tab-pane {{ $hotelRouteKey == 0 ? 'active' : ''}}">
-										<ul id="hotel_{{ $hotelRoute->id }}" class="list list-unstyled">
-											<li></li>
-										</ul>
+								<div id="hotel_{{ $hotelRoute->id }}_div" 
+										class="tab-pane {{ $hotelRouteKey == 0 ? 'active' : ''}}">
+									<ul id="hotel_{{ $hotelRoute->id }}" class="list list-unstyled" data-rid="{{ $hotelRoute->id }}"></ul>
 								</div>
 							@endforeach
 						</div>

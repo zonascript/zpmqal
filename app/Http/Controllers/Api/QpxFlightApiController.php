@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Api\QpxLimitModel;
 use App\Models\Api\QpxFlightModel;
 
+ini_set('max_execution_time', 90);
+
 class QpxFlightApiController extends Controller
 {
 	public $solutions = 500;
@@ -20,8 +22,13 @@ class QpxFlightApiController extends Controller
 		return new QpxFlightApiController;
 	}
 
+	public function model()
+	{
+		return new QpxFlightModel;
+	}
 
-	public function flights($packageFlight)
+
+	public function flights($route)
 	{
 		$flights = [];
 		
@@ -33,9 +40,9 @@ class QpxFlightApiController extends Controller
 				"request" => [
 					"slice" => [
 						[
-							"origin" => $packageFlight->route->origin_code,
-							"destination" => $packageFlight->route->destination_code,
-							"date" => $packageFlight->route->start_date,
+							"origin" => $route->origin_code,
+							"destination" => $route->destination_code,
+							"date" => $route->start_date,
 						]
 					],
 					"passengers" => [
@@ -138,7 +145,7 @@ class QpxFlightApiController extends Controller
 	*/
 	public function book($id, $index)
 	{
-		$flight = QpxFlightModel::find($id);
+		$flight = $this->model()->find($id);
 		
 		$return = false;
 

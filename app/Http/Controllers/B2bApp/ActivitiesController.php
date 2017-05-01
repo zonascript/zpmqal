@@ -51,17 +51,23 @@ class ActivitiesController extends Controller
 	|		"location" => null,
 	|	];
 	*/
-	public function createNew($params)
+	public function createNew($params = [], $onlyId = false)
 	{
-		$packageActivity = $this->isExist($params->route_id);
+		/*$packageActivity = $this->isExist($params->route_id);
 		
 		if (is_null($packageActivity)) {
 			$packageActivity = new PackageActivityModel;
-		}
+		}*/
 
-		$packageActivity->route_id = $params->route_id;
+		// $packageActivity->route_id = $params->route_id; // removed bcoz route_package_modes
+		
+		$packageActivity = new PackageActivityModel;
 		$packageActivity->status = 'active';
 		$packageActivity->save();
+		
+		if ($onlyId) {
+			$packageActivity = $packageActivity->id;
+		}
 
 		return $packageActivity;
 	}

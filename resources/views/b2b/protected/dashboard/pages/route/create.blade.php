@@ -56,7 +56,7 @@
 							<div class="x_content nopadding">
 								<div class="form-group">
 									<div class="destinationClass">
-										@if ($package->routes->count())
+										@if ($routes->count())
 											@include('b2b.protected.dashboard.pages.route.create_partials.non_empty')
 										@else
 											@include('b2b.protected.dashboard.pages.route.create_partials.empty')

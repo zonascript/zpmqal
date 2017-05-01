@@ -9,7 +9,7 @@ class BookingHotelModel extends Model
 {
 	protected $connection = 'mysql4';
 	protected $table = 'booking_hotels';
-	protected $appends = ['country', 'city'];
+	protected $appends = ['country', 'city', 'vendor'];
 	protected $hidden = [
 								'cc1', 'photo_url', 'city_hotel', 
 								'distance', 'zip', 'countryDetail'
@@ -27,6 +27,11 @@ class BookingHotelModel extends Model
 		return $value;
 	}
 
+
+	public function getVendorAttribute()
+	{
+		return 'b';
+	}
 
 	public function getCityAttribute()
 	{
@@ -90,7 +95,21 @@ class BookingHotelModel extends Model
 	}
 
 
-		/*
+	public function hotelByCode($code)
+	{
+		$columns = [
+				'id', 'name', 'class as star_rating', 'longitude', 'latitude',  
+				'address', 'zip', 'city_hotel', 'cc1', 
+				'desc_en as description', 'photo_url as image'
+			];
+
+		$result = $this->select($columns)
+										->where(['id' => $code])
+											->get();
+		return $result;
+	}
+
+	/*
 	| this function is to get activities from self db or cache data 
 	| which is stored from other api like viator 
 	| params = ["fgf_city_id" => 15180, "viator_city_id" => 10];

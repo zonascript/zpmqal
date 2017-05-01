@@ -1,7 +1,7 @@
 @extends('b2b.protected.dashboard.main')
 
 @section('css')
-		<!-- Datatables -->
+		{{-- Datatables --}}
 		<link href="{{ commonAsset('dashboard/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
 @endsection
 
@@ -62,13 +62,13 @@
 @endsection
 
 @section('js')
-	<!-- Datatables -->
+	{{-- Datatables --}}
 	<script src="{{ commonAsset('dashboard/vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 	<script src="{{ commonAsset('dashboard/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 @endsection
 
 @section('scripts')
-	<!-- Datatables -->
+	{{-- Datatables --}}
 	<script>
 		$(document).ready(function() {
 			$('#datatable').dataTable({
@@ -76,5 +76,5 @@
 			});
 		});
 	</script>
-	<!-- /Datatables -->
+	{{-- /Datatables --}}
 @endsection

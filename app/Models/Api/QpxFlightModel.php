@@ -8,11 +8,13 @@ use DB;
 
 class QpxFlightModel extends Model
 {
+	protected $connection = 'mysql2';
 	protected $table = 'qpx_flights';
 	protected $appends = [
 			'airlines', 'cities', 'slices', 'legs', 'segments',
 			'departureDateTime', 'arrivalDateTime'
 		];
+		
 	protected $casts = [
 			'request' => 'object', 
 			'result' => 'object'

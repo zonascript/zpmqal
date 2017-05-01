@@ -1,7 +1,7 @@
 @extends('b2b.protected.dashboard.main')
 
 @section('css')
-    <!-- FullCalendar -->
+    {{-- FullCalendar --}}
     <link href="{{ commonAsset('dashboard/vendors/fullcalendar/dist/fullcalendar.min.css') }}" rel="stylesheet">
     <link href="{{ commonAsset('dashboard/vendors/fullcalendar/dist/fullcalendar.print.css') }}" rel="stylesheet" media="print">
 @endsection
@@ -58,7 +58,7 @@
         </div>
       </div>
     </div>
-    <!-- calendar modal -->
+    {{-- calendar modal --}}
     <div id="CalenderModalNew" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -130,17 +130,17 @@
 
     <div id="fc_create" data-toggle="modal" data-target="#CalenderModalNew"></div>
     <div id="fc_edit" data-toggle="modal" data-target="#CalenderModalEdit"></div>
-    <!-- /calendar modal -->
+    {{-- /calendar modal --}}
 @endsection
 @section('js')
-    <!-- FullCalendar -->
+    {{-- FullCalendar --}}
     <script src="{{ commonAsset('dashboard/vendors/moment/min/moment.min.js') }}"></script>
     <script src="{{ commonAsset('dashboard/vendors/fullcalendar/dist/fullcalendar.min.js') }}"></script>
 @endsection
 
 @section('scripts')
 
-    <!-- FullCalendar -->
+    {{-- FullCalendar --}}
     <script>
       $(window).load(function() {
         var date = new Date(),
@@ -238,5 +238,5 @@
         });
       });
     </script>
-    <!-- /FullCalendar -->
+    {{-- /FullCalendar --}}
 @endsection

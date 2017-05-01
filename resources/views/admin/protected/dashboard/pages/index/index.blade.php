@@ -10,15 +10,15 @@
 @endsection
 
 @section('js')
-	<!-- Datatables -->
+	{{-- Datatables --}}
 	<script src="{{ commonAsset('dashboard/vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 	<script src="{{ commonAsset('dashboard/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 
-	<!-- bootstrap-progressbar -->
+	{{-- bootstrap-progressbar --}}
 	<script src="{{ commonAsset('dashboard/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
-	<!-- Chart.js -->
+	{{-- Chart.js --}}
 	<script src="{{ commonAsset('dashboard/vendors/Chart.js/dist/Chart.min.js') }}"></script>
-	<!-- ECharts -->
+	{{-- ECharts --}}
 	<script src="{{ commonAsset('dashboard/vendors/echarts/dist/echarts.min.js') }}"></script>
 	<script src="{{ commonAsset('dashboard/vendors/echarts/map/js/world.js') }}"></script>
 @endsection
@@ -33,7 +33,7 @@
 		});
 	</script>
 	{{-- data table --}}
-	<!-- Clock -->
+	{{-- Clock --}}
 	<script>
 		function startTime() {
 				var today = new Date();
@@ -51,9 +51,9 @@
 				return i;
 		}
 	</script>
-	<!-- Clock -->
+	{{-- Clock --}}
 
-	<!-- Chart.js -->
+	{{-- Chart.js --}}
 	<script>
 		Chart.defaults.global.legend = {
 			enabled: false
@@ -128,5 +128,5 @@
 			}
 		});
 	</script>
-	<!-- /Chart.js -->
+	{{-- /Chart.js --}}
 @endsection

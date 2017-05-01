@@ -1,4 +1,4 @@
-<!-- foreach ever destination activity here -->
+{{-- foreach ever destination activity here --}}
 <div class="row">
 	<div class="x_panel">
 		<div class="x_title">
@@ -146,5 +146,5 @@
 		</div>
 	</div>
 </div>
-<!-- /foreach ever destination activity here -->
+{{-- /foreach ever destination activity here --}}
 

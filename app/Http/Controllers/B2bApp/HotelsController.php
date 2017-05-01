@@ -40,13 +40,6 @@ class HotelsController extends Controller
 	}
 
 	/*
-	| this function is to find hotel by hotel table id
-	*/
-	public function find($id){
-		return PackageHotelModel::find($id);
-	}
-
-	/*
 	| this function is to find hotel by route table id which is route_id
 	*/
 	public function findByRouteId($routeId, $column = '*'){
@@ -59,15 +52,14 @@ class HotelsController extends Controller
 	/*
 	| this function is to get view on the browser using get request
 	*/
-	public function getHotelsByPackageId($packageDbId)
+	public function getHotelsByToken($token)
 	{
-		$package = PackageController::call()->model()->usersFind($packageDbId);
+		$package = PackageController::call()->model()->findByTokenOrExit($token);
 		$blade = [
 				'package' => $package,
 				'client' => $package->client,
 			];
-		// dd($package->hotelRoutes[0]->location_hotel);
-		return view('b2b.protected.dashboard.pages.hotels.index', $blade);
+		return trimHtml(view('b2b.protected.dashboard.pages.hotels.index', $blade)->render());
 	}
 
 
@@ -77,36 +69,108 @@ class HotelsController extends Controller
 	*/
 	public function createNew($object)
 	{
-		$packageHotel = $this->isExist($object->route_id);
-		
-		if (is_null($packageHotel)) {
-			$packageHotel = new PackageHotelModel;
-		}
-
-		$packageHotel->route_id = $object->route_id;
+		$packageHotel = new PackageHotelModel;
 		$packageHotel->status = "active";
 		$packageHotel->save();
-
 		return $packageHotel->id;
 	}
 
 
-
-	/*
-	| this function is to create new hotel table row using route data 
-	*/
-	public function createNewByRoute($routeDbId)
+	public function postAddHotelRoom($routeId, Request $request)
 	{
-		$params = (object)['route_id' => $routeDbId];
-		$result = $this->createNew($params);
+		$route = RouteController::call()->model()->find($routeId);
+		$packageHotelId = $request->hdid;
+		$packageHotel = $this->model()->find($packageHotelId);
+		
+		if (is_null($packageHotel)) {
+			$packageHotel = $this->model();
+			$packageHotel->hotel_code = $request->hid;
+			$packageHotel->vendor = $request->hvdr;
+			$packageHotel->save();
+			$packageHotelId = $packageHotel->id;
+			$route->fusion_id = $packageHotelId;
+			$route->fusion_type = 'App\\Models\\B2bApp\\PackageHotelModel';
+			$route->status = 'complete';
+			$route->save();
+		}
 
-		// =========this function is to create new activity row in db=========
-		ActivitiesController::call()->createNew($params);
+		$packageRooms = $packageHotel->roomModel();
+		$packageRooms->package_hotel_id = $packageHotel->id;
+		$packageRooms->roomtype_code = $request->rmid;
+		$packageRooms->vendor = $request->rmvdr;
+		$packageRooms->save();
 
-		return $result;
+		return json_encode([
+				"hdid" => $packageHotelId,
+				"rmdid" => $packageRooms->id
+			]);
 
 	}
 
+
+	public function postRemoveHotel($rid, Request $request)
+	{
+		$route = RouteController::call()->model()->find($rid);
+		$route->fusion_id = '';
+		$route->fusion_type = '';
+		$route->status = 'active';
+		$route->save();
+		return json_encode(['status' => '200', 'reponse' => 'delete']);
+	}
+
+
+	public function postRemoveHotelRoom($rid, Request $request)
+	{
+		$route = RouteController::call()->model()->find($rid);
+		$count = $route->fusionCount($route->fusion_id);
+		$result = [
+				"hdid" => '',
+				"rooms" => [],
+				"status" => 200, 
+				"is_copied" => 0,
+				"reponse" => "delete",
+			];
+
+		if ($count > 1) {
+			$packageHotel = $this->model();
+			$packageHotel->hotel_code = $route->fusion->hotel_code;
+			$packageHotel->vendor = $route->fusion->vendor;
+			$packageHotel->save();
+			$packageHotelId = $packageHotel->id;
+			$result['is_copied'] = 1;
+			$result['hdid'] = $packageHotelId;
+			if ($route->fusion->packageRooms->count()) {
+				foreach ($route->fusion->packageRooms as $packageRoom) {
+					if ($packageRoom->id != $request->rmdid) {
+						$packageHotelRoom = $this->model()->roomModel();
+						$packageHotelRoom->package_hotel_id = $packageHotelId;
+						$packageHotelRoom->roomtype_code = $packageRoom->roomtype_code;
+						$packageHotelRoom->vendor = $packageRoom->vendor;
+						$packageHotelRoom->save();
+						$result['rooms'][$packageRoom->id] = $packageHotelRoom->id;
+					}
+				}
+			}
+			$route->fusion_id = $packageHotel->id;
+			$route->fusion_type = 'App\\Models\\B2bApp\\PackageHotelModel';
+			$route->status = 'complete';
+			$route->save();
+		}
+		else {
+			$this->model()->roomModel()->destroy($request->rmdid);
+		}
+
+		return json_encode($result);
+	}
+
+
+	// this is not using but it can be use 
+	public function postSelectedHotel($rid)
+	{
+		$route = RouteController::call()->model()->find($rid);
+		$hotel = json_encode($route->fusion->hotelForView());
+		return $hotel;
+	}
 
 
 	/*
@@ -119,71 +183,6 @@ class HotelsController extends Controller
 															->update(["status" => "inactive"]);
 	}
 
-
-
-
-	/*
-	| this function for checking route already exist 
-	| or not behalf of route table id because one route 
-	| can contain only one row in db
-	*/
-	public function isExist($routeDbId)
-	{
-		$packageHotel = PackageHotelModel::select()
-										->where([
-													"route_id" => $routeDbId,
-												])
-											->first();
-
-			return $packageHotel;
-	}
-
-
-
-	/*
-	| this function is to pull hotels result from api 
-	*/
-	public function getHotel($packageHotelId)
-	{
-		$packageHotel = PackageHotelModel::call()->usersFind($packageHotelId);
-		
-		// dd($packageHotel->route);
-
-		// $requestParams = $this->makeApiRequestData($packageHotel);
-		// if (!is_null($requestParams)) {
-			
-		// 	// =========================Tbtq hotels here=========================
-		// 	$tbtqResult = TbtqHotelApiController::call()->hotel($requestParams);
-		// 	$getCurrentCart->tbtq_temp_hotel_id = $tbtqResult->db->id;
-		// 	$getCurrentCart->save();
-
-			// ==========================blade data here=========================
-			$bladeData = [
-				"package" => $getCurrentCart->package,
-				"client"    =>  $getCurrentCart->package->client,
-				"packageHotel" => $getCurrentCart,
-				"destination" => $requestParams->destination,
-				"hotelResults" => (object)["tbtq" => $tbtqResult]
-			];
-
-			return view('b2b.protected.dashboard.pages.hotel.get_hotel', $bladeData);
-		// }
-		// else{
-		// 	return view('errors.404');
-		// }
-	}
-
-	public function getHotelView($packageHotelId)
-	{
-		$packageHotel = PackageHotelModel::call()->usersFind($packageHotelId);
-		$bladeData = [
-				"packageHotel" => $packageHotel,
-				"package" => $packageHotel->route->package,
-				"client" =>  $packageHotel->route->package->client,
-			];
-
-		return view('b2b.protected.dashboard.pages.hotel.get_hotel_view', $bladeData);
-	}
 
 	// this function is make global array for hotel api
 	public function makeApiRequestData($data)
@@ -216,96 +215,17 @@ class HotelsController extends Controller
 	/* 
 	| this function is to pull hotel rooms data using post mrthod
 	*/
-	public function postHotelRoom($packageHotelId, Request $request)
+	public function postHotelRoom(Request $request)
 	{
-		$packageHotel = PackageHotelModel::call()->usersFind($packageHotelId);
 		$params = [
 				"id" => $request->hid,
 				"vendor" => $request->vdr
 			];
-
 		$rooms = DbHotelsController::call()->hotelRooms($params);
 		return json_encode($rooms);
 	}
 
 
-
-	/*
-	| this function it to final the room
-	*/
-	public function postBookHotelRoom($packageHotelId, Request $request)
-	{
-		/*
-		| vdr = vendor
-		| apk = agent_prices key
-		| rok = room_offers key
-		| rk = rooms key
-		| hid = hotel id
-		| rmid = room id
-		| pu =  pick_up
-		|	pus = pick_up_selected
-		|	do = drop_off
-		|	dos = drop_off_selected
-		*/
-
-		$packageHotelModel = new PackageHotelModel;
-		$getCurrentCart = $packageHotelModel->usersFind($packageHotelId);
-		$getCurrentCart->route->is_pick_up = $request->pus;
-		$getCurrentCart->route->pick_up = $request->pu;
-		$getCurrentCart->route->is_drop_off = $request->dos;
-		$getCurrentCart->route->drop_off = $request->do;
-		$getCurrentCart->route->save();
-
-		if (!is_null($getCurrentCart)) {
-			// storing vendor in db
-			$getCurrentCart->selected_hotel_vendor = $request->vdr;
-
-			// checking which vendor is selected
-			if ($request->vdr == 'tbtq') {
-				// if vendor is tbtq then copying tbtq_temp_hotel_id to tbtq_hotel_id
-				$getCurrentCart->tbtq_hotel_id = $getCurrentCart->tbtq_temp_hotel_id;
-				// calling tbtq book function here
-				TbtqHotelApiController::call()
-									->book($getCurrentCart->tbtq_temp_hotel_id, $request->tk);
-			}
-			elseif($request->vdr == 'ss'){
-				$getCurrentCart->skysacanner_hotel_id =  $getCurrentCart->skysacanner_temp_hotel_id;
-				SkyscannerHotelApiController::call()
-									->book($getCurrentCart->skysacanner_temp_hotel_id, $request);
-			}
-			elseif($request->vdr == 'a'){
-				$getCurrentCart->agoda_hotel_room_id =  $request->rmid;
-			}
-			elseif($request->vdr == 'b'){
-				$getCurrentCart->booking_hotel_room_id = $request->rmid;
-			}// if there is another api provider then using elseif here to define next 
-
-			$routeDbId = $getCurrentCart->route_id;
-			$getCurrentCart->status = 'occupied';
-			$getCurrentCart->save();
-			
-			//====================telling this route is complete====================
-			RouteController::call()->complete($routeDbId);
-
-			$returnArray = [ 
-				"status" => 200,
-				"packageUrl" => newRedirectUrl(urlPackageAll($getCurrentCart->route->package->client->id, $getCurrentCart->route->package->id)),
-				"nextUrl" => newRedirectUrl(url('dashboard/package/builder/event/'.$getCurrentCart->route->package->id.'/hotel')),
-			];
-
-			return json_encode($returnArray);
-		}
-		else{
-			
-			$returnArray = [ 
-				"status" => 200,
-				"packageUrl" => url($packageDbId),
-				"nextUrl" => url($packageDbId),
-			];
-
-			return json_encode($returnArray);
-		}
-	}
 
 	public function removeHotelRoom($id)
 	{
@@ -316,22 +236,7 @@ class HotelsController extends Controller
 		return $packageHotel;
 	}
 
-	public function postRemoveHotelRoom($id)
-	{
-		$packageHotel = $this->removeHotelRoom($id);
-		$result = [
-				'status' => 500, 
-				'responce' => 'removing failed'
-			];
 
-		if (!is_null($packageHotel)) {
-			$result = [
-					'status' => 200, 
-					'responce' => 'removed successfully'
-				];
-		}
-		return json_encode($result);
-	}
 
 	/*
 	| this function is to pull data from tbtq api using TbtqHotelApiController
@@ -386,10 +291,15 @@ class HotelsController extends Controller
 	| this function is to pull data from fgf database's agoda hotels data using 
 	| AgodaHotelsController and it can be call using http post request
 	*/
-	public function postHotelFromDb($id, $index = 0)
+	public function postHotelFromDb($routeId, $index = 0)
 	{
-		$packageHotel = PackageHotelModel::call()->usersFind($id);
-		$location = $packageHotel->route->dbDestination();
+		$route = RouteController::call()->model()->find($routeId);
+		$selected = [];
+		if (!is_null($route->fusion)) {
+			$selected = json_decode(json_encode($route->fusion->hotelForView()));
+		}
+
+		$location = $route->dbDestination();
 		$params = [
 				'latitude' => $location->latitude, 
 				'longitude' => $location->longitude, 
@@ -397,6 +307,8 @@ class HotelsController extends Controller
 				'min_rating' => 0
 			];
 		$hotels = DbHotelsController::call()->hotels($params); 
+		$hotels = json_decode(json_encode($hotels));
+		$hotels = array_merge($selected, $hotels);
 		$result = (object)['hotels' => $hotels];
 		return json_encode($result);
 	}
@@ -479,9 +391,9 @@ class HotelsController extends Controller
 		if ($request->format == 'json') {
 			$result = json_encode($result);
 		}
-
 		return $result;
 	}
+
 
 	public function searchHotelNames($id, Request $request)
 	{

@@ -46,6 +46,13 @@ function isLocalhost()
 
 	return $return;
 }
+
+function clean($string) {
+	 $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+	 $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+	 return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
+}
+
  
 function removeAndSym($string){
 	if (findWord('&amp;', $string)) {
@@ -76,6 +83,36 @@ function listFolderFiles($dir){
 
 
 /*
+ * Convert an integer to a string of uppercase letters (A-Z, AA-ZZ, AAA-ZZZ, etc.)
+ */
+function num2alpha($n)
+{
+	for($r = ""; $n >= 0; $n = intval($n / 26) - 1)
+		$r = chr($n%26 + 0x41) . $r;
+	return $r;
+}
+
+/*
+ * Convert a string of uppercase letters to an integer.
+ */
+function alpha2num($a)
+{
+	$l = strlen($a);
+	$n = 0;
+	for($i = 0; $i < $l; $i++)
+		 $n = $n*26 + ord($a[$i]) - 0x40;
+	return $n-1;
+}
+
+
+
+function mylocal_path($path)
+{
+	return storage_path('mylocal/'.$path);
+}
+
+
+/*
 | this function is for finding word from string 
 */
 
@@ -94,6 +131,11 @@ function pre_echo($array){
 	echo '<pre>';
 	print_r($array);
 	echo '</pre>';
+}
+
+function ddp($array){
+	pre_echo($array);
+	exit;
 }
 
 function dd_pre_echo($array){
@@ -895,6 +937,12 @@ function activityTiming($key)
 	return $found;
 }
 
+
+function urlReport(){
+	return url('dashboard/report/submit');
+}
+
+
 function urlDefaultImageRoom(){
 	return urlImage('images/default/room.png');
 }
@@ -958,9 +1006,15 @@ function urlRouteCreate($clientId)
 
 /*=====================Package Url=====================*/
 
+function urlPackageOpen($token){
+	return url('dashboard/package/open/'.$token);
+}
+
+
 function urlPackageAll($id = false, $packageDbId = false){
 	return url('dashboard/package/all/'.$id.'/'.$packageDbId);
 }
+
 
 function urlSavePackageCost($id = 0, $packageDbId = 0){
 	return url('dashboard/package/savecost/'.$id.'/'.$packageDbId);
@@ -969,12 +1023,14 @@ function urlSavePackageCost($id = 0, $packageDbId = 0){
 
 /*=====================Hotel Url=====================*/
 function urlAllHotelsBuilder($packageDbId = 0){
-	return url('dashboard/package/builder/hotels/'.$packageDbId);
+	$url = url('dashboard/package/builder/hotels/'.$packageDbId);
+	$url = str_replace('//', '/', $url);
+	return $url;
 }
 
 
-function urlHotelsBuilder($firstCartId = 0){
-	return url('dashboard/package/builder/hotel/'.$firstCartId);
+function urlHotelsBuilder($slug = ''){
+	return url('dashboard/package/builder/hotels/'.$slug);
 }
 
 function urlHotelsRoomBuilder($firstCartId = 0){

@@ -1,12 +1,9 @@
 
-{{-- did == db id --}}
 <script>
 	function postSsFlight(rid ='') {
 		var ridObject = getRidObject(rid);
 		var elem_id = "flight_"+rid;
-		var did = ridObject.did;
 		var ids = {
-				'did' : did,
 				'rid' : rid,
 				'vendor' : 'ss',
 				'elem_id' : elem_id
@@ -14,7 +11,7 @@
 
 		$.ajax({
 			type:"post",
-			url: "{{ url('ss/flights/result') }}/"+did,
+			url: "{{ url('ss/flights/result') }}/"+rid,
 			data: { "_token" : csrf_token },
 
 			success: function(responce, textStatus, xhr) {

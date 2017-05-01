@@ -8,7 +8,7 @@ class AgodaHotelModel extends Model
 {
 	protected $connection = 'mysql4';
 	protected $table = 'agoda_hotels';
-	protected $appends = ['images'];
+	protected $appends = ['images', 'vendor'];
 	protected $hidden = [
 								'addressline1', 'addressline2', 'zipcode', 
 								'photo1', 'photo2', 'photo3', 'photo4', 'photo5'
@@ -19,6 +19,10 @@ class AgodaHotelModel extends Model
 		return new AgodaHotelModel;
 	}
 
+	public function getVendorAttribute()
+	{
+		return 'a';
+	}
 
 
 	public function getAddressAttribute($value)
@@ -45,10 +49,8 @@ class AgodaHotelModel extends Model
 
 		$columns = [
 				'hotel_id as id', 'hotel_name as name', 'star_rating', 
-				'longitude', 'latitude', $rawQuery, 'addressline1', 
-				'addressline2', 'zipcode', 'city', 'country', 'photo1', 
-				'photo2', 'photo3', 'photo4', 'photo5', 
-				'overview as description'
+				'longitude', 'latitude', $rawQuery, 'address', 'zipcode', 'city', 'country', 
+				'photo1 as image', 'overview as description'
 			];
 
 		$whereRaw = 'longitude between ('.$long.'-25/cos(radians('.$lat.'))*69) 
@@ -67,6 +69,19 @@ class AgodaHotelModel extends Model
 		return $result;
 	}
 
+	public function hotelByCode($code)
+	{
+		$columns = [
+				'hotel_id as id', 'hotel_name as name', 'star_rating', 
+				'longitude', 'latitude', 'address', 'zipcode', 'city', 'country', 
+				'photo1 as image', 'overview as description'
+			];
+
+		$result = $this->select($columns)
+										->where(['hotel_id' => $code])
+											->get();
+		return $result;
+	}
 
 	public function hotelsByCityId($cityId, $index = 0, $take = 50, $isCol = true)
 	{

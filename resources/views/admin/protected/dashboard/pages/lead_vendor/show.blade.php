@@ -71,7 +71,7 @@
                       </div>
                       <div class="col-md-3 col-sm-3 col-xs-12">
                         <a data-toggle="modal" data-target=".bs-example-modal-warning" class="btn btn-danger btn-block"><i class="fa fa-trash"></i> Delete</a>
-                        <!-- Small modal -->
+                        {{-- Small modal --}}
                           <div class="modal fade bs-example-modal-warning" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog modal-sm">
                               <div class="modal-content">
@@ -97,7 +97,7 @@
                               </div>
                             </div>
                           </div>
-                        <!-- /modals -->
+                        {{-- /modals --}}
                       </div>
                       <div class="col-md-2 col-sm-2 col-xs-12"></div>
                     </div>

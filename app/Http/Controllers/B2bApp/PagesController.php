@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RedirectController;
+
 // use URL;
 
 class PagesController extends Controller
@@ -16,6 +19,11 @@ class PagesController extends Controller
 
 	public function getHome(){
 		return redirect('/#home');
+	}
+
+	public function homeIndex()
+	{
+    return redirect('dashboard');
 	}
 
 	public function getAbout(){
@@ -30,6 +38,11 @@ class PagesController extends Controller
 		return redirect('/#services');
 	}
 
+	public function getLogout(){
+		Auth::logout();
+		return redirect('');
+	}
+
 	public function getTest(){
 		return view('b2b.protected.dashboard.pages.form_advanced1');
 	}
@@ -38,4 +51,11 @@ class PagesController extends Controller
 	{
 		return 'Your cab is on the way';
 	}
+
+	public function redirectNow($hash)
+	{
+		return RedirectController::call()->redirectNow($hash);
+	}
+
+
 }

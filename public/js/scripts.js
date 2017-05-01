@@ -53,6 +53,14 @@ function isset(obj, key) {
 }
 
 
+function findInArray(element, array) {
+  var result = false;
+  if(jQuery.inArray(element,array) != -1){
+    result = true;
+  };
+  return result;
+}
+
 function star_Rating(count){
   var stars = '';
   for (var i = 0; i < 5; i++) {

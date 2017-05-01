@@ -9,7 +9,8 @@
         "laravel/framework": "5.4.*",
         "doctrine/dbal": "^2.5",
         "mpdf/mpdf": "^6.1",
-        "hesto/multi-auth": "^1.0"
+        "hesto/multi-auth": "^1.0",
+        "markwilson/xml-to-json": "^0.1.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

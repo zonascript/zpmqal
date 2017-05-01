@@ -27,6 +27,20 @@ class HotelsController extends Controller
 		return new HotelModel;
 	}
 
+
+	public function hotelByCode(Array $params)
+	{
+		$params = (object) $params;
+		$hotel = [];
+		if ($params->vendor == 'a') {
+ 			$hotel = AgodaHotelsController::call()->model()->hotelByCode($params->code);
+		}elseif ($params->vendor == 'b') {
+ 			$hotel = BookingHotelsController::call()->model()->hotelByCode($params->code);
+		}
+		return $hotel;
+	}
+
+
 	public function hotels($params = [])
 	{
  		$hotels = BookingHotelsController::call()->hotelsByLatLong($params);

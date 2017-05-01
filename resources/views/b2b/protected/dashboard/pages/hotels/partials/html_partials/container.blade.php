@@ -30,18 +30,16 @@
 				<div class="row">
 					<div class="col-md-12 col-sm-12 col-xs-12 m-top-50">
 						<button 
-							class="btn btn-primary btn-block btn-chooseRoom" 
-							data-uid="'+hotel.ukey+'"
+							class="btn '+hotel.btnClass+' btn-block btn-chooseRoom off" 
 							data-hid="'+hotel.code+'"
-							data-rid="'+hotel.ridObj.rid+'" 
-							data-vendor="'+hotel.vendor+'" 
-							data-isadd="0">Rooms
+							data-hdid="'+hotel.hdid+'" {{-- package_hotel_id --}}
+							data-vdr="'+hotel.vendor+'">'+hotel.btnName+'
 						</button>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row hotel-detail" style="display: none;">
+		<div class="row hotel-detail off" style="display: none;">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="row">
 					<div class="col-md-12 col-sm-12 col-xs-12">

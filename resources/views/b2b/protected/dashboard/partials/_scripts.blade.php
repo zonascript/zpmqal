@@ -1,6 +1,7 @@
-
-{{-- Select2 --}}
 <script>
+	var csrf_token = $('[name="csrf_token"]').attr('content');
+	{{-- Select2 --}}
+
 	$(document).ready(function() {
 		$(".select2_multiple").select2({
 			maximumSelectionLength:10,
@@ -14,11 +15,9 @@
 	$(window).load(function() {
 		loopHotelDetail();
 	});
-</script>
-{{-- /Select2 --}}
+	{{-- /Select2 --}}
 
 
-<script>
 	$(document).on('ifChanged', 'input', function() {
 		var type = $(this).attr('data-type');
 		var isChecked = $(this).is(':checked');
@@ -39,14 +38,11 @@
 			}  , 5000 );
 		}
 	});
-</script>
 
 
 
-{{-- Saving to do --}}
-<script>
+	{{-- Saving to do --}}
 	$(document).on('click', '.btn-to-do', function(){
-
 		var to_do_select = $('#to_do_select').val();
 		var to_do_text = $('#to_do_text').val();
 
@@ -70,11 +66,10 @@
 		$('#to_do_text').val('');
 		$('.btn-to-do-close').click();
 	});
-</script>
-{{-- /Saving to do --}}
+	{{-- /Saving to do --}}
 
 
-<script>
+
 	$(document).on('click', '.remove-to-do',function(){
 		var toDoIndex = $(this).attr('data-index');
 		removeTodo(toDoIndex);
@@ -84,11 +79,10 @@
 			/*Do something after 1 second */
 		}  , 1000 );
 	});
-</script>
 
 
 
-<script>
+
 	function refreashLeadBox() {
 		$.ajax({
 			type : "post",
@@ -129,10 +123,8 @@
 			echo $html;
 		?>
 	}
-</script>
 
 
-<script>
 	function refreashTodo(toDoId) {
 		$.ajax({
 			type : "post",
@@ -189,18 +181,18 @@
 			data : data,
 		});
 	}
-</script>
 
-<script>
+
+
 	function loopHotelDetail() {
 		$.ajax({
 			type : "get",
 			url : "{{ url('a/l/htdetail') }}"
 		});
 	}
-</script>
 
-<script>
+
+
 	function refreashTrack(){
 		$.ajax({
 			type : "post",
@@ -223,19 +215,19 @@
 			}
 		});
 	}
-</script>
 
-<script>
+
+
 	var vTimeOut;
 
 	$(function() {
 		vTimeOut= setInterval(refreashLeadBox, 20000);
 		vTimeOut= setInterval(refreashTrack, 20000);
 	});
-</script>
 
 
-<script>
+
+
 	function showWaitingLogo() {
 		var html = '<style>#logo{ top: 32vh; left: 42.5%; position: fixed; font-size: 210px !important; z-index: 100; } #fgfpreloader { top: 27vh; left: 40%; font-size: 5px; border-radius: 50%; width: 250px; height: 250px; position: fixed; text-indent: -9999em; border-top: 1.1em solid rgba(255,255,128, 0.2); border-right: 1.1em solid rgba(255,255,128, 0.2); border-bottom: 1.1em solid rgba(255,255,128, 0.2); border-left: 1.1em solid #FFD700; z-index: 100; -webkit-transform: translateZ(0); -ms-transform: translateZ(0); transform: translateZ(0); -webkit-animation: load8 1.1s infinite linear; animation: load8 1.1s infinite linear; } @-webkit-keyframes load8 { 0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); } 100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); } } @keyframes load8 { 0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); } 100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); } }</style><div id="showWaitingLogo"><div id="fgfpreloader" class="fixed-top"></div><i id="logo" class="s-icon-fgf font-big fixed-top"></i></div>';
 		$('body').prepend(html);

@@ -1,22 +1,12 @@
 
-{{-- did == db id --}}
 <script>
 	function postQpxFlight(rid ='') {
 		var ridObject = getRidObject(rid);
-		var elem_id = "flight_"+rid;
-		var did = ridObject.did;
-		var ids = {
-				'did' : did,
-				'rid' : rid,
-				'vendor' : 'qpx',
-				'elem_id' : elem_id
-			};
-
+		var elem_id = ridObject.elem_id;
 		$.ajax({
 			type:"post",
-			url: "{{ url('qpx/flights/result') }}/"+did,
+			url: "{{ url('qpx/flights/result') }}/"+rid,
 			data: { "_token" : csrf_token },
-
 			success: function(responce, textStatus, xhr) {
 					var responce = JSON.parse(responce);
 					var fullhtml = '';
@@ -24,12 +14,13 @@
 					if (responce.hasOwnProperty('trips') && responce.trips.hasOwnProperty('tripOption')) {
 						var tripOption = responce.trips.tripOption;
 						$.each(tripOption, function(i,v){
-							fullhtml = makeQpxHtml(i, v, responce, ids);
+							fullhtml = makeQpxHtml(i, v, responce);
 							$('#'+elem_id).append(fullhtml);
 						});
-					}else{
-						/*refreashFlights(ids);*/
 					}
+					/*else{
+						refreashFlights(ids);
+					}*/
 					dataIsPulled(rid);					
 					filter.initFilter(rid);
 					
@@ -52,7 +43,7 @@
 
 
 <script>
-	function makeQpxHtml(tripOptionKey, tripOption, data, ids) {
+	function makeQpxHtml(tripOptionKey, tripOption, data) {
 		var appendHtml = '';
 		var airlines = data.airlines;
 		var cities = data.cities;
@@ -84,11 +75,10 @@
 		});
 
 		var flight = {
+				'vendor_id': data.db.id, {{-- this is vendor db id like qpx db id --}}
 				'index' : tripOptionKey,
-				'vendor_id': data.db.id,
 				'stacks' : stacks, 
-				'vendor' : 'qpx',
-				'ids' : ids
+				'vendor' : 'qpx'
 			};
 
 		return getFlightStack(flight);

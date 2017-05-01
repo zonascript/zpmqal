@@ -3,6 +3,8 @@
 namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\B2bApp\PackageHotelRoomModel;
+use App\Http\Controllers\HotelApp\HotelsController;
 use DB;
 
 class PackageHotelModel extends Model
@@ -23,6 +25,43 @@ class PackageHotelModel extends Model
 
 	public static function call(){
 		return new PackageHotelModel;
+	}
+
+	public function roomModel()
+	{
+		return new PackageHotelRoomModel;
+	}
+
+
+	public function packageRooms()
+	{
+		return $this->hasMany(
+							'App\Models\B2bApp\PackageHotelRoomModel', 
+							'package_hotel_id'
+						);
+	}
+
+
+	public function hotelForView()
+	{
+		$params = ['code' => $this->hotel_code, 'vendor' => $this->vendor];
+		return HotelsController::call()->hotelByCode($params);
+		// id
+		// address
+		// city
+		// country
+		// image
+		// latitude
+		// longitude
+		// name
+		// vendor
+		// description
+		// star_rating
+	}
+
+	public function agoda()
+	{
+		
 	}
 
 	/*
@@ -84,17 +123,23 @@ class PackageHotelModel extends Model
 	}
 
 
-	public function getDetailAttribute()
+	public function getDetail()
 	{
+
 		$result = (object)[
+				"id" => '',
 				"code" => '',
 				"vendor" => '',
 				"name" => '',
+				"latitude" => '',
+				"longitude" => '',
 				"nights" => $this->route->nights,
 				"location" => $this->route->destination_detail->location,
 				"endDate" => $this->route->end_datetime->format('d-M-Y'),
 				"startDate" => $this->route->start_datetime->format('d-M-Y'),
 				"address" => '',
+				"city" => '',
+				"country" => 'country',
 				"roomType" => '',
 				"image" => '',
 				"address" => '',

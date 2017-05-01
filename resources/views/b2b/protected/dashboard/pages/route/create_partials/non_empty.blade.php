@@ -9,7 +9,7 @@
 			"cruise" => "Cruise"
 		];
 ?>
-@foreach ($package->routes as $routeKey => $route)
+@foreach ($routes as $routeKey => $route)
 	<div id="destination{{$routeKey}}" class="col-md-12 col-sm-12 col-xs-12 form-group-self destinationList no-rid" data-destination="1" data-rid="{{$route->id}}">
 		<div class="col-md-2 col-sm-2 col-xs-12">
 			<select class="form-control nopadding p-left-10 mode" data-parsley-type="value" required="">

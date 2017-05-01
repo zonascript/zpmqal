@@ -47,9 +47,10 @@ class BookingHotelRoomsController extends Controller
 				
 				$image = $images[$count];
 				$rooms[] = [
+						'vdr' => 'b',
 						'id' => $room->id,
 						'roomtype' => $room->roomtype,
-						'image' => $images[$count]
+						'image' => $images[$count],
 					];
 				$count++;
 			}

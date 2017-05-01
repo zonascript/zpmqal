@@ -75,12 +75,14 @@
 					<div class="col-md-4 col-sm-4 col-xs-12">
 						<div class="row">
 							<div class="col-md-12 col-sm-12 col-xs-12">
-								<button class="btn btn-block btn-primary btn-bookRoom" data-rmid="'+roomId+'">Add</button>
+								<button class="btn btn-block '+btnClass+' btn-bookRoom" 
+									data-vdr="'+roomVdr+'" 
+									data-rmid="'+roomId+'" 
+									data-rmdid="'+rmdid+'" {{-- package_hotel_id --}}>'+btnName+'</button>
 							</div>
 						</div>
 					</div>
 				</div>
-				
 				<div class="row">
 					<div class="col-md-4 col-sm-4 col-xs-6">
 						<div class="row">

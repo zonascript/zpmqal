@@ -44,13 +44,15 @@ class CruisesController extends Controller
 
 	public function createNew($object)
 	{
-		$packageCruise = $this->isExist($object->route_id);
+		/*$packageCruise = $this->isExist($object->route_id);
 		
 		if (is_null($packageCruise)) {
 			$packageCruise = new PackageCruiseModel;
-		}
+		}*/
 
-		$packageCruise->route_id = $object->route_id;
+		// $packageCruise->route_id = $object->route_id; // removed bcoz route_package_modes
+		
+		$packageCruise = new PackageCruiseModel;
 		$packageCruise->status = "active";
 		$packageCruise->save();
 

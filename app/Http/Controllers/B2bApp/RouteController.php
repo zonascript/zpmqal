@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\B2bApp\ClientController;
 use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\B2bApp\RoomGuestsController;
+use App\Http\Controllers\B2bApp\PackageCodesController;
+
 
 // ================================Api Controller================================
 use App\Http\Controllers\B2bApp\DestinationController;
@@ -26,28 +28,35 @@ class RouteController extends Controller
 		return new RouteController;
 	}
 
+
+	public function model()
+	{
+		return new RouteModel;
+	}
 	
 	/**
 	 * Show the form for creating a new resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create($id, $pid = null)
+	public function create($id, $token = null)
 	{
 		$client = ClientController::call()->info($id);
 		$packageController = new PackageController;
 
-		if (is_null($pid)) {
+		if (is_null($token)) {
 			$package = $packageController->createTemp($id);
-			return redirect('dashboard/package/route/'.$id.'/'.$package->id);
+			$token = $package->token;
+			return redirect('dashboard/package/route/'.$id.'/'.$token);
 		}
 		else{
-			$package = $packageController->model()->find($pid);
+			$package = $packageController->model()->findByTokenOrExit($token);
 		}
 
 		$blade = [
 				"client" => $client, 
-				"package" => $package
+				"package" => $package,
+				"routes" => $package->routes
 			];
 
 		return view('b2b.protected.dashboard.pages.route.create', $blade);

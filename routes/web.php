@@ -13,7 +13,6 @@ if (isLocalHost()) {
 	include('temp.php');
 }
 
-	
 //==================================server==================================
 Route::group(['domain' => env('B2B_DOMAIN')], function () {
 	include('b2b.php');
@@ -28,7 +27,6 @@ Route::group(['domain' => env('ADMIN_DOMAIN')], function () {
 });
 
 
-
 //==================================local==================================
 Route::group(['domain' => env('LOCAL_B2B_DOMAIN')], function () {
 	include('b2b.php');
@@ -41,19 +39,3 @@ Route::group(['domain' => env('LOCAL_BACKEND_DOMAIN')], function () {
 Route::group(['domain' => env('LOCAL_ADMIN_DOMAIN')], function () {
 	include('admin.php');
 });
-
-
-// if (in_array(url('/'), [env('B2B_URL'), env('TEST_URL'), env('LOCAL_B2B_URL')])) {
-// 	include('b2b.php');
-// }
-// elseif (in_array(url('/'),[env('BACKEND_URL'), env('LOCAL_BACKEND_URL')])) {
-// 	include('backend.php');
-// }
-// elseif (in_array(url('/'),[env('ADMIN_URL'), env('LOCAL_ADMIN_URL')])) {
-// 	include('admin.php');
-// }
-
-
-
-
-

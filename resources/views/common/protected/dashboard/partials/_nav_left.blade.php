@@ -1,16 +1,16 @@
-<!-- Left bar -->
+{{-- Left bar --}}
 <div class="col-md-3 left_col menu_fixed">
 	<div class="left_col scroll-view">
 		<div class="navbar nav_title" style="border: 0;">
 			<a href="{{ url('dashboard') }}" class="site_title">
 				<i class="s-icon-fgf"></i> 
-				<span>Dashboard</span>
+				<span> Dashboard</span>
 			</a>
 		</div>
 
 		<div class="clearfix"></div>
 
-		<!-- menu profile quick info -->
+		{{-- menu profile quick info --}}
 		<div class="profile">
 			<div class="profile_pic">
 				<img src="{{ $agent->profile_pic }}" alt="..." class="img-circle profile_img">
@@ -20,11 +20,11 @@
 				<h2>{{ $agent->fullname }}</h2>
 			</div>
 		</div>
-		<!-- /menu profile quick info -->
+		{{-- /menu profile quick info --}}
 
 		<br />
 
-		<!-- sidebar menu -->
+		{{-- sidebar menu --}}
 		<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
 			<div class="menu_section">
 				<div class="row"></div>
@@ -66,9 +66,9 @@
 			</div>
 
 		</div>
-		<!-- /sidebar menu -->
+		{{-- /sidebar menu --}}
 
-		<!-- /menu footer buttons -->
+		{{-- /menu footer buttons --}}
 		<div class="sidebar-footer hidden-small">
 			<a href="{{ url('dashboard/settings') }}" data-toggle="tooltip" data-placement="top" title="Settings">
 				<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
@@ -87,7 +87,7 @@
 				</span>
 			</a>
 		</div>
-		<!-- /menu footer buttons -->
+		{{-- /menu footer buttons --}}
 	</div>
 </div>
-<!-- /left end here -->
+{{-- /left end here --}}

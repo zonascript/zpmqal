@@ -27,6 +27,19 @@
 </script>
 
 
+{{-- move to top --}}
+<script>
+	function moveToTop(thisObj) {
+		var parent = $(thisObj).closest('.list.list-unstyled');
+		$(parent).prepend(thisObj)
+							.find('.border-green-2px')
+								.removeClass('border-green-2px');
+
+		$(thisObj).find('.x_panel.glowing-border').addClass('border-green-2px');
+	}
+</script>
+{{-- /move to top --}}
+
 
 <script>
 	function refreashFlights(ids) {
@@ -55,8 +68,8 @@
 		var destination = $('input.destination').val();
 		changeTabMenu(rid, origin, destination);
 
-		idObject['flight_'+rid].origin = origin;
-		idObject['flight_'+rid].destination = destination;
+		idObject['flight_'+rid].origin = origin; {{--setting attribute here--}}
+		idObject['flight_'+rid].destination = destination; {{--setting attribute here--}}
 		
 		{{--var arrival = $('input.arrival').val();
 		var adult = $('input.adult').val();
@@ -66,7 +79,7 @@
 		var data = {
 				"_token" : csrf_token,
 				"origin" : origin,
-				"destination" : destination,
+				"destination" : destination
 				{{--"arrival" : arrival,
 				"adult" : adult,
 				"child" : child,
@@ -95,64 +108,72 @@
 	function addToCart(thisObj) {
 		$('#loging_log').show();
 
-		$(thisObj).addClass('btn-danger');
-		$(thisObj).removeClass('btn-primary');
-		$(thisObj).text('Delete');
+		$(thisObj).addClass('btn-danger')
+								.removeClass('btn-primary')
+									.text('Delete');
 
-		var parent = $(thisObj).closest('.tab-pane');
-		$(parent).find('.btn-addtocart.btn-primary').addClass('btn-dark');
-		$(parent).find('.btn-addtocart.btn-primary').removeClass('btn-primary');
+		var parent = $(thisObj).closest('.list.list-unstyled'); {{--parent ul element--}}
+		$(parent).find('.btn-addtocart.btn-primary')
+							 .addClass('btn-dark')
+								 .removeClass('btn-primary');
 		{{-- $('.btn-addtocart.btn-primary').prop('disabled', false); --}}
 
-		var id = $(thisObj).attr('data-id');
-		var did = $(thisObj).attr('data-did');
-		var rid = $(thisObj).attr('data-rid');
-		var vendor = $(thisObj).attr('data-vendor');
-		var elemId = 'flight_'+rid;
+		var rid = $(parent).attr('data-rid'); {{-- route id --}}
+		var ind = $(thisObj).attr('data-ind'); {{-- index --}}
+		var vdr = $(thisObj).attr('data-vdr'); {{-- api vendor --}}
+		var vid = $(thisObj).attr('data-vid'); {{-- api vendor db id --}}
 		var ridObject = getRidObject(rid);
-		var next_did = ridObject.next_did;
 		var next_rid = ridObject.next_rid;
 
 		var data = {
-				"_token" : csrf_token,
-				"did" : did,
-				"index" :id,
-				"next_rid" : next_rid,
-				"vendor" : vendor
+				"rid" : rid,
+				"ind" : ind,
+				"vdr" : vdr,
+				"vid" : vid,
+				"next_rid" : next_rid
 			};
-		
-		postAddtoCartFlight(data);
 
-		$(thisObj).closest('.main-list-item').prependTo("#"+elemId);
+		postAddtoCartFlight(data);
+		moveToTop($(thisObj).closest('.main-list-item'));
 	}
 </script>	
 
 <script>
-	function postAddtoCartFlight(data) {
+	function postAddtoCartFlight(dataObj) {
+
+		var data = {
+				"ind" : dataObj.ind,
+				"vdr" : dataObj.vdr,
+				"vid" : dataObj.vid,
+				"_token" : csrf_token
+			};
+
 		$.ajax({
-			type:"post",
-			url: "{{ urlFlightBook()}}"+data.did,
-			data: data,
+			type	: "post",
+			url 	:	"{{ urlFlightBook() }}"+dataObj.rid,
+			data 	: data,
 			success : function(responce){
 				responce = JSON.parse(responce);
 				if (responce.status == 200) {
-					if (data.next_rid != "NaN") {
+					if (dataObj.next_rid != "NaN") {
 						setTimeout(function () {
-							console.log(isPulled(data.next_rid));
-							if (isPulled(data.next_rid) == 0) {
-								postQpxFlight(data.next_rid);
+							if (isPulled(dataObj.next_rid) == 0) {
+								postQpxFlight(dataObj.next_rid);
 								/*postSsFlight(next_rid);*/
-							}else{
+							}
+							else{
 								$('#loging_log').hide();
 							}
-					  }, 2000)
-					}else{
+					  }, 2000);
+					}
+					else{
 						setTimeout(function () {    
-							document.location.href = "{{ url('/dashboard/package/builder/event/'.$package->id.'/flight') }}";
+							document.location.href = "{{ url('dashboard/package/builder/event/'.$package->token.'/flight') }}";
 					  }, 2000)
 					}
-					$('#a_flight_'+data.next_rid).click();
-				}else{
+					clickNext(dataObj.next_rid);
+				}
+				else{
 					alert('Something went wrong please try again.');
 				}
 			},
@@ -170,7 +191,7 @@
 	function getFlightStack(flight) {
 		var appendHtml = '';
 		var searchWord = '';
-		@include('b2b.protected.dashboard.pages.flights.partials.html')
+		@include('b2b.protected.dashboard.pages.flights.partials.scripts.html')
 		return appendHtml;
 	}
 </script>
@@ -193,6 +214,11 @@
 	}
 </script>
 
+<script>
+	function clickNext(rid) {
+		$('#a_flight_'+rid).click();
+	}
+</script>
 
 @include('b2b.protected.dashboard.pages.flights.partials.scripts.qpx')
 @include('b2b.protected.dashboard.pages.flights.partials.scripts.ss')

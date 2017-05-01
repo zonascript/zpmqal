@@ -15,6 +15,11 @@ class ClientModel extends Model
 		return new ClientModel;
 	}
 
+	public function user()
+	{
+		return $this->belongsTo('App\User', 'user_id');
+	}
+
 	public function packages(){
 		return $this->hasMany('App\Models\B2bApp\PackageModel', 'client_id');
 	}

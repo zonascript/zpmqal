@@ -70,7 +70,7 @@
 		var mode = $('.destinationList').find('.mode.inctv');
 		if (mode.length) {
 			$(mode).addClass('border-red');
-			myAlert('I think you forgot to select mode. it\'s vary easy just click on mode and select.');
+			$.alert('I think you forgot to select mode. it\'s vary easy just click on mode and select.');
 			return false;
 		}
 		else{
@@ -84,7 +84,7 @@
 		var location = $('.destinationList').find('.location.inctv');
 		if (location.length) {
 			$(location).addClass('border-red');
-			myAlert('You forgot to write location.');
+			$.alert('You forgot to write location.');
 			return false;
 		}
 		else{
@@ -98,7 +98,7 @@
 		var nights = $('.destinationList').find('.nights.inctv');
 		if (nights.length) {
 			$(nights).addClass('border-red');
-			myAlert('You forgot to select nights.');
+			$.alert('You forgot to select nights.');
 			return false;
 		}
 		else{
@@ -133,7 +133,7 @@
 			var mode = $(this).find('.mode').val();
 			if (mode == '') {
 				$(this).find('.mode').addClass('border-red');
-				myAlert('I think you forgot to select mode. it\'s vary easy just click on mode and select.');
+				$.alert('I think you forgot to select mode. it\'s vary easy just click on mode and select.');
 				return false;
 			}else{
 				$(this).find('.mode').removeClass('border-red');
@@ -142,12 +142,12 @@
 			var origin = $(this).find('.origin').val();
 			if (origin == '' && mode == 'flight') {
 				$(this).find('.origin').addClass('border-red');
-				myAlert('You forgot to write origin.');
+				$.alert('You forgot to write origin.');
 				return false;
 			}
 			if((mode == 'flight' || mode == 'train' || mode == 'ferry') && origin.indexOf(', ') == -1){
 				$(this).find('.origin').addClass('border-red');
-				myAlert('You forgot to write origin.');
+				$.alert('You forgot to write origin.');
 				return false;
 			}
 			else{
@@ -157,11 +157,11 @@
 			var destination = $(this).find('.destination').val();
 			if (destination == '') {
 				$(this).find('.destination').addClass('border-red');
-				myAlert('You forgot to write destination.');
+				$.alert('You forgot to write destination.');
 				return false;
 			}if(destination.indexOf(', ')  == -1){
 				$(this).find('.destination').addClass('border-red');
-				myAlert('You forgot to write destination.');
+				$.alert('You forgot to write destination.');
 				return false;
 			}else{
 				$(this).find('.destination').removeClass('border-red');
@@ -170,7 +170,7 @@
 			var nights = $(this).find('.nights').val();
 			if (nights == '') {
 				$(this).find('.nights').addClass('border-red');
-				myAlert('You forgot to select nights.');
+				$.alert('You forgot to select nights.');
 				return false;
 			}else{
 				$(this).find('.nights').removeClass('border-red');

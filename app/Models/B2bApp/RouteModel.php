@@ -21,11 +21,11 @@ class RouteModel extends Model
 			'end_datetime',
 			'origin_detail', 
 			'start_datetime', 
-			'location_hotel',
 			'location_viator', 
 			'destination_code',
 			'destination_agoda',
-			'destination_detail'
+			'destination_detail',
+			'package_lock_id'
 		];
 	
 	/**
@@ -40,11 +40,6 @@ class RouteModel extends Model
 	public function setStatusAttribute($value)
 	{
 		$this->attributes['status'] = strtolower($value);
-	}
-
-	public function getLocationHotelAttribute()
-	{
-		return DestinationController::call()->search($this->attributes['destination']);
 	}
 
 	public function getOriginDetailAttribute()
@@ -86,6 +81,7 @@ class RouteModel extends Model
 		}
 		return $originCode;
 	}
+
 
 
 	public function getDestinationCodeAttribute()
@@ -154,6 +150,18 @@ class RouteModel extends Model
 	}
 
 
+
+	public function fusion()
+	{
+		return $this->morphTo();
+	}
+
+	public function fusionCount($fusionId)
+	{
+		return $this->where(['fusion_id' => $fusionId])->count();
+	}
+
+
 	public function package()
 	{
 		return $this->belongsTo('App\Models\B2bApp\PackageModel', 'package_id');
@@ -193,7 +201,6 @@ class RouteModel extends Model
 	{
 		return $this->hasOne('App\Models\B2bApp\PackageActivityModel', 'route_id');
 	}
-
 
 
 	/*

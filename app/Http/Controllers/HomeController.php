@@ -26,6 +26,5 @@ class HomeController extends Controller
         return redirect('dashboard');
         // return view('home');
     }
-
    
 }

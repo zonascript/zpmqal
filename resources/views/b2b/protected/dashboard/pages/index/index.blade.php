@@ -1,6 +1,6 @@
 @extends('b2b.protected.dashboard.main')
 @section('content')
-		<!-- top tiles -->
+		{{-- top tiles --}}
 		<div class="row tile_count">
 			<div class="col-md-3 col-sm-6 col-xs-6 tile_stats_count">
 				<span class="count_top"><i class="fa fa-user"></i> Total Leads</span>
@@ -35,7 +35,7 @@
 				<span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
 			</div> --}}
 		</div>
-		<!-- /top tiles -->
+		{{-- /top tiles --}}
 		<div class="row top_tiles">
 			<div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
 				<div class="row">
@@ -281,11 +281,11 @@
 @endsection
 
 @section('js')
-	<!-- bootstrap-progressbar -->
+	{{-- bootstrap-progressbar --}}
 	<script src="{{ commonAsset('dashboard/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
-	<!-- Chart.js -->
+	{{-- Chart.js --}}
 	<script src="{{ commonAsset('dashboard/vendors/Chart.js/dist/Chart.min.js') }}"></script>
-	<!-- ECharts -->
+	{{-- ECharts --}}
 	<script src="{{ commonAsset('dashboard/vendors/echarts/dist/echarts.min.js') }}"></script>
 	<script src="{{ commonAsset('dashboard/vendors/echarts/map/js/world.js') }}"></script>
 @endsection

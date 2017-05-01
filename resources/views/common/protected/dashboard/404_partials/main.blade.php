@@ -2,14 +2,14 @@
 <html lang="en">
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<!-- Meta, title, CSS, favicons, etc. -->
+	{{-- Meta, title, CSS, favicons, etc. --}}
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>{{ config('app.name', 'Laravel') }} @yield('title') </title>
 
-	<!-- Bootstrap -->
+	{{-- Bootstrap --}}
 	<link href="{{ asset('common/dashboard/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
 	<link href="{{ asset('common/dashboard/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
 	<link href="{{ asset('common/dashboard/vendors/nprogress/nprogress.css') }}" rel="stylesheet">
@@ -31,12 +31,12 @@
 
 	@yield('jquery', '<script src="'.asset('common/dashboard/vendors/jquery/dist/jquery.min.js').'"></script>')
 
-	<!-- FastClick -->
+	{{-- FastClick --}}
 	<script src="{{ asset('common/dashboard/vendors/fastclick/lib/fastclick.js') }}"></script>
 	<script src="{{ asset('common/dashboard/vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 	<script src="{{ asset('common/dashboard/vendors/nprogress/nprogress.js') }}"></script>
 	@yield('js')
-	<!-- Custom Theme Scripts -->
+	{{-- Custom Theme Scripts --}}
 	<script src="{{ asset('common/dashboard/build/js/custom.min.js') }}"></script>
 
 	@yield('scripts')

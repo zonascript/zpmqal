@@ -1,4 +1,4 @@
-<!-- foreach ever destination activity here -->
+{{-- foreach ever destination activity here --}}
 
 @forelse ($activitiesSlices as $activitiesSlice_key => $activitiesSlice)
 <div class="row">
@@ -37,5 +37,5 @@
 <h1>There is no activity</h1>
 @endforelse
 
-<!-- /foreach ever destination activity here -->
+{{-- /foreach ever destination activity here --}}
 

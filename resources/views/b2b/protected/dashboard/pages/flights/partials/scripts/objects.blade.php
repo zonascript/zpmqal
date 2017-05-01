@@ -1,5 +1,3 @@
-
-{{-- making an object which contain some ids --}}
 <?php 
 	$rid =  [];
 	$did =  [];
@@ -8,31 +6,23 @@
 		$objectKey = 'flight_'.$flightRoute->id;
 
 		$idObject[$objectKey] = [
-				'did' => $flightRoute->flight->id,
-				'rid' => $flightRoute->id,
-				'next_did' => 'NaN',
-				'next_rid' => 'NaN',
-				'origin' => $flightRoute->origin,
+				'next_rid' 		=> 'NaN',
+				'elem_id' 		=> $objectKey,
+				'rid' 				=> $flightRoute->id,
+				'origin' 			=> $flightRoute->origin,
 				'destination' => $flightRoute->destination,
 			];
 
-		$nestFlightRouteKey = $flightRouteKey+1;
+		$nextFlightRouteKey = $flightRouteKey+1;
 		
-		if ($nestFlightRouteKey < $package->flightRoutes->count()) {
-
-			$idObject[$objectKey]['next_did'] = $package
-																					->flightRoutes[$nestFlightRouteKey]
-																						->flight->id;
-
+		if ($nextFlightRouteKey < $package->flightRoutes->count()) {
 			$idObject[$objectKey]['next_rid'] = $package
-																					->flightRoutes[$nestFlightRouteKey]->id;
+																					->flightRoutes[$nextFlightRouteKey]->id;
 		}
 
 		$rid[] = $flightRoute->id;
-		$did[] = $flightRoute->flight->id;
 	}
 
-	$idObject['did'] = $did;
 	$idObject['rid'] = $rid;
 	$idObject = rejson_decode($idObject);
 ?>
@@ -40,3 +30,4 @@
 <script>
 	var idObject = {!! json_encode($idObject) !!};
 </script>
+{{-- /making an object which contain some ids --}}
