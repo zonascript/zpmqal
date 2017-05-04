@@ -1,23 +1,24 @@
+<?php
+	$crusiePartisalPath = 'b2b.protected.dashboard.pages.cruises.partials'; 
+	$html = trimHtml(view($crusiePartisalPath.'.scripts.html')->render());
+?>
+
 <script>
+
 	function getRidObject(rid) {
 		return idObject['cruise_'+rid];
 	}
-</script>
 
-<?php 
-	$html = view('b2b.protected.dashboard.pages.cruises.partials.html')->render();
-	$html = trimHtml($html);
-?>
-<script>
+
 	function getCruiseStack(cruise) {
 		var appendHtml = '';
 		var searchWord = '';
 		appendHtml += '{!!$html!!}';
 		return appendHtml;
 	}
-</script>
 
-<script>
+
+
 	function changeChooseBtn(elem) {
 		var isSeleted =  $(elem).attr('data-isseleted');
 		if (isSeleted == 1) {
@@ -39,9 +40,9 @@
 			$('.btn-primary.btn-chooseRoom').removeClass('btn-primary');
 		}
 	}
-</script>
 
-<script>
+
+
 	function changeBookBtn(elem) {
 		var isSeleted =  $(elem).attr('data-isseleted');
 		var parent = $(elem).closest('.tab-content');
@@ -61,9 +62,9 @@
 			$(elem).text('Added');
 		}
 	}
-</script>
 
-<script>
+
+
 	function postAddtoCartCruise(data) {
 		/*Object must be like this 
 		var data = {
@@ -94,7 +95,7 @@
 			}
 		});
 	}
+
 </script>
 
-
-@include('b2b.protected.dashboard.pages.cruises.partials.fgf')
+@include($crusiePartisalPath.'.scripts.fgf')

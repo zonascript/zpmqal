@@ -79,12 +79,12 @@ class HotelsController extends Controller
 	public function postAddHotelRoom($routeId, Request $request)
 	{
 		$route = RouteController::call()->model()->find($routeId);
-		$packageHotelId = $request->hdid;
+		$packageHotelId = $request->fdid;
 		$packageHotel = $this->model()->find($packageHotelId);
 		
 		if (is_null($packageHotel)) {
 			$packageHotel = $this->model();
-			$packageHotel->hotel_code = $request->hid;
+			$packageHotel->hotel_code = $request->fid;
 			$packageHotel->vendor = $request->hvdr;
 			$packageHotel->save();
 			$packageHotelId = $packageHotel->id;
@@ -101,22 +101,11 @@ class HotelsController extends Controller
 		$packageRooms->save();
 
 		return json_encode([
-				"hdid" => $packageHotelId,
+				"fdid" => $packageHotelId,
 				"rmdid" => $packageRooms->id
 			]);
-
 	}
 
-
-	public function postRemoveHotel($rid, Request $request)
-	{
-		$route = RouteController::call()->model()->find($rid);
-		$route->fusion_id = '';
-		$route->fusion_type = '';
-		$route->status = 'active';
-		$route->save();
-		return json_encode(['status' => '200', 'reponse' => 'delete']);
-	}
 
 
 	public function postRemoveHotelRoom($rid, Request $request)
@@ -124,7 +113,7 @@ class HotelsController extends Controller
 		$route = RouteController::call()->model()->find($rid);
 		$count = $route->fusionCount($route->fusion_id);
 		$result = [
-				"hdid" => '',
+				"fdid" => '',
 				"rooms" => [],
 				"status" => 200, 
 				"is_copied" => 0,
@@ -138,7 +127,7 @@ class HotelsController extends Controller
 			$packageHotel->save();
 			$packageHotelId = $packageHotel->id;
 			$result['is_copied'] = 1;
-			$result['hdid'] = $packageHotelId;
+			$result['fdid'] = $packageHotelId;
 			if ($route->fusion->packageRooms->count()) {
 				foreach ($route->fusion->packageRooms as $packageRoom) {
 					if ($packageRoom->id != $request->rmdid) {
@@ -218,13 +207,12 @@ class HotelsController extends Controller
 	public function postHotelRoom(Request $request)
 	{
 		$params = [
-				"id" => $request->hid,
+				"id" => $request->fid,
 				"vendor" => $request->vdr
 			];
 		$rooms = DbHotelsController::call()->hotelRooms($params);
 		return json_encode($rooms);
 	}
-
 
 
 	public function removeHotelRoom($id)
@@ -359,14 +347,14 @@ class HotelsController extends Controller
 
 	public function postFgfAgodaHotelRoomResult($id, Request $request)
 	{
-		$agodaHotelId = $request->hid;
+		$agodaHotelId = $request->fid;
 		$result = AgodaHotelRoomsController::call()->hotelRoom($agodaHotelId);
 		return json_encode($result);
 	}
 
 	public function postFgfAgodaHotelDetail($id, Request $request)
 	{
-		$agodaHotelId = $request->hid;
+		$agodaHotelId = $request->fid;
 		$result = AgodaHotelDetailsController::call()->hotelDetail($agodaHotelId);
 		return $result; 
 	}

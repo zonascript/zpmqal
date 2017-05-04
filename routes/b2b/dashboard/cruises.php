@@ -1,9 +1,19 @@
-<?php 
+<?php
+
 	/* ============================Cruise============================
 	| id = Clients table index or id
 	| packageDbId = packages table index or id
 	|	packageCruiseId = package_cruises table or id
 	*/
+	Route::group(['prefix' => 'dashboard/package/builder/cruises'], function () {
+		$controller = '';
+		Route::get('{token}', 'CruisesController@getCruisesByToken');
+		Route::post('remove/{routeId}', 'CruisesController@postRemoveHotel');
+		Route::post('room/add/{routeId}', 'CruisesController@postAddHotelRoom');
+		Route::post('selected/{routeId}', 'CruisesController@postSelectedHotel');
+		Route::post('room/remove/{routeId}', 'CruisesController@postRemoveHotelRoom');
+	});
+
 	Route::get('dashboard/package/builder/cruises/{packageDbId?}', 'CruisesController@getCruisesByPackageId');
 	// Book Cruise Room
 	Route::post('dashboard/package/builder/cruise/cabin/book/{packageCruiseId}', 'CruisesController@postBookCrusieCabin');

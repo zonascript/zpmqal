@@ -1,32 +1,19 @@
 <?php 
-	$viewPath = 'b2b.protected.dashboard.pages.hotels.partials.html_partials';
-	$hotelHtml = trimHtml(view($viewPath.'.container')->render());
-	$hotelRoomHtml = trimHtml(view($viewPath.'.rooms')->render()); 
+	$accomoHtml = trimHtml(
+									view($viewDir.'.partials.html_partials.container')->render()
+								);
+	$accomoPropHtml = trimHtml(
+											view($viewDir.'.partials.html_partials.props')->render()
+										);
 ?>
 <script>
-		{{-- get rid object --}}
-
+	{{-- get rid object --}}
 	function getRidObject(rid) {
-		return idObject['hotel_'+rid];
+		return idObject['rid_'+rid];
 	}
-
 	{{-- get rid object --}}
 
-
-
-	function showSpinIcon() {
-		$('#fa_home_filter_icon').addClass('hide');
-		$('#fa_spin_filter_icon').removeClass('hide');
-	}
-
-	function hideSpinIcon() {
-		$('#fa_spin_filter_icon').addClass('hide');
-		$('#fa_home_filter_icon').removeClass('hide');
-	}
-
-
 	{{-- show description --}}
-
 	function showDescription(thisObj) {
 		var popupTitle = proper($(thisObj).attr('data-title'));
 		var popupBodyId = $(thisObj).attr('data-bodyid');
@@ -39,15 +26,7 @@
 			columnClass: 'col-md-6 col-md-offset-3'
 		});
 	}
-
 	{{-- show description --}}
-
-
-
-	function clickAtab(thisObj) {
-		var rid = $(thisObj).attr('data-rid');
-		$('#btn_next').attr('data-rid', rid);
-	}
 
 
 	{{-- checkChange --}}
@@ -89,34 +68,38 @@
 			}
 		}
 	}
-
 	{{-- /check Change --}}
 
 
 	{{-- post hotel --}}
-
-	function postHotels(rid) {
+	function postAccomo(rid) {
 		var ridObj 	= getRidObject(rid);
 		var elem_id = ridObj.elem_id;
-
 		$.ajax({
 			type:"post",
-			url: "{{ url('fatch/hotels/result') }}/"+rid,
-			data: { '_token' : csrf_token },
+			url: "{{ urlAccomoApi('fatch') }}/"+rid,
+			data: {'_token' : csrf_token},
 			success: function(response, textStatus, xhr) {
 				var html = '';
 				var response = JSON.parse(response);
-				var hotels = response.hotels;
-
 				$('#loging_log').hide();
-				if (hotels.length) {
-					$.each(hotels, function(i,v){
-						html = makeHotelObject(i, v, rid);
-						$('#'+elem_id).append(html);
-					});
+				var accomos = [];
+
+				if (isset(response, 'hotels') && ridObj.mode == 'hotel') {
+					var accomos = response.hotels;
 				}
+				else if (isset(response, 'cruises') && ridObj.mode == 'cruise') {
+					var accomos = response.cruises;
+				}
+
+				$.each(accomos, function(i,v){
+					html = makeAccomoObject(i, v, rid);
+					$('#'+elem_id).append(html);
+				})
+
 			},
 			error: function(xhr, textStatus) {
+				$('#loging_log').hide();
 				if(xhr.status == 401){
 					window.open("{{ url('login') }}", '_blank');
 				}
@@ -126,37 +109,42 @@
 			}
 		});
 	}
-
 	{{-- post hotel --}}
 
 
 
 	{{-- make hotel object --}}
-
-	function makeHotelObject(i, object, rid) {
+	function makeAccomoObject(i, object, rid) {
 		var code = object.id;
-		var ukey = code+'_'+object.vendor;   {{-- uniqueKye = hotel_id_vendor --}}
+		var ukey = code+'_'+object.vendor;   {{-- uniqueKye = rid_id_vendor --}}
 		var name = proper(object.name);
 		var address = object.address.replace(/, , /g, ', '); 
 		var sortAddress = address.substring(0, 50);
 		var sortDescription = object.description.substring(0, 120);
 		var starRatingHtml = star_Rating(object.star_rating);
 		var ridObj = getRidObject(rid);
-		var hid = ridObj.hid;
-		var hdid = ridObj.hdid;
-		var btnClass = hid == code ? 'btn-danger' : 'btn-primary';
-		var btnName = hid == code ? 'Selected' : 'Rooms';
+		var fid = ridObj.fid;
+		var fdid = ridObj.fdid;
+		var btnClass = 'btn-primary';
+		var btnName = ridObj.mode  == 'hotel' ? 'Rooms' : 'Cabins';
+
+		if (fid == code) {
+			btnClass = 'btn-danger';
+			btnName = 'Selected';
+		}
+
 		var hotel = {
 				"ukey" : ukey,
 				"name" : name,
 				"code" : code,
-				"hdid" : hdid,
-				"btnClass" : btnClass,
-				"btnName" : btnName,
+				"fdid" : fdid,
 				"ridObj" : ridObj,
+				"btnName" : btnName,
 				"address" : address,
-				"vendor" : object.vendor,
+				"btnClass" : btnClass,
+				"propTabName" : btnName,
 				"image" : object.image,
+				"vendor" : object.vendor,
 				"latitude" : object.latitude,
 				"longitude" : object.longitude,
 				"sortAddress" : sortAddress,
@@ -173,51 +161,48 @@
 			return false;
 		}
 		else{
-			return makeHotelHtml(hotel);
+			return makeAccomoHtml(hotel);
 		}
 		{{-- $('#'+ridObj.elem_id).find('.li_'+ukey).remove();   Removing old cart --}}
 	}
-
 	{{-- make hotel object --}}
 
 
 	{{-- make hotel html --}}
-
-	function makeHotelHtml(hotel) {
+	function makeAccomoHtml(accomo) {
 		var appendHtml = '';
 		var searchWord = '';
-		appendHtml += '{!!$hotelHtml!!}';
+		appendHtml += '{!!$accomoHtml!!}';
 		return appendHtml;
 	}
-
 	{{-- make hotel html --}}
 
 
-	{{-- Choose room --}}
-
-	function chooseRoom(thisObj) {
+	{{-- Choose prop --}}
+	function chooseProp(thisObj) {
 		var parent = $(thisObj).closest('.list.list-unstyled');
 		var parentLi = $(thisObj).closest('.main-list-item');
 		$(parent).find('.hotel-detail').addClass('off');
 		$(parentLi).find('.hotel-detail').addClass('on').removeClass('off');
 		$(parent).find('.hotel-detail.off').hide();
 		$(parentLi).find('.hotel-detail').toggle();
-		var hasElem = $(parentLi).find('.btn-bookRoom');
+
+		var hasElem = $(parentLi).find('.btn-bookprop');
 		if (hasElem.length == 0) {
 			$('#loging_log').show();
 			var rid = $(parent).attr('data-rid');
 			var vdr = $(thisObj).attr('data-vdr');
-			var hid = $(thisObj).attr('data-hid');
+			var fid = $(thisObj).attr('data-fid');
 			var data = {
-					"hid" : hid,
-					"vdr" : vdr,
+					"fid" : fid,
 					"rid" : rid,
+					"vdr" : vdr,
 					"_token" : csrf_token
 				};
 
 			$.ajax({
 				type:"post",
-				url: "{{ url('fatch/hotels/rooms/result/') }}",
+				url: "{{ urlAccomoApi('fatch/prop') }}/"+rid,
 				data: data,
 				success: function(response, textStatus, xhr) {
 					response = JSON.parse(response);
@@ -237,82 +222,177 @@
 			});
 		}
 	}
+	{{-- /Choose prop --}}
 
-	{{-- /Choose room --}}
 
 
-	{{-- Book Room --}}
-	function bookRoom(thisObj) {
+	{{-- populate in tab --}}
+	function populateInTab(obj) {
+		var ukey = obj.fid+'_'+obj.vdr+'_'+obj.rid;
+		var ridObj = getRidObject(obj.rid);
+		var props = [];
+		if (ridObj.mode == 'hotel') {
+			invokeMap(ukey);
+			props = obj.rooms;
+		}
+		else if(ridObj.mode == 'cruise'){
+			props = obj.cabins;
+		}
+
+		$.each(props,function(propKey, prop) {
+			prop['fid'] = obj.fid;
+			prop['rid'] = obj.rid;
+			prop['svdr'] = obj.vdr;
+			prop['proptype'] = '';
+
+			if (ridObj.mode == 'hotel') {
+				prop['proptype'] = prop.roomtype;
+			}
+			else if(ridObj.mode == 'cruise'){
+				prop['proptype'] = prop.cabintype;
+			}
+
+			$('#'+ukey+'_props').append(makePropHtml(prop));
+			invokeIcheck('#'+ukey+'_props');
+		});
+
+		$.each(obj.images, function(imagekey, image) {
+			$('#'+ukey+'_gallary').find('.gallery.cf').append(makeGallaryHtml(image));
+		});
+	}
+	{{-- /populate in tab --}}
+
+
+	{{-- make prop html --}}
+	function makePropHtml(obj) {
+		var rmdid = '';
+		var btnClass = 'btn-primary';
+		var btnName = 'Add';
+		var propId = obj.id;
+		var propType = obj.proptype;
+		var propImage = obj.image;
+		var propVdr = obj.vdr;
+		var ridObj = getRidObject(obj.rid);
+		var selectedProps = ridObj.props;
+		var mode = ridObj.mode;
+		var checkExits = (
+											ridObj.fid == obj.fid && 
+											isset(selectedProps, propId) && 
+											selectedProps[propId].vdr == obj.vdr
+										);
+		if (checkExits) {
+			rmdid = selectedProps[propId].id;
+			btnClass = 'btn-danger';
+			btnName = 'Remove';
+		}
+
+		return '{!! $accomoPropHtml !!}';
+	}
+	{{-- /make prop html --}}
+
+
+	{{-- make gallary html --}}
+	function makeGallaryHtml(obj) {
+		return '<div class="height-160px width-48-p"><img class="width-100-p height-100p" src="'+obj+'" /></div>'
+	}
+	{{-- /make gallary html --}}
+
+
+	{{-- invoke map --}}
+	function invokeMap(ukey) {
+		var src = $('#'+ukey+'_map').attr('data-src');
+		$('#'+ukey+'_map').html('<div class="m-top-5"><iframe width="100%" height="360" src="'+src+'" ></iframe></div>');
+	}
+	{{-- /invoke map --}}
+
+
+	{{-- Book prop --}}
+	function bookProp(thisObj) {
 		var parent = $(thisObj).closest('.hotel-detail');
 		var parentLi = $(thisObj).closest('.main-list-item');
 		var parentUl = $(thisObj).closest('.list.list-unstyled');
 
-		$(parentUl).find('.btn-chooseRoom').addClass('off').removeClass('on');
+		$(parentUl).find('.btn-chooseProp').addClass('off').removeClass('on');
 		
 		if ($(thisObj).hasClass("btn-primary")) {
 			$(thisObj).addClass('btn-danger')
 									.text('Remove')
 										.removeClass('btn-primary');
-			addRoom(thisObj);
+			addProp(thisObj);
 		}
 		else if ($(thisObj).hasClass("btn-danger")) {
 			$(thisObj).addClass('btn-primary')
 									.text('Add')
 										.removeClass('btn-danger');
-			removeRoom(thisObj);
+			removeProp(thisObj);
 		}
 
 		var selected = $(parent).find('.btn-danger');
 		if (selected.length > 0) {
-			$(parentLi).find('.btn-chooseRoom')
+			$(parentLi).find('.btn-chooseProp')
 										.addClass('on btn-danger')
 											.text('Selected')
 												.removeClass('off btn-primary');
 
-			$(parentUl).find('.btn-chooseRoom.off')
+			$(parentUl).find('.btn-chooseProp.off')
 										.addClass('btn-dark')
-											.prop('disabled', true)
+											.Prop('disabled', true)
 												.removeClass('btn-primary');
 		}
 		else{
-			$(parentUl).find('.btn-chooseRoom')
+			$(parentUl).find('.btn-chooseProp')
 										.addClass('btn-primary')
-											.text('Rooms')
+											.text('props')
 												.removeClass('btn-dark')
 													.removeClass('btn-danger')
-														.prop('disabled', false);
+														.Prop('disabled', false);
 			removeHotel(thisObj);
 		}
 	}
-	{{-- /Book Room --}}
+	{{-- /Book prop --}}
 
 
 
-	function addRoom(thisObj) {
+	function addProp(thisObj) {
 		var parentLi = $(thisObj).closest('.main-list-item');
 		var rid = $(parentLi).closest('.list.list-unstyled').attr('data-rid');
-		var chooseRoom = $(parentLi).find('.btn-chooseRoom');
-		var hid = $(chooseRoom).attr('data-hid');
-		var hvdr = $(chooseRoom).attr('data-vdr');
-		var hdid = $(chooseRoom).attr('data-hdid');
+		var chooseProp = $(parentLi).find('.btn-chooseProp');
+		var fid = $(chooseProp).attr('data-fid');
+		var fvdr = $(chooseProp).attr('data-vdr');
+		var fdid = $(chooseProp).attr('data-fdid');
 		var rmid = $(thisObj).attr('data-rmid');
 		var rmvdr = $(thisObj).attr('data-vdr');
+		var propContainer = $(thisObj).closest('.prop-container');
+		var pickUpVal = $(propContainer).find('.h-pick-up').val();
+		var dropOffVal = $(propContainer).find('.h-drop-off').val();
+		var pickUpSelect = $(propContainer).find('.h-pick-up').data('selected');
+		var dropOffSelect = $(propContainer).find('.h-drop-off').data('selected');
+		var lunch = $(propContainer).find('.meal.lunch.selected').data('meal');
+		var dinner = $(propContainer).find('.meal.dinner.selected').data('meal');
+		var breakfast = $(propContainer).find('.meal.breakfast.selected').data('meal');
+
 		var data = {
-					"hid" : hid,
-					"hdid" : hdid,
-					"hvdr" : hvdr,
+					"fid" : fid,
+					"fdid" : fdid,
+					"fvdr" : fvdr,
 					"rmid" : rmid,
 					"rmvdr" : rmvdr,
+					"pu" : pickUpVal, {{-- pick_up --}}
+					"pus" : pickUpSelect, {{-- pick_up_selected --}}
+					"do" : dropOffVal, {{-- drop_off --}}
+					"dos" : dropOffSelect, {{-- drop_off_selected --}}
+					"breakfast" : breakfast,
+					"lunch" : lunch,
 					"_token" : csrf_token
 				};
 
 		$.ajax({
 			type:"post",
-			url: "{{ urlHotelsBuilder('room/add') }}/"+rid,
+			url: "{{ urlAccomoBuilder('prop/add') }}/"+rid,
 			data: data,
 			success: function(response, textStatus, xhr) {
 				response = JSON.parse(response);
-				$(chooseRoom).attr('data-hdid', response.hdid);
+				$(chooseProp).attr('data-fdid', response.fdid);
 				$(thisObj).attr('data-rmdid', response.rmdid);
 			},
 			error: function(xhr, textStatus) {
@@ -329,11 +409,12 @@
 
 
 
-	function removeRoom(thisObj) {
+	function removeProp(thisObj) {
 		var parentLi = $(thisObj).closest('.main-list-item');
-		var chooseRoom = $(parentLi).find('.btn-chooseRoom');
+		var chooseProp = $(parentLi).find('.btn-chooseProp');
 		var rmdid = $(thisObj).attr('data-rmdid');
 		var rid = $(thisObj).closest('.list.list-unstyled').attr('data-rid');
+		var ridObj =  getRidObject(rid);
 		var data = {
 					"rmdid" : rmdid,
 					"_token" : csrf_token
@@ -341,15 +422,21 @@
 
 		$.ajax({
 			type:"post",
-			url: "{{ urlHotelsBuilder('room/remove') }}/"+rid,
+			url: "{{ urlAccomoBuilder('prop/remove') }}/"+rid,
 			data: data,
 			success: function(response, textStatus, xhr) {
 				response = JSON.parse(response);
 				if (response.is_copied == 1) {
-					$(chooseRoom).attr('data-hdid', response.hdid);
-					$.each(response.rooms, function(i,v) {
-						$(parentLi).find("[data-rmdid='" + i + "']").attr('data-rmdid', v);
-					});
+					$(chooseProp).attr('data-fdid', response.fdid);
+					if (ridObj.mode == 'hotel') {
+						$.each(response.rooms, function(i,v) {
+							$(parentLi).find("[data-rmdid='" + i + "']").attr('data-rmdid', v);
+						});
+					}else if (ridObj.mode == 'cruise') {
+						$.each(response.cabins, function(i,v) {
+							$(parentLi).find("[data-rmdid='" + i + "']").attr('data-rmdid', v);
+						});
+					}
 				}
 				$(thisObj).attr('data-rmdid','');
 			},
@@ -370,20 +457,20 @@
 	function removeHotel(thisObj) {
 		var parentUl = $(thisObj).closest('.list.list-unstyled');
 		var parentLi = $(thisObj).closest('.main-list-item');
-		var chooseRoom = $(parentLi).find('.btn-chooseRoom');
-		var hdid = $(chooseRoom).attr('data-hdid');
+		var chooseProp = $(parentLi).find('.btn-chooseProp');
+		var fdid = $(chooseProp).attr('data-fdid');
 		var rid = $(parentUl).attr('data-rid');
 		var data = {
-					"hdid" : hdid,
+					"fdid" : fdid,
 					"_token" : csrf_token
 				};
 
 		$.ajax({
 			type:"post",
-			url: "{{ urlHotelsBuilder('remove') }}/"+rid,
+			url: "{{ urlAccomoBuilder('remove') }}/"+rid,
 			data: data,
 			success: function(response, textStatus, xhr) {
-				$(chooseRoom).attr('data-hdid','');
+				$(chooseProp).attr('data-fdid','');
 			},
 			error: function(xhr, textStatus) {
 				if(xhr.status == 401){
@@ -399,7 +486,6 @@
 
 
 	{{-- move to top --}}
-
 	function moveToTop(thisObj) {
 		var parent = $(thisObj).closest('.list.list-unstyled');
 		$(parent).prepend(thisObj)
@@ -408,90 +494,33 @@
 
 		$(thisObj).find('.x_panel.glowing-border').addClass('border-green-2px');
 	}
-
 	{{-- /move to top --}}
 
 
-	{{-- populate in tab --}}
-
-	function populateInTab(obj) {
-		var ukey = obj.hid+'_'+obj.vdr+'_'+obj.rid;
-
-		$.each(obj.rooms,function(roomKey, room) {
-			room['hid'] = obj.hid;
-			room['svdr'] = obj.vdr;
-			room['rid'] = obj.rid;
-			$('#'+ukey+'_rooms').append(makeRoomHtml(room));
-			invokeIcheck('#'+ukey+'_rooms');
-		});
-
-		$.each(obj.images, function(imagekey, image) {
-			$('#'+ukey+'_gallary').find('.gallery.cf').append(makeGallaryHtml(image));
-		});
-
-		invokeMap(ukey);
-	}
-
-	{{-- /populate in tab --}}
-
-
-
-	function nextHotelEvent(thisObj) {
+	{{-- find next event --}}
+	function nextAccomoEvent(thisObj) {
 		$('#loging_log').show();
 		rid = $(thisObj).attr('data-rid');
-		ridObj = getRidObject(rid);
-		if (ridObj.next_rid == "NaN") {
+		ridObj = getRidObject(idObject.crid);
+		if (ridObj.nrid == "NaN") {
 			setTimeout(function () {    
-				document.location.href = "{{url('dashboard/package/builder/event/'.$package->token.'/hotel')}}";
+				document.location.href = "{{url('dashboard/package/builder/event/'.$package->token.'/accommodation')}}";
 			}, 5000);
 		}
 		else{
-			aObject =  $('#a_hotel_'+ridObj.next_rid);
-			$(aObject).click();
-			clickAtab(aObject);
+			clickAtab(ridObj.nrid);
 			$('#loging_log').hide();
 		}
 	}
+	{{-- /find next event --}}
 
-
-
-
-	{{-- make room html --}}
-	function makeRoomHtml(obj) {
-		ridObj = getRidObject(obj.rid);
-		var rmdid = '';
-		var btnClass = 'btn-primary';
-		var btnName = 'Add';
-		var roomId = obj.id;
-		var roomVdr = obj.vdr;
-		var roomType = obj.roomtype;
-		var roomImage = obj.image;
-		var selectedRooms = ridObj.rooms;
-		if (ridObj.hid == obj.hid && isset(selectedRooms, roomId)) {
-			rmdid = selectedRooms[roomId];
-			btnClass = 'btn-danger';
-			btnName = 'Remove';
-		}
-		return '{!! $hotelRoomHtml !!}';
+	function clickAtab(rid) {
+		$('#a_rid_'+rid).click();
 	}
-	{{-- /make room html --}}
 
-
-	{{-- make gallary html --}}
-	function makeGallaryHtml(obj) {
-		return '<div class="height-160px width-48-p"><img class="width-100-p height-100p" src="'+obj+'" /></div>'
+	function setCrid(rid) {
+		idObject.crid = rid;
 	}
-	{{-- /make gallary html --}}
-
-
-	{{-- invoke map --}}
-	function invokeMap(ukey) {
-		var src = $('#'+ukey+'_map').attr('data-src');
-		$('#'+ukey+'_map').html('<div class="m-top-5"><iframe width="100%" height="360" src="'+src+'" ></iframe></div>');
-	}
-	{{-- /invoke map --}}
-
-
 
 	function postSearchHotel() {
 		hideSpinIcon();
@@ -555,12 +584,12 @@
 
 		$.ajax({
 			type:"post",
-			url: "{{ url('dashboard/package/builder/hotel/room/book/') }}/"+data.rid,
+			url: "{{ url('dashboard/package/builder/hotel/prop/book/') }}/"+data.rid,
 			data: data,
 			success : function(response){
 				response = JSON.parse(response);
 				if (response.status == 200) {
-					$('#a_hotel_'+data.next_rid).click();
+					$('#a_rid_'+data.nrid).click();
 					$(window).scrollTop(0);
 				}else{
 					alert('Something went wrong please try again.');

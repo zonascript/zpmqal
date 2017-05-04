@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models\Api;
+namespace App\Models\CruiseApp;
 
 use Illuminate\Database\Eloquent\Model;
 
 class CruiseDateModel extends Model
 {
-	protected $connection = 'mysql2';
+	protected $connection = 'mysql5';
 	protected $table = 'cruise_dates';
 	
 }

@@ -1,7 +1,6 @@
-@include('b2b.protected.dashboard.pages.cruises.partials.js_objects')
-
-{{-- bootstrap-daterangepicker --}}
+@include('b2b.protected.dashboard.pages.cruises.partials.scripts.objects')
 <script>
+	{{-- bootstrap-daterangepicker --}}
 	$(document).ready(function() {
 		$('.datepicker').daterangepicker({
 			singleDatePicker: true,
@@ -18,11 +17,11 @@
 
 		// console.log(isset([{"a":"a"}, {"a":"a"}], 2));
 	});
-</script>
-{{-- /bootstrap-daterangepicker --}}
 
-{{-- filter List.js--}}
-<script>
+	{{-- /bootstrap-daterangepicker --}}
+
+	{{-- filter List.js--}}
+
 	var filter = {
 		@foreach ($package->cruiseRoutes as $cruiseRouteKey => $cruiseRoute)
 			'cruise_{{ $cruiseRoute->id }}' : '',
@@ -39,9 +38,9 @@
 		}
 	}
 	
-</script>
 
-<script>
+
+
 	$(document).on('keypress keyup keydown paste', "#filter_search", function(){
 		var targetList = $('#tab_menu').find('.active').attr('data-list');
 		// console.log(targetList);
@@ -53,10 +52,10 @@
 		@endforeach
 	});
 
-</script>
-{{-- /filter List.js --}}
 
-<script>
+	{{-- /filter List.js --}}
+
+
 	$(document).on('ifChanged', 'input', function() {
 		var type = $(this).attr('data-type');
 		var isChecked = $(this).is(':checked');
@@ -86,22 +85,22 @@
 			}
 		}
 	});
-</script>
 
-{{-- Choose Room --}}
-<script>
+
+	{{-- Choose Room --}}
+
 	$(document).on('click','.btn-chooseRoom', function(){
 		var parent = $(this).closest('.main-li');
 		$(parent).find('.toggle-detail').toggle();
 		changeChooseBtn(this);
 	});
-</script>
-{{-- /Choose Room --}}
+
+	{{-- /Choose Room --}}
 
 
 
-{{-- Book hotel --}}
-<script>
+	{{-- Book hotel --}}
+
 	$(document).on('click', '.btn-book-cabin', function(){
 		$('#loging_log').show();
 		changeBookBtn(this);
@@ -125,10 +124,10 @@
 			"cbid" : cabinId,
 			"vdr" : vdr,
 			"did" : did,
-			"pu" : pickUpVal, {{-- pick_up --}}
-			"pus" : pickUpSelect, {{-- pick_up_selected --}}
-			"do" : dropOffVal, {{-- drop_off --}}
-			"dos" : dropOffSelect, {{-- drop_off_selected --}}
+			"pu" : pickUpVal, 	{{-- pick_up --}}
+			"pus" : pickUpSelect, 	{{-- pick_up_selected --}}
+			"do" : dropOffVal, 	{{-- drop_off --}}
+			"dos" : dropOffSelect, 	{{-- drop_off_selected --}}
 			"next_rid" : next_rid,
 		}
 
@@ -148,10 +147,8 @@
 				document.location.href = "{{ url('/dashboard/package/builder/event/'.$package->id.'/cruise') }}";
 		  }, 3000)
 		}
-
 	});
+	{{-- /Book hotel --}}
+
 </script>
-{{-- /Book hotel --}}
-
-
-@include('b2b.protected.dashboard.pages.cruises.partials.js_function')
+@include('b2b.protected.dashboard.pages.cruises.partials.scripts.function')

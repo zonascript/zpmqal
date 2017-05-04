@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\CruiseApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 // ====================================Models====================================
-use App\Models\Api\CruisePriceModel;
+use App\Models\CruiseApp\CruisePriceModel;
 
 class CruisePriceController extends Controller
 {
@@ -20,14 +20,5 @@ class CruisePriceController extends Controller
 		return new CruisePriceModel;
 	}
 
-	public function cruise($params)
-	{
-		return $this->model()->pullCruise($params);
-	}
-
-	public function cruiseCabin($params)
-	{
-		return $this->model()->pullCruiseCabin($params);
-	}
 
 }

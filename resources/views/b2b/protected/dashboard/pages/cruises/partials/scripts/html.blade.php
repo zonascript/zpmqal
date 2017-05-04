@@ -48,7 +48,7 @@
 								</li>
 							</ul>
 							<div id="main_cruiseDetail_'+cruise.id+'" class="tab-content main-hotelDetail scroll-bar clearfix">
-								@include('b2b.protected.dashboard.pages.cruises.partials.cabins')
+								@include('b2b.protected.dashboard.pages.cruises.partials.scripts.cabins')
 							</div>
 						</div>
 					</div>

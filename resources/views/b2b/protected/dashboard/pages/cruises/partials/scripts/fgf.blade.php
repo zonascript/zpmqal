@@ -116,7 +116,7 @@
 </script>
 
 <?php
-	$cabinsHtml = view('b2b.protected.dashboard.pages.cruises.partials.cabin_partials.cabin')->render();
+	$cabinsHtml = view('b2b.protected.dashboard.pages.cruises.partials.scripts.cabin_partials.cabin')->render();
 	$cabinsHtml = trimHtml($cabinsHtml);
 ?>
 

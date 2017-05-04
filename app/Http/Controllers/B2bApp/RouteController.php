@@ -184,18 +184,20 @@ class RouteController extends Controller
 
 	public function findByPackageid($packageDbId)
 	{
-		return RouteModel::select()->where(["package_id" => $packageDbId])->get();
+		return RouteModel::where(["package_id" => $packageDbId])->get();
 	}
 
 
-	/*
-	| this functio is to find route with with package 
-	*/
-	public function find($id)
+
+	public function postRemoveFusion($id)
 	{
-		return RouteModel::with('package')->find($id);
+		$route = $this->model()->find($id);
+		$route->fusion_id = '';
+		$route->fusion_type = '';
+		$route->status = 'active';
+		$route->save();
+		return json_encode(['status' => '200', 'reponse' => 'delete']);
 	}
-
 
 	/*
 	| if there is no action on route the run this function 

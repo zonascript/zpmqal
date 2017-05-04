@@ -9,9 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\B2bApp\RouteController;
 
-// =================================Api Controller=================================
-use App\Http\Controllers\Api\CruiseController;
-use App\Http\Controllers\Api\DestinationController;
+// ================================B2bApp Controller===============================
+use App\Http\Controllers\CruiseApp\CruiseOnlyDatesController;
 
 // =====================================Model======================================
 use App\Models\B2bApp\PackageCruiseModel;
@@ -25,8 +24,9 @@ class CruisesController extends Controller
 
 	public static function call()
 	{
-		return new cruisesController;
+		return new CruisesController;
 	}
+
 
 	public function model()
 	{
@@ -34,94 +34,17 @@ class CruisesController extends Controller
 	}
 
 
-	public function findByRouteId($routeId, $colunm = '*')
-	{
-		return PackageCruiseModel::select($colunm)
-															->where(['route_id' => $routeId])
-																->first();
-	}
-
-
-	public function createNew($object)
-	{
-		/*$packageCruise = $this->isExist($object->route_id);
-		
-		if (is_null($packageCruise)) {
-			$packageCruise = new PackageCruiseModel;
-		}*/
-
-		// $packageCruise->route_id = $object->route_id; // removed bcoz route_package_modes
-		
-		$packageCruise = new PackageCruiseModel;
-		$packageCruise->status = "active";
-		$packageCruise->save();
-
-		return $packageCruise->id;
-	}
-
-
-	public function createNewByRoute($routeDbId)
-	{
-
-		$route = RouteController::call()->find($routeDbId);
-		$package = PackageController::call()->find($route->package_id);
-
-		$events = json_decode($route->events);
-
-		$destination = $route->destination;
-		$destination = explode(' | ', $route->destination);
-		$destination = 	ifset($destination[1], $destination[0]);
-
-		// dd_pre_echo($destination);
-		$destinationArray = DestinationController::call()->search($destination);
-		// echo $destinationArray;
-		// dd_pre_echo($destinationArray);
-		$city_id = isset($destinationArray->id) ? $destinationArray->id : $destination;
-
-		$newcruiseDetail = (object)[
-				'package_id' => $route->package_id, 
-				'route_id' => $routeDbId, 
-				'city_id' => $city_id, 
-				'check_in_date' => $events->cruise->startDate, 
-				'nights' => $route->nights, 
-				'room_guests' => $package->guests_detail, 
-				'location' => json_encode($destinationArray)
-			];
-
-		return $this->createNew($newcruiseDetail);
-
-	}
-
-
-	/*
-	| this function for checking route already exist 
-	| or not behalf of route table id because one route 
-	| can contain only one row in db
-	*/
-	public function isExist($routeDbId)
-	{
-		$packageCruise = PackageCruiseModel::select()
-											->where([
-													"route_id" => $routeDbId,
-													])
-												->first();
-
-		return $packageCruise;
-	}
-
-
-
 	/*
 	| this function is to get view on the browser using get request
 	*/
-	public function getCruisesByPackageId($packageDbId)
+	public function getCruisesByToken($token)
 	{
-		$package = PackageController::call()->model()->usersFind($packageDbId);
+		$package = PackageController::call()->model()->findByTokenOrExit($token);
 		$blade = [
 				'package' => $package,
 				'client' => $package->client,
 			];
-		return view('b2b.protected.dashboard.pages.cruises.index', $blade);
+		return trimHtml(view('b2b.protected.dashboard.pages.cruises.index', $blade)->render());
 	}
 
 
@@ -129,123 +52,36 @@ class CruisesController extends Controller
 	| this function is to pull data from tbtq api using TbtqHotelApiController
 	| and it can be call using http post request
 	*/
-	public function postFgfOnlyCruise($id)
+	public function postOnlyCruise($rid)
 	{
-		$packageCruise = PackageCruiseModel::find($id);
+		$route = RouteController::call()->model()->find($rid);
 		$params = [
-				'nights' =>  $packageCruise->route->nights,
-				'date' => $packageCruise->route->start_date, 
-				'cityId' =>  $packageCruise->route->destination_detail->fgf_destinationcode, 
+				'nights' => $route->nights,
+				'date'	 => $route->start_date, 
+				'cityId' => $route->destination_detail->id, 
 			];
 
-		$result = CruiseController::call()->cruises($params);
-
+		$result = CruiseOnlyDatesController::call()
+							->model()->cruiseFormatted($params);
+		// dd(json_decode(json_encode($result)));
 		return json_encode(['cruises' => $result]);
 	}
 
 
-	/*
-	| this function for book cabin mean save id or index
-	*/
-	public function postBookCrusieCabin($packageCruiseId, Request $request)
+	public function postCruiseCabin(Request $request)
 	{
-		$packageCruise = PackageCruiseModel::find($packageCruiseId);
-		$packageCruise->cruise_cabin_id = $request->cbid;
-		$packageCruise->selected_cruise_vendor = $request->vdr;
-		$packageCruise->status = 'complete';
-		$packageCruise->route->pick_up = $request->pu;
-		$packageCruise->route->is_pick_up = $request->pus;
-		$packageCruise->route->drop_off = $request->do;
-		$packageCruise->route->is_drop_off = $request->dos;
-		$packageCruise->route->status = 'complete';
-		$packageCruise->route->save();
-		$packageCruise->save();
-		return json_encode(['status' => 200, 'response' => 'done']);
-	}
-
-
-
-	/*
-	| this function is to pull data from tbtq api using TbtqHotelApiController
-	| and it can be call using http post request
-	*/
-	public function postFgfCruiseResult($id)
-	{
-		// return file_get_contents(public_path('faker\fgfcruise.json'));
-
-		$packageCruise = PackageCruiseModel::find($id);
-		$adultCount = isset($packageCruise->route->package->pax_detail->adult)
-								? $packageCruise->route->package->pax_detail->adult
-								: 0;
-
 		$params = [
-				"checkInDate" => $packageCruise->route->start_datetime->date,
-				"city_id" => $packageCruise->route->destination_detail->fgf_destinationcode,
-				"nights" => $packageCruise->route->nights,
-				"adultCount" => $adultCount,
-				"childAge" => [], 
-				"minRating" => 1,
-				"maxRating" => 5,
-				"PreferredCurrency" => "INR",
+				"id" => $request->fid,
+				"vendor" => $request->vdr
 			];
-
-		if (!is_null($params)) {
-			$result = CruiseController::call()->cruise($params);
+		
+		if ($request->vdr == 'f') {
+			$cabins = CruiseOnlyDatesController::call()
+							->model()->cruiseCabinsWithImages($request->fid);
 		}
-
-		if (isset($result->db->id)) {
-			$packageCruise->fgf_temp_cruise_id = $result->db->id;
-			$packageCruise->save();
-		}
-		return json_encode($result);
+		return json_encode($cabins);
 	}
 
-
-	/*
-	| this function is to pull data from tbtq api using TbtqHotelApiController
-	| and it can be call using http post request
-	*/
-	public function postFgfCruiseCabin($id)
-	{
-		// return file_get_contents(public_path('faker\fgfcruise.json'));
-		$index = 0;
-		$packageCruise = PackageCruiseModel::find($id);
-
-		$resultIndex = $packageCruise->fgfTempCruise
-									->result->cruises[$index]->resultIndex;
-
-		$adultCount = isset($packageCruise->route->package->pax_detail->adult)
-								? $packageCruise->route->package->pax_detail->adult
-								: 0;
-
-		$params = [
-				"resultIndex" => $resultIndex,
-				"checkInDate" => $packageCruise->route->start_datetime->date,
-				"nights" => $packageCruise->route->nights,
-				"adultCount" => $adultCount,
-				"childAge" => [], 
-				"minRating" => 1,
-				"maxRating" => 5,
-			];
-
-		$result = CruiseController::call()->cruiseCabin($params);
-
-		if (isset($result->db->id)) {
-			$packageCruise->fgfTempCruise->temp_selected_index = $index;
-			$packageCruise->fgfTempCruise->fgf_temp_cruise_detail_id = $result->db->id;
-			$packageCruise->fgfTempCruise->save();
-			$packageCruise->save();
-		}
-		return json_encode($result);
-	}
-	
-
-
-	public function deleteByRoute($routeDbId)
-	{
-		PackageCruiseModel::where('route_id', $routeDbId)->update(["status" => "Inactive"]);
-		return true;
-	}
 
 	public function itinerary()
 	{
@@ -255,28 +91,78 @@ class CruisesController extends Controller
 	}
 
 
-	public function cruiseDays($cruiseDay = 0)
+	public function postAddCruiseCabin($routeId, Request $request)
 	{
-		if ($cruiseDay == 1) {
-			$itinerary = 'Transfer to the cruise arrive at the cruise after check in enjoy the moment of cruise feel the wind of the ocean see the deep sea and the blue water.'; 
-		}elseif ($cruiseDay == 2) {
-			$itinerary = 'Transfer to the cruise arrive at the cruise after check in enjoy the moment of cruise feel the wind of the ocean see the deep sea and the blue water.'; 
-		}elseif ($cruiseDay == 3) {
-			$itinerary = 'Transfer to the cruise arrive at the cruise after check in enjoy the moment of cruise feel the wind of the ocean see the deep sea and the blue water.'; 
-		}elseif ($cruiseDay == 4) {
-			$itinerary = 'Transfer to the cruise arrive at the cruise after check in enjoy the moment of cruise feel the wind of the ocean see the deep sea and the blue water.'; 
-		}elseif ($cruiseDay == 5) {
-			$itinerary = 'Transfer to the cruise arrive at the cruise after check in enjoy the moment of cruise feel the wind of the ocean see the deep sea and the blue water.'; 
-		}elseif ($cruiseDay == 6) {
-			$itinerary = 'Transfer to the cruise arrive at the cruise after check in enjoy the moment of cruise feel the wind of the ocean see the deep sea and the blue water.'; 
-		}elseif ($cruiseDay == 7) {
-			$itinerary = 'Transfer to the cruise arrive at the cruise after check in enjoy the moment of cruise feel the wind of the ocean see the deep sea and the blue water.'; 
-		}else{
-			$itinerary = 'Transfer to the cruise arrive at the cruise after check in enjoy the moment of cruise feel the wind of the ocean see the deep sea and the blue water.'; 
+		$route = RouteController::call()->model()->find($routeId);
+		$packageCruiseId = $request->fdid;
+		$packageCruise = $this->model()->find($packageCruiseId);
+		
+		if (is_null($packageCruise)) {
+			$packageCruise = $this->model();
+			$packageCruise->cruise_code = $request->fid;
+			$packageCruise->vendor = $request->hvdr;
+			$packageCruise->save();
+			$packageCruiseId = $packageCruise->id;
+			$route->fusion_id = $packageCruiseId;
+			$route->fusion_type = 'App\\Models\\B2bApp\\PackageCruiseModel';
+			$route->status = 'complete';
+			$route->save();
 		}
 
-		return $itinerary;
-		
+		$packageRooms = $packageCruise->cabinModel();
+		$packageRooms->package_cruise_id = $packageCruise->id;
+		$packageRooms->cabintype_code = $request->rmid;
+		$packageRooms->vendor = $request->rmvdr;
+		$packageRooms->save();
+
+		return json_encode([
+				"fdid" => $packageCruiseId,
+				"rmdid" => $packageRooms->id
+			]);
 	}
 
+
+	public function postRemoveCruiseCabin($rid, Request $request)
+	{
+		$route = RouteController::call()->model()->find($rid);
+		$count = $route->fusionCount($route->fusion_id);
+		$result = [
+				"fdid" => '',
+				"cabins" => [],
+				"status" => 200, 
+				"is_copied" => 0,
+				"reponse" => "delete",
+			];
+
+		if ($count > 1) {
+			$packageCrusie = $this->model();
+			$packageCrusie->hotel_code = $route->fusion->hotel_code;
+			$packageCrusie->vendor = $route->fusion->vendor;
+			$packageCrusie->save();
+			$packageCrusieId = $packageCrusie->id;
+			$result['is_copied'] = 1;
+			$result['fdid'] = $packageCrusieId;
+			if ($route->fusion->packageRooms->count()) {
+				foreach ($route->fusion->packageRooms as $packageRoom) {
+					if ($packageRoom->id != $request->rmdid) {
+						$packageCrusieRoom = $this->model()->cabinModel();
+						$packageCrusieRoom->package_cruise_id = $packageCrusieId;
+						$packageCrusieRoom->cabintype_code = $packageRoom->roomtype_code;
+						$packageCrusieRoom->vendor = $packageRoom->vendor;
+						$packageCrusieRoom->save();
+						$result['cabins'][$packageRoom->id] = $packageCrusieRoom->id;
+					}
+				}
+			}
+			$route->fusion_id = $packageCrusie->id;
+			$route->fusion_type = 'App\\Models\\B2bApp\\PackageCrusieModel';
+			$route->status = 'complete';
+			$route->save();
+		}
+		else {
+			$this->model()->cabinModel()->destroy($request->rmdid);
+		}
+
+		return json_encode($result);
+	}
 }

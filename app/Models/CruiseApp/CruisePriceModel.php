@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models\Api;
+namespace App\Models\CruiseApp;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
 class CruisePriceModel extends Model
 {
-	protected $connection = 'mysql2';
+	protected $connection = 'mysql5';
 	protected $table = 'cruise_prices';
 	
 	public static function call()

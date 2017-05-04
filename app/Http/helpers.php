@@ -1021,13 +1021,20 @@ function urlSavePackageCost($id = 0, $packageDbId = 0){
 }
 
 
-/*=====================Hotel Url=====================*/
-function urlAllHotelsBuilder($packageDbId = 0){
-	$url = url('dashboard/package/builder/hotels/'.$packageDbId);
-	$url = str_replace('//', '/', $url);
-	return $url;
+
+/*=====================Accommodation Url=====================*/
+function urlAccomoBuilder($slug = ''){
+	return url('dashboard/package/builder/accommodation/'.$slug);
 }
 
+function urlAccomoApi($slug = ''){
+	return url('api/package/accommodation/'.$slug);
+}
+
+/*=====================Hotel Url=====================*/
+function urlAllHotelsBuilder($packageDbId = 0){
+	return url('dashboard/package/builder/hotels/'.$packageDbId);
+}
 
 function urlHotelsBuilder($slug = ''){
 	return url('dashboard/package/builder/hotels/'.$slug);

@@ -684,6 +684,11 @@ body {font-family:Helvetica,Arial,sans-serif;}
 
 .noborder{ border-bottom: 0px ! important; }
 
+.tab-content-box{ 
+	min-height: 75vh;
+	background-color: #ffffff ! important; 
+	border: 10px solid #2a3f54;
+}
 
 #exTab1 .tab-content {
 	color : #333333;
