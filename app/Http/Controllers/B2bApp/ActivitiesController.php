@@ -78,11 +78,11 @@ class ActivitiesController extends Controller
 	*/
 	public function isExist($routeDbId)
 	{
-		$packageActivity = PackageActivityModel::select()
+		$packageActivity = $this->model()
 											->where([
 														"route_id" => $routeDbId,
 													])
-												->first();
+												->get();
 
 			return $packageActivity;
 	}
@@ -121,6 +121,16 @@ class ActivitiesController extends Controller
 		if (is_null($packageActivity)) {
 			$packageActivity = $this->model();
 		}
+
+		if (isset($request->isAdded) && $request->isAdded) {
+			$route = RouteController::call()->model()->find($rid);
+			$data = $request->input();
+			$data['cityId'] = $route->destination_detail->id;
+			$request->code = AgentActivitiesController::call()
+												->insertOwnActivities($data);
+			$request->vendor = 'own';
+		}
+
 		$date = date_formatter($request->date, 'd/m/Y');
 		$activityType = '';
 		if ($request->vendor == 'f') {
@@ -224,37 +234,6 @@ class ActivitiesController extends Controller
 
 
 
-	/*
-	| this function is to pull data from tbtq api using TbtqHotelApiController
-	| and it can be call using http post request
-	*/
-	public function postUnionActivitiesResult($id)
-	{
-		$packageActivity = PackageActivityModel::find($id);
-		$result = (object)['activities' => ''];
-
-		$fgfCityId = isset($packageActivity->route->location_hotel->fgf_destinationcode)
-							 ? $packageActivity->route->location_hotel->fgf_destinationcode
-							 : '';
-
-		$viatorCityId = isset($packageActivity->route->location_viator->destinationId)
-									? $packageActivity->route->location_viator->destinationId
-									: '';
-
-		
-		$params = [
-				"fgf_city_id" => $fgfCityId,
-				"viator_city_id" => $viatorCityId
-			];
-
-		$activities = ActivityController::call()->model()->unionActivities($params);
-		// $packageActivity->union_temp_activity_id = $activities->db->id;
-		$packageActivity->save();
-		$result->activities =  $activities;
-		return json_encode($result);
-	}
-
-
 
 	/*
 	| this function is to pull data from Skyscanner api using 
@@ -276,38 +255,6 @@ class ActivitiesController extends Controller
 		}
 
 		return json_encode($result);
-	}
-
-
-
-	public function saveActivities($id, Request $request)
-	{
-		$packageActivities = PackageActivityModel::find($id);
-
-		$selectedIndex = isset($request->activities)
-									 ? $request->activities
-									 : [];
-									 
-		if (isset($request->own_activities)) {
-			$destinationId = $packageActivities->route
-												->location_hotel->fgf_destinationcode;
-
-			$agentActivities = AgentActivitiesController::call()
-												->insertOwnActivities(
-															$request->own_activities, 
-															$destinationId
-														);
-
-			$selectedIndex = array_merge($selectedIndex, $agentActivities['selectedIndex']);
-		}
-
-		$selectedIndex = $this->arrayForBulkInsert($selectedIndex, $id);
-
-		SelectedActivitiesController::call()->inactiveOld($id)
-																					->bulkInsert($selectedIndex, $id);
-		$packageActivities->save();
-
-		return json_encode(['saved' => true]);
 	}
 
 
@@ -336,68 +283,6 @@ class ActivitiesController extends Controller
 
 		return $selectedActivities;
 	}
-
-
-	public function searchActivities($id, Request $request)
-	{
-		$packageActivity = PackageActivityModel::find($id);
-
-		$fgfCityId = isset($packageActivity->route->location_hotel->fgf_destinationcode)
-							 ? $packageActivity->route->location_hotel->fgf_destinationcode
-							 : '';
-
-		$viatorCityId = isset($packageActivity->route->location_viator->destinationId)
-									? $packageActivity->route->location_viator->destinationId
-									: '';
-
-		$params = [
-				"name" => $request->term,
-				"fgf_city_id" => $fgfCityId,
-				"viator_city_id" => $viatorCityId
-			];
-
-		$activities = ActivityController::call()->model()
-									->searchActivitiesByName($params);
-
-		$activityNames = [];
-		foreach ($activities as $activity) {
-			$activityNames[] = $activity->name;
-		}
-
-
-		if ($request->format == 'json') {
-			$activityNames = json_encode($activityNames);
-		}
-
-		return $activityNames;
-	}
-
-
-	public function findActivity($id, Request $request)
-	{
-		$packageActivity = PackageActivityModel::find($id);
-
-		$fgfCityId = isset($packageActivity->route->location_hotel->fgf_destinationcode)
-							 ? $packageActivity->route->location_hotel->fgf_destinationcode
-							 : '';
-
-		$viatorCityId = isset($packageActivity->route->location_viator->destinationId)
-									? $packageActivity->route->location_viator->destinationId
-									: '';
-
-		$params = [
-				"name" => $request->name,
-				"fgf_city_id" => $fgfCityId,
-				"viator_city_id" => $viatorCityId
-			];
-
-		$activity = ActivityController::call()->model()->searchActivityByName($params);
-		$activity = ["activities" => $activity];
-		$activity = json_encode($activity);
-
-		return $activity;
-	}
-
 
 
 }

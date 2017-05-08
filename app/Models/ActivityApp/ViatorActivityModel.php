@@ -33,30 +33,21 @@ class ViatorActivityModel extends Model
 	}
 
 
-	public function findByDestination($cityId)
+	public function findByDestination($cityId, $name = null)
 	{
-		return $this->select()
-									->where([
-												"primaryDestinationId" => $cityId,
-												"is_active" => 1
-											])
-										->skip(0)
-											->take(20)
-												->get();
-	}
+		$where = [
+						"primaryDestinationId" => $cityId,
+						"is_active" => 1
+					];
 
+		if (!is_null($name)) {
+			$where[] = ["title", 'like', '%'.$name.'%'];
+		}
 
-	public function searchActivities($cityId, $name)
-	{
-		return $this->select()
-									->where([
-												"primaryDestinationId" => $cityId,
-												["title", 'like', '%'.$name.'%'],
-												"is_active" => 1
-											])
-										->skip(0)
-											->take(20)
-												->get();
+		return $this->where($where)
+									->skip(0)
+										->take(20)
+											->get();
 	}
 
 }

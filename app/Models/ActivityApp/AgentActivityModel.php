@@ -16,7 +16,7 @@ class AgentActivityModel extends Model
 		return new AgentActivityModel;
 	}
 
-	public function setAdminIdAttribute($value)
+	public function setAdminIdAttribute($value = '')
 	{
 		$this->attributes['admin_id'] = $this->checkUser();
 	}
@@ -25,8 +25,6 @@ class AgentActivityModel extends Model
 	{
 		return 'own';
 	}
-
-
 
 	public function getImageUrlAttribute()
 	{
@@ -51,31 +49,23 @@ class AgentActivityModel extends Model
 	}
 
 
-	public function findByDestination($cityId)
+	public function findByDestination($cityId, $name = null)
 	{
-		return $this->where([
-											"admin_id" => $this->checkUser(),
-											"destination_code" => $cityId,
-											"is_active" => 1
-										])
+		$where = [
+						"admin_id" => $this->checkUser(),
+						"destination_code" => $cityId,
+						"is_active" => 1
+					];
+
+		if (!is_null($name)) {
+			$where[] = ["title", 'like', '%'.$name.'%'];
+		}
+
+		return $this->where($where)
 									->skip(0)
 										->take(20)
 											->get();
 	}
-
-	public function searchActivities($cityId, $name)
-	{
-		return $this->where([
-									"admin_id" => $this->checkUser(),
-									"destination_code" => $cityId,
-									["title", 'like', '%'.$name.'%'],
-									"is_active" => 1
-								])
-							->skip(0)
-								->take(20)
-									->get();
-	}
-
 	
 
 	public function checkUser()
@@ -95,4 +85,10 @@ class AgentActivityModel extends Model
 	}
 
 
+
+	public function __construct(array $attributes = [])
+	{
+		$this->setAdminIdAttribute();
+		parent::__construct($attributes);
+	}
 }

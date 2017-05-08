@@ -18,7 +18,7 @@
 	$(document).on('keypress paste	{{--keyup  keydown --}}', '#filter_search', function(e) {
 		var key = e.which;
 		if(key == 13){ /*the enter key code*/
-			postSearchHotel();
+			searchActivities();
 		}
 		else{
 			var name = $(this).val();
@@ -68,21 +68,9 @@
 	});
 
 	{{-- add-own-activity --}}
-
 	$(document).on('click', '.add-own-activity', function() {
-		var did = $(this).attr('data-did');
-		var rid = $(this).attr('data-rid');
-		var count = $(this).attr('data-count');
-		var code = rid+'_'+count;
-		count = parseInt(count)+1;
-		$(this).attr('data-count', count);
-		var elemid = 'rid_'+rid;
-		var html = '{!! $addActiviyHtml !!}';
-		$('#'+elemid).append(html);
-		addDropzone('#uploadform_'+code);
-		initDatePicker(rid);
+		addOwnActivity(this);
 	});
-
 	{{-- /add-own-activity --}}
 
 

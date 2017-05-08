@@ -19,40 +19,17 @@ class AgentActivitiesController extends Controller
 		return new AgentActivityModel;
 	}
 
-	public function insertOwnActivities($actvities, $destCode)
+	public function insertOwnActivities(Array $data)
 	{
-		$selectedIndex = [];
-
-		foreach ($actvities as &$actvity) {
-			$agentActivity = new AgentActivityModel;
-			$agentActivity->status = 'active';
-			$agentActivity->mode = $actvity['mode'];
-			$agentActivity->title = $actvity['name'];
-			$agentActivity->destination_code = $destCode;
-			$agentActivity->timing = $actvity['timing'];
-			$agentActivity->image_path = $actvity['image_path'];
-			$agentActivity->description = $actvity['description'];
-			$agentActivity->admin_id = null; //no need to add here it is adding in model
-			$agentActivity->save();
-
-			$actvity['rank'] = 0;
-			$actvity['currency'] = 'INR';
-			$actvity['status'] = 'active';
-			$actvity['id'] = $agentActivity->id;
-			$actvity['code'] = 'OWN'.$agentActivity->id;
-			$actvity['destinationCode'] = $destCode;
-			$actvity['image'] = urlImage($actvity['image_path']);
-
-			$selectedIndex['OWN'.$agentActivity->id] = [
-					'mode' => $actvity['mode'],
-					'date' => $actvity['date'],
-					'timing' => $actvity['timing'],
-					'vendor' => 'own',
-					'activityCode' => $agentActivity->id,
-				];
-		}
-
-		return ['actvities' => $actvities, 'selectedIndex' => $selectedIndex];
-
+		$data = (object) $data;
+		$agentActivity = new AgentActivityModel;
+		$agentActivity->mode = $data->mode;
+		$agentActivity->title = $data->name;
+		$agentActivity->destination_code = $data->cityId;
+		$agentActivity->timing = $data->timing;
+		$agentActivity->image_path = $data->image;
+		$agentActivity->description = $data->description;
+		$agentActivity->save();
+		return $agentActivity->id;
 	}
 }

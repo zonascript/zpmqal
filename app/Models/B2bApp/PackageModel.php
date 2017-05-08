@@ -280,7 +280,7 @@ class PackageModel extends Model
 		return $this->hasMany('App\Models\B2bApp\PackageLockModel', 'package_id');
 	}
 
-	public function __construct(array $attributes = array())
+	public function __construct(array $attributes = [])
 	{
 		$this->setTokenAttribute();
 		parent::__construct($attributes);

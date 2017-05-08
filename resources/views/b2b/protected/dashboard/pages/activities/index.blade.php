@@ -56,6 +56,9 @@
 								<div id="rid_{{ $hotelRoute->id }}_div" 
 										class="tab-pane {{ $hotelRouteKey == 0 ? 'active' : ''}}">
 									<ul id="rid_{{ $hotelRoute->id }}" class="list list-unstyled" data-rid="{{ $hotelRoute->id }}"></ul>
+									<button class="btn btn-success add-own-activity" data-count="0"
+										>Add your own Activity
+									</button>
 								</div>
 							@endforeach
 						</div>

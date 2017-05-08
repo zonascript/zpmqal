@@ -30,32 +30,33 @@ class PackageActivityModel extends Model
 	public function activityObject()
 	{
 		$activity = $this->activity;
+		if (!is_null($activity)) {
+			$ukey = $activity->vendor.'_'.$activity->id;
+			$name = $activity->title;
+			$image = $activity->image_url;
+			$description = $activity->description;
 
-		$ukey = $activity->vendor.'_'.$activity->id;
-		$name = $activity->title;
-		$image = $activity->image_url;
-		$description = $activity->description;
+			if ($activity->vendor == 'f') {
+				$name = $activity->name;
+			}
+			elseif ($activity->vendor == 'v') {
+				$image = $activity->thumbnailURL;
+				$description = $activity->shortDescription;
+			}
 
-		if ($activity->vendor == 'f') {
-			$name = $activity->name;
+			return (object)[
+					'ukey' => $ukey,
+					'code' => $activity->id,
+					'vendor' => $activity->vendor,
+					'image' => $image,
+					'name' => $name,
+					'description' => $description,
+					'date' => $this->date,
+					'timing' => $this->timing,
+					'mode' => $this->mode,
+					'isSelected' => 1
+				];
 		}
-		elseif ($activity->vendor == 'v') {
-			$image = $activity->thumbnailURL;
-			$description = $activity->shortDescription;
-		}
-
-		return (object)[
-				'ukey' => $ukey,
-				'code' => $activity->id,
-				'vendor' => $activity->vendor,
-				'image' => $image,
-				'name' => $name,
-				'description' => $description,
-				'date' => $this->date,
-				'timing' => $this->timing,
-				'mode' => $this->mode,
-				'isSelected' => 1
-			];
 	}
 
 }

@@ -53,18 +53,18 @@ class ActivityController extends Controller
 	{
 		$this->cityId = $cityId;
 		$agentActivities = AgentActivitiesController::call()
-											->model()->searchActivities($cityId, $name);
-		$this->activityObject($agentActivities);
+											->model()->findByDestination($cityId, $name);
+		$this->activityObject($agentActivities); // pushing to main object
 
-		$fgfActivities = $this->model()->searchActivities($cityId, $name);
+		$fgfActivities = $this->model()->findByDestination($cityId, $name);
 		$this->activityObject($fgfActivities);
 		
-		$destination = $this->destination();
+		$destination = $this->destination(); // pushing to main object
 		if (isset($destination->viatorDestination->destinationId)) {
 			$vCityId = $destination->viatorDestination->destinationId;
 			$viatorActivities = ViatorActivitiesController::call()
-													->model()->searchActivities($vCityId, $name);
-			$this->activityObject($viatorActivities);
+													->model()->findByDestination($vCityId, $name);
+			$this->activityObject($viatorActivities); // pushing to main object
 		}
 
 		return $this->activities;

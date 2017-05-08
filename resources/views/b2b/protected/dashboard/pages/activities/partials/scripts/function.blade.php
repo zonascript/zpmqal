@@ -1,6 +1,3 @@
-
-{{-- @include($viewPath.'.partials.scripts.act') --}}
-
 <script>
 
 	function getRidObj(rid) {
@@ -220,6 +217,7 @@
 		var rid =  $(ulParent).attr('data-rid');
 		$(ulParent).find('.btn-danger.unsaved').each(function () {
 			var data = getActInputs(this);
+			console.log(data);
 			var btnObj = this;
 			if (data == false) {
 				return false;
@@ -344,83 +342,37 @@
 		var date = getDate(thisObj);
 		var mode = getMode(thisObj);
 		var timing = getTiming(thisObj);
+
 		if (date && mode && timing) {
 			var code = $(thisObj).attr('data-code');
 			var pdid = $(thisObj).attr('data-pdid');
 			var vendor = $(thisObj).attr('data-vendor');
-			return {
+			var data =  {
 					'pdid' : pdid,
 					'date' : date,
 					'code' : code,
 					'mode' : mode,
 					'vendor' : vendor,
-					'timing' : timing
+					'timing' : timing,
+
 				};
+
+			var parentLi = $(thisObj).closest('.activity-container');
+			if ($(parentLi).hasClass('added-own')) {
+				data['isAdded'] = 1;
+				data['name'] = $(parentLi).find('.name').val();
+				data['description'] = $(parentLi).find('.description').val();
+				data['image'] = $(parentLi).find('.uploadform.dropzone')
+																				.attr('data-path');
+			}
+
+			return data;
 		}
 		else{
 			return false;
 		}
 	}
 
-
-	{{-- make Own ActivitiesJson --}}
-	function makeOwnActivitiesJson(rid) {
-		var elemid = 'rid_'+rid;
-		var ridObj = getRidObj(rid);
-		var did = ridObj.did;
-		var activitiesData = [];
-		var isAllDateSelected = true;
-
-		$('#'+elemid).each(function () {
-			$(this).find('.border-blue-1px').each(function(){
-				var vendor = $(this).attr('data-vendor');
-				var mode = $(this).find('.mode').val();
-				var timing = $(this).find('.timing').val();
-				var date = $(this).find('.datepicker').val();
-				var name = $(this).find('.activity-name').val();
-				var description = $(this).find('.activity-description').val();
-				var image = $(this).find('.uploadform').attr('data-path');
-
-				$(this).find('.border-red').removeClass('border-red');
-
-				if (date == '') {
-					$(this).find('.datepicker').addClass('border-red');
-					isAllDateSelected = false;
-					return false;
-				}
-
-				if (mode == '') {
-					$(this).find('.mode').addClass('border-red');
-					isAllDateSelected = false;
-					return false;
-				}
-
-				if (timing == '') {
-					$(this).find('.timing').addClass('border-red');
-					isAllDateSelected = false;
-					return false;
-				}
-				var tempData = {
-						'mode' : mode,
-						'date' : date,
-						'name' : name,
-						'timing' : timing, 
-						'vendor' : vendor,
-						'image_path' : image,
-						'description' : description
-					};
-				
-				activitiesData.push(tempData);
-			});
-		});
-
-		if (isAllDateSelected) {
-			return activitiesData;
-		}else{
-			return false;
-		}
-	}
-	{{-- /make Own ActivitiesJson --}}
 
 	function clickNextTab() {
 		var ridObj = getRidObj(idObject.crid);
@@ -443,6 +395,22 @@
 		else{
 			clickNextTab();
 		}
+	}
+
+
+	function addOwnActivity(thisObj) {
+		var rid = idObject.crid;
+		var firstLi = $('#rid_'+rid).find('.activity-container');
+		addActivity(firstLi[0]);
+		var count = $(thisObj).attr('data-count');
+		var code = 'ao_'+rid+'_'+count; {{-- added_own --}}
+		count = parseInt(count)+1;
+		$(thisObj).attr('data-count', count);
+		var elemid = 'rid_'+rid;
+		var html = '{!! $addActiviyHtml !!}';
+		$('#'+elemid).append(html);
+		addDropzone('#uploadform_'+code);
+		initDatePicker(rid);
 	}
 
 
