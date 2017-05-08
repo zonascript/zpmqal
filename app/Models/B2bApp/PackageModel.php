@@ -15,7 +15,7 @@ class PackageModel extends Model
 	protected $hidden = ['created_at', 'updated_at'];
 	protected $append = [
 								'uid', 'cost', 'nights', 'pax_detail',
-								'itinerary', 'package_lock_id'
+								'itinerary'
 							];
 
 
@@ -81,26 +81,6 @@ class PackageModel extends Model
 	}
 
 
-
-	/*
-	| this function for find package by id but it should be blongs to user 
-	| otherwise it should be return null which means id or package is not that user 
-	*/
-	public function usersFind($id, $colunm = null, $where = [])
-	{
-
-		$colunm = is_null($colunm) ? '*' : $colunm;
-		
-		$where = array_merge(["id" => $id], $where);
-
-		$result  = $this->select($colunm)
-											->with('roomGuest')
-												->where($where)
-													->first();
-
-		return $result;
-	}
-
 	public function modifiedCount($code)
 	{
 		return $this->where('package_code', $code)->count();
@@ -109,7 +89,7 @@ class PackageModel extends Model
 
 	public function findOrExit($id)
 	{
-		$package = $this->usersFind($id);
+		$package = $this->find($id);
 		if (is_null($package)) {
 			$this->exitView();
 		}
@@ -127,7 +107,6 @@ class PackageModel extends Model
 	{
 		$result = $this->findByToken($token);
 		$auth = Auth::user();
-
 		if (is_null($result) && $result->user_id != $auth->id) {
 			$this->exitView();
 		}
@@ -262,6 +241,15 @@ class PackageModel extends Model
 		return $result->where(['mode' => 'cruise']);
 	}
 
+	public function activeAccomoRoutes()
+	{
+		$result = $this->hasMany('App\Models\B2bApp\RouteModel', 'package_id');
+		return $result->where([['status', '=', 'active']])
+										->where(function ($query) {
+												$query->orWhere('mode', '=', 'hotel')
+															->orWhere('mode', '=', 'cruise');
+											});
+	}
 
 	public function accomoRoutes()
 	{

@@ -44,7 +44,7 @@ class VendorDetailModel extends Model
 	public function destination()
 	{
 		return $this->belongsTo(
-											'App\Models\Api\DestinationModel', 
+											'App\Models\CommonApp\DestinationModel', 
 											'destination_code'
 										);
 	}
@@ -52,9 +52,7 @@ class VendorDetailModel extends Model
 
 	public function images()
 	{
-		return $this->hasMany(
-											'App\Models\Api\ImageModel', 'relationId', 'uid'
-										);
+    return $this->morphMany('App\Models\CommonApp\ImageModel', 'connectable');
 	}
 
 }

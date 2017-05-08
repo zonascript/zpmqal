@@ -9,7 +9,7 @@ class CruiseOnlyDateModel extends Model
 {
 	protected $connection = 'mysql5';
 	protected $table = 'cruise_only_dates';
-	protected $appends = ['vendor', 'images', 'cabins'];
+	protected $appends = ['vendor'];
 	protected $hidden = ['created_at', 'updated_at'];
 	public $params = [];
 

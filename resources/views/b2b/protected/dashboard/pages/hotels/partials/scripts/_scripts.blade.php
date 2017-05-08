@@ -23,6 +23,7 @@
 		var key = e.which;
 		if(key == 13){ /*the enter key code*/
 			postSearchHotel();
+			hideSpinIcon();
 		}
 		else{
 			var name = $(this).val();
@@ -38,6 +39,7 @@
 
 	$(document).on('autocompleteselect', '#filter_search', function (e, ui) {
 		postSearchHotel();
+		hideSpinIcon();
 	});
 	{{-- /autocomplete --}}
 

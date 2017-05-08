@@ -48,7 +48,7 @@
 								</li>
 							@endforeach
 						</ul>
-						<div class="tab-content main-flight-detail clearfix">
+						<div class="tab-content tab-content-box clearfix">
 							@foreach ($package->flightRoutes as $flightRouteKey => $flightRoute)
 								<div id="flight_{{ $flightRoute->id }}_div" 
 									class="tab-pane {{ $flightRouteKey == 0 ? 'active' : ''}}">

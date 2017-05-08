@@ -10,7 +10,7 @@ class Backend extends Authenticatable
 {
     use Notifiable;
 
-    protected $connection = 'mysql2';
+    protected $connection = 'mysql1';
     protected $appends = ['fullname', 'profile_pic'];
 
     /**

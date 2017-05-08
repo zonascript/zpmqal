@@ -9,97 +9,53 @@ class PackageActivityModel extends Model
 {
 
 	protected $table  = 'package_activities';
-	protected $appends = ['activities_detail'];
 	protected $hidden = ['created_at', 'updated_at'];
-
 
 	public static function call(){
 		return new PackageActivityModel;
 	}
 
-
-	public function setStatusAttribute($value)
+	public function activity()
 	{
-		$this->attributes['status'] = strtolower($value);
+		return $this->morphTo();
 	}
 
-	
-	public function setSelectedActivitiesAttribute($value)
+	public function findByRouteId($rid)
 	{
-		if (is_array($value) || is_object($value)) {
-			$value = json_encode($value);
+		return $this->where(['route_id' => $rid, 'is_active' => 1])->get();
+	}
+
+
+
+	public function activityObject()
+	{
+		$activity = $this->activity;
+
+		$ukey = $activity->vendor.'_'.$activity->id;
+		$name = $activity->title;
+		$image = $activity->image_url;
+		$description = $activity->description;
+
+		if ($activity->vendor == 'f') {
+			$name = $activity->name;
 		}
-		$this->attributes['selected_activities'] = $value;
-	}
-
-
-	public function getActivitiesDetailAttribute()
-	{
-		$selectedActivities = null;
-
-		if (isset($this->union->result)) {
-			$activities = $this->union->result;
-			$selectedActivities = $this->selected_activities;
-
-			if (is_array($activities) && is_object($selectedActivities)) {
-				foreach ($activities as $key => $value) {
-					$code = $value->code;
-					if (isset($selectedActivities->$code)) {
-						$selectedActivities->$code->detail = $value;
-					}
-				}
-			}
+		elseif ($activity->vendor == 'v') {
+			$image = $activity->thumbnailURL;
+			$description = $activity->shortDescription;
 		}
 
-		return $selectedActivities;
+		return (object)[
+				'ukey' => $ukey,
+				'code' => $activity->id,
+				'vendor' => $activity->vendor,
+				'image' => $image,
+				'name' => $name,
+				'description' => $description,
+				'date' => $this->date,
+				'timing' => $this->timing,
+				'mode' => $this->mode,
+				'isSelected' => 1
+			];
 	}
-
-	/*
-	| this function is for getting route of that route
-	*/
-	public function route()
-	{
-		return $this->belongsTo('App\Models\B2bApp\RouteModel', 'route_id');		
-	}
-
-
-	public function hotel()
-	{
-		return $this->belongsTo('App\Models\B2bApp\PackageHotelModel', 'package_hotel_id');		
-	}
-
-	/*
-	| Getting flygoldfinch's all activities
-	*/
-	public function fgf()
-	{
-		return $this->belongsTo('App\Models\Api\FgfActivityModel', 'fgf_activity_id');		
-	}
-
-	/*
-	| Getting viator's all activities
-	*/
-	public function viator()
-	{
-		return $this->belongsTo('App\Models\Api\ViatorActivityModel', 'viator_activity_id');		
-	}
-
-
-	/*
-	| Getting viator's all activities
-	*/
-	public function union()
-	{
-		return $this->belongsTo('App\Models\Api\UnionActivityModel', 'union_activity_id');		
-	}
-
-
-	public function selectedActivities()
-	{
-		$result = $this->hasMany('App\Models\B2bApp\SelectedActivityModel', 'package_activity_id');
-		return $result->where([['is_active', '>', 0]])->orderBy('date', 'asc');
-	}
-
-
 
 }

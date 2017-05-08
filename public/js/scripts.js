@@ -76,3 +76,11 @@ function invokeIcheck(elem) {
     checkboxClass: 'icheckbox_flat-green'
   });
 }
+
+
+function shortString(string, start = 0, word = 350) {
+  if (string !=  null) {
+    string = string.substring(start, word);
+  }
+  return string;
+}

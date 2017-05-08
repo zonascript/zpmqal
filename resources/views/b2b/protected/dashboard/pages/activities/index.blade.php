@@ -15,27 +15,22 @@
 @endsection
 
 @section('content')
-	{{-- <div id="loging_log">
-		<div id="fgfpreloader" class="fixed-top"></div>
-		<i id="logo" class="s-icon-fgf font-big fixed-top"></i>
-	</div> --}}
 	<div class="btn-right-top cursor-pointer" data-toggle="modal" data-target=".bs-example-modal-to-do">
 		
 	</div>
-	<div id="activities_result" class="row">
+	<div id="rid_result" class="row">
 		<div class="col-md-3 col-md-3 col-xs-12">
 			<div class="row">	
 				<div class="x_panel nopadding" style="background: aliceblue;">
 					<h3><div class="text-center">Activities</div></h3>
 				</div>
 			</div>
-			@include('b2b.protected.dashboard.pages.activities.index_partials._filter')
+			@include($viewPath.'.partials._filter')
 			<div class="row m-top-70" align="center">
 				<div id="saveActivities" class="circle-big bg-blue glowing-green-border cursor-pointer" data-rid="" data-did="">
 					<div class="circle-in text-center font-size-20">Next <i class="fa fa-arrow-right"></i></div>
 				</div>
 			</div>
-			{{-- @include('b2b.protected.dashboard.pages.activities.index_partials._next') --}}
 		</div>
 		<div class="col-md-9 col-sm-9 col-xs-12">
 			<div class="row">
@@ -43,26 +38,24 @@
 					<div id="exTab1" class="container">
 						<ul id="tab_menu" class="nav nav-pills">
 							@foreach ($package->hotelRoutes as $hotelRouteKey => $hotelRoute)
-								<li class="col-md-2 col-sm-2 col-xs-12 text-center li-menu-dest {{ $hotelRouteKey == 0 ? 'active' : ''}}" data-list="activities_{{ $hotelRoute->id }}_div" data-did="{{ $hotelRoute->activities->id }}" data-rid="{{ $hotelRoute->id }}">
-									<a id="a_activities_{{ $hotelRoute->id }}" href="#activities_{{ $hotelRoute->id }}_div" data-toggle="tab">
-										{{ $hotelRoute->location_hotel->destination.', '.$hotelRoute->location_hotel->country }}
+								<li class="col-md-2 col-sm-2 col-xs-12 text-center li-menu-dest 
+									{{ $hotelRouteKey == 0 ? 'active' : ''}}" 
+									data-list="rid_{{ $hotelRoute->id }}_div">
+									<a id="a_rid_{{ $hotelRoute->id }}" 
+										href="#rid_{{ $hotelRoute->id }}_div" 
+										data-rid="{{ $hotelRoute->id }}"
+										class="a_tab_menu"
+										data-toggle="tab">
+										{{ $hotelRoute->destination_detail->destination.', '.$hotelRoute->destination_detail->country }}
 									</a>
 								</li>
 							@endforeach
 						</ul>
-						<div class="tab-content main-flight-detail clearfix">
+						<div class="tab-content tab-content-box clearfix">
 							@foreach ($package->hotelRoutes as $hotelRouteKey => $hotelRoute)
-								<div id="activities_{{ $hotelRoute->id }}_div" 
-									class="tab-pane {{ $hotelRouteKey == 0 ? 'active' : ''}}">
-									<ul id="activities_{{ $hotelRoute->id }}" class="list list-unstyled">
-										<li></li>
-									</ul>
-									<button class="btn btn-success add-own-activity" 
-										data-rid="{{ $hotelRoute->id }}" 
-										data-did="{{ $hotelRoute->activities->id }}" 
-										data-count="0"
-										>Add your own Activity
-									</button>
+								<div id="rid_{{ $hotelRoute->id }}_div" 
+										class="tab-pane {{ $hotelRouteKey == 0 ? 'active' : ''}}">
+									<ul id="rid_{{ $hotelRoute->id }}" class="list list-unstyled" data-rid="{{ $hotelRoute->id }}"></ul>
 								</div>
 							@endforeach
 						</div>
@@ -72,7 +65,7 @@
 		</div>
 	</div>
 
-	@include('b2b.protected.dashboard.pages.activities.index_partials._hidden')
+	{{-- @include($viewPath.'.partials._hidden') --}}
 
 @endsection
 
@@ -93,5 +86,5 @@
 @endsection
 
 @section('scripts')
-	@include('b2b.protected.dashboard.pages.activities.index_partials._scripts')
+	@include($viewPath.'.partials.scripts._scripts')
 @endsection

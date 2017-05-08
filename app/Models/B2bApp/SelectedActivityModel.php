@@ -5,9 +5,9 @@ namespace App\Models\B2bApp;
 use Illuminate\Database\Eloquent\Model;
 
 // ===========================Other model===========================
-use App\Models\Api\ActivityModel;
-use App\Models\Api\AgentActivityModel;
-use App\Models\Api\ViatorActivityModel;
+use App\Models\CommonApp\ActivityModel;
+use App\Models\CommonApp\AgentActivityModel;
+use App\Models\CommonApp\ViatorActivityModel;
 use Carbon\Carbon;
 
 class SelectedActivityModel extends Model

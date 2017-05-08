@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 // ===============================Controller=============================== 
 use App\Http\Controllers\Api\GoogleMapController;
-use App\Http\Controllers\B2bApp\DestinationController;
+use App\Http\Controllers\CommonApp\DestinationController;
+
+// ===============================Model=============================== 
 use App\Models\HotelApp\AgodaDestinationModel;
 use Carbon\Carbon;
 
@@ -14,18 +16,14 @@ use Carbon\Carbon;
 class RouteModel extends Model
 {
 	protected $table = 'routes';
-
 	protected $appends = [
 			'geo_code',
 			'origin_code', 
 			'end_datetime',
 			'origin_detail', 
 			'start_datetime', 
-			'location_viator', 
 			'destination_code',
-			'destination_agoda',
-			'destination_detail',
-			'package_lock_id'
+			'destination_detail'
 		];
 	
 	/**
@@ -44,26 +42,13 @@ class RouteModel extends Model
 
 	public function getOriginDetailAttribute()
 	{
-		return DestinationController::call()->search($this->attributes['origin']);
+		return $this->searchDbLocation($this->attributes['origin']);
 	}
 
 	public function getDestinationDetailAttribute()
 	{
-		return DestinationController::call()->search($this->attributes['destination']);
+		return $this->searchDbLocation($this->attributes['destination']);
 	}
-
-	public function getLocationViatorAttribute()
-	{
-		$destination = $this->location_hotel->destination;
-		return DestinationController::call()->viatorSearch($destination);
-	}
-
-	public function getDestinationAgodaAttribute()
-	{
-		$destination = $this->location_hotel->destination;
-		return AgodaDestinationModel::call()->searchFirst($destination);
-	}
-
 
 
 	public function getGeoCodeAttribute()
@@ -120,36 +105,11 @@ class RouteModel extends Model
 		return $startDate;*/
 	}
 
-
-	// public function getStartDateAttribute()
-	// {
-	// 	return $this->start_datetime;
-	// }
-
-	// public function getEndDateAttribute()
-	// {
-	// 	$endDate = $this->attributes['end_date'];
-	// 	if (in_array($this->attributes['mode'], ['hotel', 'land', 'road'])) {
-	// 		$endDate = $this->end_datetime;
-	// 	}
-	// 	return $endDate;
-	// }
-
-
-	public function dbDestination()
+	public function searchDbLocation($word)
 	{
-		return DestinationController::call()
-						->search($this->attributes['destination']);
+		return DestinationController::call()->model()->search($word);
 	}
-
-
-	public function dbOrigin()
-	{
-		return DestinationController::call()
-						->search($this->attributes['origin']);
-	}
-
-
+	
 
 	public function fusion()
 	{
@@ -161,46 +121,18 @@ class RouteModel extends Model
 		return $this->where(['fusion_id' => $fusionId])->count();
 	}
 
+	// if copying route then copy package activities too
+	public function packageActivities()
+	{
+		return $this->hasMany('App\Models\B2bApp\PackageActivityModel', 'route_id');
+	}
+
 
 	public function package()
 	{
 		return $this->belongsTo('App\Models\B2bApp\PackageModel', 'package_id');
 	}
 
-
-	/*
-	| this function is to get all flights which is belongs to this package
-	*/
-	public function flight()
-	{
-		return $this->hasOne('App\Models\B2bApp\PackageFlightModel', 'route_id');
-	}
-
-
-	/*
-	| this function is to get all hotels which is belongs to this package
-	*/
-	public function hotel()
-	{
-		return $this->hasOne('App\Models\B2bApp\PackageHotelModel', 'route_id');
-	}
-
-
-
-	/*
-	| this function is to get all cruises which is belongs to this package
-	*/
-	public function cruise()
-	{
-		return $this->hasOne('App\Models\B2bApp\PackageCruiseModel', 'route_id');
-	}
-
-
-
-	public function activities()
-	{
-		return $this->hasOne('App\Models\B2bApp\PackageActivityModel', 'route_id');
-	}
 
 
 	/*
@@ -258,12 +190,11 @@ class RouteModel extends Model
 		$images = [];
 
 		if ($this->mode == 'hotel') {
-			$images = $this->hotel->images();
+			//$images = $this->hotel->images();
 		}
 		elseif ($this->mode = 'cruise') {
-			$images = $this->cruise->images();
+			//$images = $this->cruise->images();
 		}
-
 		return $images;
 	}
 

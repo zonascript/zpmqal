@@ -6,20 +6,13 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Auth;
 
 // ================================B2bApp Controller===============================
 use App\Http\Controllers\B2bApp\RouteController;
 use App\Http\Controllers\B2bApp\PackageController;
-use App\Http\Controllers\B2bApp\ActivitiesController;
-use App\Http\Controllers\B2bApp\DestinationController;
 
 // ==============================HotelApp Controller===============================
 use App\Http\Controllers\HotelApp\HotelsController as DbHotelsController;
-/*use App\Http\Controllers\HotelApp\BookingHotelsController;
-use App\Http\Controllers\HotelApp\AgodaHotelsController;
-use App\Http\Controllers\HotelApp\AgodaHotelRoomsController;
-use App\Http\Controllers\HotelApp\AgodaHotelDetailsController;*/
 
 // =================================Api Controller=================================
 use App\Http\Controllers\Api\TbtqHotelApiController;
@@ -39,14 +32,6 @@ class HotelsController extends Controller
 		return new PackageHotelModel;		
 	}
 
-	/*
-	| this function is to find hotel by route table id which is route_id
-	*/
-	public function findByRouteId($routeId, $column = '*'){
-		return PackageHotelModel::select($column)
-															->where(['route_id' => $routeId])
-																->first();
-	}
 
 
 	/*
@@ -287,7 +272,7 @@ class HotelsController extends Controller
 			$selected = json_decode(json_encode($route->fusion->hotelForView()));
 		}
 
-		$location = $route->dbDestination();
+		$location = $route->destination_detail;
 		$params = [
 				'latitude' => $location->latitude, 
 				'longitude' => $location->longitude, 
@@ -308,7 +293,7 @@ class HotelsController extends Controller
 	public function postHotelFromRename($id, Request $request)
 	{
 		$packageHotel = PackageHotelModel::call()->usersFind($id);
-		$location = $packageHotel->route->dbDestination();
+		$location = $packageHotel->route->destination_detail();
 		$result = (object)['hotels' => []];
 
 		if (strlen($request->name) > 3) {
@@ -363,7 +348,7 @@ class HotelsController extends Controller
 	public function searchHotels($id, Request $request)
 	{
 		$packageHotel = PackageHotelModel::find($id);
-		$location = $packageHotel->route->dbDestination();
+		$location = $packageHotel->route->destination_detail();
 		$params = [
 					'name' => $request->name,
 					'latitude' => $location->latitude, 
@@ -386,7 +371,7 @@ class HotelsController extends Controller
 	public function searchHotelNames($id, Request $request)
 	{
 		$packageHotel = PackageHotelModel::find($id);
-		$location = $packageHotel->route->dbDestination();
+		$location = $packageHotel->route->destination_detail();
 		$params = [
 					'name' => $request->term,
 					'latitude' => $location->latitude, 

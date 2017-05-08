@@ -8,17 +8,9 @@ use App\Http\Controllers\Controller;
 // ================================B2b Controller================================
 use App\Http\Controllers\B2bApp\ClientController;
 use App\Http\Controllers\B2bApp\PackageController;
-use App\Http\Controllers\B2bApp\RoomGuestsController;
-use App\Http\Controllers\B2bApp\PackageCodesController;
-
-
-// ================================Api Controller================================
-use App\Http\Controllers\B2bApp\DestinationController;
 
 // ====================================Models====================================
 use App\Models\B2bApp\RouteModel;
-
-use Auth;
 
 
 class RouteController extends Controller

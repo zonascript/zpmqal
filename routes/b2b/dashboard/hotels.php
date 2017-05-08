@@ -1,12 +1,11 @@
 <?php
 		
 	Route::group(['prefix' => 'dashboard/package/builder/hotels'], function () {
-		$controller = '';
-		Route::get('{token}', 'HotelsController@getHotelsByToken');
+		/*Route::get('{token}', 'HotelsController@getHotelsByToken');
 		Route::post('remove/{routeId}', 'HotelsController@postRemoveHotel');
 		Route::post('room/add/{routeId}', 'HotelsController@postAddHotelRoom');
 		Route::post('selected/{routeId}', 'HotelsController@postSelectedHotel');
-		Route::post('room/remove/{routeId}', 'HotelsController@postRemoveHotelRoom');
+		Route::post('room/remove/{routeId}', 'HotelsController@postRemoveHotelRoom');*/
 
 		/*Route::post('hotel/remove/{packageHotelId}', 'HotelsController@postRemoveHotelRoom');
 		Route::get('hotel/room', 'HotelsController@postHotelRoom');

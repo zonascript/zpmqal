@@ -165,6 +165,7 @@ class PackageController extends Controller
 		return $package;
 	}
 
+
 	public function storeGuestsDetail($id, $guestsDetail)
 	{
 		$package = PackageModel::find($id);
@@ -173,6 +174,7 @@ class PackageController extends Controller
 
 		return true;
 	}
+
 
 	public function createPdfHtml($packageDbId){
 
@@ -192,6 +194,7 @@ class PackageController extends Controller
 		}
 		return $pdfHtmlId;
 	}
+	
 
 	
 	public function getCreatePdfHtml($packageDbId)
@@ -256,13 +259,13 @@ class PackageController extends Controller
 	/*
 	| this function it to get all event of the package;
 	*/
-	public function findEvent($packageDbId, $findType = 'id')
+	public function findEvent($value, $findType = 'id', $current = '')
 	{
 		if ($findType == 'token') {
-			$package = $this->model()->findByTokenOrExit($packageDbId);
+			$package = $this->model()->findByTokenOrExit($value);
 		}
 		else{
-			$package = $this->model()->findOrExit($packageDbId);
+			$package = $this->model()->findOrExit($value);
 		}
 
 		$token = $package->token;
@@ -271,65 +274,31 @@ class PackageController extends Controller
 		if ($package->activeFlightRoutes->count()) {
 			$nextUrl = url('dashboard/package/builder/flights/'.$token);
 		}
-		elseif ($package->activeHotelRoutes->count()) {
-			$nextUrl = url('dashboard/package/builder/hotels/'.$token);
+		elseif ($package->activeAccomoRoutes->count()) {
+			$nextUrl = url('dashboard/package/builder/accommodation/'.$token);
 		}
-		elseif($package->activeCruiseRoutes->count()){
-			$nextUrl = url('dashboard/package/builder/cruises/'.$token);
-		}
-		elseif($package->hotelRoutes->count()){
+		elseif($package->hotelRoutes->count() && $current != 'activities'){
 			$nextUrl = url('dashboard/package/builder/activities/'.$token);
 		}
 		else{
 			$nextUrl = urlPackageOpen($token);
 		}
+		/*elseif ($package->activeHotelRoutes->count()) {
+			$nextUrl = url('dashboard/package/builder/hotels/'.$token);
+		}
+		elseif($package->activeCruiseRoutes->count()){
+			$nextUrl = url('dashboard/package/builder/cruises/'.$token);
+		}*/
 		return json_encode(["nextUrl" => $nextUrl]);
 	}
 	
 
-	public function getFindEvent($token)
+	public function getFindEvent($token, $current)
 	{
-		$result = $this->findEvent($token, 'token');
+		$result = $this->findEvent($token, 'token', $current);
 		$result = json_decode($result);
 		return redirect($result->nextUrl);
 	}
 
-
-	public function dbCostSapr()
-	{
-		$colunm = ['id', 'total_cost', 'created_at','updated_at'];
-		$packages = PackageModel::select($colunm)->get();
-		$costParams = [];
-		foreach ($packages as $package) {
-			$totalCost = $package->total_cost;
-			if (isset($totalCost->old)) {
-				$netCost = 0;
-				foreach ($totalCost->old as $old) {
-					$netCost = isset($old->totalCost) ? $old->totalCost : 0;
-					$costParams[] = [
-							"package_id" => $package->id,
-							"currency" => "INR", 
-							"net_cost" => $netCost, 
-							"margin" => 0,
-							"is_current" => 0,
-							"created_at" => $package->created_at,
-							"updated_at" => $package->updated_at,
-						];
-				}
-
-				$costParams[] = [
-						"package_id" => $package->id,
-						"currency" => "INR", 
-						"net_cost" => $netCost, 
-						"margin" => 0,
-						"is_current" => 1,
-						"created_at" => $package->created_at,
-						"updated_at" => $package->updated_at,
-					];
-			}
-		}
-
-		PackageCostsController::call()->model()->insert($costParams);
-	}
 
 }

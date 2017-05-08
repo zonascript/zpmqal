@@ -971,29 +971,8 @@ function  urlImageAirline($airlineCode='')
 	return urlImage('images/airlineImages/'.$airlineCode.'.gif');
 }
 
-/*=====================Itinerary Url=====================*/
-function urlHotelsIti($id = 0, $packageDbId = 0 ){
-	return url('/dashboard/package/itinerary/hotels/'.$id.'/'.$packageDbId);
-}
-
-function urlFlightsIti($id = 0, $packageDbId = 0 ){
-	return url('/dashboard/package/itinerary/flights/'.$id.'/'.$packageDbId);
-}
-
-function urlCabsIti($id = 0, $packageDbId = 0 ){
-	return url('/dashboard/package/itinerary/cabs/'.$id.'/'.$packageDbId);
-}
-
-function urlActivitiesIti($id = 0, $packageDbId = 0 ){
-	return url('/dashboard/package/itinerary/activities/'.$id.'/'.$packageDbId);
-}
-
-function urlCopyHotelIti($id = 0, $packageDbId = 0 ){
-	return url('/dashboard/package/itinerary/activities/copytohotel/'.$id.'/'.$packageDbId);
-}
 
 /*======================Event Url======================*/
-
 function urlPackageEvent($routeDbId){
 	return url('/dashboard/package/event/'.$routeDbId);
 }
@@ -1100,8 +1079,8 @@ function urlFlightBook($flightDbId='')
 
 /*=====================Activities Url=====================*/
 
-function urlActivitiesBuilder($packageDbId = 0){
-	return url('dashboard/package/builder/activities/'.$packageDbId);
+function urlActivitiesBuilder($slug){
+	return url('dashboard/package/builder/activities/'.$slug);
 }
 
 

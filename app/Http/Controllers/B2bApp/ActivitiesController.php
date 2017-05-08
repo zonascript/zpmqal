@@ -6,18 +6,16 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
 
-// =============================Api Controller=============================
-use App\Http\Controllers\Api\ActivityController;
-use App\Http\Controllers\Api\AgentActivitiesController;
+// =============================ActivityApp Controller=============================
+use App\Http\Controllers\ActivityApp\ActivityController;
+use App\Http\Controllers\ActivityApp\AgentActivitiesController;
 
 // =============================B2b Controller=============================
-use App\Http\Controllers\B2bApp\ClientController;
-use App\Http\Controllers\B2bApp\HotelsController;
+use App\Http\Controllers\B2bApp\RouteController;
 use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\B2bApp\FgfActivitiesController;
 use App\Http\Controllers\B2bApp\ViatorActivitiesController;
 use App\Http\Controllers\B2bApp\SelectedActivitiesController;
-// use App\Http\Controllers\B2bApp\UnionActivitiesController;
 
 // =================================Models=================================
 use App\Models\B2bApp\PackageActivityModel;
@@ -93,197 +91,68 @@ class ActivitiesController extends Controller
 	/*
 	| this function is to get view on the browser using get request
 	*/
-	public function getActivitiesByPackageId($packageDbId)
+	public function getActivitiesByToken($token)
 	{
-		$package = PackageController::call()->model()->usersFind($packageDbId);
+		$package = PackageController::call()->model()->findByTokenOrExit($token);
+		$viewPath = 'b2b.protected.dashboard.pages.activities';
 		$blade = [
 				'package' => $package,
 				'client' => $package->client,
+				'viewPath' => $viewPath
 			];
-		// dd($package->hotelRoutes[0]->activities);
-		return view('b2b.protected.dashboard.pages.activities.index', $blade);
+		return trimHtml(view($viewPath.'.index', $blade)->render());
 	}
 
 
-	/*
-	| this function is to find all activities by package table id
-	*/
-	public function findByPackageId($packageDbId)
+	public function postFatchActivities($rid){
+		$selectedActivities = $this->selectedActivities($rid);
+		$route = RouteController::call()->model()->find($rid);
+		$dbActivities = ActivityController::call()
+									->activities($route->destination_detail->id);
+		$activities = $this->mergeActivities($selectedActivities, $dbActivities);
+		return json_encode(['activities' => array_values($activities)]);
+	}
+
+
+	public function postAddActivity($rid, Request $request)
 	{
-		$auth = Auth::user();
+		$packageActivity = $this->model()->find($request->pdid);
+		
+		if (is_null($packageActivity)) {
+			$packageActivity = $this->model();
+		}
+		$date = date_formatter($request->date, 'd/m/Y');
+		$activityType = '';
+		if ($request->vendor == 'f') {
+			$activityType = 'App\\Models\\ActivityApp\\ActivityModel';
+		}
+		elseif ($request->vendor == 'v') {
+			$activityType = 'App\\Models\\ActivityApp\\ViatorActivityModel';
+		}
+		elseif ($request->vendor == 'own') {
+			$activityType = 'App\\Models\\ActivityApp\\AgentActivityModel';
+		}
 
-		return PackageActivityModel::select()
-					->with('hotel')
-						->with('fgf')
-							->with('viator')
-								->where([
-											'package_id' => $packageDbId, 
-											['status', '<>', 'inactive']
-										])
-									->get();
+		$packageActivity->route_id = $rid;
+		$packageActivity->mode = $request->mode;
+		$packageActivity->date = $date;
+		$packageActivity->activity_id = $request->code;
+		$packageActivity->activity_type = $activityType;
+		$packageActivity->timing = $request->timing;
+		$packageActivity->save();
+		return json_encode(['pdid' => $packageActivity->id]);
 	}
 
 
-	/*
-	| this function is pull all activities with to the browser
-	*/
-	public function getActivities($packageDbId){
-		$package = PackageController::call()->model()->usersFind($packageDbId);
-		dd($package->routes[0]->activities);
-		if (!is_null($package)) {
-
-			//===========================get client information============================
-			$client = $package->client;
-
-			// ===every Activities detail here which is belongs to the package table id====
-			$packageActivities = $this->findByPackageId($packageDbId);
-
-			// ====================initializing activities variable here==================== 
-			$activities = [];
-
-			if (!is_null($packageActivities)) {
-				foreach ($packageActivities as &$packageActivity) {
-					//Location finding here
-					$location = json_decode($packageActivity->hotel->location);
-					$startDate = $packageActivity->hotel->check_in_date;
-					$endDate = $packageActivity->hotel->check_out_date;
-
-					// ======================storing required detail in db======================
-					$packageActivity->city_id = $location->id;
-					$packageActivity->location = json_encode($location);
-					$packageActivity->start_date = $startDate;
-					$packageActivity->end_date = $endDate;
-
-					//
-					$activitiesTemp = (object)[];
-
-					if (!is_null($packageActivity->hotel)) {
-						// getting total count of pax 
-						$activitiesTemp->noOfPax = getPax(json_decode($package->guests_detail));
-						$activitiesTemp->location = $location;
-
-						$activitiesTemp
-							->selectedActivities = json_decode($packageActivity->selected_activities);
-
-						// fatching data from db
-						$activitiesTemp->fgfActivities = FgfActivitiesController::call()
-												->activities($location->fgf_destinationcode, $startDate);
-						$packageActivity->fgf_temp_activity_id = $activitiesTemp->fgfActivities->db->id;
-
-						// Calling Viator Activity here
-						$viatorDestiantion = ViatorActivitiesController::call()
-												->searchDestination($location->destination);
-						
-
-						$viatorActivitiesResult = [];
-						
-						if (isset($viatorDestiantion[0]) && isset($viatorDestiantion[0]->destinationId)) {
-							$viatorParams =	[
-								"startDate" => $startDate,
-								"endDate" => $endDate,
-								"destId" => $viatorDestiantion[0]->destinationId,
-								"currencyCode" => 'USD', 
-								"catId" => 0, 
-								"subCatId" => 0, 
-								"dealsOnly" => false
-							];
-
-							$activitiesTemp->viatorActivities = ViatorActivitiesController::call()
-																									->getProduct($viatorParams);
-
-							// saving viator activity db id temporary column   
-							$packageActivity->viator_temp_activity_id = $activitiesTemp
-																													->viatorActivities->db->id;
-						}
-
-						// pushing $packhotel in a new index for blade
-						$activitiesTemp->model = $packageActivity;
-
-						$packageActivity->save();
-
-						$activities[] = $activitiesTemp;
-					}
-				}
-			}
-
-
-			//make blade array
-			$bladeData = [
-					"client" => $client,
-					// "menus" => $menus,
-					"package" => $package,
-					"activitiesSlices" => $activities,
-					"urlVariable" => (object)[
-						"id" => $client->id,
-						"packageId" => getPackageId($packageDbId),
-						"packageDbId" => $packageDbId,
-					],
-			];
-
-
-			return view('b2b.protected.dashboard.pages.activities.activities', $bladeData);
-
+	public function postRemoveActivity($rid, Request $request)
+	{
+		if ($request->pdid) {
+			$packageActivity = $this->model()->find($request->pdid);
+			$packageActivity->is_active = 0;
+			$packageActivity->save();
 		}
-		else{
-			return view('errors.404');
-		}
-	}
 
-
-	public function postActivities($packageDbId, Request $request){
-		$package = PackageController::call()->model()->usersFind($packageDbId);
-
-		if (!is_null($package)) {
-
-			$requestActivities = [];
-
-			/*
-			| making group sliceIndex wise
-			| sliceIndex is id of package_activity table id 
-			*/
-			if (is_array($request->activitiesData)) {
-				foreach ($request->activitiesData as $activities_key => $activity) {
-					/*----sliceIndex is id of package_activity table id----*/
-					$sliceIndex = $activity['sliceIndex'];
-					
-					/*----------this is the code of activity code----------*/
-					$activityCode = $activity['activityCode'];
-					
-					/*----------------making new array here----------------*/
-					$requestActivities[$sliceIndex][$activityCode] = $activity;
-				}
-			}
-
-
-			//========================saving data into db========================
-			foreach ($requestActivities as $requestActivity_key => $requestActivity) {
-
-				//====================finding package_activity=====================
-				$packageActivities = PackageActivityModel::find($requestActivity_key);
-				$packageActivities->fgf_activity_id = $packageActivities->fgf_temp_activity_id;
-				$packageActivities->viator_activity_id = $packageActivities->viator_temp_activity_id;
-
-				//==================saving selected activity data==================
-				$packageActivities->selected_activities = json_encode($requestActivity);
-				$packageActivities->save();
-			}
-			// dd($requestActivities);
-		}
-		else{
-			return jsonError('Invalid Data');
-		}
-	}
-
-
-
-
-	/*
-	| this function is to delete the activity
-	*/
-	public function delete($packageDbId){
-		PackageActivityModel::where('package_id', $packageDbId)
-													->update(["status" => "inactive"]);
-		return true;
+		return json_encode(['status' => 200, 'response' => 'deleted']);
 	}
 
 
@@ -307,36 +176,52 @@ class ActivitiesController extends Controller
 		return $result;
 	}
 
-	public function postSelectedActivities($id)
-	{
-		$packageActivity = PackageActivityModel::find($id);
-		$selectedActivities = $packageActivity->selectedActivities;
-		$activities = [];
-		foreach ($selectedActivities as $selectedActivity) {
-			$code = $selectedActivity->code;
-			if ($selectedActivity->vendor == 'f') {
-				$code = 'ACTV'.$code;
-			}
 
-			$activities[] = [
-					"id" => $selectedActivity->detail->id,
-					"code" => $code,
-					"vendor" => $selectedActivity->vendor,
-					"date" => $selectedActivity->date->format('Y-m-d'),
-					"mode" => $selectedActivity->mode,
-					"timing" => $selectedActivity->timing,
-					"destinationCode" => $selectedActivity->detail->destinationCode,
-					"currency" => $selectedActivity->detail->currency,
-					"name" => $selectedActivity->detail->name,
-					"description" => $selectedActivity->detail->description,
-					"status" => $selectedActivity->detail->status,
-					"rank" => $selectedActivity->detail->rank,
-					"image" => $selectedActivity->detail->image
-				];
+	public function selectedActivities($rid)
+	{
+		$packageActivities = $this->model()->findByRouteId($rid);
+		$activities = [];
+		foreach ($packageActivities as $packageActivity) {
+			$activity = $packageActivity->activityObject();
+			if (!is_null($activity)) $activities[$activity->ukey] = $activity;
 		}
-		// dd_pre_echo(["activities" => $activities]);
-		return json_encode(["activities" => $activities]);
+		return $activities;
 	}
+
+
+	/*this function is to merge selected and db actvities*/
+	public function mergeActivities($selectedActivities, $activities)
+	{
+		foreach ($activities as $key => $activity) {
+			if (!isset($selectedActivities[$key])) {
+				$selectedActivities[$key] = $activity;
+			}
+		}
+		return $selectedActivities;
+	}
+
+	public function getActivityNames($rid, Request $request)
+	{
+		$name = $request->term;
+		$route = RouteController::call()->model()->find($rid);
+		$names = ActivityController::call()
+									->activityNames($route->destination_detail->id, $name);
+
+		if ($request->format == 'json') {
+			$names = json_encode($names);
+		}
+		return $names;
+	}
+
+	public function postActivitiesSearch($rid, Request $request)
+	{
+		$name = $request->term;
+		$route = RouteController::call()->model()->find($rid);
+		$activities = ActivityController::call()
+									->searchActivities($route->destination_detail->id, $name);
+		return json_encode(['activities' => array_values($activities)]);
+	}
+
 
 
 	/*

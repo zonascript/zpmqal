@@ -47,7 +47,7 @@ class BookingHotelModel extends Model
 
 	public function countryDetail()
 	{
-		return $this->hasOne('App\Models\Api\CountryModel', 'country_code', 'cc1');
+		return $this->hasOne('App\Models\CommonApp\CountryModel', 'country_code', 'cc1');
 	}
 
 

@@ -11,11 +11,6 @@ class PackageHotelModel extends Model
 {
 	protected $table = 'package_hotels';
 	protected $appends = ['detail'];
-	protected $casts = [
-			'request' => 'object',
-			'result' => 'object'
-		];
-
 
 	public function setStatusAttribute($value)
 	{

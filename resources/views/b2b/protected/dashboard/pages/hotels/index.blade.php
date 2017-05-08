@@ -50,7 +50,7 @@
 								</li>
 							@endforeach
 						</ul>
-						<div class="tab-content main-flight-detail clearfix">
+						<div class="tab-content tab-content-box clearfix">
 							@foreach ($package->hotelRoutes as $hotelRouteKey => $hotelRoute)
 								<div id="hotel_{{ $hotelRoute->id }}_div" 
 										class="tab-pane {{ $hotelRouteKey == 0 ? 'active' : ''}}">
