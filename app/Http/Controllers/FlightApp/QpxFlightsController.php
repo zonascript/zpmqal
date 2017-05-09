@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\FlightApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 // ===========================Model===========================
-use App\Models\Api\QpxLimitModel;
-use App\Models\Api\QpxFlightModel;
+use App\Models\FlightApp\QpxLimitModel;
+use App\Models\FlightApp\QpxFlightModel;
 
 ini_set('max_execution_time', 90);
 
-class QpxFlightApiController extends Controller
+class QpxFlightsController extends Controller
 {
 	public $solutions = 500;
 	protected $key = '';
@@ -19,7 +19,7 @@ class QpxFlightApiController extends Controller
 
 	public static function call()
 	{
-		return new QpxFlightApiController;
+		return new QpxFlightsController;
 	}
 
 	public function model()

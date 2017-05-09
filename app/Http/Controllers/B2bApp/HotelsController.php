@@ -70,9 +70,10 @@ class HotelsController extends Controller
 		if (is_null($packageHotel)) {
 			$packageHotel = $this->model();
 			$packageHotel->hotel_code = $request->fid;
-			$packageHotel->vendor = $request->hvdr;
+			$packageHotel->vendor = $request->fvdr;
 			$packageHotel->save();
 			$packageHotelId = $packageHotel->id;
+			
 			$route->fusion_id = $packageHotelId;
 			$route->fusion_type = 'App\\Models\\B2bApp\\PackageHotelModel';
 			$route->status = 'complete';

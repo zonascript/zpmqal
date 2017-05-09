@@ -1,9 +1,9 @@
 <?php
-	$activityName = $selectedActivity->detail->name;
-	$activityImageThumb = $selectedActivity->detail->image;
-	$activityDescription = $selectedActivity->detail->description;
-	$uniqueCode = $selectedActivity->detail->code.'_'
-							. $selectedActivity->detail->vendor;
+	$activity = $selectedActivity->activityObject();
+	$activityName = $activity->name;
+	$activityImageThumb = $activity->image;
+	$activityDescription = $activity->description;
+	$uniqueCode = $activity->ukey;
 ?>
 
 <li class="min-height-110px">

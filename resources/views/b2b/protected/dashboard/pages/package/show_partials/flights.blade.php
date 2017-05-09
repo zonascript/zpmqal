@@ -23,9 +23,8 @@
 		</div>
 		<div class="x_content">
 			@foreach ($package->flightRoutes as $flightRoute)
-				@if (isset($flightRoute->flight->flight_details) && 
-				!is_null($flightRoute->flight->flight_details))
-					@include('b2b.protected.dashboard.pages.package.show_partials.flight_partials.index')
+				@if (!is_null($flightRoute->flightDetail()))
+					@include($viewPath.'.show_partials.flight_partials.index')
 				@endif
 			@endforeach
 		</div>

@@ -13,6 +13,8 @@ if (isLocalHost()) {
 	include('temp.php');
 }
 
+include('common.php');
+
 //==================================server==================================
 Route::group(['domain' => env('B2B_DOMAIN')], function () {
 	include('b2b.php');

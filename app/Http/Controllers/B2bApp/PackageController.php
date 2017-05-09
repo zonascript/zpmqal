@@ -23,6 +23,7 @@ use Auth;
 
 class PackageController extends Controller
 {
+	protected $viewPath = 'b2b.protected.dashboard.pages.package';
 
 	public static function call(){
 		return new PackageController;
@@ -44,20 +45,13 @@ class PackageController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index($id){
-		
-		$client  = ClientController::call()->info($id);
-		if (!is_null($client)) {
+		$client  = ClientController::call()->model()->findByUserOrExit($id);
+		$bladeData = [
+				"client" => $client,
+				"packages" => $client->packages
+			];
 
-			$bladeData = [
-					"client" => $client,
-					"packages" => $client->packages
-				];
-
-			return view('b2b.protected.dashboard.pages.package.index', $bladeData);
-		}
-		else{
-			return view('errors.404');
-		}
+		return view($this->viewPath.'.index', $bladeData);
 	}
 
 
@@ -65,8 +59,11 @@ class PackageController extends Controller
 	{
 		$package = $this->model()->findByTokenOrExit($token);
 		TrackPackageController::call()->inactiveOld($package->id);
-		$bladeData = ["package" => $package];
-		return view('b2b.protected.dashboard.pages.package.show',$bladeData);
+		$bladeData = [
+					"package" => $package,
+					"viewPath" => $this->viewPath,
+				];
+		return view($this->viewPath.'.show',$bladeData);
 	}
 
 	// this if function is for storing and creating new row in db
@@ -189,7 +186,7 @@ class PackageController extends Controller
 				"texts" => $texts,
 			];
 
-			$html = view('b2b.protected.dashboard.pages.package.pdf', $bladeData)->render();
+			$html = view($this->viewPath.'.pdf', $bladeData)->render();
 			$pdfHtmlId = PdfHtmlController::call()->createNew($packageDbId, $html);
 		}
 		return $pdfHtmlId;

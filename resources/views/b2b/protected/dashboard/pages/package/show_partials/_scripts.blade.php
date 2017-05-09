@@ -64,4 +64,4 @@
 </script>
 {{-- /run pdf --}}
 
-@include('b2b.protected.dashboard.pages.package.show_partials.scripts.function')
+@include($viewPath.'.show_partials.scripts.function')

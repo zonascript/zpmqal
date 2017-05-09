@@ -15,15 +15,23 @@ class AirportController extends Controller
 		return new AirportController;
 	}
 
-	public function getAirport($search){
-		return AirportModel::call()->getAirport($search);
+
+	public function model()
+	{
+		return new AirportModel;
 	}
 
-	public function getLocation($search){
-		return AirportModel::call()->getLocation($search);
-	}
 
-	public function getAirportAndLocation($search){
-		return AirportModel::call()->getAirportAndLocation($search);
+	public function getAirport(Request $request){
+
+		$airportsData = $this->model()
+										->getAirportAndLocation($request->term);
+		$airports = [];
+		
+		foreach ($airportsData as $airport) {
+			$airports[] = $airport->airports;
+		}
+
+		return json_encode($airports);
 	}
 }

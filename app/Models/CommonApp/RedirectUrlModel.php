@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\B2bApp;
+namespace App\Models\CommonApp;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Auth;
 class RedirectUrlModel extends Model
 {
+  protected $connection = 'mysql2';
   protected $table = 'redirect_urls';
 
   protected $fillable = ['status', 'user_id'];

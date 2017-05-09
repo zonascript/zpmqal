@@ -832,8 +832,7 @@ function do_get_request($url)
 /*=====================Redirect Url=====================*/
 function newRedirectUrl($url){
 
-	$newUrlObj = new \App\Http\Controllers\Common\RedirectController;
-	
+	$newUrlObj = new \App\Http\Controllers\CommonApp\RedirectController;
 	return $newUrlObj->newUrl($url);
 
 }

@@ -8,7 +8,7 @@
 				</div>
 				<div class="x_content">
 					<div class="height-300px">
-						<textarea id="text_req" class="form-control width-100-p height-100p" rows="3" placeholder="First he want to go to peris for 3 nights then italy for 2 nights..."></textarea>
+						<textarea id="text_req" class="form-control width-100-p height-100p" rows="3" placeholder="First he want to go to peris for 3 nights then italy for 2 nights...">{{ $package->req }}</textarea>
 					</div>
 					<div class="row m-top-20">
 						<div class="col-md-6 col-sm-6 col-xs-12">

@@ -23,5 +23,34 @@ class DestinationController extends Controller
 	}
 
 
+	public function getDestination(Request $request){
+		$tag = $request->tags;
+		$locations = $this->model()->getLocationRight($request->term, $tag);
+		if (!$locations->count()) {
+			$locations = $this->model()->getLocation($request->term, $tag);
+		}
+
+		$result = [];
+		foreach ($locations as $location) {
+			$result[] = $location->location;
+		}
+
+		return json_encode($result);
+	}
+
+
+	public function getCountry(){
+		$locations = CountryController::call()->getCountry();
+		$country_array = [];
+
+		if(bool_array($locations)){
+			foreach ($locations as $location) {
+				$country_array[] = $location->CountryCode;
+			}
+		}
+
+		return json_encode($country_array);
+	}
+
 
 }

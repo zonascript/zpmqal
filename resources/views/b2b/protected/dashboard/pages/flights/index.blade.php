@@ -23,12 +23,12 @@
 					<h3><div class="text-center">Flights</div></h3>
 				</div>
 			</div>
-			@include('b2b.protected.dashboard.pages.flights.partials._filter')
-			@include('b2b.protected.dashboard.pages.flights.partials._search')
+			@include($viewPath.'.partials._filter')
+			@include($viewPath.'.partials._search')
 		</div>
 		
 		<div class="col-md-9 col-sm-9 col-xs-12">
-			<div class="row">
+			<div class="row">	
 				<div class="col-md-12 col-sm-12 col-xs-12">
 					<div id="exTab1" class="container">
 						<ul id="tab_menu" class="nav nav-pills">
@@ -79,6 +79,6 @@
 @endsection
 
 @section('scripts')
-	@include('b2b.protected.dashboard.pages.flights.partials.scripts._scripts')
+	@include($viewPath.'.partials.scripts._scripts')
 @endsection
 

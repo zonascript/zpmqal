@@ -3,8 +3,7 @@
 namespace App\Models\CommonApp;
 
 use Illuminate\Database\Eloquent\Model;
-
-use App\Http\Controllers\Api\GoogleMapController;
+use App\Http\Controllers\CommonApp\GoogleMapController;
 use DB;
 
 class DestinationModel extends Model

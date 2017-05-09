@@ -13,24 +13,24 @@
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="row">
 				<div class="col-md-6 col-sm-6 col-xs-12">
-					@include('b2b.protected.dashboard.pages.package.show_partials.info')
-					@include('b2b.protected.dashboard.pages.package.show_partials.follow_up')
+					@include($viewPath.'.show_partials.info')
+					@include($viewPath.'.show_partials.follow_up')
 				</div>
 				<div class="col-md-6 col-sm-6 col-xs-12">
-					@include('b2b.protected.dashboard.pages.package.show_partials.sector')
+					@include($viewPath.'.show_partials.sector')
 				</div>
 			</div>
 		</div>
 	
 		<div class="col-md-12 col-sm-12 col-xs-12">
-			@include('b2b.protected.dashboard.pages.package.show_partials.routes')
+			@include($viewPath.'.show_partials.routes')
 		</div>
 
 		{{-- Flights List --}}
 		<a name="flights"></a>
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="row">
-				@include('b2b.protected.dashboard.pages.package.show_partials.flights')
+				@include($viewPath.'.show_partials.flights')
 			</div>
 		</div>
 		{{-- /Flights List --}}
@@ -40,7 +40,7 @@
 		<a name="hotels"></a>
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="row">
-				@include('b2b.protected.dashboard.pages.package.show_partials.hotels')
+				@include($viewPath.'.show_partials.hotels')
 			</div>
 		</div>
 		{{-- /Hotels List --}}
@@ -49,16 +49,17 @@
 		<a name="cruises"></a>
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="row">
-				@include('b2b.protected.dashboard.pages.package.show_partials.cruises')
+				@include($viewPath.'.show_partials.cruises')
 			</div>
 		</div>
 		{{-- /Hotels List --}}
 		
+
 		{{-- Hotels List --}}
 		<a name="cabs"></a>
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="row">
-				@include('b2b.protected.dashboard.pages.package.show_partials.cars')
+				@include($viewPath.'.show_partials.cars')
 			</div>
 		</div>
 		{{-- /Hotels List --}}
@@ -68,7 +69,7 @@
 		<a name="activities"></a>
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="row">
-				@include('b2b.protected.dashboard.pages.package.show_partials.activities')
+				@include($viewPath.'.show_partials.activities')
 			</div>
 		</div>
 		{{-- /Activitiy List --}}
@@ -77,10 +78,10 @@
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="row">
 				<div class="col-md-5 col-sm-5 col-xs-12">
-					@include('b2b.protected.dashboard.pages.package.show_partials.costs')
+					@include($viewPath.'.show_partials.costs')
 				</div>
 				<div class="col-md-7 col-sm-7 col-xs-12">
-					@include('b2b.protected.dashboard.pages.package.show_partials.cost_history')
+					@include($viewPath.'.show_partials.cost_history')
 				</div>
 			</div>
 		</div>
@@ -108,5 +109,5 @@
 
 
 @section('scripts')
-	@include('b2b.protected.dashboard.pages.package.show_partials._scripts')
+	@include($viewPath.'.show_partials._scripts')
 @endsection

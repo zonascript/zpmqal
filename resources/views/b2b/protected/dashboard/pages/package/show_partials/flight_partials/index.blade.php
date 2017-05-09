@@ -2,7 +2,7 @@
 	<li class="min-height-110px">
 		<div class="x_panel glowing-border">
 			<div class="col-md-10 col-sm-10 col-xs-12">
-				@foreach ($flightRoute->flight->flight_details as $flightDetail)
+				@foreach ($flightRoute->flightDetail() as $flightDetail)
 					<div class="row">
 						<div class="col-md-5 col-sm-5 col-xs-12">
 							<div class="row m-tb-10px">

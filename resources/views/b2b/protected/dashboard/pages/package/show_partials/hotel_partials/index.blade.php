@@ -1,7 +1,6 @@
-@if(isset($hotelRoute->hotel->detail) && !is_null($hotelRoute->hotel->detail))
+@if(!is_null($hotelRoute->hotelDetail()))
 <?php
-	$hotelDetail = $hotelRoute->hotel->detail;
-	$uniqueKey = $hotelDetail->vendor.'_'.$hotelDetail->code;
+	$hotelDetail = $hotelRoute->hotelDetail();
 ?>
 <ul class="list list-unstyled">
 	<li class="m-top-10">
@@ -32,16 +31,16 @@
 							</span>
 						</div>
 						<div class="col-md-12 col-sm-12 col-xs-12 font-size-13 m-top-5">
-							<b>RoomType : </b>{{ $hotelDetail->roomType }}
+							<b>RoomType : </b>{{ implode(',', $hotelDetail->roomType) }}
 						</div>
 						<div class="col-md-12 col-sm-12 col-xs-12 m-top-5 font-size-13">
 							{{ $hotelDetail->shortDescription }}
 							<button 
 								class="btn-link cursor-pointer btn-model" 
 								data-title="{{ $hotelDetail->name }} : Description" 
-								data-bodyid="hotelDescription_{{ $uniqueKey}}">More
+								data-bodyid="hotelDescription_{{ $hotelDetail->id }}">More
 							</button>
-							<div id="hotelDescription_{{ $uniqueKey }}" hidden>
+							<div id="hotelDescription_{{ $hotelDetail->id }}" hidden>
 								{!! $hotelDetail->htmlDescription !!}
 							</div>
 						</div>

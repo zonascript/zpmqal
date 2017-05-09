@@ -32,21 +32,24 @@ class HotelsController extends Controller
 	{
 		$params = (object) $params;
 		$hotel = [];
+		
 		if ($params->vendor == 'a') {
  			$hotel = AgodaHotelsController::call()->model()->hotelByCode($params->code);
-		}elseif ($params->vendor == 'b') {
+		}
+		elseif ($params->vendor == 'b') {
  			$hotel = BookingHotelsController::call()->model()->hotelByCode($params->code);
 		}
+
 		return $hotel;
 	}
 
 
 	public function hotels($params = [])
 	{
- 		$hotels = BookingHotelsController::call()->hotelsByLatLong($params);
+ 		$hotels = BookingHotelsController::call()->model()->hotelsByLatLong($params);
 
  		if (!$hotels->count()) {
- 			$hotels = AgodaHotelsController::call()->hotelsByLatLong($params);
+ 			$hotels = AgodaHotelsController::call()->model()->hotelsByLatLong($params);
  		}
 
  		return $hotels;

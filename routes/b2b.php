@@ -15,7 +15,6 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'B2bApp'], function(){
 			require 'b2b/dashboard/routes.php';
 		});
 	});
-
 	
 	require 'b2b/dashboard/flights.php';
 	require 'b2b/dashboard/hotels.php';

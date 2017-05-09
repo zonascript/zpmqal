@@ -33,7 +33,7 @@ class RouteController extends Controller
 	 */
 	public function create($id, $token = null)
 	{
-		$client = ClientController::call()->info($id);
+		$client = ClientController::call()->model()->findByUser($id);
 		$packageController = new PackageController;
 
 		if (is_null($token)) {

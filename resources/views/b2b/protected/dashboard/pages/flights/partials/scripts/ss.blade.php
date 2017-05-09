@@ -47,9 +47,8 @@
 			}
 		});
 	}
-</script>
 
-<script>
+
 	function makeSsHtml(legKey,leg, data, ids) {
 		if (leg.hasOwnProperty('SegmentIds') && data.hasOwnProperty('Segments')) {
 			var stacks = [];

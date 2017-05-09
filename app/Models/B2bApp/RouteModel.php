@@ -5,7 +5,6 @@ namespace App\Models\B2bApp;
 use Illuminate\Database\Eloquent\Model;
 
 // ===============================Controller=============================== 
-use App\Http\Controllers\Api\GoogleMapController;
 use App\Http\Controllers\CommonApp\DestinationController;
 
 // ===============================Model=============================== 
@@ -17,7 +16,6 @@ class RouteModel extends Model
 {
 	protected $table = 'routes';
 	protected $appends = [
-			'geo_code',
 			'origin_code', 
 			'end_datetime',
 			'origin_detail', 
@@ -48,12 +46,6 @@ class RouteModel extends Model
 	public function getDestinationDetailAttribute()
 	{
 		return $this->searchDbLocation($this->attributes['destination']);
-	}
-
-
-	public function getGeoCodeAttribute()
-	{
-		return GoogleMapController::call()->geoCode($this->attributes['destination']);
 	}
 
 
@@ -120,6 +112,7 @@ class RouteModel extends Model
 	{
 		return $this->where(['fusion_id' => $fusionId])->count();
 	}
+
 
 	// if copying route then copy package activities too
 	public function packageActivities()
@@ -198,4 +191,30 @@ class RouteModel extends Model
 		return $images;
 	}
 
+	// if mode is flight then this will return else will null
+	public function flightDetail()
+	{
+		$result = null;
+
+		if ($this->mode == 'flight' && !is_null($this->fusion)) {
+			$result = $this->fusion->flightDetail();
+		}
+
+		return $result;
+	}
+
+
+
+	public function hotelDetail()
+	{
+		$result = null;
+		if ($this->mode == 'hotel' && !is_null($this->fusion)) {
+			$result = $this->fusion->hotelDetail();
+			$result->nights = $this->nights;
+			$result->location = $this->destination_detail->location;
+			$result->endDate = $this->end_datetime->format('d-M-Y');
+			$result->startDate = $this->start_datetime->format('d-M-Y');
+		}
+		return $result;
+	}
 }

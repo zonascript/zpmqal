@@ -25,10 +25,6 @@ class AgodaHotelsController extends Controller
 		return new AgodaHotelModel;
 	}
 
-	public function hotelsByLatLong(Array $params)
-	{
-		return $this->model()->hotelsByLatLong($params);
-	}
 
 	public function hotels($cityId, $index)
 	{

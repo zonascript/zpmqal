@@ -1,5 +1,5 @@
-
 <script>
+
 	function initTimePicker(elem, option = {}){
 		var option = $.extend({}, {twentyFour: true}, option);
 		$(elem).wickedpicker(option);
@@ -12,9 +12,9 @@
 			minDate: 0,
 		});*/
 	}
-</script>
 
-<script>
+
+
 	function initDateTime(elem) {
 		$(elem).datetimepicker({
 			formatDate:'d/m/Y',
@@ -22,9 +22,9 @@
 			minDate: 0,
 		});
 	}
-</script>
 
-<script>
+
+
 	function addDestCount() {
 		var totalDest = $('#btn-addDestination').attr('data-count');
 		var totalDest = parseInt(totalDest);
@@ -32,9 +32,9 @@
 		$('#btn-addDestination').attr('data-count', totalDest);
 		return totalDest;
 	}
-</script>
 
-<script>
+
+
 	function postRemoveRoute(rid) {
 		$.ajax({
 			type:"post",
@@ -42,9 +42,9 @@
 			data: {"_token" : csrf_token}
 		});
 	}
-</script>
 
-<script>
+
+
 	function checkStartDate() {
 		var startDate = $('#startDate').val();
 
@@ -63,9 +63,9 @@
 			return false;
 		}
 	}
-</script>
 
-<script>
+
+
 	function checkMode() {
 		var mode = $('.destinationList').find('.mode.inctv');
 		if (mode.length) {
@@ -77,9 +77,9 @@
 			return true;
 		}
 	}
-</script>
 
-<script>
+
+
 	function checkLocation() {
 		var location = $('.destinationList').find('.location.inctv');
 		if (location.length) {
@@ -91,9 +91,9 @@
 			return true;
 		}
 	}
-</script>
 
-<script>
+
+
 	function checkNights() {
 		var nights = $('.destinationList').find('.nights.inctv');
 		if (nights.length) {
@@ -105,9 +105,9 @@
 			return true;
 		}
 	}
-</script>
 
-<script>
+
+
 	function checkInputs() {
 		if (checkStartDate() && checkMode() && checkLocation() && checkNights()) {
 			return true;
@@ -116,15 +116,15 @@
 			return false;
 		}
 	}
-</script>
 
-<script>
+
+
 	function changeInRoute(route) {
 		$(route).addClass('no-rid');
 	}
-</script>
 
-<script>
+
+
 	function getRoute() {
 		var route = []; 
 		var routeCount = $('.destinationList').length;
@@ -197,9 +197,9 @@
 		}
 	
 	}
-</script>
 
-<script>
+
+
 	function postRoute() {
 		if (checkInputs()) {
 			$('.destinationList.no-rid').each(function(){
@@ -242,9 +242,9 @@
 			return false;
 		}
 	}
-</script>
 
-<script>
+
+
 	function formSubmit(thisObj) {
 		if(postRoute()){
 			showWaitingLogo();

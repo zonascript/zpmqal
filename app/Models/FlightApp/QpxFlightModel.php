@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Api;
+namespace App\Models\FlightApp;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
@@ -8,7 +8,7 @@ use DB;
 
 class QpxFlightModel extends Model
 {
-	protected $connection = 'mysql2';
+	protected $connection = 'mysql7';
 	protected $table = 'qpx_flights';
 	protected $appends = [
 			'airlines', 'cities', 'slices', 'legs', 'segments',

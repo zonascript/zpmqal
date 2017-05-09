@@ -16,11 +16,6 @@
 	// it will generate pdf of a specific package
 	Route::get('pdf/{hashId}', 'PackageController@getCreatePdf');
 
-	/*-------------------New enquiry creation will oprate here-------------------*/
-	// this route is gui to get information
-	Route::get('create/{id}', 'PackageBuilderController@create');
-	// this route will store the information into DB
-	Route::post('create/{id}', 'PackageBuilderController@store');
 
 	// this for finding next event
 	Route::get('event/{routeDbId}', 'PackageController@getEvent');

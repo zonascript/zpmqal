@@ -29,20 +29,16 @@ class ClientController extends Controller
 		return new ClientModel;
 	}
 
-	public function info($id){
-		return ClientModel::call()->selfInfo($id);
-	}
-
 
 	public function all(){
 		$auth = Auth::user();
 
-		$clients = ClientModel::select('*', DB::raw("CONCAT(`prefix`,LPAD(`id`,5,0)) AS uid"))
-								->where([
-											'user_id' => $auth->id,
-											['status', '<>', 'deleted']
-										])
-									->get();;
+		$clients = $this->model()
+											->where([
+														'user_id' => $auth->id,
+														['status', '<>', 'deleted']
+													])
+												->get();;
 
 		return $clients;
 	}
@@ -61,24 +57,13 @@ class ClientController extends Controller
 	{
 		$auth = Auth::user();
 
-		$clients = ClientModel::select('id', 'fullname', 'mobile', 'note', 'created_at')
+		return $this->model()
+						->select('id', 'fullname', 'mobile', 'note', 'created_at')
 							->where([
 										'user_id' => $auth->id,
 										'status' => 'pending'
 									])
 								->get();
-		return $clients;
 	}
-
-
-/*	// ================using $this->info here to check it is valid or not================
-	public function validClient($id){
-		$result = $this->info($id);
-		return $result == null ? false : true;
-	}
-*/
-
-
-
 
 }

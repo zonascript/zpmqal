@@ -2,9 +2,9 @@
 	function getRidObject(rid) {
 		return idObject['flight_'+rid];
 	}
-</script>
 
-<script>
+
+
 	function qpxDateTime(datetime) {
 		var datetime = datetime.split('T');
 		var time =  datetime[1].substring(0, 5);
@@ -24,11 +24,11 @@
 	function getTime(datetime) {
 		return moment(datetime).format("HH:mm");
 	}
-</script>
+
 
 
 {{-- move to top --}}
-<script>
+
 	function moveToTop(thisObj) {
 		var parent = $(thisObj).closest('.list.list-unstyled');
 		$(parent).prepend(thisObj)
@@ -37,18 +37,18 @@
 
 		$(thisObj).find('.x_panel.glowing-border').addClass('border-green-2px');
 	}
-</script>
+
 {{-- /move to top --}}
 
 
-<script>
+
 	function refreashFlights(ids) {
 		$('#loging_log').show();
 		$('#'+ids.elem_id).append('<div id="sorry_error" class="m-top-20"><h1>Sorry Something went wrong<h1><div class="row"><div class="col-md-6 col-sm-6 col-xs-12 offset-col-md-3"><button data-vendor="'+ids.vendor+'" data-did="'+ids.did+'" data-rid="'+ids.rid+'" class="btn btn-primary btn-block refreash-flights">Refreash</button></div></div></div>');
 	}
-</script>
 
-<script>
+
+
 	function clickAtab(thisObj) {
 		var rid = $(thisObj).attr('data-rid');
 		var ridObject = getRidObject(rid);
@@ -58,9 +58,9 @@
 		$('#modify_destination').val(destination);
 		$('#modify_search').attr('data-rid', rid);
 	}
-</script>
 
-<script>
+
+
 	function modifySearch(thisObj) {
 		$('#loging_log').show();
 		var rid = $(thisObj).attr('data-rid');
@@ -101,10 +101,10 @@
       }
 		});
 	}
-</script>
 
 
-<script>
+
+
 	function addToCart(thisObj) {
 		$('#loging_log').show();
 
@@ -136,9 +136,9 @@
 		postAddtoCartFlight(data);
 		moveToTop($(thisObj).closest('.main-list-item'));
 	}
-</script>	
+	
 
-<script>
+
 	function postAddtoCartFlight(dataObj) {
 
 		var data = {
@@ -185,18 +185,19 @@
 			}
 		});
 	}
-</script>
 
-<script>
+
+
 	function getFlightStack(flight) {
 		var appendHtml = '';
 		var searchWord = '';
-		@include('b2b.protected.dashboard.pages.flights.partials.scripts.html')
+		@include($viewPath.'.partials.scripts.html')
 		return appendHtml;
 	}
-</script>
 
-<script>
+
+
+
 	function dataIsPulled(rid) {
 		$('#flight_'+rid).attr('data-ispulled', 1);
 	}
@@ -204,21 +205,20 @@
 	function isPulled(rid) {
 		return $('#flight_'+rid).attr('data-ispulled');
 	}
-</script>
 
-<script>
+
 	function changeTabMenu(rid, origin, destination) {
 		var originCode = origin.substring(0,3);
 		var destinationCode = destination.substring(0,3);
 		$('#a_flight_'+rid).text(originCode+' → '+destinationCode);
 	}
-</script>
 
-<script>
+
 	function clickNext(rid) {
 		$('#a_flight_'+rid).click();
 	}
 </script>
 
-@include('b2b.protected.dashboard.pages.flights.partials.scripts.qpx')
-@include('b2b.protected.dashboard.pages.flights.partials.scripts.ss')
+
+@include($viewPath.'.partials.scripts.qpx')
+@include($viewPath.'.partials.scripts.ss')

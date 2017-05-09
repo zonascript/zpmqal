@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Models\Api;
+namespace App\Models\FlightApp;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
 class SkyscannerFlightsModel extends Model
 {
+	protected $connection 'mysql7';
 	protected $table = 'skyscanner_flights';
 	protected $appends = [
 			'places_formatted', 

@@ -63,7 +63,7 @@ class PackageFlightModel extends Model
 	*/
 	public function qpxFlight()
 	{
-		return $this->belongsTo('App\Models\Api\QpxFlightModel', 'qpx_flight_id');		
+		return $this->belongsTo('App\Models\FlightApp\QpxFlightModel', 'qpx_flight_id');		
 	}
 
 	/*
@@ -71,7 +71,7 @@ class PackageFlightModel extends Model
 	*/
 	public function ssFlight()
 	{
-		return $this->belongsTo('App\Models\Api\SkyscannerFlightsModel', 'skyscanner_flight_id');
+		return $this->belongsTo('App\Models\FlightApp\SkyscannerFlightsModel', 'skyscanner_flight_id');
 	}
 
 

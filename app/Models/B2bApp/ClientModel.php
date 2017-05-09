@@ -10,9 +10,15 @@ class ClientModel extends Model
 {
 
 	protected $table = 'clients';
+	protected $appends = ['uid'];
 
 	public static function call(){
 		return new ClientModel;
+	}
+
+	public function getUidAttribute()
+	{
+		return $this->prefix.str_pad($this->id, 7, '0', STR_PAD_LEFT);
 	}
 
 	public function user()
@@ -29,23 +35,30 @@ class ClientModel extends Model
 		return $this->belongsTo('App\Models\AdminApp\LeadVendorModel', 'lead_vendor_id');
 	}
 
-	/*
-	| this function also call for all client info 
-	| for that you dont have to pass any thing
-	*/
-	public function selfInfo($id = false){
 
+	public function findByUser($id = null)
+	{
 		$auth = Auth::user();
-		
 		$where = ['user_id' => $auth->id];
+		if ($id) $where['id'] = $id;
 
-		if ($id) { $where['id'] = $id; }
+		return $this->where($where)->first();
+	}
 
-		$client = $this->select('*', DB::raw("CONCAT(`prefix`,LPAD(`id`,5,0)) AS uid"))
-										->where($where)
-											->first();
 
-		return $client;
+	public function findByUserOrExit($id)
+	{
+		$result = $this->findByUser($id);
+		if (is_null($result)) {
+			$this->exitView();
+		}
+		return $result;
+	}
+
+	public function exitView()
+	{
+		$blade = ["url" => urlReport()];
+		exit(view('b2b.protected.dashboard.404_main', $blade)->render());
 	}
 
 

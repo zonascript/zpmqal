@@ -19,18 +19,6 @@ class BookingHotelsController extends Controller
 		return new BookingHotelModel;
 	}
 
-	public function hotelsByLatLong(Array $params)
-	{
-		/*$params = [
-					'latitude' => -36.8484597, 
-					'longitude' => 174.7633315, 
-					'max_rating' => 5,
-					'min_rating' => 0
-		 	];*/
-
-		return $this->model()->hotelsByLatLong($params);
-	}
-
 
 
 }

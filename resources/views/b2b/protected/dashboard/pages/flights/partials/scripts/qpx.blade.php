@@ -1,4 +1,3 @@
-
 <script>
 	function postQpxFlight(rid ='') {
 		var ridObject = getRidObject(rid);
@@ -38,11 +37,6 @@
 		});
 	}
 
-</script>
-
-
-
-<script>
 	function makeQpxHtml(tripOptionKey, tripOption, data) {
 		var appendHtml = '';
 		var airlines = data.airlines;

@@ -8,8 +8,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 // ========================Api Controller========================
-use App\Http\Controllers\Api\QpxFlightApiController;
-use App\Http\Controllers\Api\SkyscannerFlightsApiController;
+use App\Http\Controllers\FlightApp\QpxFlightsController;
+use App\Http\Controllers\FlightApp\SkyscannerFlightsController;
 
 // ========================B2b Controller========================
 use App\Http\Controllers\B2bApp\RouteController;
@@ -35,15 +35,14 @@ class FlightsController extends Controller
 	{
 		$package = PackageController::call()->model()
 									->findByTokenOrExit($token);
-		$html = '';
+		$viewPath = 'b2b.protected.dashboard.pages.flights';
 		$blade = [
-				'package' => $package,
-				'client' => $package->client,
+				'package'  => $package,
+				'client' 	 => $package->client,
+				'viewPath' => $viewPath
 			];
 
-		$html = view('b2b.protected.dashboard.pages.flights.index', $blade)->render();
-
-		return trimHtml($html);
+		return trimHtml(view($viewPath.'.index', $blade)->render());
 	}
 
 
@@ -62,14 +61,14 @@ class FlightsController extends Controller
 
 			// ===============booking flight here with respective vendor================
 			if ($vendor == 'qpx') {
-				$bookedFlightDetail = QpxFlightApiController::call()
+				$bookedFlightDetail = QpxFlightsController::call()
 															->book($vendorId, $vendorIndex);
 
-				$vendorModelName = 'App\\Models\\Api\\QpxFlightModel';
+				$vendorModelName = 'App\\Models\\FlightApp\\QpxFlightModel';
 			}
 			elseif ($vendor == 'ss') {
-				$vendorModelName = 'App\\Models\\Api\\SkyscannerFlightsModel';
-				$bookedFlightDetail = SkyscannerFlightsApiController::call()
+				$vendorModelName = 'App\\Models\\FlightApp\\SkyscannerFlightsModel';
+				$bookedFlightDetail = SkyscannerFlightsController::call()
 															->book($vendorId, $vendorIndex);	
 			}//---if there is other fight service provider then use elseif here---
 
@@ -114,7 +113,7 @@ class FlightsController extends Controller
 		$result = '';
 
 		if (!is_null($route)) {
-			$result = QpxFlightApiController::call()->flights($route);
+			$result = QpxFlightsController::call()->flights($route);
 		}
 
 		return json_encode($result);
@@ -127,7 +126,7 @@ class FlightsController extends Controller
 		$route = RouteController::call()->model()->find($id);
 		$result = '';
 		if (!is_null($packageFlight)) {
-			$result = SkyscannerFlightsApiController::call()->flights($route);
+			$result = SkyscannerFlightsController::call()->flights($route);
 		}
 		return json_encode($result);
 	}

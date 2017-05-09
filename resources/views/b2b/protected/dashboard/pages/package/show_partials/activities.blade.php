@@ -13,12 +13,13 @@
 			<div class="clearfix"></div>
 		</div>
 		<div class="x_content">
-			@foreach ($package->hotelRoutes as $hotelRoutes)
-				<?php 
-					$location = $hotelRoutes->location_hotel;
-					$selectedActivities = $hotelRoutes->activities->selectedActivities;
+			@foreach ($package->hotelRoutes as $hotelRoute)
+				<?php
+					// dd($hotelRoute->packageActivities[0]->activityObject());
+					$location = $hotelRoute->destination_detail;
+					$selectedActivities = $hotelRoute->packageActivities;
 				?>
-				@if ($selectedActivities->count())
+				@if ($hotelRoute->packageActivities->count())
 				<div class="row">
 					<div class="x_panel">
 						<div class="x_title">
@@ -27,9 +28,9 @@
 							</div>
 							<div class="col-md-5 col-sm-5 col-xs-12">
 								<h2 class="pull-right">
-									({{ $hotelRoutes->start_datetime->format('d-M-Y') }}
+									({{ $hotelRoute->start_datetime->format('d-M-Y') }}
 										To
-									{{ $hotelRoutes->end_datetime->format('d-M-Y')}})
+									{{ $hotelRoute->end_datetime->format('d-M-Y')}})
 								</h2>
 							</div>
 							<div class="col-md-1 col-sm-1 col-xs-12">
@@ -43,7 +44,7 @@
 							<div class="row">
 								<ul class="list list-unstyled">
 									@foreach ($selectedActivities as $selectedActivity)
-										@include('b2b.protected.dashboard.pages.package.show_partials.activities_partials.index')
+										@include($viewPath.'.show_partials.activities_partials.index')
 									@endforeach
 								</ul>
 							</div>

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\FlightApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 // ==============================Models==============================
-use App\Models\Api\SkyscannerFlightsModel;
+use App\Models\FlightApp\SkyscannerFlightsModel;
 
-class SkyscannerFlightsApiController extends Controller
+class SkyscannerFlightsController extends Controller
 {
 
 	protected $key = '';
@@ -15,7 +15,7 @@ class SkyscannerFlightsApiController extends Controller
 
 	public static function call()
 	{
-		return new SkyscannerFlightsApiController;	
+		return new SkyscannerFlightsController;	
 	}
 
 	/*

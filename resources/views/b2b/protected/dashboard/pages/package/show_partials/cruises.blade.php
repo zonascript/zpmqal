@@ -23,7 +23,7 @@
 		</div>
 		<div class="x_content">
 			@foreach ($package->cruiseRoutes as $cruiseRoute)
-				@include('b2b.protected.dashboard.pages.package.show_partials.cruise_partials.index')
+				@include($viewPath.'.show_partials.cruise_partials.index')
 			@endforeach
 		</div>
 	</div>

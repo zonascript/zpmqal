@@ -1,8 +1,7 @@
-
-@include('b2b.protected.dashboard.pages.flights.partials.scripts.objects')
-
-{{-- bootstrap-daterangepicker --}}
+@include($viewPath.'.partials.scripts.objects')
 <script>
+	{{-- bootstrap-daterangepicker --}}
+
 	$(document).ready(function() {
 		$('.datepicker').daterangepicker({
 			singleDatePicker: true,
@@ -17,22 +16,21 @@
 		postQpxFlight({{$package->flightRoutes[0]->id}});
 
 	});
-</script>
-{{-- /bootstrap-daterangepicker --}}
 
-{{-- autocomplete --}}
-<script>
-	$(document).on('keyup keypress keydown paste', '.input-airport', function(){
-		$(this).autocomplete({
-			source: '{{ url("dashboard/tools/airport") }}'
-		});
+	{{-- /bootstrap-daterangepicker --}}
+
+	{{-- autocomplete --}}
+
+	$(document).on('keypress paste', '.input-airport', function(){
+		console.log($(this).val());
+		$(this).autocomplete({source: "{{ route("fatchAirports") }}"});
 	});
-</script>
-{{-- /autocomplete --}}
+
+	{{-- /autocomplete --}}
 
 
-{{-- filter List.js--}}
-<script>
+	{{-- filter List.js--}}
+
 	var filter = {
 		@foreach ($package->flightRoutes as $flightRouteKey => $flightRoute)
 			'flight_{{ $flightRoute->id }}' : '',
@@ -47,10 +45,10 @@
 				}
 			@endforeach
 		}
-	}
+	};
 
-</script>
-<script>
+
+
 	$(document).on('keypress keyup keydown', "#filter_search", function(){
 		var targetList = $('#tab_menu').find('.active').attr('data-list');
 		console.log(targetList);
@@ -61,34 +59,30 @@
 			}
 		@endforeach
 	});
-</script>
-{{-- /filter List.js --}}
 
-{{-- modify search --}}
-<script>
+	{{-- /filter List.js --}}
+
+	{{-- modify search --}}
+
 	$(document).on('click', '#modify_search', function(){
 		modifySearch(this);
 	});
-</script>
-{{-- /modify search --}}
+	{{-- /modify search --}}
 
-{{-- Book Flight --}}
-<script>
+	{{-- Book Flight --}}
 	$(document).on('click', '.btn-addtocart', function(){
 		addToCart(this);
 	});
-</script>
-{{-- /Book Flight --}}
+	{{-- /Book Flight --}}
 
 
-<script>
+
 	$(document).on('click', '.a_tab_menu',function () {
 		clickAtab(this);
 	});
-</script>
 
-{{-- refreash flights --}}
-<script>
+
+	{{-- refreash flights --}}
 	$(document).on('click', '.refreash-flights', function() {
 		var vendor = $(this).attr('data-vendor');
 		var did = $(this).attr('data-did');
@@ -100,13 +94,9 @@
 			postSsFlight(rid);
 		}
 	});
-</script>
-{{-- /refreash flights --}}
+	{{-- /refreash flights --}}
 
-{{-- Adults-Child-button --}}
-<script>
-	/*plugin bootstrap minus and plus
-	http://jsfiddle.net/laelitenetwork/puJ6G/*/
+	{{-- Adults-Child-button --}}
 	$('.btn-number').click(function(e){
 			e.preventDefault();
 			
@@ -204,7 +194,6 @@
 					e.preventDefault();
 			}
 	});
+	{{-- /Adults-Child-button --}}
 </script>
-{{-- /Adults-Child-button --}}
-
-@include('b2b.protected.dashboard.pages.flights.partials.scripts.function')
+@include($viewPath.'.partials.scripts.function')

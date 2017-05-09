@@ -36,8 +36,6 @@ class AirportModel extends Model
 	*/
 	public function getAirportAndLocation($search)
 	{
-		 // dd(strlen($search));
-
 		$sqlQuery = (
 			"SELECT CONCAT
 			  (
@@ -57,10 +55,8 @@ class AirportModel extends Model
 
 		if (strlen($search) <= 3) {
 			$sqlQuery .= "a.`airport_code` = '$search'";
-
 		}
 		else{
-
 			$sqlQuery .= (
 				"CONCAT(
 			    a.`airport_code`,', ',
@@ -77,16 +73,10 @@ class AirportModel extends Model
 				) LIKE '%$search%'"
 			);
 		}
-
-		// dd_pre_echo($sqlQuery);
-
 		$result = DB::connection('mysql2')->select(DB::raw($sqlQuery));
-		
-		// dd_pre_echo($result);
-
 		return $result;
 	}
 
-
+	
 
 }

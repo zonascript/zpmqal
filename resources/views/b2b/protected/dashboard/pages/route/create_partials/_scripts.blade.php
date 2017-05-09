@@ -1,5 +1,6 @@
-{{-- bootstrap-daterangepicker --}}
 <script>
+	{{-- bootstrap-daterangepicker --}}
+
 	$(document).ready(function() {
 		$('.datepicker').daterangepicker({
 			singleDatePicker: true,
@@ -17,12 +18,12 @@
 		});
 
 	});
-</script>
-{{-- /bootstrap-daterangepicker --}}
+
+	{{-- /bootstrap-daterangepicker --}}
 
 
-{{-- Adding or Removing-room --}}
-<script>
+	{{-- Adding or Removing-room --}}
+
 	$(document).on('click','#btn-addRoom',function(){
 		var currentRoom = $('#room').children(":visible").length;
 	
@@ -48,12 +49,12 @@
 			$('#btn-addRoom, #pipeSapr').show();
 		}
 	});
-</script>
-{{-- /Adding or Removing-room --}}
+
+	{{-- /Adding or Removing-room --}}
 
 
-{{-- remove destination button --}}
-<script>
+	{{-- remove destination button --}}
+
 	$('#btn-removeDestination').click(function(){
 		var totalDestination = $('.destinationClass').children().length;
 		$('#destination'+totalDestination).remove();
@@ -62,13 +63,13 @@
 			$('#btn-removeDestination, #pipeSaprDestination').hide();
 		}
 	});
-</script>
-{{-- /remove destination button --}}
+
+	{{-- /remove destination button --}}
 
 
 
-{{-- requirement --}}
-<script>
+	{{-- requirement --}}
+
 	$(document).on('click', '#cancel_req', function() {
 		var text = $('#text_req').val();
 		var showText = $('#show_req').text();
@@ -104,12 +105,12 @@
 	$(document).on('click', '#edit_req', function() {
 		$('#container_req').removeClass('hide');
 	});
-</script>
-{{-- requirement --}}
+
+	{{-- requirement --}}
 
 
 
-<script>
+
 	$(document).on('click', '.rmv-destlist', function () {
 		var parant = $(this).closest('.destinationList');
 		var rid = $(parant).attr('data-rid');
@@ -120,11 +121,11 @@
 		
 		$(parant).remove();
 	});
-</script>
 
 
-{{-- Adding or Removing-Destination --}}
-<script>
+
+	{{-- Adding or Removing-Destination --}}
+
 	$('#btn-addDestination').click(function(){
 		if (postRoute()) {
 			/*var totalDestination = $('.destinationClass').children().length;*/
@@ -147,12 +148,12 @@
 		}
 	});
 
-</script>
-{{-- /Adding or Removing-Destination --}}
+
+	{{-- /Adding or Removing-Destination --}}
 
 
-{{-- autocomplete --}}
-<script>
+	{{-- autocomplete --}}
+
 	$(document).on('keyup keypress keydown paste', '.location', function(e) {
 		var parent = $(this).closest('.destinationList');
 		var mode = $(parent).find('.mode').val();
@@ -160,16 +161,13 @@
 
 		if (mode != '') {
 			
-			var	url = '';
+			var	url = '{{ route('fatchDestinations') }}';
 
 			if (mode == 'flight') {
-				url = '{{ url("dashboard/tools/airport") }}?tags=flight';
+				url = '{{ route('fatchAirports') }}?tags=flight';
 			}
 			else if(mode == 'cruise'){
-				url = '{{ url("dashboard/tools/destination") }}?tags=cruise';
-			}
-			else{
-				url = '{{ url("dashboard/tools/destination") }}';
+				url += '?tags=cruise';
 			}
 
 			$(parent).find('.mode').removeClass('border-red');
@@ -185,19 +183,19 @@
 			$(parent).find('.mode').addClass('border-red');
 		}
 	});
-</script>
 
-<script>
+
+
 	$(document).on('autocompleteselect', '.location', function (e, ui) {
 		$(this).attr('data-match', $(this).val())
 						.removeClass('inctv')
 							.removeClass('border-red');
 	});
-</script>
-{{-- /autocomplete --}}
+
+	{{-- /autocomplete --}}
 
 
-<script>
+
 	$(document).on('change', '.nights', function () {
 		var nights = $(this).val();
 
@@ -211,10 +209,10 @@
 			$(this).removeClass('border-red');
 		}
 	});
-</script>
 
-{{-- changing mode --}}
-<script>
+
+	{{-- changing mode --}}
+
 	$(document).on('change', '.mode', function(){
 		if(checkStartDate()){
 			var thisVal = $(this).val();
@@ -255,26 +253,26 @@
 			// $(parent).find('.location').val('');
 		}
 	});
-</script>
-{{-- /changing mode --}}
 
-<script>
+	{{-- /changing mode --}}
+
+
 	$(document).on('keypress', '.datetimepicker', function(event) {
 		event.preventDefault();
 	});
-</script>
 
-{{-- form submition --}}
-<script>
+
+	{{-- form submition --}}
+
 	$(document).on('click','#formSubmit', function(){
 		formSubmit(this);
 	});
-</script>
-{{-- /form submition --}}
+
+	{{-- /form submition --}}
 
 
-{{-- Adults-Child-button --}}
-<script>
+	{{-- Adults-Child-button --}}
+
 	$('.btn-number').click(function(e){
 			e.preventDefault();
 			
@@ -376,7 +374,8 @@
 					e.preventDefault();
 			}
 	});
+
+	{{-- /Adults-Child-button --}}
 </script>
-{{-- /Adults-Child-button --}}
 
 @include('b2b.protected.dashboard.pages.route.create_partials.function')
