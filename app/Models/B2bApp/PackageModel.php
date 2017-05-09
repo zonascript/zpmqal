@@ -15,7 +15,7 @@ class PackageModel extends Model
 	protected $hidden = ['created_at', 'updated_at'];
 	protected $append = [
 								'uid', 'cost', 'nights', 'pax_detail',
-								'itinerary'
+								'itinerary', 'package_url'
 							];
 
 
@@ -30,7 +30,7 @@ class PackageModel extends Model
 
 	public function setTokenAttribute()
 	{
-		$this->attributes['token'] = md5(uniqid($this->count(), true));
+		$this->attributes['token'] = mycrypt($this->count());
 	}
 
 	public function getUidAttribute()
@@ -59,6 +59,15 @@ class PackageModel extends Model
 	public function getItineraryAttribute()
 	{
 		return ItineraryController::call()->itinerary($this);
+	}
+
+	public function getPackageUrlAttribute()
+	{
+		$url = null;
+		if (isset($this->cost->token)) {
+			$url = route('yourPackage', $this->token).'?ctk='.$this->cost->token;
+		}
+		return $url;
 	}
 
 	public function getPaxDetailAttribute()

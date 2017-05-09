@@ -1,6 +1,6 @@
-
-{{-- show description --}}
 <script>
+	{{-- show description --}}
+
 	function showDescription(thisObj) {
 		var popupTitle = proper($(thisObj).data('title'));
 		var popupBodyId = $(thisObj).data('bodyid');
@@ -13,11 +13,11 @@
 			columnClass: 'col-md-6 col-md-offset-3'
 		});
 	}
-</script>
-{{-- show description --}}
 
-{{-- set follow up --}}
-<script>
+	{{-- show description --}}
+
+	{{-- set follow up --}}
+
 	function setFollowUp(thisObj) {
 		var datetime = $('.datetime-followup').val();
 		var followup = $('.text-followup').val();
@@ -37,11 +37,11 @@
 				type:"post",
 				url: "{{ url('/dashboard/follow-up/') }}",
 				data: data,
-				success: function(responce, textStatus, xhr) {
+				success: function(response, textStatus, xhr) {
 					$('.datetime-followup, .text-followup').val('');
-					console.log(responce);
-					responce = JSON.parse(responce);
-					alert(responce.responce);
+					console.log(response);
+					response = JSON.parse(response);
+					alert(response.response);
 				},
 
 				error: function(xhr, textStatus) {
@@ -52,11 +52,11 @@
 			});
 		}
 	}
-</script>
-{{-- /set follow up --}}
 
-{{-- save cost --}}
-<script>
+	{{-- /set follow up --}}
+
+	{{-- save cost --}}
+
 	function saveCost() {
 		var visa = $('#visaCostCheckbox').is(':checked');
 		visa = visa ? 1 : 0;
@@ -87,14 +87,14 @@
 				type:"post",
 				url: "{{ urlSavePackageCost($package->client->id, $package->id) }}",
 				data: data,
-				success: function(responce, textStatus, xhr) {
-					responce = JSON.parse(responce);
+				success: function(response, textStatus, xhr) {
+					response = JSON.parse(response);
+					setHref(response.token);
 					$.alert({
 						title: 'Success!',
-						content: '<h2>'+responce.responce+'</h2>'
+						content: '<h2>'+response.response+'</h2>'
 					});
 				},
-
 				error: function(xhr, textStatus) {
 					if(xhr.status == 401){
 						window.open("{{ url('login') }}", '_blank');
@@ -107,11 +107,17 @@
 
 		}
 	}
-</script>
-{{-- /save cost --}}
 
-{{-- run pdf --}}
-<script>
+	{{-- /save cost --}}
+
+	function setHref(token) {
+		var url = "{{ route('yourPackage', $package->token) }}?ctk="+token;
+		$('#input_html_link').val(url);
+		$('#a_html_link').attr('href', url);
+	}
+
+	{{-- run pdf --}}
+
 	function runPdf() {
 		var ischanged = $("#totalCost").attr('data-ischanged');
 		var costError = $('#totalCost').attr('data-error');
@@ -136,11 +142,11 @@
 				type:"get",
 				url: "{{ url('/dashboard/package/html/'.$package->id) }}",
 				data: data,
-				success: function(responce, textStatus, xhr) {
-					responce = JSON.parse(responce);
-					if (responce.status == 200) {
-						var pdfUrl = '{{ url('/dashboard/package/pdf/') }}/'+responce.hash_id;
-						var htmlUrl = '{{url('/your/package/detail/')}}/'+responce.hash_id;
+				success: function(response, textStatus, xhr) {
+					response = JSON.parse(response);
+					if (response.status == 200) {
+						var pdfUrl = '{{ url('/dashboard/package/pdf/') }}/'+response.hash_id;
+						var htmlUrl = '{{url('/your/package/detail/')}}/'+response.hash_id;
 						$('#btn_pdf').attr('href', pdfUrl);
 						$('#show_html_link').val(htmlUrl);
 						window.open(pdfUrl, '_blank');
@@ -155,12 +161,12 @@
 			});
 		}
 	}
-</script>
-{{-- /run pdf --}}
+
+	{{-- /run pdf --}}
 
 
-{{-- visa confirmation --}}
-<script>
+	{{-- visa confirmation --}}
+
 	function alertVisa() {
 		var isChecked = $('#visaCostCheckbox').is(':checked');
 		var yes = $('#visaCost').attr('data-yes');
@@ -193,19 +199,19 @@
 
 		return result;
 	}
-</script>
-{{-- /visa confirmation --}}
 
-{{-- error in cost --}}
-<script>
+	{{-- /visa confirmation --}}
+
+	{{-- error in cost --}}
+
 	function setErrorCost(error) {
 		$("#totalCost").attr('data-error', error);
 	}
-</script>
-{{-- /error in cost --}}
 
-{{-- calculateSum --}}
-<script>
+	{{-- /error in cost --}}
+
+	{{-- calculateSum --}}
+
 	function calculateSum() {
 		var sum = 0;
 		//iterate through each textboxes and add the values
@@ -229,5 +235,6 @@
 		$("#totalCost").text(sum.toFixed(2));
 		$("#totalCost").attr('data-ischanged', 1);
 	}
+
+	{{-- /calculateSum --}}
 </script>
-{{-- /calculateSum --}}

@@ -14,16 +14,16 @@
 			url: "{{ url('ss/flights/result') }}/"+rid,
 			data: { "_token" : csrf_token },
 
-			success: function(responce, textStatus, xhr) {
-					var responce = JSON.parse(responce);
+			success: function(response, textStatus, xhr) {
+					var response = JSON.parse(response);
 					$('#sorry_error').remove();
-					if (responce.hasOwnProperty('Legs') && responce.Legs.length) {
-						/*console.log(Object.keys(responce.Carriers).length);*/
+					if (response.hasOwnProperty('Legs') && response.Legs.length) {
+						/*console.log(Object.keys(response.Carriers).length);*/
 						$('#loging_log').hide();
 
-						$.each(responce.Legs, function(i,v){
+						$.each(response.Legs, function(i,v){
 							var html = '';
-							html = makeSsHtml(i, v, responce, ids);
+							html = makeSsHtml(i, v, response, ids);
 							$('#'+elem_id).append(html);
 						});
 

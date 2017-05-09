@@ -15,11 +15,11 @@
 			type:"post",
 			url: "{{ url('/fo/cruises/result/') }}/"+did,
 			data: ids,
-			success: function(responce, textStatus, xhr) {
-				var responce = JSON.parse(responce);
-				// console.log(responce);
+			success: function(response, textStatus, xhr) {
+				var response = JSON.parse(response);
+				// console.log(response);
 				var html = '';
-				var cruises = responce.cruises;
+				var cruises = response.cruises;
 				// console.log(cruises.length);
 				if (cruises.length) {
 					$('#loging_log').hide();

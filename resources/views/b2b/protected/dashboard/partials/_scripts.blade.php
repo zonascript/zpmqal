@@ -88,16 +88,16 @@
 			type : "post",
 			url : "{{ url('dashboard/enquiry/pending') }}",
 			data : { "_token" : csrf_token },
-			success: function(responce, textStatus, xhr) {
-				var responce = JSON.parse(responce);
-				var leadCount = responce.length ? responce.length : '';
+			success: function(response, textStatus, xhr) {
+				var response = JSON.parse(response);
+				var leadCount = response.length ? response.length : '';
 				
 				$('#menu_lead_box_count').html(leadCount);
 
 				var html = '';
 				$('#menu_lead_box').empty();
 				$('#menu_lead_box').html('<li><h2>Lead Box</h2></li>');
-				$.each(responce, function(i,v){
+				$.each(response, function(i,v){
 					elemId = i;
 					html = makeLeadBoxHtml(i,v);
 					$('#menu_lead_box').append(html);
@@ -130,11 +130,11 @@
 			type : "post",
 			url : "{{ url('dashboard/todo/all/json') }}",
 			data : { "_token" : csrf_token },
-			success: function(responce, textStatus, xhr) {
-					responce =  JSON.parse(responce);
-					var html = makeTodoHtml(responce);
-					if (responce.length) {
-						$('#todos_count').text(responce.length);
+			success: function(response, textStatus, xhr) {
+					response =  JSON.parse(response);
+					var html = makeTodoHtml(response);
+					if (response.length) {
+						$('#todos_count').text(response.length);
 					}
 					$(toDoId).html(html);
 					$('#menu_todo').find('input').iCheck({
@@ -198,13 +198,13 @@
 			type : "post",
 			url : "{{ url('dashboard/package/track/json') }}",
 			data : { "_token" : csrf_token},
-			success: function(responce, textStatus, xhr) {
-				responce =  JSON.parse(responce);
+			success: function(response, textStatus, xhr) {
+				response =  JSON.parse(response);
 				$('#menu_track').empty();
 				$('#menu_track').append('<li><h2>Package Status</h2></li>');
-				var trackCount = responce.length ? responce.length : ''; 
+				var trackCount = response.length ? response.length : ''; 
 				$('#menu_track_count').text(trackCount);
-				$.each(responce, function(trackKey, track) {
+				$.each(response, function(trackKey, track) {
 					<?php 
 						$trackJsHtml = view('b2b.protected.dashboard.partials.script_partials.track')->render();
 						$trackJsHtml = trimHtml($trackJsHtml);

@@ -84,7 +84,7 @@ class FlightsController extends Controller
 				$route->fixDates($route->id);
 				$returnArray = [ 
 					"status" => 200,
-					"responce" => 'data saved successfully'
+					"response" => 'data saved successfully'
 				];
 			}
 			else{

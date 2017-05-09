@@ -185,11 +185,11 @@
 				type:"post",
 				{{-- url: "{{ url('dashboard/package/builder/hotel/room/'.$urlVariable->id.'/'.$urlVariable->packageDbId.'/'.$urlVariable->packageHotelId) }}", --}}
 				data: data,
-				success: function(responce, textStatus, xhr) {
+				success: function(response, textStatus, xhr) {
 					// console.log(textStatus);
 					if(xhr.status == 200){
-						$('#'+currntHotelRoomlId).empty(responce);
-						$('#'+currntHotelRoomlId).html(responce);
+						$('#'+currntHotelRoomlId).empty(response);
+						$('#'+currntHotelRoomlId).html(response);
 						// document.location.href = this.url;
 					}
 				},
@@ -198,8 +198,8 @@
 						window.open("{{ url('login') }}", '_blank');
 					}
 					else if(xhr.status == 500){
-						var responceHtml = '<pre><div class="m-top-20"><h1>Sorry Something went wrong<h1></div></pre>'; 
-						$('#'+currntHotelRoomlId).html(responceHtml);
+						var responseHtml = '<pre><div class="m-top-20"><h1>Sorry Something went wrong<h1></div></pre>'; 
+						$('#'+currntHotelRoomlId).html(responseHtml);
 					}
 				},
 			});
@@ -222,8 +222,8 @@
 			type:"post",
 			url: "{{ str_replace('/cab/', '/cab/pickup/', Request::url()) }}",
 			data: data,
-			success: function(responce, textStatus, xhr) {
-				showPopUp('PICKUP', responce);
+			success: function(response, textStatus, xhr) {
+				showPopUp('PICKUP', response);
 			}
 		});
 	});
@@ -239,8 +239,8 @@
 			type:"post",
 			url: "{{ str_replace('/cab/', '/cab/book/', Request::url()) }}",
 			data: data,
-			success: function(responce, textStatus, xhr) {
-				$('#booked_cab').html(responce);
+			success: function(response, textStatus, xhr) {
+				$('#booked_cab').html(response);
 			}
 		});
 	});
@@ -264,28 +264,28 @@
 			type:"post",
 			url: "{{ str_replace('/cab/', '/cab/book/', Request::url()) }}",
 			data: data,
-			success: function(responce, textStatus, xhr) {
+			success: function(response, textStatus, xhr) {
 				// alert("Room Booked.");
-				responce = JSON.parse(responce);
-				console.log(responce);
-				if (responce.status == 200) { 
+				response = JSON.parse(response);
+				console.log(response);
+				if (response.status == 200) { 
 					if (confirm('Go to the next')) {
 							// yes 
-							document.location.href = responce.nextUrl;
+							document.location.href = response.nextUrl;
 					} else {
 							// now
-							document.location.href = responce.packageUrl;
+							document.location.href = response.packageUrl;
 					}
 				}
 				else{
-					alert(responce.responce);
+					alert(response.response);
 				}
 
 
-				// console.log(responce);
+				// console.log(response);
 				// if(xhr.status == 200){
-				// 	$('#'+currntHotelRoomlId).empty(responce);
-				// 	$('#'+currntHotelRoomlId).html(responce);
+				// 	$('#'+currntHotelRoomlId).empty(response);
+				// 	$('#'+currntHotelRoomlId).html(response);
 				// 	// document.location.href = this.url;
 				// }
 			},
@@ -359,11 +359,11 @@
 			type: "post",
 			data: data,
 			
-			success: function(responce, textStatus, xhr) {
-				// console.log(responce);
-				$('#cab_result').html(responce);
-				// var responce = JSON.parse(responce);
-				// document.location.href = responce.nextUrl;
+			success: function(response, textStatus, xhr) {
+				// console.log(response);
+				$('#cab_result').html(response);
+				// var response = JSON.parse(response);
+				// document.location.href = response.nextUrl;
 			},
 		});
 	});

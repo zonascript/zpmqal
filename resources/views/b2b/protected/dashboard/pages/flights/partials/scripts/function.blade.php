@@ -152,9 +152,9 @@
 			type	: "post",
 			url 	:	"{{ urlFlightBook() }}"+dataObj.rid,
 			data 	: data,
-			success : function(responce){
-				responce = JSON.parse(responce);
-				if (responce.status == 200) {
+			success : function(response){
+				response = JSON.parse(response);
+				if (response.status == 200) {
 					if (dataObj.next_rid != "NaN") {
 						setTimeout(function () {
 							if (isPulled(dataObj.next_rid) == 0) {

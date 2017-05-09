@@ -9,6 +9,11 @@ class PackageCostModel extends Model
 	protected $table = 'package_costs';
 	protected $appends = ['total_cost'];
 
+	public function setTokenAttribute()
+	{
+		$this->attributes['token'] = mycrypt($this->count());
+	}
+
 	public function getTotalCostAttribute()
 	{
 		$netCost = isset($this->attributes['net_cost']) 
@@ -20,5 +25,12 @@ class PackageCostModel extends Model
 						 : 0;
 
 		return $netCost+$margin;
+	}
+
+
+	public function __construct(array $attributes = [])
+	{
+		$this->setTokenAttribute();
+		parent::__construct($attributes);
 	}
 }

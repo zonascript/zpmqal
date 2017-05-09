@@ -17,12 +17,12 @@
 				type : "post",
 				url : "{{ Request::url() }}/save",
 				data : { '_token' : '{{ csrf_token() }}', 'html' : html },
-				success: function(responce, textStatus, xhr) {
-					console.log(responce);
-					if (responce != 'done') {
-	         	document.location.href = responce;
+				success: function(response, textStatus, xhr) {
+					console.log(response);
+					if (response != 'done') {
+	         	document.location.href = response;
 					}else{
-						alert(responce);
+						alert(response);
 					}
         }
 			});

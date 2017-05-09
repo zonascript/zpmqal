@@ -460,7 +460,7 @@ class ActivitiesController extends Controller
 		return json_encode([
 							"status" => 200, 
 							"nextUrl" => url('dashboard/activities/create'),
-							"responce" => 'activities added']);
+							"response" => 'activities added']);
 
 	}
 

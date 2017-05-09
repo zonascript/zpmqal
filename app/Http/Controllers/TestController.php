@@ -11,6 +11,10 @@ class TestController extends Controller
 
 	public function testCode()
 	{
+
+		dd(mycrypt(329));
+		dd(1 == '1.0');
+		dd(strlen(md5('202')), md5('202'), strlen('07afea6ad39621bbb718575b5178f5c7'));
 		dd(array_diff( [312, 401, 1599, 3], [401] ));
 		// $hotel = HotelModel::find(1);
 		// dd($hotel->vendor);

@@ -6,14 +6,14 @@
 			type:"post",
 			url: "{{ url('qpx/flights/result') }}/"+rid,
 			data: { "_token" : csrf_token },
-			success: function(responce, textStatus, xhr) {
-					var responce = JSON.parse(responce);
+			success: function(response, textStatus, xhr) {
+					var response = JSON.parse(response);
 					var fullhtml = '';
 					$('#sorry_error').remove();
-					if (responce.hasOwnProperty('trips') && responce.trips.hasOwnProperty('tripOption')) {
-						var tripOption = responce.trips.tripOption;
+					if (response.hasOwnProperty('trips') && response.trips.hasOwnProperty('tripOption')) {
+						var tripOption = response.trips.tripOption;
 						$.each(tripOption, function(i,v){
-							fullhtml = makeQpxHtml(i, v, responce);
+							fullhtml = makeQpxHtml(i, v, response);
 							$('#'+elem_id).append(fullhtml);
 						});
 					}

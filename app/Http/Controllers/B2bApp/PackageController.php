@@ -58,6 +58,7 @@ class PackageController extends Controller
 	public function open($token)
 	{
 		$package = $this->model()->findByTokenOrExit($token);
+		$package->package_url;
 		TrackPackageController::call()->inactiveOld($package->id);
 		$bladeData = [
 					"package" => $package,
@@ -201,13 +202,13 @@ class PackageController extends Controller
 		$return = [
 					"status" => 500, 
 					"hash_id" => 'error',
-					"responce" => "something went wrong"
+					"response" => "something went wrong"
 				];
 
 		if (!is_null($pdfHtml)) {
 			$return['status'] = 200;
 			$return['hash_id'] = $pdfHtml->hash_id;
-			$return['responce'] = 'done';
+			$return['response'] = 'done';
 		}
 
 		return json_encode($return);
@@ -246,10 +247,12 @@ class PackageController extends Controller
 
 		$package = PackageModel::find($packageDbId);
 		$packageCost = PackageCostsController::call()
-									->inactiveByPackageId($package->id)
 										->createNew($package->id, $costParams);
 
-		return json_encode(["status" => 200, "responce" => "saved successfully..."]);
+		return json_encode([
+								"status" => 200, "response" => "saved successfully...",
+								"token" => $packageCost->token
+							]);
 	}
 
 
@@ -295,6 +298,13 @@ class PackageController extends Controller
 		$result = $this->findEvent($token, 'token', $current);
 		$result = json_decode($result);
 		return redirect($result->nextUrl);
+	}
+
+
+
+	public function showPackageDetail($token, Request $request)
+	{
+		echo "coming soon...";
 	}
 
 

@@ -12,7 +12,7 @@
 			},
 			success: function (response) {
 				$(response.previewElement).addClass('bg-color-gray');
-				var resHtml = '<div class="dz-responce-json" hidden>'+response.xhr.responseText+'</div>';
+				var resHtml = '<div class="dz-response-json" hidden>'+response.xhr.responseText+'</div>';
 				$(response.previewElement).append(resHtml);
 			},		
 			addRemoveLinks: true,
@@ -28,7 +28,7 @@
 
 	function makeImagesObject() {
 		var imageObj = [];
-		$('.uploadform').find('.dz-responce-json').each(function () {
+		$('.uploadform').find('.dz-response-json').each(function () {
 			var json = $(this).text();
 			json = JSON.parse(json);
 			imageObj.push(json);

@@ -62,7 +62,7 @@ class FollowUpController extends Controller
 		$followUp->status = 'Active';
 		$followUp->save();
 
-		return json_encode(["status" => 200,"responce" => "saved successfully..."]);
+		return json_encode(["status" => 200,"response" => "saved successfully..."]);
 	}
 
 	/**

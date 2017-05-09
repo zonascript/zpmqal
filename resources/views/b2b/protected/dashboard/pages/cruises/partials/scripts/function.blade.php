@@ -78,9 +78,9 @@
 			type:"post",
 			url: "{{ url('dashboard/package/builder/cruise/cabin/book') }}/"+data.did,
 			data: data,
-			success : function(responce){
-				responce = JSON.parse(responce);
-				if (responce.status == 200) {
+			success : function(response){
+				response = JSON.parse(response);
+				if (response.status == 200) {
 					$('#a_cruise_'+data.next_rid).click();
 					$(window).scrollTop(0);
 				}else{

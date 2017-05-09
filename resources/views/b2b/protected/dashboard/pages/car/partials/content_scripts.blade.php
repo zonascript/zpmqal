@@ -188,20 +188,20 @@
 			type:"post",
 			url: "{{ Request::url().'/choose' }}",
 			data: data,
-			success: function(responce, textStatus, xhr) {
-				responce = JSON.parse(responce);
-				// console.log(responce);
-				if (responce.status == 200) { 
+			success: function(response, textStatus, xhr) {
+				response = JSON.parse(response);
+				// console.log(response);
+				if (response.status == 200) { 
 					if (confirm('Want to add anouther car?')) {
 							getMenuJson();
 
 					} else {
 							// no
-							document.location.href = responce.packageUrl;
+							document.location.href = response.packageUrl;
 					}
 				}
 				else{
-					alert(responce.responce);
+					alert(response.response);
 				}
 			},
 			error: function(xhr, textStatus) {
@@ -261,17 +261,17 @@
 				type: "post",
 				data: data,
 				
-				success: function(responce, textStatus, xhr) {
-					// console.log(responce);
+				success: function(response, textStatus, xhr) {
+					// console.log(response);
 					
-					var responce = JSON.parse(responce);
+					var response = JSON.parse(response);
 					var html = '';
 					
 					$('#cars_result').empty();
-					$('#cars_result').attr('data-id', responce.db.package_car_id);
-					$('#cars_result').attr('data-ssid', responce.db.id);
-					if (responce.hasOwnProperty('cars')) {
-						$.each(responce.cars, function(i,v){
+					$('#cars_result').attr('data-id', response.db.package_car_id);
+					$('#cars_result').attr('data-ssid', response.db.id);
+					if (response.hasOwnProperty('cars')) {
+						$.each(response.cars, function(i,v){
 							elemId = i;
 
 							if (elemId % 3 == 0) {
@@ -281,10 +281,10 @@
 							html = makeCarHtml(i,v);
 							$('#cars_result').append(html);
 						});
-					}else if(responce.hasOwnProperty('errors')){
-						alert(responce.errors[0]);
+					}else if(response.hasOwnProperty('errors')){
+						alert(response.errors[0]);
 					}
-					// document.location.href = responce.nextUrl;
+					// document.location.href = response.nextUrl;
 				},
 			});
 		}
@@ -500,7 +500,7 @@
 				"_mathod" : "delete",
 				"pcid" : pcid 
 			},
-			success: function(responce, textStatus, xhr) {
+			success: function(response, textStatus, xhr) {
 				getMenuJson();
 			}
 		});
@@ -516,17 +516,17 @@
 			type:"post",
 			url: "{{ Request::url().'/menu' }}",
 			data: {"_token" : "{{ csrf_token() }}" },
-			success: function(responce, textStatus, xhr) {
-				var responce = JSON.parse(responce);
+			success: function(response, textStatus, xhr) {
+				var response = JSON.parse(response);
 				var html = '';
 				
 				$('#menu_cars, #menu_cars_count').empty();
 
-				if (responce.length) {
-					$('#menu_cars_count').html(responce.length);
+				if (response.length) {
+					$('#menu_cars_count').html(response.length);
 				}
 
-				$.each(responce, function(i,v){
+				$.each(response, function(i,v){
 					elemId = i;
 					html = makeCarMenu(i,v);
 					$('#menu_cars').append(html);

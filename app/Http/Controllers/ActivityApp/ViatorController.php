@@ -127,8 +127,8 @@ class ViatorController extends Controller
 
 						$url = str_replace( "&amp;", "&", urldecode(trim($url)) );
 						// dd($url);
-						$responce = $this->httpGet($url);
-						saveInFile($responce, $data->code, 'json', "test/api/viator/product_detail/$destId");
+						$response = $this->httpGet($url);
+						saveInFile($response, $data->code, 'json', "test/api/viator/product_detail/$destId");
 					}
 
 					
@@ -164,8 +164,8 @@ class ViatorController extends Controller
 
 						$url = str_replace( "&amp;", "&", urldecode(trim($url)) );
 						// dd($url);
-						$responce = $this->do_get_request($url);
-						saveInFile($responce, $data->code, 'json', "test/api/viator/product_detail/$destId");
+						$response = $this->do_get_request($url);
+						saveInFile($response, $data->code, 'json', "test/api/viator/product_detail/$destId");
 					}
 
 					
@@ -204,8 +204,8 @@ class ViatorController extends Controller
 
 						$url = str_replace( "&amp;", "&", urldecode(trim($url)) );
 						// dd($url);
-						$responce = $this->httpGet($url);
-						saveInFile($responce, $data->code, 'json', "test/api/viator/product_detail/$destId");
+						$response = $this->httpGet($url);
+						saveInFile($response, $data->code, 'json', "test/api/viator/product_detail/$destId");
 					// }
 
 					
@@ -240,8 +240,8 @@ class ViatorController extends Controller
 
 						$url = str_replace( "&amp;", "&", urldecode(trim($url)) );
 						// dd($url);
-						$responce = $this->httpGet($url);
-						saveInFile($responce, $data->code, 'json', "test/api/viator/product_detail/$destId");
+						$response = $this->httpGet($url);
+						saveInFile($response, $data->code, 'json', "test/api/viator/product_detail/$destId");
 					}
 
 					if ($data->code == '38297P1') {
@@ -281,8 +281,8 @@ class ViatorController extends Controller
 
 						$url = str_replace( "&amp;", "&", urldecode(trim($url)) );
 						// dd($url);
-						$responce = $this->httpGet($url);
-						saveInFile($responce, $data->code, 'json', "test/api/viator/product_detail/$destId");
+						$response = $this->httpGet($url);
+						saveInFile($response, $data->code, 'json', "test/api/viator/product_detail/$destId");
 					// }
 
 
@@ -319,8 +319,8 @@ class ViatorController extends Controller
 
 						$url = str_replace( "&amp;", "&", urldecode(trim($url)) );
 						// dd($url);
-						$responce = $this->httpGet($url);
-						saveInFile($responce, $data->code, 'json', "test/api/viator/product_detail/$destId");
+						$response = $this->httpGet($url);
+						saveInFile($response, $data->code, 'json', "test/api/viator/product_detail/$destId");
 					}
 					
 				}
@@ -458,8 +458,8 @@ class ViatorController extends Controller
 
 						$url = str_replace( "&amp;", "&", urldecode(trim($url)) );
 						// dd($url);
-						$responce = $this->do_get_request($url);
-						saveInFile($responce, $data->code, 'json', "test/api/viator/product_detail/$destId");
+						$response = $this->do_get_request($url);
+						saveInFile($response, $data->code, 'json', "test/api/viator/product_detail/$destId");
 					// }
 				}
 			}

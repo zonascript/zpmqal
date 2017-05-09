@@ -278,10 +278,10 @@
 				type:"post",
 				url: "{{ url('dashboard/package/route/'.$package->id.'/u') }}",
 				data: data,
-				success: function(responce, textStatus, xhr) {
+				success: function(response, textStatus, xhr) {
 					if(xhr.status == 200){
-						responce_obj = JSON.parse(responce);
-						document.location.href = responce_obj.nextUrl;
+						response_obj = JSON.parse(response);
+						document.location.href = response_obj.nextUrl;
 					}
 				},
 				error: function(xhr, textStatus) {

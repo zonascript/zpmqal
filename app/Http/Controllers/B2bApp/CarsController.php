@@ -143,13 +143,13 @@ class CarsController extends Controller
 
 		$returnArray = (object)[ 
 				"status" => '',
-				"responce" => '',
+				"response" => '',
 				"packageUrl" => urlPackageAll($packageCarModel->package->client_id, $packageDbId),
 			];
 
 		if (!is_null($packageCarModel) && $packageCarModel->package_id == $packageDbId) {
 			$returnArray->status = 200;
-			$returnArray->responce = "ok";
+			$returnArray->response = "ok";
 			
 			$packageCarModel->status = 'complete';
 
@@ -161,7 +161,7 @@ class CarsController extends Controller
 		}
 		else{
 			$returnArray->status = 500;
-			$returnArray->responce = "Something went wrong";
+			$returnArray->response = "Something went wrong";
 		}
 
 		$packageCarModel->save();

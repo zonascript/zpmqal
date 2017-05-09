@@ -172,7 +172,7 @@ class UberApiController extends Controller
 		$requestEstimates = json_decode($uberCab->requests_estimate);
 
 		$params = [
-				'fare_id' => $requestEstimates->responce->fare->fare_id,
+				'fare_id' => $requestEstimates->response->fare->fare_id,
 				'product_id' => $requestEstimates->request->product_id, // Optional
 				'payment_method_id' => $paymentMethodId,
 				'start_latitude' => $uberCab->start_latitude,
@@ -235,20 +235,20 @@ class UberApiController extends Controller
 		}
 
 		$url = $this->getUrlFromPath('requests/estimate');
-		$responce = $this->post($url, json_encode($params), $this->header);
-		$responce = json_decode($responce);
+		$response = $this->post($url, json_encode($params), $this->header);
+		$response = json_decode($response);
 
-		if (isset($responce->fare)) {
-			$responce->price = $responce->fare->display;
-			$responce->currency_code = $responce->fare->currency_code;
-		}elseif (isset($responce->estimate)) {
-			$responce->price = $responce->estimate->display;
-			$responce->currency_code = $responce->estimate->currency_code;
+		if (isset($response->fare)) {
+			$response->price = $response->fare->display;
+			$response->currency_code = $response->fare->currency_code;
+		}elseif (isset($response->estimate)) {
+			$response->price = $response->estimate->display;
+			$response->currency_code = $response->estimate->currency_code;
 		}
 
 		$result = [
 			"request" => $params,
-			"responce" => $responce,
+			"response" => $response,
 		]; 
 		
 		$uberCab->requests_estimate = json_encode($result);
@@ -260,15 +260,15 @@ class UberApiController extends Controller
 	public function postRequestRide($params)
 	{
 		$url = $this->getUrlFromPath('requests');
-		$responce = $this->post($url, json_encode($params), $this->header);
-		return json_decode($responce);
+		$response = $this->post($url, json_encode($params), $this->header);
+		return json_decode($response);
 	}
 
 	public function getCurrentRequest()
 	{
 		$url = $this->getUrlFromPath('requests/current');
-		$responce = $this->get($url, null, $this->header);
-		return json_decode($responce);
+		$response = $this->get($url, null, $this->header);
+		return json_decode($response);
 	}
 
 

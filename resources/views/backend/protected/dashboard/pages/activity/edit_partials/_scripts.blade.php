@@ -22,11 +22,11 @@
 			type:"post",
 			url: "{{ url('/destination/option') }}",
 			data: data,
-			success: function(responce, textStatus, xhr) {
+			success: function(response, textStatus, xhr) {
 				if(xhr.status == 200){
-					$('select.destinations').html(responce);
-					// responce_obj = JSON.parse(responce);
-					// console.log(responce);
+					$('select.destinations').html(response);
+					// response_obj = JSON.parse(response);
+					// console.log(response);
 
 				}
       }
@@ -248,12 +248,12 @@
 				type:"post",
 				url: "{{ url('dashboard/activities') }}",
 				data: data,
-				success: function(responce, textStatus, xhr) {
+				success: function(response, textStatus, xhr) {
 					if(xhr.status == 200){
-						responce = JSON.parse(responce);
-						/*console.log(responce.nextUrl);*/
-						alert(responce.responce);
-						document.location.href = responce.nextUrl;
+						response = JSON.parse(response);
+						/*console.log(response.nextUrl);*/
+						alert(response.response);
+						document.location.href = response.nextUrl;
 
 					}
         },

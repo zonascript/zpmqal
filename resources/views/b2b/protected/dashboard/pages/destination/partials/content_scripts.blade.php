@@ -22,11 +22,11 @@
 			type:"post",
 			url: "{{ Request::url() }}", 
 			data: data,
-			success: function(responce, textStatus, xhr) {
+			success: function(response, textStatus, xhr) {
 				if(xhr.status == 200){
-					responce_obj = JSON.parse(responce);
-					console.log(responce_obj.nextUrl);
-					document.location.href = responce_obj.nextUrl;
+					response_obj = JSON.parse(response);
+					console.log(response_obj.nextUrl);
+					document.location.href = response_obj.nextUrl;
 				}
       },
 

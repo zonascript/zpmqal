@@ -309,11 +309,11 @@
 				type:"post",
 				url: "{{ url('/destination/option') }}",
 				data: data,
-				success: function(responce, textStatus, xhr) {
+				success: function(response, textStatus, xhr) {
 					if(xhr.status == 200){
-						$('select.destinations').html(responce);
-						// responce_obj = JSON.parse(responce);
-						// console.log(responce);
+						$('select.destinations').html(response);
+						// response_obj = JSON.parse(response);
+						// console.log(response);
 
 					}
 				}
@@ -534,10 +534,10 @@
 					type:"post",
 					url: "{{ url('dashboard/activities') }}",
 					data: data,
-					success: function(responce, textStatus, xhr) {
+					success: function(response, textStatus, xhr) {
 						if(xhr.status == 200){
-							responce_obj = JSON.parse(responce);
-							$('#activityId').val(responce_obj.response);
+							response_obj = JSON.parse(response);
+							$('#activityId').val(response_obj.response);
 							$('#uploadImage').click();
 						}
 					},

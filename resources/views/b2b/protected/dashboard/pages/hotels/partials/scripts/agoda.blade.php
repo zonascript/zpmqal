@@ -12,10 +12,10 @@
 			type:"post",
 			url: "{{ url('/a/hotels/result/') }}/"+did+"/"+index,
 			data: ids,
-			success: function(responce, textStatus, xhr) {
-				var responce = JSON.parse(responce);
+			success: function(response, textStatus, xhr) {
+				var response = JSON.parse(response);
 				var html = '';
-				var hotels = responce.hotels;
+				var hotels = response.hotels;
 				$('#loging_log').hide();
 
 				if (hotels.length) {
@@ -59,10 +59,10 @@
 			type:"post",
 			url: "{{ url('dashboard/hotel/find/a') }}/"+did,
 			data: ids,
-			success: function(responce, textStatus, xhr) {
-				var responce = JSON.parse(responce);
+			success: function(response, textStatus, xhr) {
+				var response = JSON.parse(response);
 				var html = '';
-				var hotels = responce.hotels;
+				var hotels = response.hotels;
 				$('#loging_log').hide();
 
 				if (hotels.length) {
@@ -128,10 +128,10 @@
 			type:"post",
 			url: "{{ url('/a/hotel/rooms/') }}/"+did,
 			data: ids,
-			success: function(responce, textStatus, xhr) {
-				var responce = JSON.parse(responce);
+			success: function(response, textStatus, xhr) {
+				var response = JSON.parse(response);
 				var html = '';
-				var rooms = responce.rooms;
+				var rooms = response.rooms;
 				var uniqueKey = hid+'_fgfa';
 				
 				invokeMap(uniqueKey);
@@ -144,7 +144,7 @@
 						$('#'+uniqueKey+'_rooms').append(html);
 					});
 
-					$.each(responce.images, function(i,v){
+					$.each(response.images, function(i,v){
 						html = makeGallaryHtml(i, v);
 						$('#'+uniqueKey+'_gimg').append(html);
 					});
@@ -209,8 +209,8 @@
 			type:"post",
 			url: "{{ url('/a/hotel/detail/') }}/"+ids.did,
 			data: ids,
-			success : function(responce){
-				$('#'+uniqueKey+'_about').html(responce);
+			success : function(response){
+				$('#'+uniqueKey+'_about').html(response);
 			}
 		});
 	}

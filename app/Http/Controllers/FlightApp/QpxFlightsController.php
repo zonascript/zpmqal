@@ -97,10 +97,10 @@ class QpxFlightsController extends Controller
 
 		$params = array_merge($paramsTemp, $params);
 
-		// =============================responce=============================
+		// =============================response=============================
 		$gotResult = false;
 		for ($i=0; $i < 5; $i++) { 
-			// breaking loop here is got responce
+			// breaking loop here is got response
 			if ($gotResult) {
 				break;
 			}
@@ -113,7 +113,7 @@ class QpxFlightsController extends Controller
 				$gotResult = true;
 			}
 		}
-		// ====================Saving responce in the db=====================
+		// ====================Saving response in the db=====================
 		
 		$result = json_decode($result);
 

@@ -74,16 +74,24 @@
 					<button type="button" id="btnSaveCost" class="btn btn-success btn-block">Save Cost</button>
 				</div>
 				<div class="col-md-6 col-sm-6 col-xs-12">
-					<button id="run_pdf" class="btn btn-primary btn-block" target="_blank">Generate PDF</button>
-					<a id="btn_pdf" href="{{ newRedirectUrl(urlPdfPacakge($package->id)) }}" class="btn btn-primary btn-block hide" target="_blank"></a>
+					{{-- <button id="run_pdf" class="btn btn-primary btn-block" target="_blank">Generate PDF</button>
+					<a id="btn_pdf" href="{{ newRedirectUrl(urlPdfPacakge($package->id)) }}" class="btn btn-primary btn-block hide" target="_blank"></a> --}}
 				</div>
 			</div>
-
+			<?php
+				$aHref = '';
+				if (!is_null($package->package_url)) {
+					$aHref = 'href="'.$package->package_url.'"';
+				}
+			?>
 			<div class="row m-top-20">
 				<div class="col-md-12 col-sm-12 col-xs-12">
-					<input class="btn-block" id="show_html_link" type="text" 
-						placeholder=" Web link ..."
-					>
+					<div class="input-group">
+		        <input type="text" id="input_html_link" class="form-control" placeholder=" Web link ..." value="{{$package->package_url}}" />
+		        <span class="input-group-btn">
+		          <a {!! $aHref !!} id="a_html_link" type="button" class="btn btn-primary" target="_blank">Open !</a>
+		        </span>
+		      </div>
 				</div>
 			</div>
 		</div>

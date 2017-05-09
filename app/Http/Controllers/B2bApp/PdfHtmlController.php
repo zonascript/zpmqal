@@ -81,10 +81,10 @@ class PdfHtmlController extends Controller
 						type:"get",
 						url: "'.url("/dashboard/package/html/".$pdfHtml->package_id).'",
 						data: data,
-						success: function(responce, textStatus, xhr) {
-							responce = JSON.parse(responce);
-							if (responce.status == 200) {
-								var pdfUrl = "{{ url("/dashboard/package/pdf/") }}/"+responce.hash_id;
+						success: function(response, textStatus, xhr) {
+							response = JSON.parse(response);
+							if (response.status == 200) {
+								var pdfUrl = "{{ url("/dashboard/package/pdf/") }}/"+response.hash_id;
 								$("#btn_pdf").attr("href", pdfUrl);
 								window.open(pdfUrl, "_blank");
 							}
