@@ -13,6 +13,8 @@ return [
     */
 
     'name' => 'B2B Trawish',
+    'admin_name' => 'Admin Trawish',
+    'backend_name' => 'Backend Trawish',
 
     /*
     |--------------------------------------------------------------------------

@@ -1,5 +1,7 @@
 @extends('common.protected.dashboard.main')
 
+@section('app_name', config('app.backend_name', 'Trawish'))
+
 @section('customCss')
 	<link href="{{ asset('backend/css/custom.min.css') }}" rel="stylesheet">
 @endsection
