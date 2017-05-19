@@ -112,20 +112,6 @@ class PayumoneyController extends Controller
 		redirect()->route('showInvoice', $payu->txnid);
 	}
 
-	public function paymentOld()
-	{
-		$data = [
-	    'txnid' => strtoupper(str_random(8)), # Transaction ID.
-	    'amount' => 10, # Amount to be charged.
-	    'productinfo' => "Product Information",
-	    'firstname' => "John", # Payee Name.
-	    'email' => "ajay@flygoldfinch.com", # Payee Email Address.
-	    'phone' => "9768447666", # Payee Phone Number.
-		];
-		return Payment::make($data, function($then) {
-		  $then->redirectTo('payment/success');
-		});
-	}
 
 	public function getUrlAttribute()
   {

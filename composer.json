@@ -10,8 +10,7 @@
         "doctrine/dbal": "^2.5",
         "mpdf/mpdf": "^6.1",
         "hesto/multi-auth": "^1.0",
-        "markwilson/xml-to-json": "^0.1.4",
-        "tzsk/payu": "^1.2"
+        "markwilson/xml-to-json": "^0.1.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

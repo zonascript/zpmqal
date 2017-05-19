@@ -9,7 +9,6 @@ use App\Http\Controllers\BackendApp\PlansController;
 
 use App\Models\AdminApp\PackageModel;
 use Auth;
-use Payment;
 
 class PackageController extends Controller
 {
