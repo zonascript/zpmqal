@@ -13,7 +13,7 @@ class ActivitiesAddAndRenameColumnImagesTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql6')->table('images', function (Blueprint $table) {
+        Schema::connection('mysql2')->table('images', function (Blueprint $table) {
             $table->integer('connectable_id')->after('statusby')->unsigned()->nullable();
             $table->string('connectable_type')->after('connectable_id')->nullable();
         });
@@ -26,7 +26,7 @@ class ActivitiesAddAndRenameColumnImagesTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mysql6')->table('images', function (Blueprint $table) {
+        Schema::connection('mysql2')->table('images', function (Blueprint $table) {
             $table->dropColumn(['connectable_id', 'connectable_type']);
         });
     }
