@@ -36,15 +36,7 @@ function findUser()
 
 function isLocalhost()
 {
-	$domain = explode('.', url('/'));
-
-	$return = false;
-
-	if (is_array($domain) && $domain[count($domain)-1] == 'dev') {
-		$return = true;
-	}
-
-	return $return;
+	return env('IS_LOCALHOST');
 }
 
 
