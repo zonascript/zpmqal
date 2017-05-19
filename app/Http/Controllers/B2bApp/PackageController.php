@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 // =================================B2b Contrller=================================
 use App\Http\Controllers\B2bApp\PdfController;
+use App\Http\Controllers\B2bApp\RouteController;
 use App\Http\Controllers\B2bApp\ClientController;
 use App\Http\Controllers\B2bApp\PdfHtmlController;
 use App\Http\Controllers\B2bApp\PackageCostsController;
@@ -58,7 +59,6 @@ class PackageController extends Controller
 	public function open($token)
 	{
 		$package = $this->model()->findByTokenOrExit($token);
-		$package->package_url;
 		TrackPackageController::call()->inactiveOld($package->id);
 		$bladeData = [
 					"package" => $package,
@@ -140,9 +140,13 @@ class PackageController extends Controller
 
 	public function createTemp($id, $request = [])
 	{
-		$newCode = PackageCodesController::call()->model()->newCode();
+
+		$newCode = isset($request->package_code) && !is_null($request->package_code)  
+						 ? $request->package_code
+						 : PackageCodesController::call()->model()->newCode();
+
 		$auth = Auth::user();
-		$package = new PackageModel;
+		$package = $this->model();
 		$package->user_id= $auth->id;
 		$package->client_id = $id;
 		$package->package_code = $newCode;
@@ -235,8 +239,14 @@ class PackageController extends Controller
 	}
 
 
-	public function saveCost($id, $packageDbId, Request $request)
+	public function saveCost($token, Request $request)
 	{
+		$package = $this->model()->findByToken($token);
+		if (!$package->is_locked) {
+			$package->is_locked = 1;
+			$package->save();
+		}
+
 		$costParams = (object)[
 				"currency" => "INR", 
 				"isVisa" => $request->visa,
@@ -245,7 +255,6 @@ class PackageController extends Controller
 				"margin" => $request->margin
 			];
 
-		$package = PackageModel::find($packageDbId);
 		$packageCost = PackageCostsController::call()
 										->createNew($package->id, $costParams);
 
@@ -302,9 +311,32 @@ class PackageController extends Controller
 
 
 
-	public function showPackageDetail($token, Request $request)
+	public function showPackageDetail($token, $page=null,  Request $request)
 	{
-		echo "coming soon...";
+		$package = $this->model()->findByTokenOrExit($token,false);
+		// dd($package->hotelRoutes[0]->packageActivities[0]->activityObject());
+		$url = $request->fullUrl();
+		if (is_null($page)) {
+			$page = 'home';
+			$url = str_replace($token, $token.'/'.$page, $url);
+		}
+
+		$tempUrl = str_replace($page, '', $url);
+		$blade = [
+				"url" => $url,
+				"package" => $package,
+				"tempUrl" => $tempUrl
+			];
+		return view('subway.pages.'.$page, $blade);
+	}
+
+
+	public function makePackageRaplica($pid)
+	{
+		$package = $this->model()->find($pid);
+		$newPackage = $this->createTemp($package->client_id, $package);
+		RouteController::call()->copyRoutes($package->id, $newPackage->id);
+		return $newPackage;
 	}
 
 

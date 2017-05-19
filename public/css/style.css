@@ -2,7 +2,6 @@
 .scroll-bar::-webkit-scrollbar-track { -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); }
 .scroll-bar::-webkit-scrollbar-thumb { background-color: darkgrey; outline: 1px solid slategrey; }
 .scroll-auto{ overflow: auto; }
-
 .hide-overflow{
 	overflow:hidden;
 	white-space:nowrap;
@@ -22,15 +21,22 @@
 }
 
 .errspan {
-  float: right;
-  margin-right: 2px;
-  margin-top: -26px;
-  position: relative;
-  z-index: 2;
+	float: right;
+	margin-right: 2px;
+	margin-top: -26px;
+	position: relative;
+	z-index: 2;
 }
 
 .wickedpicker{
 	z-index: 50;
+}
+
+
+.full-image{
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
 }
 
 .alert-pop-up-base{
@@ -54,6 +60,83 @@
 	border-radius: 5px;
 	border: 1px solid #916464;
 	box-shadow: 3px 3px 1px #888888;
+}
+
+
+.square {
+	float:left;
+	position: relative;
+	width: 100%;
+	padding-bottom : 100%; /* = width for a 1:1 aspect ratio */
+	margin:2.1%;
+	background-color:#1E1E1E;
+	overflow:hidden;
+}
+
+.square-content {
+	position:absolute;
+	height:100%; /* = 100% - 2*5% padding */
+	width:100%; /* = 100% - 2*5% padding */
+}
+
+/*  For responsive images */
+
+.square-content .square-rs{
+	width:auto;
+	height:auto;
+	max-height:90%;
+	max-width:100%;
+}
+/*  For responsive images as background */
+
+.square-bg{
+	background-position:center center;
+	background-repeat:no-repeat;
+	background-size:cover; /* you change this to "contain" if you don't want the images to be cropped */
+	color:#fff;
+}
+
+/*  following just for the demo */
+
+
+.square-numbers{
+	font-weight:900;
+	font-size:100px;
+}
+
+.tile-title{
+	font-size: 30px;
+	margin: 20px 0 25px 0;	
+}
+
+.tile-line{
+	margin: 3px;
+	font-size: 17px;
+}
+
+.down-title{
+	height: 60px;
+	line-height: 60px;
+	font-size: 36px;
+	font-family: "NewCicleFina";
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	color: #ffffff;
+	background-color : rgba(0,0,0,0.6);
+}
+
+.subway-theme-font{
+	font-family: "NewCicleFina";
+}
+
+.mod-box-color3 {
+	color: #ffffff;
+	background: #32839E;
+	background: -moz-linear-gradient(-45deg, #5FA0C0 0%, #32839E 100%);
+	background: -webkit-linear-gradient(-45deg, #5FA0C0 0%,#32839E 100%);
+	background: -o-linear-gradient(-45deg, #5FA0C0 0%,#32839E 100%);
+	background: linear-gradient(to bottom right, #5FA0C0 0%,#32839E 100%); 
 }
 
 .capitalize{	text-transform: capitalize; }
@@ -210,12 +293,16 @@
 .font-dark-red{ color: #ce5d5d !important; }
 
 /*font-size*/
+.font-size-0{ font-size: 0px ! important; }
 .font-size-10{ font-size: 10px ! important; }
+.font-size-11{ font-size: 11px ! important; }
 .font-size-13{ font-size: 13px ! important; }
 .font-size-15{ font-size: 15px ! important; }
 .font-size-17{ font-size: 17px ! important; }
+.font-size-18{ font-size: 18px ! important; }
 .font-size-20{ font-size: 20px ! important; }
 .font-size-22{ font-size: 22px ! important; }
+.font-size-25{ font-size: 25px ! important; }
 .font-size-30{ font-size: 30px ! important; }
 .font-size-35{ font-size: 35px ! important; }
 .font-size-40{ font-size: 40px ! important; }
@@ -272,8 +359,8 @@
 .form-style-8 input[type="url"],
 .form-style-8 input[type="password"],
 .form-style-8 textarea,
-.form-style-8 select 
-{ box-sizing: border-box;
+.form-style-8 select { 
+	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	outline: none;
@@ -285,9 +372,12 @@
 	background: transparent;
 	margin-bottom: 10px;
 	font: 16px Arial, Helvetica, sans-serif;
-	height: 45px; }
-.form-style-8 textarea{ resize:none;
-	overflow: hidden; }
+	height: 45px; 
+}
+.form-style-8 textarea{ 
+	resize:none;
+	overflow: hidden; 
+}
 
 
 /*.form-style-8 > input[type="button"], 
@@ -328,6 +418,7 @@
 .width-100{ width: 100px ! important; }
 .width-120{ width: 120px ! important; }
 .width-350{ width: 350px !important; }
+.width-220{ width: 220px !important; }
 .width-400{ width: 400px !important; }
 .width-450{ width: 450px !important; }
 .width-550{ width: 550px !important; }
@@ -347,7 +438,8 @@
 .height-30{ height: 30px ! important; }
 .height-34{ height: 34px ! important; }
 .height-50px{ height: 50px ! important; }
-.height-70px{ height: 50px ! important; }
+.height-67px{ height: 67px ! important; }
+.height-70px{ height: 70px ! important; }
 .height-80px{ height: 80px ! important; }
 .height-87px{ height: 87px ! important; }
 .height-100px{ height: 100px ! important; }
@@ -360,6 +452,7 @@
 .height-165px{ height: 165px ! important; }
 
 .height-180px{ height: 180px ! important; }
+.height-188px{ height: 188px ! important; }
 .height-190px{ height: 190px ! important; }
 .height-200px{ height: 200px ! important; }
 .height-210px{ height: 210px ! important; }
@@ -374,6 +467,7 @@
 .height-71vh{ height: 71vh ! important; }
 .height-75vh{ height: 75vh ! important; }
 .height-80vh{ height: 80vh ! important; }
+.height-82vh{ height: 82vh ! important; }
 .height-90vh{ height: 90vh ! important; }
 
 .min-height-100px{ min-height: 100px; }
@@ -421,10 +515,13 @@
 
 /*.padding-top{ padding-top : 50px; }*/
 
+.p-10{ padding: 10px ! important; }
 .padding-10{ padding: 10px ! important; }
 .p-top-2{ padding-top: 2px !important; }
 .p-top-5{ padding-top: 5px !important; }
 .p-top-10{ padding-top: 10px !important; }
+.p-top-15{ padding-top: 15px !important; }
+.p-top-20{ padding-top: 20px !important; }
 
 .p-right-0{ padding-right: 0 !important; }
 .p-right-5{ padding-right: 5px !important; }
@@ -443,6 +540,7 @@
 
 
 .padding-tb-10{ padding: 10px 0 10px 0; }
+
 
 
 /* end padding section*/
@@ -484,6 +582,7 @@
 .m-top-15{ margin-top: 15px ! important; }
 .m-top-20{ margin-top: 20px ! important; }
 .m-top-30{ margin-top: 30px !important; }
+.m-top-40{ margin-top: 40px !important; }
 .m-top-50{ margin-top: 50px !important; }
 .m-top-70{ margin-top: 70px !important; }
 .m-top-100{ margin-top: 100px !important; }
@@ -564,6 +663,7 @@
 .border-gray{ border: 1px solid #ccc; }
 .border-red{border: 1px solid red ! important;}
 .border-top-gray{ border-top: 1px solid #ccc; }
+.border-red-2px{border: 2px solid red ! important;}
 .border-blue-1px{border: 1px solid #337ab7 ! important;}
 .border-blue-2px{border: 2px solid #337ab7 ! important;}
 .border-green-2px{border: 2px solid #388e22 ! important;}
@@ -797,3 +897,48 @@ body {font-family:Helvetica,Arial,sans-serif;}
 .cf:after {
 	clear: both;
 }
+
+
+
+/* entire container, keeps perspective */
+.flip-container {
+	perspective: 1000px;
+}
+/* flip the pane when hovered */
+.flip-container:hover .flipper, .flip-container.hover .flipper {
+	transform: rotateY(180deg);
+}
+
+.flip-container, .front, .back {
+	width: 100%;
+	height: 100%;
+}
+
+/* flip speed goes here */
+.flipper {
+	transition: 0.6s;
+	transform-style: preserve-3d;
+	position: relative;
+}
+
+/* hide back of pane during swap */
+.front, .back {
+	backface-visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+/* front pane, placed above back */
+.front {
+	z-index: 2;
+	/* for firefox 31 */
+	transform: rotateY(0deg);
+}
+
+/* back, initially hidden pane */
+.back {
+	transform: rotateY(180deg);
+}
+
+

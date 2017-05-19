@@ -19,9 +19,11 @@ class RouteModel extends Model
 			'origin_code', 
 			'end_datetime',
 			'origin_detail', 
+			'explode_origin',
 			'start_datetime', 
 			'destination_code',
-			'destination_detail'
+			'destination_detail',
+			'explode_destination',
 		];
 	
 	/**
@@ -97,6 +99,16 @@ class RouteModel extends Model
 		return $startDate;*/
 	}
 
+	public function getExplodeOriginAttribute()
+	{
+		return explode(', ', $this->origin);
+	}
+
+	public function getExplodeDestinationAttribute()
+	{
+		return explode(', ', $this->destination);
+	}
+
 	public function searchDbLocation($word)
 	{
 		return DestinationController::call()->model()->search($word);
@@ -117,7 +129,11 @@ class RouteModel extends Model
 	// if copying route then copy package activities too
 	public function packageActivities()
 	{
-		return $this->hasMany('App\Models\B2bApp\PackageActivityModel', 'route_id');
+		$activities = $this->hasMany(
+											'App\Models\B2bApp\PackageActivityModel', 
+											'route_id'
+										);
+		return $activities->orderBy('date' ,'asc');
 	}
 
 
@@ -146,7 +162,7 @@ class RouteModel extends Model
 			$where[] = ['id', '>', $routeId];
 		}
 
-		$routes = $this->select()->where($where)->get();
+		$routes = $this->where($where)->get();
 		
 		if ($routes->count()) {
 			$nextStartDate = '0000-00-00';
@@ -217,4 +233,30 @@ class RouteModel extends Model
 		}
 		return $result;
 	}
+
+	public function cruiseDetail()
+	{
+		$result = null;
+		if ($this->mode == 'cruise' && !is_null($this->fusion)) {
+			$result = $this->fusion->cruiseDetail();
+			$result->nights = $this->nights;
+			$result->location = $this->destination_detail->location;
+			$result->endDate = $this->end_datetime->format('d-M-Y');
+			$result->startDate = $this->start_datetime->format('d-M-Y');
+		}
+		return $result;
+	}
+
+	public function accomo()
+	{
+		$result = null;
+		if ($this->mode == 'hotel') {
+			$result = $this->hotelDetail();
+		}
+		elseif ($this->mode == 'cruise') {
+			$result = $this->cruiseDetail();
+		}
+		return $result;
+	}
+
 }

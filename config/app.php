@@ -173,7 +173,8 @@ return [
          * Self added Package Service Providers...
          */
         Hesto\MultiAuth\MultiAuthServiceProvider::class,
-        
+        Tzsk\Payu\Provider\PayuServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -231,6 +232,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Payment' => Tzsk\Payu\Facade\Payment::class,
     ],
 
 ];

@@ -1,7 +1,8 @@
 <?php 
 
 	Route::group(['prefix' => 'dashboard/package/builder/activities'], function () {
-		Route::get('{token}', 'ActivitiesController@getActivitiesByToken');
+		Route::get('{token}', 'ActivitiesController@getActivitiesByToken')
+						->middleware('packageIsLock')->name('activities');
 		Route::post('add/{routeId}', 'ActivitiesController@postAddActivity');
 		Route::post('remove/{routeId}', 'ActivitiesController@postRemoveActivity');
 	});

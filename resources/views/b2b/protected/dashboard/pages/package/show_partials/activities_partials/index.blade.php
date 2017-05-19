@@ -28,9 +28,8 @@
 							@if (strlen($activityDescription) != '')
 								<button id="btn-descriptionMore_{{ $uniqueCode }}" 
 									class="btn-link cursor-pointer nopadding btn-model" 
-									data-toggle="modal" data-target=".bs-example-modal-lg" 
-									data-title="{{ $activityName }} : Description" data-bodyid="activityFullDescription_{{ $uniqueCode }}" 
-									data-button="false" data-Index="{{ $uniqueCode }}">More
+									data-title="{{ $activityName }} : Description" 
+									data-bodyid="activityFullDescription_{{ $uniqueCode }}">More
 								</button>
 							@endif
 							<div id="activityFullDescription_{{ $uniqueCode }}" hidden>

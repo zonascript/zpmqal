@@ -85,7 +85,7 @@
 
 			$.ajax({
 				type:"post",
-				url: "{{ urlSavePackageCost($package->client->id, $package->id) }}",
+				url: "{{ route('saveCost', $package->token) }}",
 				data: data,
 				success: function(response, textStatus, xhr) {
 					response = JSON.parse(response);

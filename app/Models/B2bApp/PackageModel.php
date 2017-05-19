@@ -36,7 +36,11 @@ class PackageModel extends Model
 	public function getUidAttribute()
 	{
 		$prefix = $this->client->user->admin->prefix;
-		return $prefix.str_pad($this->package_code, 7, '0', STR_PAD_LEFT);
+		$uid = $prefix.str_pad($this->package_code, 7, '0', STR_PAD_LEFT);
+		if ($this->modify_count) {
+			$uid .= '-'.num2alpha($this->modify_count-1);
+		}
+		return $uid; 
 	}
 
 	public function getNightsAttribute()
@@ -65,7 +69,7 @@ class PackageModel extends Model
 	{
 		$url = null;
 		if (isset($this->cost->token)) {
-			$url = route('yourPackage', $this->token).'?ctk='.$this->cost->token;
+			$url = route('yourPackage', $this->attributes['token']).'?ctk='.$this->cost->token;
 		}
 		return $url;
 	}
@@ -108,17 +112,24 @@ class PackageModel extends Model
 
 	public function findByToken($token)
 	{
-		return $this->select()->where(['token' => $token])->first();
+		return $this->where(['token' => $token])->first();
 	}
 
 
-	public function findByTokenOrExit($token)
+	public function findByTokenOrExit($token, $next_auth = true)
 	{
 		$result = $this->findByToken($token);
-		$auth = Auth::user();
-		if (is_null($result) && $result->user_id != $auth->id) {
+		$next_check = false;
+
+		if ($next_auth) {
+			$auth = Auth::user();
+			$next_check = $result->user_id != $auth->id;
+		}
+
+		if (is_null($result) || $next_check) {
 			$this->exitView();
 		}
+
 		return $result;
 	}
 
@@ -146,7 +157,6 @@ class PackageModel extends Model
 	}
 
 
-
 	/*
 	| this function is to get all route which is belongs to package table id
 	*/
@@ -154,6 +164,14 @@ class PackageModel extends Model
 	{
 		$routes = $this->hasMany('App\Models\B2bApp\RouteModel', 'package_id');
 		return $routes->where([['status', '<>', 'deleted']]);
+	}
+
+	public function packages()
+	{
+		return $this->hasMany('App\Models\B2bApp\PackageModel',
+											'package_code',
+											'package_code'
+										);
 	}
 
 

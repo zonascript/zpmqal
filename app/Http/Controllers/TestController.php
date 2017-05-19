@@ -11,6 +11,7 @@ class TestController extends Controller
 
 	public function testCode()
 	{
+		dd(url('/'));
 
 		dd(mycrypt(329));
 		dd(1 == '1.0');

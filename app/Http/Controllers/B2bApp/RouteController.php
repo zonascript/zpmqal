@@ -11,6 +11,7 @@ use App\Http\Controllers\B2bApp\PackageController;
 
 // ====================================Models====================================
 use App\Models\B2bApp\RouteModel;
+use App\Models\B2bApp\PackageActivityModel;
 
 
 class RouteController extends Controller
@@ -330,4 +331,49 @@ class RouteController extends Controller
 		$nextEvent = PackageController::call()->findEvent($package->id);
 		return $nextEvent;
 	}
+
+
+
+	public function copyRoutes($oldPid, $newPid)
+	{
+		$routes = $this->findByPackageid($oldPid);
+		foreach ($routes as $route) {
+			$newRoute = $this->model();
+			$newRoute->package_id = $newPid;
+			$newRoute->mode = $route->mode;
+			$newRoute->origin = $route->origin;
+			$newRoute->destination = $route->destination;
+			$newRoute->nights = $route->nights;
+			$newRoute->start_date = $route->start_date;
+			$newRoute->start_time = $route->start_time;
+			$newRoute->end_date = $route->end_date;
+			$newRoute->end_time = $route->end_time;
+			$newRoute->is_pick_up = $route->is_pick_up;
+			$newRoute->pick_up = $route->pick_up;
+			$newRoute->is_drop_off = $route->is_drop_off;
+			$newRoute->drop_off = $route->drop_off;
+			$newRoute->fusion_id = $route->fusion_id;
+			$newRoute->fusion_type = $route->fusion_type;
+			$newRoute->status = $route->status;
+			$newRoute->save();
+
+			if ($route->packageActivities->count()) {
+				foreach ($route->packageActivities as $packageActivity) {
+					$activity = new PackageActivityModel;
+					$activity->route_id = $newRoute->id;
+					$activity->mode = $packageActivity->mode;
+					$activity->date = $packageActivity->date;
+					$activity->timing = $packageActivity->timing;
+					$activity->activity_id = $packageActivity->activity_id;
+					$activity->activity_type = $packageActivity->activity_type;
+					$activity->is_active = $packageActivity->is_active;
+					$activity->save();
+				}
+			}
+		}
+
+		return $routes;
+	}
+
+
 }

@@ -28,6 +28,10 @@ Route::group(['domain' => env('ADMIN_DOMAIN')], function () {
 	include('admin.php');
 });
 
+Route::group(['domain' => env('ITINERARY_DOMAIN')], function () {
+	include('itinerary.php');
+});
+
 
 //==================================local==================================
 Route::group(['domain' => env('LOCAL_B2B_DOMAIN')], function () {
@@ -40,4 +44,8 @@ Route::group(['domain' => env('LOCAL_BACKEND_DOMAIN')], function () {
 
 Route::group(['domain' => env('LOCAL_ADMIN_DOMAIN')], function () {
 	include('admin.php');
+});
+
+Route::group(['domain' => env('LOCAL_ITINERARY_DOMAIN')], function () {
+	include('itinerary.php');
 });

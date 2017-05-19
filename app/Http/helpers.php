@@ -713,6 +713,17 @@ function getUniqueId($id, $prefix = '', $count = 5){
 	return $prefix.str_pad($id, $count, '0', STR_PAD_LEFT);
 }
 
+function uid()
+{
+	return time().rand(1000,99999);
+}
+
+function daysToMonth($days, $inRound = true)
+{
+	$month = $days/30;
+	return $inRound ? ceil($month) : $month;
+}
+
 
 function timeStamp(){
 	date_default_timezone_set('Asia/Kolkata');
@@ -890,6 +901,11 @@ function urlImage($path = '')
 
 }
 
+function flightImage($code = null)
+{
+	return urlImage('images/airlineImages/'.$code.'.gif');
+}
+
 /*
 | this function is to fix skyscanner images array
 */
@@ -999,12 +1015,6 @@ function urlPackageOpen($token){
 function urlPackageAll($id = false, $packageDbId = false){
 	return url('dashboard/package/all/'.$id.'/'.$packageDbId);
 }
-
-
-function urlSavePackageCost($id = 0, $packageDbId = 0){
-	return url('dashboard/package/savecost/'.$id.'/'.$packageDbId);
-}
-
 
 
 /*=====================Accommodation Url=====================*/

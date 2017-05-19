@@ -2,9 +2,9 @@
 
 namespace App\Models\AdminApp;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Admin;
 
-class AdminModel extends Model
+class AdminModel extends Admin
 {
 	protected $connection = 'mysql3';
 	protected $table = 'admins';

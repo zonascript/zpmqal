@@ -28,8 +28,8 @@ class PackageCostsController extends Controller
 		
 		$isVisa = isset($request->isVisa) ? $request->isVisa : 0;
 		$packageCost = $this->lastCost();
-
 		$check = (
+						!is_null($packageCost) &&
 						$packageCost->is_visa == $isVisa &&
 						$packageCost->margin	== $request->margin &&
 						$packageCost->net_cost == $request->netCost &&

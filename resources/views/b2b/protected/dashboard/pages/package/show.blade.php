@@ -17,7 +17,7 @@
 					@include($viewPath.'.show_partials.follow_up')
 				</div>
 				<div class="col-md-6 col-sm-6 col-xs-12">
-					@include($viewPath.'.show_partials.sector')
+					@include($viewPath.'.show_partials.modify')
 				</div>
 			</div>
 		</div>
@@ -86,25 +86,15 @@
 			</div>
 		</div>
 		{{-- /Grand Total List --}}
-
 	</div>
-
-
-{{-- popUpModel --}}
-@include('common.protected.dashboard.partials._popupModel')
-{{-- /popUpModel --}}
-
-
 @endsection
 
 @section('js')
-
 	{{-- bootstrap-daterangepicker --}}
 	<script src="{{ commonAsset('datetimepicker/jquery.datetimepicker.full.js') }}"></script>
 	<script src="{{ commonAsset('dashboard/js/moment/moment.min.js') }}"></script>
 	<script src="{{ commonAsset('dashboard/js/datepicker/daterangepicker.js') }}"></script>
 	{{-- /bootstrap-daterangepicker --}}
-
 @endsection
 
 

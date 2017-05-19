@@ -18,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
-		
+
 		View::composer('b2b.*', function($view){
 			$view->with('auth', Auth::user());
 		});
@@ -30,18 +30,24 @@ class AppServiceProvider extends ServiceProvider
 		View::composer('backend.*', function($view){
 			$view->with('auth', Auth::guard('backend')->user());
 		});
+		
+		$domain = isset($_SERVER['HTTP_HOST']) 
+						? $_SERVER['HTTP_HOST']
+						: env('B2B_DOMAIN');
 
-		View::composer('b2b.*', function($view){
-			$view->with('todos', ToDoController::call()->all());
-		});
+		if (in_array($domain, [env('B2B_DOMAIN'), env('LOCAL_B2B_DOMAIN')]) ) {
+			View::composer('b2b.*', function($view){
+				$view->with('todos', ToDoController::call()->all());
+			});
 
-		View::composer('b2b.*', function($view){
-			$view->with('pendingLeads',  ClientController::call()->pendingClients());
-		});
+			View::composer('b2b.*', function($view){
+				$view->with('pendingLeads',  ClientController::call()->pendingClients());
+			});
 
-		View::composer('b2b.*', function($view){
-			$view->with('pendingFollowUps',  FollowUpController::call()->all());
-		});
+			View::composer('b2b.*', function($view){
+				$view->with('pendingFollowUps',  FollowUpController::call()->all());
+			});
+		}
 
 	}
 

@@ -14,20 +14,41 @@ Route::get('password/reset/{token}', 'AdminAuth\ResetPasswordController@showRese
 
 Route::get('home', 'AdminApp\PagesController@getHome');
 
-Route::group(['middleware' => ['admin']], function(){
-	
-	Route::get('/', 'AdminApp\PagesController@getIndex');
-	Route::get('/dashboard', 'AdminApp\DashboardController@getIndex');
+Route::group(['middleware' => ['admin'], 'namespace' => 'AdminApp'], function(){
+	Route::get('/', 'PagesController@getIndex');
 
-	Route::resource('/dashboard/enquiry', 'AdminApp\EnquiryController');
-	Route::post('/dashboard/enquiry/{id}/active', 'AdminApp\EnquiryController@active');
+	Route::group(['prefix' => 'agent'], function(){
+		/** @credits */
+		Route::get('credits', 'PackageController@getShowPlans')
+					 ->name('getCredits');
+		Route::get('credits_checkout', 'PackageController@getCheckout')
+					 ->name('creditsCheckout');
+		Route::get('show/invoice/{txnid}', 'PackageController@showInvoice')
+					 ->name('showInvoice');	
 
-	// Settings Section
-	Route::resource('/dashboard/settings/text', 'AdminApp\TextController');
-	Route::post('/dashboard/settings/text/{id}/active', 'AdminApp\TextController@active');
+		/** @payments */
+		Route::get('pay', 'PayumoneyController@pay')->name('pay');
+		Route::match(['get', 'post'], 'pay/success','PayumoneyController@success')
+					 ->name('paySuccess');
+		Route::match(['get', 'post'], 'pay/failure', 'PayumoneyController@failure')
+					 ->name('payFailure');
+	});
 
-	Route::resource('/dashboard/settings/lead/vendor', 'AdminApp\LeadVendorController');
-	Route::post('/dashboard/settings/lead/vendor/{id}/active', 'AdminApp\LeadVendorController@active');
+	Route::group(['prefix' => 'dashboard'], function(){
+
+		Route::get('/', 'DashboardController@getIndex');
+		Route::resource('enquiry', 'EnquiryController');
+		Route::post('enquiry/{id}/active', 'EnquiryController@active');
+
+		// Settings Section
+		Route::group(['prefix' => 'settings'], function(){
+			Route::resource('text', 'TextController');
+			Route::post('text/{id}/active', 'TextController@active');
+			Route::resource('lead/vendor', 'LeadVendorController');
+			Route::post('lead/vendor/{id}/active', 'LeadVendorController@active');
+		});
+
+	});
 });
 
 

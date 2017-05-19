@@ -34,7 +34,7 @@ class EnquiryController extends Controller
 	 */
 	public function index()
 	{
-		$clients = EnquiryModel::call()->findByAdminId();
+		$clients = $this->model()->findByAdminId();
 		return view('admin.protected.dashboard.pages.enquiry.index', ['clients' => $clients]);
 	}
 
@@ -45,7 +45,7 @@ class EnquiryController extends Controller
 	 */
 	public function create()
 	{
-		$auth = Auth::gaurd('admin')->user();
+		$auth = Auth::guard('admin')->user();
 		$agents = $auth->users;
 		$leadVendors = LeadVendorController::call()->model()->findByAdminId();
 		// dd($leadVendors);
@@ -95,8 +95,8 @@ class EnquiryController extends Controller
 	 */
 	public function show($id)
 	{
-		$auth = Auth::gaurd('admin')->user();
-		$enquiry = EnquiryModel::find($id);
+		$auth = Auth::guard('admin')->user();
+		$enquiry = $this->model()->find($id);
 
 		if (!is_null($enquiry) && $auth->id == $enquiry->user->admin->id) {
 			$agents = $auth->users;
@@ -121,8 +121,8 @@ class EnquiryController extends Controller
 	 */
 	public function edit($id)
 	{
-		$auth = Auth::gaurd('admin')->user();
-		$enquiry = EnquiryModel::find($id);
+		$auth = Auth::guard('admin')->user();
+		$enquiry = $this->model()->find($id);
 
 		if (!is_null($enquiry) && $auth->id == $enquiry->user->admin->id) {
 			$agents = $auth->users;
@@ -156,7 +156,7 @@ class EnquiryController extends Controller
 			'email' => 'required|email|max:255',
 		]);
 
-		$client = EnquiryModel::find($id);
+		$client = $this->model()->find($id);
 		$client->user_id = $request->agent;
 		$client->lead_vendor_id = $request->vendor;
 		$client->fullname = $request->fullname;
@@ -171,7 +171,7 @@ class EnquiryController extends Controller
 
 	public function active($id)
 	{
-		$enquiry = EnquiryModel::find($id);
+		$enquiry = $this->model()->find($id);
 		$enquiry->status = 'active';
 		$enquiry->save();
 		return redirect('dashboard/enquiry');
@@ -185,7 +185,7 @@ class EnquiryController extends Controller
 	 */
 	public function destroy($id, Request $request)
 	{
-		$enquiry = EnquiryModel::find($id);
+		$enquiry = $this->model()->find($id);
 
 		if (isset($request->inactive)) {
 			$enquiry->status = 'inactive';

@@ -1,7 +1,8 @@
 <?php
 		
 	Route::group(['prefix' => 'dashboard/package/builder/accommodation'], function () {
-		Route::get('{token}', 'AccommodationController@getHotelsByToken');
+		Route::get('{token}', 'AccommodationController@getHotelsByToken')
+						->middleware('packageIsLock')->name('accommo');
 		Route::post('remove/{routeId}', 'AccommodationController@postRemoveAccomo');
 		Route::post('prop/add/{routeId}', 'AccommodationController@postAddProp');
 		Route::post('prop/remove/{routeId}', 'AccommodationController@postRemoveProp');

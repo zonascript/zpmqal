@@ -2,7 +2,8 @@
 	$flightsController = 'FlightsController';
 	
 	Route::group(['prefix' => 'dashboard/package/builder'], function () {
-		Route::get('flights/{token}', 'FlightsController@getFlightsByToken');
+		Route::get('flights/{token}', 'FlightsController@getFlightsByToken')
+						->middleware('packageIsLock')->name('flights');
 		Route::post('flight/book/{routeId}', 'FlightsController@postBookFlightsResult');
 		Route::delete('flight/{routeId}', 'FlightsController@removeFlight');
 	});

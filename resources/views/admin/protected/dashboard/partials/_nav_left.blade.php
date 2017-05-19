@@ -19,11 +19,30 @@
 			<div class="profile_info">
 				<div class="text-center">Welcome!</div>
 				<h2 class="text-center">{{ $auth->fullname }}</h2>
-				<h2 class="text-center"><div class="font-size-17">({{ $auth->companyname }})</div></h2>
+				<h2 class="text-center">
+					<div class="font-size-17">({{ $auth->companyname }})</div>
+				</h2>
 			</div>
 		</div>
-		{{-- /menu profile quick info --}}
 
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="text-right font-white">
+				<div>
+					<b>Active Plan</b>: <span class="font-gold">Gold</span>
+				</div>
+
+				<div>
+					<b>Valid Till</b>: 30-06-2017
+				</div>
+				<div>
+					<span><b>Balance (<i class="fa fa-rupee font-size-11"></i> 5000)</b> </span>
+					<a href="{{ route('getCredits') }}" class="btn-danger btn-xs">Add Money</a>
+				</div>
+			</div>
+			<div class="m-top-20"></div>
+		</div>
+
+		{{-- /menu profile quick info --}}
 		<br />
 
 		{{-- sidebar menu --}}
