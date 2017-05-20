@@ -1,7 +1,9 @@
 @if ($package->flightRoutes->count())
 	<article class="item">
 		<header>
-			<h1 class="title"><a href="index30e4.html?p=607" title="holiday impressions">flights</a></h1>
+			<h1 class="title">
+				<a href="{{ $urlObj->url('flights') }}" title="holiday impressions">flights</a>
+			</h1>
 		</header>
 		@foreach ($package->flightRoutes as $key => $route)
 			<div class="content clearfix p-10">
@@ -70,6 +72,6 @@
 		@endforeach
 	</article>
 	<div class="links">
-		<a href="{{ $tempUrl }}flight" title="show more">show more</a>
+		<a href="{{ $urlObj->url('flights') }}" title="show more">show more</a>
 	</div>
 @endif

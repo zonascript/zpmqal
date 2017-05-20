@@ -2,12 +2,12 @@
 	<article class="item">
 		<header>
 			<h1 class="title">
-				<a href="{{ $tempUrl }}accommodation" title="holiday impressions">accommodations</a>
+				<a href="{{ $urlObj->url('accommodation') }}" title="holiday impressions">accommodations</a>
 			</h1>
 		</header>
 		
 		<div class="gi-carousel-main">
-	    <div class="GICarousel demo1 GI_C_wrapper">
+	    <div class="GICarousel carousel-box GI_C_wrapper">
 	      <ul class="GI_IC_items" style="{{ $package->accomoRoutes->count() == 1 ? "display: block;" : ''}}">
 		      @foreach ($package->accomoRoutes as $key => $route)
 						<?php
@@ -35,10 +35,10 @@
 	    </div>
 	  </div>
 		<script type="text/javascript">
-			$('.demo1').GICarousel({arrows:true});
+			$('.carousel-box').GICarousel({arrows:true});
   	</script>
 	</article>
 	<div class="links">
-		<a href="{{ $tempUrl }}accommodation" title="show more">show more</a>
+		<a href="{{ $urlObj->url('accommodation') }}" title="show more">show more</a>
 	</div>
 @endif

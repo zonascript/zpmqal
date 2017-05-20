@@ -1,6 +1,6 @@
-<article id="item-607" class="item" data-permalink="https://demo.yootheme.com/themes/wordpress/2012/subway/?p=607">
+<article class="item">
 	<header>
-		<h1 class="title"><a href="index30e4.html?p=607" title="holiday impressions">trip summary</a></h1>
+		<h1 class="title">trip summary</h1>
 	</header>
 	<div class="content clearfix">
 		<table class="zebra">

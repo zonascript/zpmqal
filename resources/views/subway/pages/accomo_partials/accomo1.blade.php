@@ -5,9 +5,8 @@
 				<a href="{{ $urlObj->url('accommodation') }}" title="holiday impressions">accommodations</a>
 			</h1>
 		</header>
-	</article>
-  @foreach ($package->accomoRoutes as $key => $route)
-		<article class="item">
+		
+    @foreach ($package->accomoRoutes as $key => $route)
 			<?php
 				$images = $route->fusion->images();
 				$accomo = $route->accomo();
@@ -40,6 +39,9 @@
 			<script type="text/javascript">
 				$('.carousel-box{{$key}}').GICarousel({arrows:true});
 	   	</script>
-		</article>
-	@endforeach
+	   	@if ($package->accomoRoutes->count() != ($key+1))
+				<hr>
+			@endif
+		@endforeach
+	</article>
 @endif

@@ -18,7 +18,7 @@
 								<div id="system">
 									<div class="items items-col-1 grid-block">
 										<div class="grid-box width100">
-											@include('subway.pages.activities_partials.activities')	
+											@include('subway.pages.activities_partials.activities1')	
 										</div>
 									</div>
 								</div>

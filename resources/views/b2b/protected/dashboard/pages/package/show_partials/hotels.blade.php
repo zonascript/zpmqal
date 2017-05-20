@@ -7,7 +7,7 @@
 					<h1>Hotel List</h1>
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-12 m-top-10">
-					<a href="{{ urlAllHotelsBuilder($package->id) }}" class="btn btn-success btn-block">Modify All Hotels</a>
+					<a href="{{ route('accommo', [$package->token]) }}" class="btn btn-success btn-block">Modify All Hotels</a>
 				</div>
 				{{-- <div class="col-md-1 col-sm-1 col-xs-12 m-top-10">
 					<ul class="nav navbar-right panel_toolbox panel_toolbox1">

@@ -53,8 +53,8 @@ return [
     |
     */
 
-    'url' => url('/'),
-    // 'url' => env('APP_URL', 'http://localhost'),
+    // 'url' => url('/'),
+    'url' => env('APP_URL', 'http://localhost'),
 
     /*
     |--------------------------------------------------------------------------

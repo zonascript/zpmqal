@@ -14,6 +14,9 @@ use App\Http\Controllers\B2bApp\PackageCostsController;
 use App\Http\Controllers\B2bApp\TrackPackageController;
 use App\Http\Controllers\B2bApp\PackageCodesController;
 
+// ===============================Common Contrller=================================
+use App\Http\Controllers\CommonApp\UrlController;
+
 // =====================================Models=====================================
 use App\Models\B2bApp\PackageModel;
 
@@ -321,12 +324,14 @@ class PackageController extends Controller
 			$url = str_replace($token, $token.'/'.$page, $url);
 		}
 
-		$tempUrl = str_replace($page, '', $url);
+		$urlObj = new UrlController(['url' => str_replace($page, '{}', $url)]);
+
 		$blade = [
 				"url" => $url,
 				"package" => $package,
-				"tempUrl" => $tempUrl
+				"urlObj" => $urlObj
 			];
+
 		return view('subway.pages.'.$page, $blade);
 	}
 

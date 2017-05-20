@@ -5,14 +5,12 @@
 				<a href="{{ $urlObj->url('activities') }}" title="holiday impressions">things to do</a>
 			</h1>
 		</header>
-	</article>
-  @foreach ($package->activities as $key => $activityData)
-		<?php
-			$images = [];
-			$activity = $activityData->activityObject();
-			$images[] = $activity->image;
-		?>
-		<article class="item">
+	  @foreach ($package->activities as $key => $activityData)
+			<?php
+				$images = [];
+				$activity = $activityData->activityObject();
+				$images[] = $activity->image;
+			?>
 			<div class="content clearfix">
 			  <div class="width-30-p height-200px pull-left m-right-10">
 					<div class="gi-carousel-main">
@@ -39,9 +37,12 @@
 					<p>{{ $activity->description }}</p>
 			  </div>
 			</div>
-		</article>
-		<script type="text/javascript">
-			$('.carousel-box{{$key}}').GICarousel({arrows:true});
-		</script>
-	@endforeach
+			<script type="text/javascript">
+				$('.carousel-box{{$key}}').GICarousel({arrows:true});
+			</script>
+			@if ($package->activities->count() != ($key+1))
+				<hr>
+			@endif
+		@endforeach
+	</article>
 @endif

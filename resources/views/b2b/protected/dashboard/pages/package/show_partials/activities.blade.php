@@ -7,7 +7,7 @@
 					<h1>Activities List</h1>
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-12 m-top-10">
-					<a href="{{ urlActivitiesBuilder($package->id) }}" class="btn btn-success btn-block">Modify All Activities</a>
+					<a href="{{ route('activities',[$package->token]) }}" class="btn btn-success btn-block">Modify All Activities</a>
 				</div>
 			</div>
 			<div class="clearfix"></div>

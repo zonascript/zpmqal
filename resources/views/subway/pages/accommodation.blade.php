@@ -18,7 +18,7 @@
 								<div id="system">
 									<div class="items items-col-1 grid-block">
 										<div class="grid-box width100">
-											@include('subway.pages.accomo_partials.accomo')	
+											@include('subway.pages.accomo_partials.accomo1')	
 										</div>
 									</div>
 								</div>

@@ -11,7 +11,7 @@
 		</p>
 	</header>
 	<div class="content clearfix">
-		<img height="195" width="195" class="align-left" alt="Demo Image" src="{{ url('/') }}/subway/wp-content/uploads/yootheme/home_news2.jpg" />
+		<img height="195" width="195" class="align-left" alt="carousel-box Image" src="{{ url('/') }}/subway/wp-content/uploads/yootheme/home_news2.jpg" />
 		<p>Subway theme brings you some nice custom features:</p>
 		<p>Two new widgetkit styles for the Slideshow and the Gallery are included. Their design seamlessly fits into the theme.</p>
 		<p>Also notice the fixed social toolbar, which appears if you hover the icon to the right of your browser window.</p>

@@ -1,7 +1,9 @@
 @if ($package->activities->count())
-	<article id="item-607" class="item" data-permalink="https://demo.yootheme.com/themes/wordpress/2012/subway/?p=607">
+	<article class="item">
 		<header>
-			<h1 class="title"><a href="index30e4.html?p=607" title="holiday impressions">things to do</a></h1>
+			<h1 class="title">
+				<a href="{{ $urlObj->url('activities') }}" title="holiday impressions">things to do</a>
+			</h1>
 		</header>
 		@foreach ($package->activities as $activity)
 			<?php $activity = $activity->activityObject(); ?>
@@ -13,6 +15,6 @@
 		@endforeach
 	</article>
 	<div class="links">
-		<a href="{{ $tempUrl }}activities" title="show more">show more</a>
+		<a href="{{ $urlObj->url('activities') }}" title="show more">show more</a>
 	</div>
 @endif

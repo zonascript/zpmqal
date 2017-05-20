@@ -10,7 +10,7 @@
 		<nav id="menu">
 			<ul class="menu menu-dropdown">
 				<li class="level1 active current">
-					<a href="{{ $tempUrl }}home" class="level1">
+					<a href="{{ $urlObj->url('home') }}" class="level1">
 						<span>
 							<span class="icon text-center">
 								{{-- <i class="fa fa-home font-size-18"></i> --}}
@@ -20,7 +20,7 @@
 				</li>
 				@if ($package->flightRoutes->count())
 					<li class="level1 active current">
-						<a href="{{ $tempUrl }}flights" class="level1">
+						<a href="{{ $urlObj->url('flights') }}" class="level1">
 							<span>
 								<span class="icon text-center">
 									{{-- <i class="fa fa-plane font-size-18"></i> --}}
@@ -31,7 +31,7 @@
 				@endif
 				@if ($package->accomoRoutes->count())
 					<li class="level1 active current">
-						<a href="{{ $tempUrl }}accommodation" class="level1">
+						<a href="{{ $urlObj->url('accommodation') }}" class="level1">
 							<span>
 								<span class="icon text-center">
 									{{-- <i class="fa fa-building font-size-18"></i> --}}
@@ -41,7 +41,7 @@
 					</li>
 				@endif
 				{{-- <li class="level1 active current">
-					<a href="{{ $tempUrl }}itinerary" class="level1">
+					<a href="{{ $urlObj->url('itinerary') }}" class="level1">
 						<span>
 							<span class="icon text-center">
 								<i class="fa fa-plane font-size-18"></i>
@@ -51,7 +51,7 @@
 				</li> --}}
 				@if ($package->activities->count())
 					<li class="level1 active current">
-						<a href="{{ $tempUrl }}activities" class="level1">
+						<a href="{{ $urlObj->url('activities') }}" class="level1">
 							<span>
 								<span class="icon text-center">
 									{{-- <i class="fa fa-futbol-o font-size-18"></i> --}}
