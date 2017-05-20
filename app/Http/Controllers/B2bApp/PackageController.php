@@ -314,7 +314,7 @@ class PackageController extends Controller
 	public function showPackageDetail($token, $page=null,  Request $request)
 	{
 		$package = $this->model()->findByTokenOrExit($token,false);
-		// dd($package->hotelRoutes[0]->packageActivities[0]->activityObject());
+		// dd($package->activities);
 		$url = $request->fullUrl();
 		if (is_null($page)) {
 			$page = 'home';

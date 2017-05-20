@@ -4,6 +4,7 @@ namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\B2bApp\ItineraryController;
+use App\Models\B2bApp\PackageActivityModel;
 use Carbon\Carbon;
 use Auth;
 use DB;
@@ -296,17 +297,17 @@ class PackageModel extends Model
 	}
 
 
-	public function packageLock()
+	public function activities()
 	{
-		return $this->hasOne('App\Models\B2bApp\PackageLockModel', 'package_id');
+		$result = $this->hasManyThrough(
+								'App\Models\B2bApp\PackageActivityModel', 
+								'App\Models\B2bApp\RouteModel', 
+								'package_id', 'route_id', 'id'
+							);
+		return $result->orderBy('date', 'asc');
 	}
+
 	
-
-	public function packageLocks()
-	{
-		return $this->hasMany('App\Models\B2bApp\PackageLockModel', 'package_id');
-	}
-
 	public function __construct(array $attributes = [])
 	{
 		$this->setTokenAttribute();

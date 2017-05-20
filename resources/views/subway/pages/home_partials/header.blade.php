@@ -1,0 +1,66 @@
+<header id="header">
+	<div id="toolbar" class="grid-block">
+	</div>
+	<div id="headerbar" class="grid-block">
+		{{-- <a id="logo" href="/"> --}}
+			<img src="/" width="140" height="40" alt="logo" />
+		{{-- </a> --}}
+	</div>
+	<div id="menubar" class="grid-block">
+		<nav id="menu">
+			<ul class="menu menu-dropdown">
+				<li class="level1 active current">
+					<a href="{{ $tempUrl }}home" class="level1">
+						<span>
+							<span class="icon text-center">
+								{{-- <i class="fa fa-home font-size-18"></i> --}}
+							</span>trip summary
+						</span>
+					</a>
+				</li>
+				@if ($package->flightRoutes->count())
+					<li class="level1 active current">
+						<a href="{{ $tempUrl }}flights" class="level1">
+							<span>
+								<span class="icon text-center">
+									{{-- <i class="fa fa-plane font-size-18"></i> --}}
+								</span>flights
+							</span>
+						</a>
+					</li>
+				@endif
+				@if ($package->accomoRoutes->count())
+					<li class="level1 active current">
+						<a href="{{ $tempUrl }}accommodation" class="level1">
+							<span>
+								<span class="icon text-center">
+									{{-- <i class="fa fa-building font-size-18"></i> --}}
+								</span>accommodation
+							</span>
+						</a>
+					</li>
+				@endif
+				{{-- <li class="level1 active current">
+					<a href="{{ $tempUrl }}itinerary" class="level1">
+						<span>
+							<span class="icon text-center">
+								<i class="fa fa-plane font-size-18"></i>
+							</span>itinerary
+						</span>
+					</a>
+				</li> --}}
+				@if ($package->activities->count())
+					<li class="level1 active current">
+						<a href="{{ $tempUrl }}activities" class="level1">
+							<span>
+								<span class="icon text-center">
+									{{-- <i class="fa fa-futbol-o font-size-18"></i> --}}
+								</span>things to do
+							</span>
+						</a>
+					</li>
+				@endif
+			</ul>
+		</nav>
+	</div>
+</header>

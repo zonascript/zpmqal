@@ -18,26 +18,15 @@
 								<div id="system">
 									<div class="items items-col-1 grid-block">
 										<div class="grid-box width100">
-											@include('subway.pages.home_partials.routes')	
-											@include('subway.pages.home_partials.flights')	
-											@include('subway.pages.home_partials.accomo')	
-											@include('subway.pages.home_partials.activities')	
+											@include('subway.pages.flights_partials.flights')	
 										</div>
 									</div>
 								</div>
 							</section>
 						</div>
 						<div class="col-md-5 col-sm-5 col-xs-12 subway-theme-font">
-							<div class="row">
-								<div class="col-md-6 col-sm-6 col-xs-6">
-									@include('subway.pages.home_partials.pricing')
-								</div>
-								<div class="col-md-6 col-sm-6 col-xs-6">
-									@include('subway.pages.home_partials.agent')
-								</div>
-							</div>
-							<div class="row font-size-0" style="color:transparent;">
-								@include('subway.pages.home_partials.slideshow')
+							<div class="m-top-5">
+								<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d448183.73907005717!2d76.81307299667618!3d28.646677259922765!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd5b347eb62d%3A0x37205b715389640!2sDelhi!5e0!3m2!1sen!2sin!4v1495309165394" width="100%" height="400" frameborder="0" style="border:0" allowfullscreen></iframe>
 							</div>
 						</div>
 					</div>

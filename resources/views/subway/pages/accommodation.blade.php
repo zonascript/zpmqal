@@ -13,35 +13,18 @@
 				<div class="wrapper grid-block">
 					@include('subway.pages.home_partials.header')
 					<div class="row">
-						<div class="col-md-7 col-sm-7 col-xs-12">
+						<div class="col-md-12 col-sm-12 col-xs-12">
 							<section id="content" class="grid-block">
 								<div id="system">
 									<div class="items items-col-1 grid-block">
 										<div class="grid-box width100">
-											@include('subway.pages.home_partials.routes')	
-											@include('subway.pages.home_partials.flights')	
-											@include('subway.pages.home_partials.accomo')	
-											@include('subway.pages.home_partials.activities')	
+											@include('subway.pages.accomo_partials.accomo')	
 										</div>
 									</div>
 								</div>
 							</section>
 						</div>
-						<div class="col-md-5 col-sm-5 col-xs-12 subway-theme-font">
-							<div class="row">
-								<div class="col-md-6 col-sm-6 col-xs-6">
-									@include('subway.pages.home_partials.pricing')
-								</div>
-								<div class="col-md-6 col-sm-6 col-xs-6">
-									@include('subway.pages.home_partials.agent')
-								</div>
-							</div>
-							<div class="row font-size-0" style="color:transparent;">
-								@include('subway.pages.home_partials.slideshow')
-							</div>
-						</div>
 					</div>
-					{{-- @include('subway.pages.home_partials.footer') --}}
 				</div>
 				<script type='text/javascript' src='{{ url('/') }}/subway/wp-includes/js/wp-embed.min1c9b.js?ver=4.6.1'></script>
 			</div>

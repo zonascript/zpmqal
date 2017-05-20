@@ -84,6 +84,16 @@ class PackageHotelModel extends Model
 
 	public function images()
 	{
+		$hotelDetail = $this->hotelForView();
+		$images = [];
+		if (isset($hotelDetail[0])) {
+			$images = $hotelDetail[0]->images();
+		}
+		return $images;
+	}
+
+	public function imagesOld()
+	{
 		$images = [];
 		$tempImg = [];
 

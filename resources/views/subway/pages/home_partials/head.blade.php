@@ -28,6 +28,9 @@
 <link rel="stylesheet" href="{{ url('/') }}/subway/wp-content/themes/yoo_subway_wp/fonts/newciclefina.css" />
 <link rel="stylesheet" href="{{ url('/') }}/subway/style.css" />
 <link rel="stylesheet" href="{{ url('/') }}/css/style.css" />
+<link rel="stylesheet" href="{{ url('/') }}/common/carousal/gi_carousal/style.css">
+<link href="http://fast.fonts.net/cssapi/4bedbdc9-7261-43be-b2e9-f34abce90975.css" media="all" type="text/css" rel="stylesheet">
+
 {{-- <link rel="stylesheet" href="{{ url('/') }}/subway/wp-content/themes/yoo_subway_wp/css/background/gradientblue.css" /> --}}
 {{-- <link rel="stylesheet" href="{{ url('/') }}/subway/wp-content/themes/yoo_subway_wp/css/style.css" /> --}}
 {{-- <link rel="stylesheet" href="{{ url('/') }}/subway/wp-content/themes/yoo_subway_wp/css/print.css" /> --}}
@@ -36,14 +39,19 @@
 
 <link href="{{ commonAsset('dashboard/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
 <link href="{{ url('/') }}/ninja-slider/style.css" rel="stylesheet" type="text/css" />
-
+<link rel="stylesheet" href="{{ url('/') }}/common/carousal/simple_slideshow.css">
 
 
 <script type="text/javascript" src="{{ url('/') }}/subway/scripts.js"></script>
 <script type='text/javascript' src='{{ url('/') }}/subway/wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+
+{{-- <script src="{{ url('/') }}/common/carousal/simple_slideshow.js" ></script> --}}
 <script src="{{asset('common/dashboard/vendors/jquery/dist/jquery.min.js')}}"></script>
 {{-- Bootstrap --}}
 <script src="{{ commonAsset('dashboard/vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+
+<script src="{{ url('/') }}/common/carousal/gi_carousal/scripts.min.js"></script>
+
 <script src="{{ url('/') }}/ninja-slider/scripts.js" type="text/javascript"></script>
 <script>
 	window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"{{ url('/') }}/subway/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6.1"}};
