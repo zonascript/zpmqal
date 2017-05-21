@@ -42,12 +42,15 @@ class RouteModel extends Model
 
 	public function getOriginDetailAttribute()
 	{
-		return $this->searchDbLocation($this->attributes['origin']);
+		$location = $this->location($this->explode_origin);
+		return $this->searchDbLocation($location);
 	}
+
 
 	public function getDestinationDetailAttribute()
 	{
-		return $this->searchDbLocation($this->attributes['destination']);
+		$location = $this->location($this->explode_destination);
+		return $this->searchDbLocation($location);
 	}
 
 
@@ -111,7 +114,11 @@ class RouteModel extends Model
 
 	public function searchDbLocation($word)
 	{
-		return DestinationController::call()->model()->search($word);
+		$result = DestinationController::call()->model();
+		if ($word != ', ') {
+			$result = $result->search($word);
+		}
+		return $result;
 	}
 	
 
@@ -125,6 +132,19 @@ class RouteModel extends Model
 		return $this->where(['fusion_id' => $fusionId])->count();
 	}
 
+
+	public function location(Array $array)
+	{
+		$country = '';
+		$destination = '';
+
+		if (count($array) > 1) {
+			$country = end($array);
+			$destination = $array[count($array) - 2];
+		}
+
+		return $destination.', '.$country;
+	}
 
 	// if copying route then copy package activities too
 	public function packageActivities()
@@ -141,7 +161,6 @@ class RouteModel extends Model
 	{
 		return $this->belongsTo('App\Models\B2bApp\PackageModel', 'package_id');
 	}
-
 
 
 	/*

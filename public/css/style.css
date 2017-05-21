@@ -297,6 +297,7 @@
 .font-size-10{ font-size: 10px ! important; }
 .font-size-11{ font-size: 11px ! important; }
 .font-size-13{ font-size: 13px ! important; }
+.font-size-14{ font-size: 14px ! important; }
 .font-size-15{ font-size: 15px ! important; }
 .font-size-17{ font-size: 17px ! important; }
 .font-size-18{ font-size: 18px ! important; }
@@ -309,6 +310,9 @@
 .font-size-50{ font-size: 50px ! important; }
 .font-size-80{ font-size: 80px ! important; }
 
+.sans-serif{
+	font-family: 'sans-serif' !important;
+}
 
 .bg-color-darkslategray{ 
 	background-color: #2a3f54;
@@ -658,7 +662,7 @@
 }
 
 
-
+.noborder{ border: none !important; }
 .border-gray{ border: 1px solid #ccc; }
 .border-red{border: 1px solid red ! important;}
 .border-top-gray{ border-top: 1px solid #ccc; }
@@ -938,6 +942,59 @@ body {font-family:Helvetica,Arial,sans-serif;}
 /* back, initially hidden pane */
 .back {
 	transform: rotateY(180deg);
+}
+
+/*.c-timeline .c-tag {
+    display: block;
+    height: 30px;
+    font-size: 13px;
+    padding: 8px;
+}
+
+.c-timeline h2.c-title {
+    position: relative;
+    font-size: 16px;
+    margin: 0;
+}    
+
+
+.c-timeline h2.c-title:before {
+    content: "";
+    position: absolute;
+    left: -27px;
+    top: 11px;
+    display: block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #d2d3d2;
+    border-radius: 14px;
+    background: #F9F9F8 url(http://wetu.com/Itinerary/VI_Content/images/transit/transfer_car.png) 50% 50% no-repeat;
+}
+*/
+.c-title:before {
+  left: -27px ! important;
+  top: 0 ! important;
+  width: 20px ! important;
+  height: 20px ! important;
+  border: 1px solid #d2d3d2 ! important;
+  background: #F9F9F8 50% 50% no-repeat ! important;
+}
+
+.i-car:before {
+  background-image: url(http://b2b.trawish.com/images/icons/theme/20X20/transfer_car.png) !important;
+}
+
+.i-hotel:before {
+  background-image: url(http://b2b.trawish.com/images/icons/theme/20X20/bed_new.jpg) !important;
+}
+
+
+.i-flight:before {
+  background-image: url(http://b2b.trawish.com/images/icons/theme/20X20/scheduledflight_plane.png) !important;
+}
+
+.i-activity:before {
+  background-image: url(http://b2b.trawish.com/images/icons/theme/20X20/act.jpg) !important;
 }
 
 

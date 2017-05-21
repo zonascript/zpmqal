@@ -45,93 +45,70 @@ class ItineraryController extends Controller
 			$routeStartTime = $route->start_datetime->format('H:i');
 			$routeEndDate = $route->end_datetime->format('Y-m-d');
 			$routeEndTime = $route->end_datetime->format('H:i');
+			$origin = $route->origin_detail->destination;
+			$destination = $route->destination_detail->destination;
 
 			if ($route->mode == 'flight') {
-				$flight = $route->flight;
-				if ($flight->selected_flight_vendor == 'qpx') {
-					$segments = $flight->qpxFlight->segments;
-					foreach ($segments as $segment) {
-						$departureDate = $segment->departureDateTime->date;
-						$arrivalDate = $segment->arrivalDateTime->date;
+				$flights = $route->flightDetail();
+				foreach ($flights as $key => $flight) {
+					$origin = $flight->origin;
+					$originCode = $flight->originCode;
+					$destination = $flight->destination;
+					$destinationCode = $flight->destinationCode;
+					$departureDate = $flight->departureDate;
+					$arrivalDate = $flight->arrivalDate;
 
-						$origin = $segment->originCity;
-						$originCode = $segment->origin;
-						$destination = $segment->destinationCity;
-						$destinationCode = $segment->destination;
+					$itinerary[$departureDate]['flight'] = true;
+					$itinerary[$departureDate]['location'][$originCode] = $origin;
+					$itinerary[$departureDate]['body'][] = [
+								'flight'=>'Board a flight from '.$origin.'.'
+							];
 
-						$itinerary[$departureDate]['flight'] = true;
-						$itinerary[$departureDate]['location'][$originCode] = $origin;
-						$itinerary[$departureDate]['body'][] = 'Board a flight from '.$origin.'.';
-
-						$itinerary[$arrivalDate]['flight'] = true;
-						$itinerary[$arrivalDate]['location'][$destinationCode] = $destination;
-						$itinerary[$arrivalDate]['body'][] = 'Arrived in '.$destination.'.';
-					}
-				}
-				elseif ($flight->selected_flight_vendor == 'ss') {
-					$segments = $flight->ssFlight->segments;
-					foreach ($segments as $segment) {
-						$departureDate = $segment->DepartureTiming->date;
-						$arrivalDate = $segment->ArrivalTiming->date;
-						$origin = $segment->Origin->Name;
-						$originCode = $segment->Origin->Code;
-						$destination = $segment->Destination->Name;
-						$destinationCode = $segment->Destination->Code;
-
-						$itinerary[$departureDate]['flight'] = true;
-						$itinerary[$departureDate]['location'][$originCode] = $origin;
-						$itinerary[$departureDate]['body'][] = 'Board a flight from '.$origin.'.';
-
-						$itinerary[$arrivalDate]['flight'] = true;
-						$itinerary[$arrivalDate]['location'][$destinationCode] = $destination;
-						$itinerary[$arrivalDate]['body'][] = 'Arrived in '.$destination.'.';
-					}
+					$itinerary[$arrivalDate]['flight'] = true;
+					$itinerary[$arrivalDate]['location'][$destinationCode] = $destination;
+					$itinerary[$arrivalDate]['body'][] = [
+								'flight' => 'Arrived in '.$destination.'.'
+							];
 				}
 			}
 			elseif (in_array($route->mode,['hotel', 'land', 'road', 'cruise'])) {
-				$hotel = $route->hotel;
+				$hotel = $route->hotelDetail();
 				$nights = $route->nights;
+				$hotelName = $hotel->name;
 				$hotelDate = $route->start_datetime->format('Y-m-d');
-				$hotelLocation = $route->location_hotel;
+				$hotelLocation = $route->destination_detail;
 				$hotelImages = $route->images();
-
-				/*$hotelImages = [];
-				if ($hotel->selected_hotel_vendor == 'tbtq') {
-					$tbtqImages = $hotel->tbtqHotel
-												->tbtqDetail->result
-													->HotelInfoResult
-														->HotelDetails->Images;
-
-					$hotelImages = array_merge($hotelImages, $tbtqImages);
-				}
-				elseif ($hotel->selected_hotel_vendor == 'ss') {
-					$ssImages = $hotel->skyscannerHotel->hotelDetail->images;
-					$hotelImages = array_merge($hotelImages, $ssImages);
-				}elseif ($hotel->selected_hotel_vendor == 'a') {
-					$hotelImages = array_merge($hotelImages, $hotel->agodaHotel->images);
-				}*/
 
 				for ($i=1; $i <= $nights+1; $i++) {
 					$mode = $route->mode;
 					$itinerary[$hotelDate][$mode] = true;
-					// $itinerary[$hotelDate]['location'][] = $hotelLocation->country;
 					$itinerary[$hotelDate]['location'][] = $hotelLocation->destination;
 
 					if ($i == 1) {
 						if ($route->is_pick_up) {
-							$itinerary[$hotelDate]['body'][] = 'Pick Up from '.$route->pick_up;
+							$itinerary[$hotelDate]['body'][] = [
+									'car' => 'Pick Up from '.$route->pick_up
+								];
 						}
 
-						$itinerary[$hotelDate]['body'][] = 'Then transfer to the '.$mode.' arrive at the '.$mode.' after check in, take some rest.';
+						$itinerary[$hotelDate]['body'][] = [
+								'hotel' => 'Then transfer to the '.$mode.' arrive at the '.$hotelName.'('.$mode.') after check in, take some rest.'
+							];
 					}
 					elseif ($i > $nights) {
-						$itinerary[$hotelDate]['body'][] = 'Check out from '.$mode;
+						$itinerary[$hotelDate]['body'][] = [
+								'hotel' => 'Check out from '.$hotelName.'('.$mode.')'
+							];
 						if ($route->is_drop_off) {
-							$itinerary[$hotelDate]['body'][] = 'Drop to '.$route->drop_off;
+							$itinerary[$hotelDate]['body'][] = [
+									'car' => 'Drop to '.$route->drop_off
+								];
 						}
 					}
 					else{
-						$itinerary[$hotelDate]['body'][] = 'Breakfast will be served at the '.$mode;
+						$itinerary[$hotelDate]['body'][] = [
+							'hotel' => 'Breakfast will be served at the '.$hotelName.'('.$mode.')'
+						];
 					}
 
 
@@ -158,74 +135,26 @@ class ItineraryController extends Controller
 					$hotelImages[] = array_shift($hotelImages);
 				}
 				
+				//=========================Activities here=========================
+				if ($route->packageActivities->count()) {
 
-
-				//===============================Activities here===============================
-				if (isset($route->activities->activities_detail) && !is_null($route->activities->activities_detail)) {
-					
-					$activitiesDetails = $route->activities->activities_detail;
-
-					/* 
-					| this code is commented because of all the activity 
-					|	pulling from db and as union (fgf viator)
-
-					$fgfActivities = null;
-					if (!is_null($activities->fgf)) {
-						$fgfActivities = json_decode($activities->fgf->result);
-					}
-
-					$viatorActivities = null;
-					if (!is_null($activities->viator)) {
-						$viatorActivities = json_decode($activities->viator->result);
-					}*/
-
-					//this is temporery array which contain activity name by date so that can be implode
 					$tempActivities = [];
-					foreach ($activitiesDetails as $activitiesDetail) {
-						$activityDate = date_formatter($activitiesDetail->date, 'd/m/Y');
-						$tempActivities[$activityDate]['names'][] =  $activitiesDetail->detail->name;
-						$tempActivities[$activityDate]['activityImages'][] = $activitiesDetail->detail->image;
-						
 
-						/*
-						| this code is commented because of all the activity 
-						|	pulling from db and as union (fgf viator)
-						if ($selectedActivity->vendor == 'fgf' && !is_null($fgfActivities)) {
-
-							$activityDate = date_formatter($selectedActivity->date, 'd/m/Y');
-							$tempActivities[$activityDate]['names'][] =  $fgfActivities->ActivitySearchResult
-																						->ActivityResults[$selectedActivity->index]
-																							->ActivityName;
-
-							if (isset($tempActivities[$activityDate]['activityImages'])) {
-								$tempActivities[$activityDate]['activityImages'] 
-										= array_merge($tempActivities[$activityDate]['activityImages'], 
-											$fgfActivities->ActivitySearchResult
-												->ActivityResults[$selectedActivity->index]->Images);
-							}
-							else{
-								$tempActivities[$activityDate]['activityImages'] 
-																= $fgfActivities
-																	->ActivitySearchResult
-																		->ActivityResults[$selectedActivity->index]->Images;
-							}
+					foreach ($route->packageActivities as $packageActivity) {
+						$activity = $packageActivity->activityObject(['images']);
+						$date = $activity->date;
+						$tempActivities[$date]['names'][] =  $activity->name;
+						if (!isset($tempActivities[$date]['activityImages'])) {
+							$tempActivities[$date]['activityImages'] = [];
 						}
-						elseif ($selectedActivity->vendor == 'viator' && !is_null($viatorActivities)) {
-							$activityDate = date_formatter($selectedActivity->date, 'd/m/Y');
-							$tempActivities[$activityDate]['names'][] =  $viatorActivities
-																						->data[$selectedActivity->index]
-																							->shortTitle;
-
-							$tempActivities[$activityDate]['activityImages'][] = $viatorActivities
-																						->data[$selectedActivity->index]
-																							->thumbnailHiResURL;
-						}*/
+						$tempActivities[$date]['activityImages'] = array_merge($tempActivities[$date]['activityImages'],$activity->images);
 					}
 
 					// pushing temp activities in to itinarary
 					foreach ($tempActivities as $tempActivityKey => $tempActivity) {
-						$itinerary[$tempActivityKey]['body'][] = 
-										'Depart for exciting activities ('.implode(', ', $tempActivity['names']).').';
+						$itinerary[$tempActivityKey]['body'][] = [ 
+								'activity' => 'Depart for exciting activities ('.implode(', ', $tempActivity['names']).').'
+							];
 
 						if (isset($itinerary[$tempActivityKey]['activityImages'])) {
 							$itinerary[$tempActivityKey]['activityImages'] = 
@@ -239,28 +168,39 @@ class ItineraryController extends Controller
 				}
 			}
 			elseif ($route->mode == 'ferry') {
-				$ferryOrigin = $route->origin_detail->destination;
-				$ferryDestination = $route->destination_detail->destination;
-
-				$itinerary[$routeStartDate]['location'][] = $ferryOrigin;
-				$itinerary[$routeStartDate]['body'][] 
-					= 'Board ferry at '.$routeStartTime.' from '.$ferryOrigin.'.';
+				$itinerary[$routeStartDate]['location'][] = $origin;
+				$itinerary[$routeStartDate]['body'][] = [
+						'ferry' => 'Board ferry at '.$routeStartTime.' from '.$origin.'.'
+					];
 				
-				$itinerary[$routeEndDate]['location'][] = $ferryDestination;
-				$itinerary[$routeStartDate]['body'][] 
-					= 'Arrived ferry on '.$ferryDestination.' at '.$routeEndTime.'.';
-			}elseif ($route->mode == 'train') {
-				$trainOrigin = $route->origin_detail->destination;
-				$trainDestination = $route->destination_detail->destination;
-
-				$itinerary[$routeStartDate]['location'][] = $trainOrigin;
-				$itinerary[$routeStartDate]['body'][] 
-					= 'Board train at '.$routeStartTime.' from '.$trainOrigin.'.';
-				
-				$itinerary[$routeEndDate]['location'][] = $trainDestination;
-				$itinerary[$routeStartDate]['body'][] 
-					= 'Arrived train on '.$trainDestination.' at '.$routeEndTime.'.';
+				$itinerary[$routeEndDate]['location'][] = $destination;
+				$itinerary[$routeStartDate]['body'][] = [
+						'ferry' => 'Arrived ferry on '.$destination.' at '.$routeEndTime.'.'
+					];
 			}
+			elseif ($route->mode == 'train') {
+				$itinerary[$routeStartDate]['location'][] = $origin;
+				$itinerary[$routeStartDate]['body'][] = [
+						'train' => 'Board train at '.$routeStartTime.' from '.$origin.'.'
+					];
+				
+				$itinerary[$routeEndDate]['location'][] = $destination;
+				$itinerary[$routeStartDate]['body'][] = [
+						'train' => 'Arrived train on '.$destination.' at '.$routeEndTime.'.'
+					];
+			}
+			elseif ($route->mode == 'bus') {
+				$itinerary[$routeStartDate]['location'][] = $origin;
+				$itinerary[$routeStartDate]['body'][] = [
+						'bus' => 'Board bus at '.$routeStartTime.' from '.$origin.'.'
+					];
+				
+				$itinerary[$routeEndDate]['location'][] = $destination;
+				$itinerary[$routeStartDate]['body'][] = [
+						'bus' => 'Arrived bus on '.$destination.' at '.$routeEndTime.'.'
+					];
+			}
+
 		}
 
 		$itineraries = [];
@@ -298,6 +238,7 @@ class ItineraryController extends Controller
 			$itineraries[] = $itineraryValue;
 			$day++;
 		}
+
 		return rejson_decode($itineraries);
 	}
 

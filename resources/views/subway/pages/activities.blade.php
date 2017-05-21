@@ -2,6 +2,7 @@
 <html lang="en-US" dir="ltr">
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 	<head>
+		<title>Things to do.</title>
 		@include('subway.pages.home_partials.head')
 	</head>
 	<body id="page" class="page home blog sidebar-a-right sidebar-b-right isblog wp-home wp-front_page transparency-75 system-transparent">

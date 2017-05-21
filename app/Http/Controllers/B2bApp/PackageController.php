@@ -317,7 +317,7 @@ class PackageController extends Controller
 	public function showPackageDetail($token, $page=null,  Request $request)
 	{
 		$package = $this->model()->findByTokenOrExit($token,false);
-
+		// dd($package->itinerary);
 		if ($package->cost->total_cost < 1) {
 			exitView();
 		}
@@ -327,8 +327,9 @@ class PackageController extends Controller
 			$page = 'home';
 			$url = str_replace($token, $token.'/'.$page, $url);
 		}
+		$tempUrl = str_replace($token.'/'.$page, $token.'/{}', $url);
 
-		$urlObj = new UrlController(['url' => str_replace($page, '{}', $url)]);
+		$urlObj = new UrlController(['url' => $tempUrl]);
 
 		$blade = [
 				"url" => $url,

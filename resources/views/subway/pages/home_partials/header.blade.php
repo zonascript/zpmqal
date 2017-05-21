@@ -40,15 +40,15 @@
 						</a>
 					</li>
 				@endif
-				{{-- <li class="level1 active current">
+				<li class="level1 active current">
 					<a href="{{ $urlObj->url('itinerary') }}" class="level1">
 						<span>
 							<span class="icon text-center">
-								<i class="fa fa-plane font-size-18"></i>
+								{{-- <i class="fa fa-plane font-size-18"></i> --}}
 							</span>itinerary
 						</span>
 					</a>
-				</li> --}}
+				</li>
 				@if ($package->activities->count())
 					<li class="level1 active current">
 						<a href="{{ $urlObj->url('activities') }}" class="level1">

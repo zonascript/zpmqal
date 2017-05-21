@@ -1,6 +1,5 @@
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Subway Theme </title>
 
 <link rel="shortcut icon" href="{{ url('/') }}/favicon.ico" />
 
@@ -30,6 +29,8 @@
 <link rel="stylesheet" href="{{ url('/') }}/css/style.css" />
 <link rel="stylesheet" href="{{ url('/') }}/common/carousal/gi_carousal/style.css">
 <link href="http://fast.fonts.net/cssapi/4bedbdc9-7261-43be-b2e9-f34abce90975.css" media="all" type="text/css" rel="stylesheet">
+<link href="{{ asset('b2b/css/custom.min.css') }}" rel="stylesheet">
+
 
 {{-- <link rel="stylesheet" href="{{ url('/') }}/subway/wp-content/themes/yoo_subway_wp/css/background/gradientblue.css" /> --}}
 {{-- <link rel="stylesheet" href="{{ url('/') }}/subway/wp-content/themes/yoo_subway_wp/css/style.css" /> --}}

@@ -28,7 +28,7 @@ class PackageActivityModel extends Model
 
 
 
-	public function activityObject()
+	public function activityObject($attribute = [])
 	{
 		$activity = $this->activity;
 		if (!is_null($activity)) {
@@ -36,6 +36,7 @@ class PackageActivityModel extends Model
 			$name = $activity->title;
 			$image = $activity->image_url;
 			$description = $activity->description;
+			
 
 			if ($activity->vendor == 'f') {
 				$name = $activity->name;
@@ -45,7 +46,7 @@ class PackageActivityModel extends Model
 				$description = $activity->shortDescription;
 			}
 
-			return (object)[
+			$result = [
 					'ukey' => $ukey,
 					'code' => $activity->id,
 					'vendor' => $activity->vendor,
@@ -57,7 +58,26 @@ class PackageActivityModel extends Model
 					'mode' => $this->mode,
 					'isSelected' => 1
 				];
+			
+			if (in_array('images', $attribute)) {
+				$result['images'] = $this->images();
+				$result['images'][] = $result['image'];
+				$result['images'] = array_unique($result['images']);
+			}
+
+			return (object) $result;
 		}
+	}
+
+	public function images()
+	{
+		$images = [];
+		$imageData = $this->activity->images;
+
+		foreach ($imageData as $image) {
+			$images[] = $image->url;
+		}
+		return $images;
 	}
 
 }
