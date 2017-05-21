@@ -8,9 +8,10 @@
 	  @foreach ($package->activities as $key => $activityData)
 			<?php
 				$images = [];
-				$activity = $activityData->activityObject();
-				$images[] = $activity->image;
+				$activity = $activityData->activityObject(['images']);
+				$images = $activity->images;
 			?>
+			
 			<div class="content clearfix">
 			  <div class="width-30-p height-200px pull-left m-right-10">
 					<div class="gi-carousel-main">
@@ -45,4 +46,9 @@
 			@endif
 		@endforeach
 	</article>
+	<style>
+		.GI_C_prev,.GI_C_next{
+			background: rgba(0,0,0,0.6) !important;
+		}
+	</style>
 @endif

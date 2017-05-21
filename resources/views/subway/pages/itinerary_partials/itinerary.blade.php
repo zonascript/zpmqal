@@ -14,7 +14,6 @@
 								</a>
 							</div>
 							<div class="block_content">
-								<div class="m-top-10"></div>
 								@foreach ($itinerary->body as $body)
 									@foreach ($body as $key => $value)
 										<h2 class="title c-title i-{{$key}}">

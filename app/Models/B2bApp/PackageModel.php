@@ -19,6 +19,7 @@ class PackageModel extends Model
 								'itinerary', 'package_url'
 							];
 
+	public $costToken = null;
 
 	public static function call(){
 		return new PackageModel;
@@ -193,8 +194,11 @@ class PackageModel extends Model
 
 	public function tempCost($value='')
 	{
+		$where = is_null($this->costToken) 
+					 ? ["is_current" => 1]
+					 : ["token" => $this->costToken];
 		$costs = $this->hasMany('App\Models\B2bApp\PackageCostModel', 'package_id');
-		return $costs->where(["is_current" => 1]);
+		return $costs->where($where);
 	}
 
 	/*

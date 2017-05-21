@@ -9,8 +9,8 @@
   @foreach ($package->activities as $key => $activityData)
 		<?php
 			$images = [];
-			$activity = $activityData->activityObject();
-			$images[] = $activity->image;
+			$activity = $activityData->activityObject(['images']);
+			$images = $activity->images;
 		?>
 		<article class="item">
 			<div class="content clearfix">

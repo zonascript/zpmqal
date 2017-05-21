@@ -262,7 +262,8 @@ class PackageController extends Controller
 										->createNew($package->id, $costParams);
 
 		return json_encode([
-								"status" => 200, "response" => "saved successfully...",
+								"status" => 200, 
+								"response" => "saved successfully...",
 								"token" => $packageCost->token
 							]);
 	}
@@ -317,10 +318,12 @@ class PackageController extends Controller
 	public function showPackageDetail($token, $page=null,  Request $request)
 	{
 		$package = $this->model()->findByTokenOrExit($token,false);
-		// dd($package->itinerary);
+		$package->costToken = $request->ctk;
+
 		if ($package->cost->total_cost < 1) {
 			exitView();
 		}
+
 
 		$url = $request->fullUrl();
 		if (is_null($page)) {
