@@ -44,7 +44,6 @@ class GoogleMapController extends Controller
 	public function __construct()
 	{
 		$this->key = env('GOOGLE_KEY');
-		parent::__construct();
 	}
 
 
