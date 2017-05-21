@@ -317,7 +317,11 @@ class PackageController extends Controller
 	public function showPackageDetail($token, $page=null,  Request $request)
 	{
 		$package = $this->model()->findByTokenOrExit($token,false);
-		// dd($package->activities);
+
+		if ($package->cost->total_cost < 1) {
+			exitView();
+		}
+
 		$url = $request->fullUrl();
 		if (is_null($page)) {
 			$page = 'home';

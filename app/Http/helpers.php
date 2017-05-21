@@ -40,6 +40,13 @@ function isLocalhost()
 }
 
 
+function exitView()
+{
+	$blade = ["url" => urlReport()];
+	exit(view('b2b.protected.dashboard.404_main', $blade)->render());
+}
+
+
 function mycrypt($value)
 {
 	return md5(bcrypt($value));
