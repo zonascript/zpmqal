@@ -73,9 +73,10 @@ class PackageActivityModel extends Model
 	{
 		$images = [];
 		$imageData = $this->activity->images;
-
-		foreach ($imageData as $image) {
-			$images[] = $image->url;
+		if (!is_null($imageData) && $imageData->count()) {
+			foreach ($imageData as $image) {
+				$images[] = $image->url;
+			}
 		}
 		return $images;
 	}
