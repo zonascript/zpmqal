@@ -111,7 +111,7 @@
 }
 .GICarousel .GI_C_prev, .GICarousel .GI_C_next {
   position: absolute;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.4);
   font-style: normal;
   top: 50%;
   margin: -15px 0 0 0;
