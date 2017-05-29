@@ -1,12 +1,73 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\FlightApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\MyLibrary\Verdant\XML2Array;
+
 
 class TravelportAirController extends Controller
 {
+	public $provider = '1G';
+	public $credentials = '';
+	public $requestPath = '';
+	public $responsePath = '';
+	public $targetBranch = 'P7004112';
+	public $flights = [];
+
+	public static function call()
+	{
+		return new TravelportAirController;
+	}
+
+
+
+	public function flights($params=[])
+	{
+		/*$params = [
+				"date" => "2016-06-05"
+				"origin" => "DEL",
+				"destination" => "SIN"
+			];*/
+
+		$xmlReq = $this->makeFlightRequestXml($params);
+		$xmlRsp = $this->runRequest($xmlReq);
+		$result = $this->xmlToArray($xmlRsp);
+		dd($result);
+		return $result;
+	}
+
+	public function makeFlightRequestXml(Array $params)
+	{
+		$params = (object) $params;
+		$message = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+		   <soapenv:Header/>
+		   <soapenv:Body>
+		      <air:AvailabilitySearchReq TraceId="TraceId" AuthorizedBy="user" TargetBranch="'.$this->targetBranch.'" xmlns:air="http://www.travelport.com/schema/air_v29_0" xmlns:com="http://www.travelport.com/schema/common_v29_0">
+		         <com:BillingPointOfSaleInfo OriginApplication="UAPI"/>
+		         <air:SearchAirLeg>
+		            <air:SearchOrigin>
+		               <com:Airport Code="'.$params->origin.'"/>
+		            </air:SearchOrigin>
+		            <air:SearchDestination>
+		               <com:Airport Code="'.$params->destination.'"/>
+		            </air:SearchDestination>
+		            <air:SearchDepTime PreferredTime="'.$params->date.'">
+		            </air:SearchDepTime>
+		         </air:SearchAirLeg>
+		         <air:AirSearchModifiers>
+		            <air:PreferredProviders>
+		               <com:Provider Code="'.$this->provider.'"/>
+		            </air:PreferredProviders>
+		         </air:AirSearchModifiers>
+		      </air:AvailabilitySearchReq>
+		   </soapenv:Body>
+		</soapenv:Envelope>';
+		$message = trimHtml($message);
+		$this->saveAsFile($message, $this->requestPath());
+		return $message;
+	}
 
 	public function index()
 	{
@@ -172,6 +233,97 @@ class TravelportAirController extends Controller
 		}
 		
 		echo "\r\n"."Processing Done. Please check results in files.";
+	}
+
+
+	public function xmlToArray($xml)
+	{
+		return XML2Array::createArray($xml);
+	}
+
+
+
+
+	public function saveAsFile($data, $name)
+	{
+		$path = mylocal_path('travelport/flights/'.$name);
+		$myfile = fopen($path, "w") or die("Unable to open file!");
+		fwrite($myfile, $data);
+		fclose($myfile);
+		return $path;
+	}
+
+
+	public function requestPath()
+	{
+		$this->requestPath = 'request/'.timestamp().'_'
+													.mycrypt(timestamp()).'.xml';
+
+		return $this->requestPath;
 
 	}
+
+
+	public function responsePath()
+	{
+		$this->responsePath = 'response/'.timestamp().'_'
+													.mycrypt(timestamp()).'.xml';
+		return $this->responsePath;
+	}
+
+
+
+	public function initializeHeader($message){ 
+
+		$auth = base64_encode($this->credentials);
+		// Initialize the CURL object with the uAPI endpoint URL
+		$soap_do = curl_init("https://americas.universal-api.pp.travelport.com/B2BGateway/connect/uAPI/AirService");
+
+		// This is the header of the request
+		$header = array(
+			"Content-Type: text/xml;charset=UTF-8", 
+			"Accept: gzip,deflate", 
+			"Cache-Control: no-cache", 
+			"Pragma: no-cache", 
+			"SOAPAction: \"\"",
+			"Authorization: Basic $auth", 
+			"Content-length: ".strlen($message),
+		); 
+		
+		//curl_setopt($soap_do, CURLOPT_CONNECTTIMEOUT, 30); // Timeout options
+		//curl_setopt($soap_do, CURLOPT_TIMEOUT, 30); 
+		curl_setopt($soap_do, CURLOPT_SSL_VERIFYPEER, false); // Verify nothing about peer certificates
+		curl_setopt($soap_do, CURLOPT_SSL_VERIFYHOST, false); // Verify nothing about host certificate
+		curl_setopt($soap_do, CURLOPT_POST, true ); 
+		curl_setopt($soap_do, CURLOPT_POSTFIELDS, $message); 
+		curl_setopt($soap_do, CURLOPT_HTTPHEADER, $header);
+		curl_setopt($soap_do, CURLOPT_RETURNTRANSFER, true);
+
+		return $soap_do;
+	}
+
+	public function runRequest($message){ 
+
+		$soap_do = $this->initializeHeader($message); //initialize header
+
+		// Run the request
+		$result = curl_exec($soap_do);
+		
+		if (curl_errno($soap_do) != ''){
+			return '<error>'.curl_errno($soap_do).'</error>';
+		}
+
+		curl_close($soap_do);
+
+		$this->saveAsFile($result,$this->responsePath());
+
+		return $result;
+	}
+
+
+	public function __construct()
+	{
+		$this->credentials = env('TRAVELPORT_USER_ID').':'.env('TRAVELPORT_PASSWORD');
+	}
+
 }

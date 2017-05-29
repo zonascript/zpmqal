@@ -264,6 +264,21 @@ function implode_kv($array){
 	));
 }
 
+function implodeEscape($glue, $pieces)
+{
+	return implode($glue, array_map('addslashes', $pieces));
+}
+
+function insertIgnoreQuery($array, $table)
+{
+	$colums = array_keys($array);
+	$values = array_values($array);
+	$query = "INSERT IGNORE INTO `".$table
+					.'` (`'.implodeEscape("`, `", $colums).'`)'
+						." VALUES ('".implodeEscape("', '", $values)."'); ";
+	return $query;
+}
+
 /*
 | this function for get cost into inr passed array should be like this 
 | $array = ["USD" => 459];

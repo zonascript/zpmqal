@@ -12,6 +12,7 @@ use App\Http\Controllers\B2bApp\RouteController;
 use App\Http\Controllers\B2bApp\PackageController;
 
 // ==============================HotelApp Controller===============================
+use App\Http\Controllers\HotelApp\TravelportHotelController;
 use App\Http\Controllers\HotelApp\HotelsController as DbHotelsController;
 
 // =================================Api Controller=================================
@@ -27,6 +28,7 @@ class HotelsController extends Controller
 	public static function call(){
 		return new HotelsController;
 	}
+
 
 	public function model(){
 		return new PackageHotelModel;		
@@ -268,21 +270,28 @@ class HotelsController extends Controller
 	public function postHotelFromDb($routeId, $index = 0)
 	{
 		$route = RouteController::call()->model()->find($routeId);
+
 		$selected = [];
 		if (!is_null($route->fusion)) {
-			$selected = json_decode(json_encode($route->fusion->hotelForView()));
+			$selected = rejson_decode($route->fusion->hotelForView());
 		}
 
+		
 		$location = $route->destination_detail;
 		$params = [
 				'latitude' => $location->latitude, 
 				'longitude' => $location->longitude, 
 				'max_rating' => 5,
-				'min_rating' => 0
+				'min_rating' => 0,
+				"adults" => 2,
+				"location" => '',
+				"hotelName" => '',
+				"checkInDate" => $route->start_date,
+				"checkOutDate" => $route->end_date,
 			];
+
 		$hotels = DbHotelsController::call()->hotels($params); 
-		$hotels = json_decode(json_encode($hotels));
-		$hotels = array_merge($selected, $hotels);
+		$hotels = array_merge($selected, rejson_decode($hotels));
 		$result = (object)['hotels' => $hotels];
 		return json_encode($result);
 	}

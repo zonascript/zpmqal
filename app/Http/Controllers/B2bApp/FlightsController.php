@@ -9,7 +9,9 @@ use App\Http\Controllers\Controller;
 
 // ========================Api Controller========================
 use App\Http\Controllers\FlightApp\QpxFlightsController;
+use App\Http\Controllers\FlightApp\TravelportAirController;
 use App\Http\Controllers\FlightApp\SkyscannerFlightsController;
+
 
 // ========================B2b Controller========================
 use App\Http\Controllers\B2bApp\RouteController;
@@ -128,6 +130,25 @@ class FlightsController extends Controller
 		if (!is_null($packageFlight)) {
 			$result = SkyscannerFlightsController::call()->flights($route);
 		}
+		return json_encode($result);
+	}
+
+	public function postTravelportFlight($rid)
+	{
+		$route = RouteController::call()->model()->find($rid);
+		$result = null;
+
+		if (!is_null($route)) {
+			// dd($route);	
+			$params = [
+				"date" => $route->start_date,
+				"origin" => $route->originCode,
+				"destination" => $route->destinationCode,
+			];
+
+			$result = TravelportAirController::call()->flights($params);
+		}
+
 		return json_encode($result);
 	}
 

@@ -14,6 +14,7 @@
 	});
 
 	Route::group(['prefix' => 'fatch/hotels'], function () {
+		Route::get('result/{id}', 'HotelsController@postHotelFromDb');
 		Route::post('result/{id}', 'HotelsController@postHotelFromDb');
 		Route::post('rooms/result', 'HotelsController@postHotelRoom');
 	});
@@ -22,6 +23,7 @@
 	Route::group(['prefix' => 'api/hotels'], function () {
 		// Api Tbtq
 		Route::post('t/result/{id}', 'HotelsController@postTbtqHotelResult');
+		Route::get('tp/result/{id}', 'HotelsController@postTravelportHotels');
 
 		// Api Skyscanner
 		Route::post('ss/result/{id}', 'HotelsController@postSkyscannerHotelResult');

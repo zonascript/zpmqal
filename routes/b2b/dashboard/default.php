@@ -17,23 +17,25 @@
 	/*------------------------------index Route------------------------------*/
 	Route::get('/', 'DashboardController@getIndex');
 
-	/*------------------------------Tools Route------------------------------*/
-	Route::get('tools', 'DashboardToolsController@getIndex');
-	Route::get('tools/country', 'DashboardToolsController@getCountry');
-	Route::get('tools/calendar', 'DashboardToolsController@getCalendar');
+	/*--------------------------Tools Route--------------------------*/
+	Route::group(['prefix' => 'tools'], function (){
+		Route::get('/', 'DashboardToolsController@getIndex');
+		Route::get('country', 'DashboardToolsController@getCountry');
+		Route::get('calendar', 'DashboardToolsController@getCalendar');
 
-	// get Request only
-	Route::get('tools/airport/{request?}', 'DashboardToolsController@getAirport');
-	Route::get('tools/destination/{request?}', 'DashboardToolsController@getDestination');
+		// get Request only
+		// Route::get('airport/{request?}', 'DashboardToolsController@getAirport');
+		// Route::get('destination/{request?}', 'DashboardToolsController@getDestination');
 
-	// contact resource 
-	Route::resource('tools/contacts', 'ContactsController');
+		// contact resource 
+		Route::resource('contacts', 'ContactsController');
+	});
 
 
-	/*-----------------------------Enquiry Route-----------------------------*/
+	/*-------------------------Enquiry Route-------------------------*/
 	Route::resource('enquiry/', 'EnquiryController');
 	Route::post('enquiry/pending', 'EnquiryController@pending');
 
-	/*----------------------------Follow Up Route----------------------------*/
+	/*------------------------Follow Up Route------------------------*/
 	Route::get('follow-up/', 'FollowUpController@index');
 	Route::post('follow-up/', 'FollowUpController@store');
