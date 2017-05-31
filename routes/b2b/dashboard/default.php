@@ -22,7 +22,7 @@
 		Route::get('/', 'DashboardToolsController@getIndex');
 		Route::get('country', 'DashboardToolsController@getCountry');
 		Route::get('calendar', 'DashboardToolsController@getCalendar');
-
+		Route::get('vouchers/{type}', 'VoucherController@getVouchers');
 		// get Request only
 		// Route::get('airport/{request?}', 'DashboardToolsController@getAirport');
 		// Route::get('destination/{request?}', 'DashboardToolsController@getDestination');

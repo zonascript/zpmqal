@@ -3,7 +3,7 @@
 	</div>
 	<div id="headerbar" class="grid-block">
 		{{-- <a id="logo" href="/"> --}}
-			<img src="/" width="140" height="40" alt="logo" />
+			<img src="{{ urlImage('images/icon/FGFLOGO4.png') }}" width="140" alt="logo" />
 		{{-- </a> --}}
 	</div>
 	<div id="menubar" class="grid-block">

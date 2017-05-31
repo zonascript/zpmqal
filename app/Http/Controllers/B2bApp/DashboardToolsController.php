@@ -25,4 +25,5 @@ class DashboardToolsController extends Controller
 		return view('b2b.protected.dashboard.pages.calendar.index');
 	}
 
+
 }

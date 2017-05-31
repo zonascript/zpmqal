@@ -40,9 +40,12 @@ function isLocalhost()
 }
 
 
-function exitView()
+function exitView($url = null)
 {
-	$blade = ["url" => urlReport()];
+	if ($url == null) {
+		$url = urlReport();
+	}
+	$blade = ["url" => $url];
 	exit(view('b2b.protected.dashboard.404_main', $blade)->render());
 }
 
@@ -50,6 +53,16 @@ function exitView()
 function mycrypt($value)
 {
 	return md5(bcrypt($value));
+}
+
+function myencrypt($value)
+{
+	return openssl_encrypt($value,"AES-128-ECB",'FGF');
+}
+
+function mydecrypt($value)
+{
+	return openssl_decrypt($value,"AES-128-ECB",'FGF');
 }
 
 

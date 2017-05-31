@@ -33,7 +33,7 @@
 						</div>
 						<div class="col-md-5 col-sm-5 col-xs-12 subway-theme-font">
 							<div class="m-top-5">
-								<div id="map_canvas" style="border: 2px solid #3872ac;"></div>
+								<div id="map_canvas" style="border: 5px solid rgba(0,0,0,0.6);"></div>
 							</div>
 						</div>
 					</div>
