@@ -159,37 +159,32 @@ class BookingHotelRoomsController extends Controller
 
 		$name = explode('/', $this->url);
 		$name = str_replace('.html', '', end($name));
-		$path = saveInStorage($html, $name, 'html', $path);
-
+		$this->path = saveInStorage($html, $name, 'html', $path);
+		$path  = str_replace(storage_path(), '', $this->path);
 		// saving in db 
 		$this->bookingHotel->is_stored_room = 1;
 		$this->bookingHotel->stored_path = $path;
 		$this->bookingHotel->save();
-
-
-		$this->path = $path;
 		return $this;
 	}
 
 
 	public function extractRooms()
 	{
-
 		include_once app_path('MyLibrary/simple_html_dom.php');
 		
 		$rooms = [];
 
 		if (strlen($this->path)) {
-
+			$this->fileExist();
 			$html = file_get_html($this->path);
-
 			foreach ($html->find('td[class=ftd]') as $tdText) {
 				$room = trim($tdText->plaintext);
 				$rooms[] = $room;
 			}
 
 			$this->storeRooms($rooms);
-			$this->rooms = $rooms;
+			$this->getDbRooms();
 		}
 
 		return $this;
@@ -217,8 +212,8 @@ class BookingHotelRoomsController extends Controller
 	public function extractImages()
 	{
 		if (strlen($this->path)) {
+			$this->fileExist();
 			$html = file_get_contents($this->path);
-
 			preg_match_all("/hotelPhotos\s*:\s*\[.*?\],/s", $html, $matches);
 
 			$images = [];
@@ -235,7 +230,7 @@ class BookingHotelRoomsController extends Controller
 			}
 
 			$this->storeImages($images);
-			$this->images = $images;
+			$this->getDbImages();
 		}
 		return $this;
 	}
@@ -286,6 +281,14 @@ class BookingHotelRoomsController extends Controller
 		return $this;
 	}
 
+	public function fileExist()
+	{
+		if (!file_exists($this->path)) {
+			$this->getHttpRoomHtml();
+		}
+		return $this;
+	}
+
 
 	public function setPath($path = null)
 	{
@@ -295,7 +298,7 @@ class BookingHotelRoomsController extends Controller
 			$this->setBookingHotel();
 
 			if ($this->bookingHotel->is_stored_room && strlen($this->bookingHotel->stored_path)) {
-				$this->path = $this->bookingHotel->stored_path;
+				$this->path = storage_path($this->bookingHotel->stored_path);
 			}
 		}
 		return $this;
