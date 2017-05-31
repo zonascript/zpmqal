@@ -70,7 +70,7 @@ class PackageModel extends Model
 	public function getPackageUrlAttribute()
 	{
 		$url = null;
-		if (isset($this->cost->token)) {
+		if (isset($this->cost->token) && $this->cost->total_cost) {
 			$url = route('yourPackage', $this->attributes['token']).'?ctk='.$this->cost->token;
 		}
 		return $url;
@@ -187,7 +187,6 @@ class PackageModel extends Model
 		if ($this->tempCost->count()) {
 			$cost = $this->tempCost[0];
 		}
-		
 		return $cost;
 	}
 

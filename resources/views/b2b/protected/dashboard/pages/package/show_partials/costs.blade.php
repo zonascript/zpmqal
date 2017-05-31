@@ -62,7 +62,7 @@
 						<h2>
 							<i class="fa fa-rupee"></i> 
 							<span id="totalCost" data-ischanged="0" data-error="0">
-								{{ isset($package->cost->totalCost) && $package->cost->totalCost ? $package->cost->totalCost : 0  }}.00
+								{{ isset($package->cost->total_cost) && $package->cost->total_cost ? $package->cost->total_cost : 0  }}.00
 							</span>
 						</h2>
 					</div>
@@ -87,7 +87,7 @@
 			<div class="row m-top-20">
 				<div class="col-md-12 col-sm-12 col-xs-12">
 					<div class="input-group">
-		        <input type="text" id="input_html_link" class="form-control" placeholder=" Web link ..." value="{{$package->package_url}}" />
+		        <input type="text" id="input_html_link" class="form-control" placeholder=" Web link ..." value="{{ $package->package_url }}" />
 		        <span class="input-group-btn">
 		          <a {!! $aHref !!} id="a_html_link" type="button" class="btn btn-primary" target="_blank">Open !</a>
 		        </span>
