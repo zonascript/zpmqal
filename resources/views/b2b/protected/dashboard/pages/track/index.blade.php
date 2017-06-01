@@ -31,7 +31,7 @@
 									<td>{{ $track->created_at }}</td>
 									<td>
 										<div class="col-md-6 col-sm-6 col-xs-12 pull-right">
-											<a href="{{urlPackageAll($track->package->client->id, $track->package->id)}}" class="btn btn-block btn-success btn-xs">Open</a>
+											<a href="{{ route('openPackage', $track->package->token) }}" class="btn btn-block btn-success btn-xs">Open</a>
 										</div>
 									</td>
 								</tr>

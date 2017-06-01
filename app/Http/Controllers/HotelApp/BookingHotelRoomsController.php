@@ -5,6 +5,7 @@ namespace App\Http\Controllers\HotelApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\HotelApp\BookingHotelController;
+use pear\Services_JSON;
 use App\Models\HotelApp\BookingHotelRoomModel;
 
 class BookingHotelRoomsController extends Controller
@@ -215,17 +216,12 @@ class BookingHotelRoomsController extends Controller
 			$this->fileExist();
 			$html = file_get_contents($this->path);
 			preg_match_all("/hotelPhotos\s*:\s*\[.*?\],/s", $html, $matches);
-
 			$images = [];
 			if (isset($matches[0][0])) {
 				$images = $matches[0][0];
 				$images = ltrim($images,"hotelPhotos: ");
 				$images = rtrim($images,",");
-				$images = str_replace(
-						['"', ": ", ",\n", "{\n", "'", '"{'], 
-						['\\"', "\" : ",",\n\"", "{\n\"", '"', '{'],
-						$images
-					);
+				$images = fixjson($images);
 				$images = json_decode($images);
 			}
 

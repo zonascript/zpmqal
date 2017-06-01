@@ -127,6 +127,7 @@ class RouteModel extends Model
 		return $this->morphTo();
 	}
 
+
 	public function fusionCount($fusionId)
 	{
 		return $this->where(['fusion_id' => $fusionId])->count();

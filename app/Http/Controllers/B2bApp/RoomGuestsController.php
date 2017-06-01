@@ -19,6 +19,12 @@ class RoomGuestsController extends Controller
 		return new RoomGuestsController;
 	}
 
+
+	public function model()
+	{
+		return new RoomGuestModel;
+	}
+
 	/*
 	| this function is to save room guest data in db
 	| object must be like this 
@@ -63,5 +69,6 @@ class RoomGuestsController extends Controller
 			$this->create($params->packageDbId, $roomGuest);
 		}
 	}
+
 
 }

@@ -79,6 +79,7 @@ class TrackPackageController extends Controller
 				$tracks[] = [
 						"pid" => $track->package->id,
 						"package_id" => $track->package->uid,
+						"url" => route('openPackage',$track->package->token),
 						"name" => $track->package->client->fullname,
 						"date" => $track->created_at->format('Y-m-d H:i:s')
 					];

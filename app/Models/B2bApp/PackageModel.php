@@ -35,6 +35,15 @@ class PackageModel extends Model
 		$this->attributes['token'] = mycrypt($this->count());
 	}
 
+	public function getTokenAttribute($value)
+	{
+		if (is_null($value)) {
+			$this->setTokenAttribute();
+			$this->save(); 
+		}
+		return $value;
+	}
+
 	public function getUidAttribute()
 	{
 		$prefix = $this->client->user->admin->prefix;
@@ -174,6 +183,14 @@ class PackageModel extends Model
 											'package_code',
 											'package_code'
 										);
+	}
+
+	public function copyRoomGuests($pid)
+	{
+		foreach ($this->roomGuest as $roomGuest) {
+			$roomGuest->copyGuests($pid);
+		}
+		return $this;
 	}
 
 

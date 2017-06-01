@@ -5,9 +5,6 @@
 	Route::post('todo/all/json', 'ToDoController@postAllJson');
 	Route::post('todo/all/html', 'ToDoController@postAllHtml');
 
-
-	Route::get('package/track', 'TrackPackageController@index');
-	Route::match(['get', 'post'], 'package/track/json', 'TrackPackageController@getActiveJson');
 	Route::resource('todo', 'ToDoController');
 	
 	Route::get('profile/password', 'ProfileController@getPassword');

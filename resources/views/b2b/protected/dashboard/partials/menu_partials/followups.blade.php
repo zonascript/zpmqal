@@ -8,7 +8,7 @@
 		<li><h2>Follow-Ups</h2></li>
 		@foreach ($pendingFollowUps as $pendingFollowUp)
 		<li>
-			<a href="{{ urlPackageAll($pendingFollowUp->package->client_id, $pendingFollowUp->package_id) }}">
+			<a href="{{ route('openPackage', $pendingFollowUp->package->token) }}">
 				<span>
 					<span>
 						<b class="font-size-15">{{ $pendingFollowUp->fullname }}</b> 

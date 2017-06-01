@@ -68,7 +68,7 @@ class HotelsController extends Controller
 		$route = RouteController::call()->model()->find($routeId);
 		$packageHotelId = $request->fdid;
 		$packageHotel = $this->model()->find($packageHotelId);
-		
+
 		if (is_null($packageHotel)) {
 			$packageHotel = $this->model();
 			$packageHotel->hotel_code = $request->fid;
@@ -108,7 +108,7 @@ class HotelsController extends Controller
 				"reponse" => "delete",
 			];
 
-		if ($count > 1) {
+		if ($count > 1 && $route->fusion->packageRooms->count() > 1) {
 			$packageHotel = $this->model();
 			$packageHotel->hotel_code = $route->fusion->hotel_code;
 			$packageHotel->vendor = $route->fusion->vendor;

@@ -294,7 +294,7 @@ class PackageController extends Controller
 			$nextUrl = url('dashboard/package/builder/activities/'.$token);
 		}
 		else{
-			$nextUrl = urlPackageOpen($token);
+			$nextUrl = route('openPackage',$token);
 		}
 		/*elseif ($package->activeHotelRoutes->count()) {
 			$nextUrl = url('dashboard/package/builder/hotels/'.$token);
@@ -348,6 +348,7 @@ class PackageController extends Controller
 	{
 		$package = $this->model()->find($pid);
 		$newPackage = $this->createTemp($package->client_id, $package);
+		$package->copyRoomGuests($newPackage->id);
 		RouteController::call()->copyRoutes($package->id, $newPackage->id);
 		return $newPackage;
 	}

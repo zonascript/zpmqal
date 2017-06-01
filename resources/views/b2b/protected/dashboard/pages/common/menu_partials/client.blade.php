@@ -45,7 +45,7 @@
 		<li>
 			<div class="col-md-12 col-sm-12 col-xs-12 m-top-10">
 				<div class="row">
-					<a href="{{ urlPackageAll($client->id, $package->id) }}" class="btn btn-success btn-block">
+					<a href="{{ route('openPackage', $package->token) }}" class="btn btn-success btn-block">
 						<i class="fa fa-arrow-left"> </i> Back to Package
 					</a>
 				</div>

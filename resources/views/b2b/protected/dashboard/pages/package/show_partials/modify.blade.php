@@ -34,9 +34,8 @@
 						<?php 
 							$country = isset($mPackage->routes[0]->explode_destination)  
 											 ? $mPackage->routes[0]->explode_destination
-											 : '';
+											 : [];
 							$country = end($country);
-
 						?>
 						<tr>
 							<th scope="row">{{ $mPackageKey+1 }}</th>

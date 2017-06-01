@@ -1,4 +1,7 @@
 <?php
+$APP_URL = env('IS_LOCALHOST') 
+         ? env('APP_URL', 'http://localhost') 
+         : url('/');
 
 return [
 
@@ -54,7 +57,7 @@ return [
     */
 
     // 'url' => url('/'),
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => $APP_URL,
 
     /*
     |--------------------------------------------------------------------------

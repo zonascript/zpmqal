@@ -144,7 +144,8 @@ class CarsController extends Controller
 		$returnArray = (object)[ 
 				"status" => '',
 				"response" => '',
-				"packageUrl" => urlPackageAll($packageCarModel->package->client_id, $packageDbId),
+				"packageUrl" => route('openPackage', 
+					[$packageCarModel->package->token]),
 			];
 
 		if (!is_null($packageCarModel) && $packageCarModel->package_id == $packageDbId) {

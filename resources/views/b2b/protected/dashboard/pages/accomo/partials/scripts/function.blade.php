@@ -336,16 +336,16 @@
 
 			$(parentUl).find('.btn-chooseProp.off')
 										.addClass('btn-dark')
-											.Prop('disabled', true)
+											.prop('disabled', true)
 												.removeClass('btn-primary');
 		}
 		else{
 			$(parentUl).find('.btn-chooseProp')
 										.addClass('btn-primary')
-											.text('props')
+											.text('Add')
 												.removeClass('btn-dark')
 													.removeClass('btn-danger')
-														.Prop('disabled', false);
+														.prop('disabled', false);
 			removeHotel(thisObj);
 		}
 	}
@@ -504,7 +504,7 @@
 		ridObj = getRidObject(idObject.crid);
 		if (ridObj.nrid == "NaN") {
 			setTimeout(function () {    
-				document.location.href = "{{url('dashboard/package/builder/event/'.$package->token.'/accommodation')}}";
+				document.location.href = "{{ url('dashboard/package/builder/event/'.$package->token.'/accommodation') }}";
 			}, 5000);
 		}
 		else{

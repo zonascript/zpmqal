@@ -12,6 +12,14 @@ class ChildAgeModel extends Model
 		'created_at', 'updated_at',
 	];
 
+
+	public function copyChildAge($rgid)
+	{
+		$newChildAge = $this->replicate();
+		$newChildAge->room_guest_id = $rgid;
+		$newChildAge->save();
+		return $newChildAge;
+	}
 	
 
 

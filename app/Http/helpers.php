@@ -223,34 +223,6 @@ function nested_jsonDecode($string, $is_array = false){
 
 }
 
-/*==========This code is not working and has some bug ==============
-
-function nestedJsonDecode($string, $is_array = false){
-
-	$result = [];
-	if (is_object($string)) {
-		$result = (object)[];
-		foreach ($string as $key => $value) {
-			$result_temp = nested_jsonDecode($value);
-			$result->$key = $result_temp == '' ? $value : $result_temp;
-		}
-	}
-	elseif (is_array($string)) {
-		$result = [];
-		foreach ($string as $key => $value) {
-			$result_temp = nested_jsonDecode($value, true);
-			$result[$key] = $result_temp == '' ? $value : $result_temp;
-		}
-	}
-	else{
-		$result_temp = json_decode(fixjson($string), $is_array);
-		$result_temp = $result_temp == '' ? json_decode($string, $is_array) : $result_temp;
-		$result = $result_temp == '' ? $string : $result_temp;
-	}
-
-	return is_bool($is_array) ? $result : '';
-}*/
-
 
 function is_url_exist($url){
 	$ch = curl_init($url);    
@@ -266,8 +238,6 @@ function is_url_exist($url){
 	curl_close($ch);
 	return $status;
 }
-
-		
 
 function implode_kv($array){
 	return implode(', ', array_map(
@@ -411,11 +381,16 @@ function travelFeed(){
 }
 
 
-function fixjson($string){
-	$search = ['\\', '"[', ']"', '"{', '}"'];
-	$repalce = ['', '[', ']', '{', '}'];
-	return $string = str_replace($search,$repalce,$string);
-}
+function fixjson($s)
+{
+	$s = preg_replace('/\s(?=([^"]*"[^"]*")*[^"]*$)/', '', $s);
+  $s = str_replace(['"',  "'"],['\"', '"'],$s);
+  $s = preg_replace('/(\w+):/i', '"\1":', $s);
+  $s = str_replace('""https"', '"https', $s);
+	return $s;
+}	
+
+
 
 function removeLeadingZero($value=0)
 {
@@ -1027,21 +1002,16 @@ function urlPackageEvent($routeDbId){
 }
 
 
-function urlRouteCreate($clientId)
-{
-	return url('/dashboard/package/route/'.$clientId);
-}
+// function urlRouteCreate($clientId)
+// {
+// 	return url('/dashboard/package/route/'.$clientId);
+// }
 
 /*=====================Package Url=====================*/
 
-function urlPackageOpen($token){
-	return url('dashboard/package/open/'.$token);
-}
-
-
-function urlPackageAll($id = false, $packageDbId = false){
-	return url('dashboard/package/all/'.$id.'/'.$packageDbId);
-}
+// function urlPackageOpen($token){
+// 	return url('dashboard/package/open/'.$token);
+// }
 
 
 /*=====================Accommodation Url=====================*/

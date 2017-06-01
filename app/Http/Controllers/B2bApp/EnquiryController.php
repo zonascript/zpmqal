@@ -98,7 +98,7 @@ class EnquiryController extends Controller
 			$client->save();
 		}
 
-		return redirect(urlRouteCreate($client->id));
+		return redirect(route('createRoute',$client->id));
 	}
 
 	/**

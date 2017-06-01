@@ -8,7 +8,7 @@
 		<li><h2>Lead Box</h2></li>
 		@foreach ($pendingLeads as $pendingLead)
 			<li>
-				<a href="{{ urlPackageAll($pendingLead->id) }}">
+				<a href="{{ route('openPackage',$pendingLead->token) }}">
 					<span>
 						<span><b class="font-size-15">{{ $pendingLead->fullname }}</b></span>
 						<span class="time">{{ $pendingLead->created_at }}</span>

@@ -15,4 +15,19 @@ class RoomGuestModel extends Model
 	}
 
 
+	public function copyGuests($pid)
+	{
+		$newGuest = $this;
+		if ($this->id) {
+			$newGuest = $this->replicate();
+			$newGuest->package_id = $pid;
+			$newGuest->save();
+			foreach ($this->childAge as $childAge) {
+			 	$childAge->copyChildAge($newGuest->id);
+			} 
+		}
+		return $newGuest;
+	}
+
+
 }
