@@ -73,10 +73,12 @@ class CruisesController extends Controller
 	{
 		$params = [
 				"id" => $request->fid,
-				"vendor" => $request->fvdr
+				"vendor" => $request->vdr
 			];
-		
-		if ($request->fvdr == 'f') {
+
+		$cabins = [];
+
+		if ($request->vdr == 'f') {
 			$cabins = CruiseOnlyDatesController::call()
 							->model()->cruiseCabinsWithImages($request->fid);
 		}
@@ -108,7 +110,7 @@ class CruisesController extends Controller
 			$packageCruise->vendor = $request->fvdr;
 			$packageCruise->save();
 			$packageCruiseId = $packageCruise->id;
-			
+
 			$route->fusion_id = $packageCruiseId;
 			$route->fusion_type = 'App\\Models\\B2bApp\\PackageCruiseModel';
 			$route->status = 'complete';
