@@ -71,7 +71,7 @@ class ItineraryController extends Controller
 							];
 				}
 			}
-			elseif (in_array($route->mode,['hotel', 'land', 'road', 'cruise'])) {
+			elseif (in_array($route->mode,['hotel', 'land', 'road'])) {
 				$hotel = $route->hotelDetail();
 				$nights = $route->nights;
 				$hotelName = $hotel->name;
@@ -165,6 +165,70 @@ class ItineraryController extends Controller
 							$itinerary[$tempActivityKey]['activityImages'] = $tempActivity['activityImages'];
 						}
 					}
+				}
+			}
+			elseif ($route->mode == 'cruise') {
+				$hotel = $route->cruiseDetail();
+				$nights = $route->nights;
+				$hotelName = $hotel->name;
+				$hotelDate = $route->start_datetime->format('Y-m-d');
+				$hotelLocation = $route->destination_detail;
+				$hotelImages = $route->images();
+
+				for ($i=1; $i <= $nights+1; $i++) {
+					$mode = $route->mode;
+					$itinerary[$hotelDate][$mode] = true;
+					$itinerary[$hotelDate]['location'][] = $hotelLocation->destination;
+
+					if ($i == 1) {
+						if ($route->is_pick_up) {
+							$itinerary[$hotelDate]['body'][] = [
+									'car' => 'Pick Up from '.$route->pick_up
+								];
+						}
+
+						$itinerary[$hotelDate]['body'][] = [
+								'hotel' => 'Then transfer to the '.$mode.' arrive at the '.$hotelName.'('.$mode.') after check in, take some rest.'
+							];
+					}
+					elseif ($i > $nights) {
+						$itinerary[$hotelDate]['body'][] = [
+								'hotel' => 'Check out from '.$hotelName.'('.$mode.')'
+							];
+						if ($route->is_drop_off) {
+							$itinerary[$hotelDate]['body'][] = [
+									'car' => 'Drop to '.$route->drop_off
+								];
+						}
+					}
+					else{
+						$itinerary[$hotelDate]['body'][] = [
+							'hotel' => 'Breakfast will be served at the '.$hotelName.'('.$mode.')'
+						];
+					}
+
+
+					
+					if ($i <= $nights) {
+						if (isset($itinerary[$hotelDate]['hotelImages'])) {
+							$itinerary[$hotelDate]['hotelImages'] = 
+											array_merge($itinerary[$hotelDate]['hotelImages'], $hotelImages);
+						}
+						else{
+							$itinerary[$hotelDate]['hotelImages'] = $hotelImages;
+						}
+					}else{
+						if (isset($itinerary[$hotelDate]['hotelCheckOutImages'])) {
+							$itinerary[$hotelDate]['hotelCheckOutImages'] = 
+											array_merge($itinerary[$hotelDate]['hotelCheckOutImages'], $hotelImages);
+						}
+						else{
+							$itinerary[$hotelDate]['hotelCheckOutImages'] = $hotelImages;
+						}
+					}
+
+					$hotelDate = addDaysinDate($hotelDate,1);
+					$hotelImages[] = array_shift($hotelImages);
 				}
 			}
 			elseif ($route->mode == 'ferry') {

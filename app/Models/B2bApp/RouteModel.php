@@ -254,11 +254,16 @@ class RouteModel extends Model
 		return $result;
 	}
 
+
 	public function cruiseDetail()
 	{
 		$result = null;
 		if ($this->mode == 'cruise' && !is_null($this->fusion)) {
-			$result = $this->fusion->cruiseDetail();
+			$params = [
+							'cityId' => $this->destination_detail->id,
+							'nights' => $this->nights
+						];
+			$result = $this->fusion->cruiseDetail($params);
 			$result->nights = $this->nights;
 			$result->location = $this->destination_detail->location;
 			$result->endDate = $this->end_datetime->format('d-M-Y');
@@ -266,6 +271,7 @@ class RouteModel extends Model
 		}
 		return $result;
 	}
+	
 
 	public function accomo()
 	{

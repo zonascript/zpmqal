@@ -27,11 +27,19 @@ class CruiseOnlyDateModel extends Model
 	public function cruises(Array $params)
 	{
 		$params = (object) $params;
+		$params->code = 25;
+		$where = [];
+		if (isset($params->code)) {
+			$where['id'] = $params->code;
+		}
+		elseif (isset($params->date)) {
+			$where['date'] = $params->date;
+		}
 
-		$cruises = $this->where('date', $params->date)
+		$cruises = $this->where($where)
 					->with('cruiseNights', 'cruiseNights.vendorDetail')
 						->whereHas('cruiseNights', function($q) use ($params) {
-								$q->where('nights','=', $params->nights)
+									$q->where('nights','=', $params->nights)
 										->whereHas('vendorDetail', function($q) use ($params) {
 												$q->where('destination_code', $params->cityId);
 											});
@@ -50,15 +58,13 @@ class CruiseOnlyDateModel extends Model
 		foreach ($cruises as $cruise) {
 			if (isset($cruise->cruiseNights->vendorDetail->company_name)) {
 				$vendorDetail = $cruise->cruiseNights->vendorDetail;
-				$images = isset($vendorDetail->images[0]->url)
-								? $vendorDetail->images[0]->url
-								: urlDefaultImageCruise();
-
-				$result[] = (object)[
+				$images = $vendorDetail->imagesAsArray();
+				$image = $images[0];
+				$data = [
 						"id" => $cruise->id, // this is cruise_only_dates -> id 
 						"name" => $vendorDetail->company_name,
 						"city" => $vendorDetail->destination->destination,
-						"image"	=> $images,
+						"image"	=> $image,
 						"vendor" => $cruise->vendor,
 						"address"	=> $vendorDetail->address,
 						"country"	=> $vendorDetail->destination->country,
@@ -67,6 +73,14 @@ class CruiseOnlyDateModel extends Model
 						"description" => $vendorDetail->description,
 						"star_rating" => $vendorDetail->star_rating,
 					];
+
+				if (isset($params['attributes'])) {
+					if (in_array('images', $params['attributes'])) {
+						$data['images'] = $images;
+					}
+				}
+
+				$result[] = (object)$data;
 			}
 		}
 		return $result;
@@ -76,25 +90,17 @@ class CruiseOnlyDateModel extends Model
 	public function cruiseCabinsWithImages($id)
 	{
 		$cruise = $this->find($id);
-		$images = [];
-		$imagesResult = isset($cruise->cruiseNights->vendorDetail->images)
-									? $cruise->cruiseNights->vendorDetail->images
-									: [];
-
-		foreach ($imagesResult as $image) {
-			$images[] = $image->url;
+		$images = [urlDefaultImageCruise()];
+		$cabinsResult = [];
+		if (isset($cruise->cruiseNights->vendorDetail) && !is_null($cruise->cruiseNights->vendorDetail)) {
+			$images = $cruise->cruiseNights->vendorDetail->imagesAsArray();
+			$cabinsResult = $cruise->cruiseNights->vendorDetail->cabins;
 		}
-		
-		
-		$cabinsResult = isset($cruise->cruiseNights->vendorDetail->cabins)
-									? $cruise->cruiseNights->vendorDetail->cabins
-									: [];
+
 		$cabins = [];
 		$count = 0;
 		foreach ($cabinsResult as $cabinKey => $cabin) {
-			
 			if ($cabinKey == count($images)) $count = 0;
-
 			$image = $images[$count];
 			$cabins[] = [
 					"id" => $cabin->id,

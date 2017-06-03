@@ -77,14 +77,7 @@
 	{{-- remove-own --}}
 	/*--Asking premission for delete--*/
 	$(document).on('click', '.btn-remove-own', function() {
-		uid = $(this).attr('data-uid');
-		$('#btn_confirmed_activity').attr('data-uid', uid);
-	});
-
-	/*--Removed after confirmed--*/
-	$(document).on('click', '#btn_confirmed_activity', function () {
-		uid = $(this).attr('data-uid');
-		$('#own_activity_'+uid).remove();
+		removeOwnActivity(this);
 	});
 	{{-- /remove-own --}}
 

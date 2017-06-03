@@ -39,7 +39,8 @@ class CruisesController extends Controller
 	*/
 	public function getCruisesByToken($token)
 	{
-		$package = PackageController::call()->model()->findByTokenOrExit($token);
+		$package = PackageController::call()->model()
+							->findByTokenOrExit($token);
 		$blade = [
 				'package' => $package,
 				'client' => $package->client,
@@ -72,10 +73,10 @@ class CruisesController extends Controller
 	{
 		$params = [
 				"id" => $request->fid,
-				"vendor" => $request->vdr
+				"vendor" => $request->fvdr
 			];
 		
-		if ($request->vdr == 'f') {
+		if ($request->fvdr == 'f') {
 			$cabins = CruiseOnlyDatesController::call()
 							->model()->cruiseCabinsWithImages($request->fid);
 		}
@@ -85,7 +86,11 @@ class CruisesController extends Controller
 
 	public function itinerary()
 	{
-		$params = ['date' => '2017-04-16', 'vendor_detail_id' => 1, 'nights' => '5'];
+		$params = [
+							'date' => '2017-04-16', 
+							'vendor_detail_id' => 1, 
+							'nights' => '5'
+						];
 
 		CruiseOnlyDateModel::call()->vendorDetial($params);	
 	}
@@ -94,15 +99,16 @@ class CruisesController extends Controller
 	public function postAddCruiseCabin($routeId, Request $request)
 	{
 		$route = RouteController::call()->model()->find($routeId);
-		$packageCruiseId = $request->fdid;
+		$packageCruiseId = $request->fid;
 		$packageCruise = $this->model()->find($packageCruiseId);
 		
 		if (is_null($packageCruise)) {
 			$packageCruise = $this->model();
 			$packageCruise->cruise_code = $request->fid;
-			$packageCruise->vendor = $request->hvdr;
+			$packageCruise->vendor = $request->fvdr;
 			$packageCruise->save();
 			$packageCruiseId = $packageCruise->id;
+			
 			$route->fusion_id = $packageCruiseId;
 			$route->fusion_type = 'App\\Models\\B2bApp\\PackageCruiseModel';
 			$route->status = 'complete';

@@ -55,4 +55,17 @@ class VendorDetailModel extends Model
     return $this->morphMany('App\Models\CommonApp\ImageModel', 'connectable');
 	}
 
+	public function imagesAsArray()
+	{
+		$images = [];
+		foreach ($this->images as $image) {
+			$images[] = $image->url;
+		}
+		if (empty($images)) {
+			$images[] = urlDefaultImageCruise();
+		}
+		return $images;
+	}
+
+
 }

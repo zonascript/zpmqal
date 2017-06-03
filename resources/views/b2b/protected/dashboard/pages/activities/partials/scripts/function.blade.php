@@ -261,6 +261,24 @@
 		});
 	}
 
+	function removeOwnActivity(thisObj) {
+		/*$.confirm({
+			title: 'Are you sure?',
+			content: 'want to remove <b>Activity</b>',
+			buttons: {
+				confirm: function () {*/
+					$(thisObj).text('Add')
+											.addClass('btn-primary')
+												.removeClass('btn-danger');
+					removeActivity(thisObj);
+				/*},
+				cancel: function () {
+				}
+			}
+		});*/
+
+	}
+
 
 	function showSpinIcon() {
 		$('#fa_def_filter_icon').addClass('hide');

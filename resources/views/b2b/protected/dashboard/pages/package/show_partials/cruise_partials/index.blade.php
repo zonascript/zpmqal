@@ -1,7 +1,6 @@
-@if(!is_null($cruiseRoute->cruise->detail))
+@if(!is_null($cruiseRoute->cruiseDetail()))
 <?php
-	$cruiseDetail = $cruiseRoute->cruise->detail;
-	$uniqueKey = $cruiseDetail->vendor.'_'.$cruiseDetail->code;
+	$cruiseDetail = $cruiseRoute->cruiseDetail();
 ?>
 <ul class="list list-unstyled">
 	<li class="m-top-10">
@@ -18,8 +17,8 @@
 							<h3 class="nopadding hotelName">{{ $cruiseDetail->name }}</h3>
 						</div>
 						<div class="col-md-12 col-sm-12 col-xs-12 m-top-5 font-size-13">
-							<i class="fa fa-map-marker"></i>
-							<span>{{ $cruiseDetail->address }}</span>
+							{{-- <i class="fa fa-map-marker"></i> --}}
+							{{-- <span>{{ $cruiseDetail->itinerary }}</span> --}}
 						</div>
 						<div class="col-md-12 col-sm-12 col-xs-12 ">
 							{!! $cruiseDetail->starRatingHtml !!}
@@ -32,16 +31,16 @@
 							</span>
 						</div>
 						<div class="col-md-12 col-sm-12 col-xs-12 font-size-13 m-top-5">
-							<b>Cabin : </b>{{ $cruiseDetail->roomType }}
+							<b>Cabin : </b>{{ implode(',', $cruiseDetail->cabins) }}
 						</div>
 						<div class="col-md-12 col-sm-12 col-xs-12 m-top-5 font-size-13">
 							{{ $cruiseDetail->shortDescription }}
 							<button 
 								class="btn-link cursor-pointer btn-model" 
 								data-title="{{ $cruiseDetail->name }} : Description" 
-								data-bodyid="cruise_description_{{ $uniqueKey}}">More
+								data-bodyid="hotelDescription_{{ $cruiseDetail->id }}">More
 							</button>
-							<div id="cruise_description_{{ $uniqueKey }}" hidden>
+							<div id="hotelDescription_{{ $cruiseDetail->id }}" hidden>
 								{!! $cruiseDetail->htmlDescription !!}
 							</div>
 						</div>
