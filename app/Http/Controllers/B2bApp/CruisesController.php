@@ -53,21 +53,42 @@ class CruisesController extends Controller
 	| this function is to pull data from tbtq api using TbtqHotelApiController
 	| and it can be call using http post request
 	*/
-	public function postOnlyCruise($rid)
+	public function postOnlyCruise($rid, Request $request)
 	{
 		$route = RouteController::call()->model()->find($rid);
 		$params = [
+				'name' 	 => $request->name,
 				'nights' => $route->nights,
 				'date'	 => $route->start_date, 
-				'cityId' => $route->destination_detail->id, 
+				'cityId' => $route->destination_detail->id,
 			];
 
 		$result = CruiseOnlyDatesController::call()
 							->model()->cruiseFormatted($params);
-		// dd(json_decode(json_encode($result)));
-		return json_encode(['cruises' => $result]);
-	}
+		$result = (object)['cruises' => $result];
 
+		if ($request->format == 'json') {
+			$result = json_encode($result);
+		}
+
+		return $result;
+	}
+	
+	public function searchCruiseNames($rid, Request $request)
+	{
+		$format = $request->format;
+		$request->merge(['format' => null]);
+		$result =  $this->postOnlyCruise($rid, $request);
+		$names = [];
+		foreach ($result->cruises as $cruise) {
+			$names[] = $cruise->name;
+		}
+
+		if ($format == 'json') {
+			$names = json_encode($names);
+		}
+		return $names;
+	}
 
 	public function postCruiseCabin(Request $request)
 	{
@@ -173,4 +194,7 @@ class CruisesController extends Controller
 
 		return json_encode($result);
 	}
+
+
+
 }

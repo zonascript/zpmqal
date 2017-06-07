@@ -20,14 +20,14 @@
 	$(document).on('keypress paste', '#filter_search', function(e) {
 		var key = e.which;
 		if(key == 13){ /*the enter key code*/
-			postSearchHotel();
+			postSearchProp();
 		}
 		else{
 			var name = $(this).val();
 			if (name.length > 2) {
 				showSpinIcon();
-				var did = $('#tab_menu').find('.active').attr('data-did');
-				url = '{{ url("dashboard/hotels/search/name") }}/'+did+'?format=json&_token='+csrf_token;
+				var ridObj = getRidObject(idObject.crid);
+				url = '{{ urlAccomoApi("search/name") }}/'+idObject.crid+'?format=json&_token='+csrf_token;
 				$(this).autocomplete({ source: url });
 			}
 		}
@@ -35,13 +35,13 @@
 
 
 	$(document).on('autocompleteselect', '#filter_search', function (e, ui) {
-		postSearchHotel();
+		postSearchProp();
 	});
 	{{-- /autocomplete --}}
 
 	{{-- search hotel --}}
 	$(document).on('click', '#btn_filter_search', function() {
-		postSearchHotel();
+		postSearchProp();
 	});
 	{{-- /search hotel --}}
 

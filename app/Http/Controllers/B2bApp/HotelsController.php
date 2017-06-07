@@ -35,17 +35,18 @@ class HotelsController extends Controller
 	}
 
 
-
 	/*
 	| this function is to get view on the browser using get request
 	*/
 	public function getHotelsByToken($token)
 	{
-		$package = PackageController::call()->model()->findByTokenOrExit($token);
+		$package = PackageController::call()->model()
+							->findByTokenOrExit($token);
 		$blade = [
 				'package' => $package,
 				'client' => $package->client,
 			];
+
 		return trimHtml(view('b2b.protected.dashboard.pages.hotels.index', $blade)->render());
 	}
 
@@ -267,16 +268,15 @@ class HotelsController extends Controller
 	| this function is to pull data from fgf database's agoda hotels data using 
 	| AgodaHotelsController and it can be call using http post request
 	*/
-	public function postHotelFromDb($routeId, $index = 0)
+	public function postHotelFromDb($routeId, Request $request)
 	{
 		$route = RouteController::call()->model()->find($routeId);
 
 		$selected = [];
-		if (!is_null($route->fusion)) {
-			$selected = rejson_decode($route->fusion->hotelForView());
+		if (!is_null($route->fusion) && is_null($request->name)) {
+			$selected = $route->fusion->hotelForView()->toArray();
 		}
 
-		
 		$location = $route->destination_detail;
 		$params = [
 				'latitude' => $location->latitude, 
@@ -285,15 +285,20 @@ class HotelsController extends Controller
 				'min_rating' => 0,
 				"adults" => 2,
 				"location" => '',
-				"hotelName" => '',
+				"name" => $request->name,
 				"checkInDate" => $route->start_date,
 				"checkOutDate" => $route->end_date,
 			];
 
-		$hotels = DbHotelsController::call()->hotels($params); 
-		$hotels = array_merge($selected, rejson_decode($hotels));
-		$result = (object)['hotels' => $hotels];
-		return json_encode($result);
+		$hotels = DbHotelsController::call()->hotels($params);
+		$hotels = array_merge($selected, $hotels->toArray());
+		$result = rejson_decode(['hotels' => $hotels]);
+
+		if ($request->format == 'json') {
+			$result = json_encode($result);
+		}
+		
+		return $result;
 	}
 
 	/*
@@ -303,7 +308,7 @@ class HotelsController extends Controller
 	public function postHotelFromRename($id, Request $request)
 	{
 		$packageHotel = PackageHotelModel::call()->usersFind($id);
-		$location = $packageHotel->route->destination_detail();
+		$location = $packageHotel->route->destination_detail;
 		$result = (object)['hotels' => []];
 
 		if (strlen($request->name) > 3) {
@@ -355,10 +360,10 @@ class HotelsController extends Controller
 	}
 
 
-	public function searchHotels($id, Request $request)
+	public function searchHotels($rid, Request $request)
 	{
-		$packageHotel = PackageHotelModel::find($id);
-		$location = $packageHotel->route->destination_detail();
+		$route = RouteController::call()->model()->find($rid);
+		$location = $route->destination_detail;
 		$params = [
 					'name' => $request->name,
 					'latitude' => $location->latitude, 
@@ -378,10 +383,10 @@ class HotelsController extends Controller
 	}
 
 
-	public function searchHotelNames($id, Request $request)
+	public function searchHotelNames($rid, Request $request)
 	{
-		$packageHotel = PackageHotelModel::find($id);
-		$location = $packageHotel->route->destination_detail();
+		$route = RouteController::call()->model()->find($rid);
+		$location = $route->destination_detail;
 		$params = [
 					'name' => $request->term,
 					'latitude' => $location->latitude, 

@@ -72,6 +72,11 @@ function clean($string) {
 	 return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
 }
 
+function fakeObject()
+{
+	return new \App\MyLibrary\MyData([]);
+}
+
  
 function removeAndSym($string){
 	if (findWord('&amp;', $string)) {
@@ -177,6 +182,13 @@ function trimHtml($html)
 	$html = trim( preg_replace('/\s+/', ' ', preg_replace('/\t+/', '',$html)));
 	$html = str_replace('> <', '><', $html);
 	return $html;
+}
+
+
+function myView($path, $blade)
+{
+	// return view($path, $blade);
+	return trimHtml(view($path, $blade)->render());
 }
 
 function proper($Word){
@@ -389,7 +401,6 @@ function fixjson($s)
   $s = str_replace('""https"', '"https', $s);
 	return $s;
 }	
-
 
 
 function removeLeadingZero($value=0)

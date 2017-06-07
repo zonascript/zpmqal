@@ -83,7 +83,7 @@ class PackageCruiseModel extends Model
 	{
 		$params['code'] = $this->cruise_code;
 		$params['vendor'] = $this->vendor;
-		$params['attributes'] = ['images'];
+		$params['attributes'] = ['images', 'itinerary'];
 		$detail = $this->findByCode($params);
 		$result = (object)[
 				"id" => $this->id,
@@ -106,6 +106,7 @@ class PackageCruiseModel extends Model
 				"description" => $detail->description,
 				"shortDescription" => $detail->description,
 				"htmlDescription" => $detail->description,
+				"itinerary" => $this->cruise->itinerary,
 			];
 
 		$result->starRatingHtml = getStarImage($result->starRating, 15, 15);

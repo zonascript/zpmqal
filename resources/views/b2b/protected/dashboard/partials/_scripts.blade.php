@@ -236,4 +236,16 @@
 	function hideWaitingLogo() {
 		$('#showWaitingLogo').remove();
 	}
+
+
+	function showSpinIcon() {
+		$('#fa_def_filter_icon').addClass('hide');
+		$('#fa_spin_filter_icon').removeClass('hide');
+	}
+
+	function hideSpinIcon() {
+		$('#fa_spin_filter_icon').addClass('hide');
+		$('#fa_def_filter_icon').removeClass('hide');
+	}
+
 </script>

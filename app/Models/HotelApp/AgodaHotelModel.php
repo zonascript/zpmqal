@@ -8,9 +8,9 @@ class AgodaHotelModel extends Model
 {
 	protected $connection = 'mysql4';
 	protected $table = 'agoda_hotels';
-	protected $appends = ['images', 'vendor'];
+	protected $appends = ['vendor'];
 	protected $hidden = [
-								'addressline1', 'addressline2', 'zipcode', 
+								'addressline1', 'addressline2', 'zipcode', 'distance',
 								'photo1', 'photo2', 'photo3', 'photo4', 'photo5'
 							];
 
@@ -38,6 +38,7 @@ class AgodaHotelModel extends Model
 	public function hotelsByLatLong(Array $params)
 	{
 		$params = (object) $params;
+		$name = $params->name;
 		$lat = $params->latitude;
 		$long = $params->longitude;
 		$maxRating = $params->max_rating == '' ? $params->max_rating : 5;
@@ -59,13 +60,14 @@ class AgodaHotelModel extends Model
 			and ('.$lat.'+(25/69)) and star_rating > '.$minRating.' and star_rating < '.$maxRating;
 
 		$result = $this->select($columns)
-										->whereRaw($whereRaw)
-											->having('distance', '<', 20)
-												->orderBy('star_rating', 'desc')
-													->orderBy('distance', 'asc')
-														->skip(0)
-															->take(50)
-																->get();
+										->where([['hotel_name', 'like', '%'.$name.'%']])
+											->whereRaw($whereRaw)
+												->having('distance', '<', 20)
+													->orderBy('star_rating', 'desc')
+														->orderBy('distance', 'asc')
+															->skip(0)
+																->take(50)
+																	->get();
 		return $result;
 	}
 
@@ -188,7 +190,7 @@ class AgodaHotelModel extends Model
 	}
 	
 
-	public function getImagesAttribute()
+	public function images()
 	{
 		// $result = $this->hotelImages;
 

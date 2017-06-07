@@ -39,9 +39,9 @@
 	});
 
 		
-	/*Route::get('dashboard/hotels/search/name/{id}', 'HotelsController@searchHotelNames');
+	Route::get('dashboard/hotels/search/name/{id}', 'HotelsController@searchHotelNames');
 	Route::post('dashboard/hotels/search/{id}', 'HotelsController@searchHotels');
-	Route::post('dashboard/hotel/find/a/{id}', 'HotelsController@findHotel');
+	/*Route::post('dashboard/hotel/find/a/{id}', 'HotelsController@findHotel');
 	Route::post('search/hotels/result/{id}', 'HotelsController@postHotelFromRename');
 	Route::get('search/hotels/result/{id}', 'HotelsController@searchHotels');*/
 

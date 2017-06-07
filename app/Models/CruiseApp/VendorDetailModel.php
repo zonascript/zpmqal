@@ -21,6 +21,11 @@ class VendorDetailModel extends Model
 		return $this->prefix.$this->id;
 	}
 
+	public function getCompanyNameAttribute($value)
+	{
+		return proper($value);
+	}
+
 	public function cruiseNights()
 	{
 		return $this->hasOne(

@@ -40,7 +40,7 @@ class ItineraryController extends Controller
 	public function itinerary($package)
 	{
 		$itinerary = [];
-		foreach ($package->routes as $route) {
+		foreach ($package->routes as $routeKey => $route) {
 			$routeStartDate = $route->start_datetime->format('Y-m-d');
 			$routeStartTime = $route->start_datetime->format('H:i');
 			$routeEndDate = $route->end_datetime->format('Y-m-d');
@@ -56,19 +56,28 @@ class ItineraryController extends Controller
 					$destination = $flight->destination;
 					$destinationCode = $flight->destinationCode;
 					$departureDate = $flight->departureDate;
+					$departureTime = $flight->departureTime;
 					$arrivalDate = $flight->arrivalDate;
+					$arrivalTime = $flight->arrivalTime;
 
 					$itinerary[$departureDate]['flight'] = true;
 					$itinerary[$departureDate]['location'][$originCode] = $origin;
 					$itinerary[$departureDate]['body'][] = [
-								'flight'=>'Board a flight from '.$origin.'.'
+								'flight' => 'Board a flight from '.$origin.'('.$departureTime.').'
 							];
 
 					$itinerary[$arrivalDate]['flight'] = true;
 					$itinerary[$arrivalDate]['location'][$destinationCode] = $destination;
-					$itinerary[$arrivalDate]['body'][] = [
-								'flight' => 'Arrived in '.$destination.'.'
-							];
+					$flightLine = '';
+					if (count($flights) == ($key+1)) {
+						$flightLine = 'Land ';
+					}
+					else{
+						$flightLine = 'Arrived ';
+					}
+					$flightLine .= 'at '.$destination.'('.$arrivalTime.').';
+
+					$itinerary[$arrivalDate]['body'][] = ['flight' => $flightLine];
 				}
 			}
 			elseif (in_array($route->mode,['hotel', 'land', 'road'])) {
@@ -87,7 +96,7 @@ class ItineraryController extends Controller
 					if ($i == 1) {
 						if ($route->is_pick_up) {
 							$itinerary[$hotelDate]['body'][] = [
-									'car' => 'Pick Up from '.$route->pick_up
+									'car' => 'You shell be met by our representative.'
 								];
 						}
 
@@ -110,7 +119,6 @@ class ItineraryController extends Controller
 							'hotel' => 'Breakfast will be served at the '.$hotelName.'('.$mode.')'
 						];
 					}
-
 
 					
 					if ($i <= $nights) {
@@ -168,67 +176,75 @@ class ItineraryController extends Controller
 				}
 			}
 			elseif ($route->mode == 'cruise') {
-				$hotel = $route->cruiseDetail();
+				$cruise = $route->cruiseDetail();
 				$nights = $route->nights;
-				$hotelName = $hotel->name;
-				$hotelDate = $route->start_datetime->format('Y-m-d');
-				$hotelLocation = $route->destination_detail;
-				$hotelImages = $route->images();
-
-				for ($i=1; $i <= $nights+1; $i++) {
+				$days = $nights+1;
+				$cruiseName = $cruise->name;
+				$cruiseDate = $route->start_datetime->format('Y-m-d');
+				$cruiseLocation = $route->destination_detail;
+				$cruiseImages = $route->images();
+				$fakeObject = fakeObject();
+				for ($i=1; $i <= $days; $i++) {
 					$mode = $route->mode;
-					$itinerary[$hotelDate][$mode] = true;
-					$itinerary[$hotelDate]['location'][] = $hotelLocation->destination;
-
+					$itinerary[$cruiseDate][$mode] = true;
+					$itinerary[$cruiseDate]['location'][] = $cruiseLocation->destination;
+					$cruiseItinerary = isset($cruise->itinerary[$i-1])
+													 ? $cruise->itinerary[$i-1]
+													 : $fakeObject;
 					if ($i == 1) {
 						if ($route->is_pick_up) {
-							$itinerary[$hotelDate]['body'][] = [
+							$itinerary[$cruiseDate]['body'][] = [
 									'car' => 'Pick Up from '.$route->pick_up
 								];
 						}
 
-						$itinerary[$hotelDate]['body'][] = [
-								'hotel' => 'Then transfer to the '.$mode.' arrive at the '.$hotelName.'('.$mode.') after check in, take some rest.'
+						$itinerary[$cruiseDate]['body'][] = [
+								'cruise' => 'Then transfer to the '.$cruiseItinerary->port.' port check in into '.$cruiseName.'(cruise), take some rest. your cruise will be depart at ('.$cruiseItinerary->etd->format('h:i A').') enjoy your vacation.'
 							];
 					}
 					elseif ($i > $nights) {
-						$itinerary[$hotelDate]['body'][] = [
-								'hotel' => 'Check out from '.$hotelName.'('.$mode.')'
-							];
+						$cruiseLine = 'Have your breakfast, your cruise will be arrive on '.$cruiseItinerary->port.' port at ('.$cruiseItinerary->eta->format('h:i A').') Check out from cruise.';
+
+
 						if ($route->is_drop_off) {
-							$itinerary[$hotelDate]['body'][] = [
+							$cruiseLine .= 'our representative will meet you there and proceed to '.$route->drop_off;
+							/*$itinerary[$cruiseDate]['body'][] = [
 									'car' => 'Drop to '.$route->drop_off
-								];
+								];*/
 						}
+
+						$itinerary[$cruiseDate]['body'][] = [
+								'cruise' => $cruiseLine,
+							];
 					}
 					else{
-						$itinerary[$hotelDate]['body'][] = [
-							'hotel' => 'Breakfast will be served at the '.$hotelName.'('.$mode.')'
+						$itinerary[$cruiseDate]['body'][] = [
+							'cruise' => 'Enjoy your day on cruise feel the wind of sea. your cruise will be arrive on '.$cruiseItinerary->port.' port at ('.$cruiseItinerary->eta->format('h:i A').') visit this place take a tour and explore then return to the cruise. cruise will be depart at ('.$cruiseItinerary->etd->format('h:i A').') so arrive on cruise before the given time'
 						];
 					}
 
-
 					
 					if ($i <= $nights) {
-						if (isset($itinerary[$hotelDate]['hotelImages'])) {
-							$itinerary[$hotelDate]['hotelImages'] = 
-											array_merge($itinerary[$hotelDate]['hotelImages'], $hotelImages);
+						if (isset($itinerary[$cruiseDate]['cruiseImages'])) {
+							$itinerary[$cruiseDate]['cruiseImages'] = 
+											array_merge($itinerary[$cruiseDate]['cruiseImages'], $cruiseImages);
 						}
 						else{
-							$itinerary[$hotelDate]['hotelImages'] = $hotelImages;
+							$itinerary[$cruiseDate]['cruiseImages'] = $cruiseImages;
 						}
-					}else{
-						if (isset($itinerary[$hotelDate]['hotelCheckOutImages'])) {
-							$itinerary[$hotelDate]['hotelCheckOutImages'] = 
-											array_merge($itinerary[$hotelDate]['hotelCheckOutImages'], $hotelImages);
+					}
+					else{
+						if (isset($itinerary[$cruiseDate]['cruiseCheckOutImages'])) {
+							$itinerary[$cruiseDate]['cruiseCheckOutImages'] = 
+											array_merge($itinerary[$cruiseDate]['cruiseCheckOutImages'], $cruiseImages);
 						}
 						else{
-							$itinerary[$hotelDate]['hotelCheckOutImages'] = $hotelImages;
+							$itinerary[$cruiseDate]['cruiseCheckOutImages'] = $cruiseImages;
 						}
 					}
 
-					$hotelDate = addDaysinDate($hotelDate,1);
-					$hotelImages[] = array_shift($hotelImages);
+					$cruiseDate = addDaysinDate($cruiseDate,1);
+					$cruiseImages[] = array_shift($cruiseImages);
 				}
 			}
 			elseif ($route->mode == 'ferry') {

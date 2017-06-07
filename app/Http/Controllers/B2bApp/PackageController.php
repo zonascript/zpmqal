@@ -319,6 +319,7 @@ class PackageController extends Controller
 	{
 		$package = $this->model()->findByTokenOrExit($token,false);
 		$package->costToken = $request->ctk;
+		// dd($package->routes[1]->fusion->cruise->itinerary);
 
 		if ($package->cost->total_cost < 1) {
 			exitView();

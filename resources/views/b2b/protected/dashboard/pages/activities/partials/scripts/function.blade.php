@@ -279,17 +279,6 @@
 
 	}
 
-
-	function showSpinIcon() {
-		$('#fa_def_filter_icon').addClass('hide');
-		$('#fa_spin_filter_icon').removeClass('hide');
-	}
-
-	function hideSpinIcon() {
-		$('#fa_spin_filter_icon').addClass('hide');
-		$('#fa_def_filter_icon').removeClass('hide');
-	}
-
 	
 	function checkInputs(thisObj) {
 		var result = true; {{-- if true then every thing is fine --}}

@@ -27,7 +27,7 @@ class CruiseOnlyDateModel extends Model
 	public function cruises(Array $params)
 	{
 		$params = (object) $params;
-		$params->code = 25;
+		$params->name = is_null($params->name) ? '' : $params->name;
 		$where = [];
 		if (isset($params->code)) {
 			$where['id'] = $params->code;
@@ -41,7 +41,10 @@ class CruiseOnlyDateModel extends Model
 						->whereHas('cruiseNights', function($q) use ($params) {
 									$q->where('nights','=', $params->nights)
 										->whereHas('vendorDetail', function($q) use ($params) {
-												$q->where('destination_code', $params->cityId);
+												$q->where([
+														'destination_code' => $params->cityId,
+														['company_name', 'like', '%'.$params->name.'%']
+													]);
 											});
 								})
 							->skip(0)
@@ -78,8 +81,10 @@ class CruiseOnlyDateModel extends Model
 					if (in_array('images', $params['attributes'])) {
 						$data['images'] = $images;
 					}
+					if (in_array('itinerary', $params['attributes'])) {
+						$data['itinerary'] = $this->itinerary;
+					}
 				}
-
 				$result[] = (object)$data;
 			}
 		}

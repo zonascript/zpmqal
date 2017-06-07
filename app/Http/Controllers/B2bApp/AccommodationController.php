@@ -24,19 +24,25 @@ class AccommodationController extends Controller
 				'client' => $package->client,
 				'viewDir' => $viewDir,
 			];
-		return trimHtml(view($viewDir.'.index', $blade)->render());
+		return myView($viewDir.'.index', $blade);
 	}
 
 
-	public function postAccomo($rid)
+	/*
+	| getting hotels list if want hotel with 
+	| name then pass name parameter
+	| if want as json then pass format = json 
+	| default is object
+	*/
+	public function postAccomo($rid, Request $request)
 	{
 		$route =  RouteController::call()->model()->find($rid);
-		$result = [];
+		$result = '[]';
 		if ($route->mode == 'hotel') {
-			$result = HotelsController::call()->postHotelFromDb($rid);
+			$result = HotelsController::call()->postHotelFromDb($rid, $request);
 		}
 		elseif ($route->mode == 'cruise') {
-			$result = CruisesController::call()->postOnlyCruise($rid);
+			$result = CruisesController::call()->postOnlyCruise($rid, $request);
 		}
 		return $result;
 	}
@@ -46,8 +52,6 @@ class AccommodationController extends Controller
 	{
 		return RouteController::call()->postRemoveFusion($rid);
 	}
-
-
 
 
 	public function postAccomoProp($rid, Request $request)
@@ -91,9 +95,26 @@ class AccommodationController extends Controller
 			$result = HotelsController::call()->postRemoveHotelRoom($rid, $request);
 		}
 		elseif ($route->mode == 'cruise') {
-			$result = CruisesController::call()->postRemoveCruiseCabin($rid, $request);
+			$result = CruisesController::call()
+								->postRemoveCruiseCabin($rid, $request);
+		}
+
+	}
+
+	public function searchPropNames($rid, Request $request)
+	{
+		$result = [];
+		$route =  RouteController::call()->model()->find($rid);
+		if ($route->mode == 'hotel') {
+			$result = HotelsController::call()
+								->searchHotelNames($rid, $request);
+		}
+		elseif ($route->mode == 'cruise') {
+			$result = CruisesController::call()
+								->searchCruiseNames($rid, $request);
 		}
 
 		return $result;
 	}
+
 }

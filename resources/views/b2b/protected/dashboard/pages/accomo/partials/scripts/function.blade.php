@@ -72,49 +72,68 @@
 
 
 	{{-- post hotel --}}
-	function postAccomo(rid) {
-		var ridObj 	= getRidObject(rid);
-		var elem_id = ridObj.elem_id;
+	function postAccomo(rid, name = '') {
 		$.ajax({
 			type:"post",
-			url: "{{ urlAccomoApi('fatch') }}/"+rid,
-			data: {'_token' : csrf_token},
+			url: "{{ urlAccomoApi('fatch') }}/"+rid+'?format=json',
+			data: {'_token' : csrf_token, 'name' : name},
 			success: function(response, textStatus, xhr) {
-				var html = '';
-				var response = JSON.parse(response);
-				$('#loging_log').hide();
-				var accomos = [];
-
-				if (isset(response, 'hotels') && ridObj.mode == 'hotel') {
-					var accomos = response.hotels;
-				}
-				else if (isset(response, 'cruises') && ridObj.mode == 'cruise') {
-					var accomos = response.cruises;
-				}
-
-				$.each(accomos, function(i,v){
-					html = makeAccomoObject(i, v, rid);
-					$('#'+elem_id).append(html);
-				})
-
+				var showTop = name == '' ? false : true;
+				populateHtml(response, rid, showTop);
 			},
 			error: function(xhr, textStatus) {
-				$('#loging_log').hide();
-				if(xhr.status == 401){
-					window.open("{{ url('login') }}", '_blank');
-				}
-				else if(xhr.status == 500){
-					postFgfAgoda(rid);
-				}
+				handleError(xhr);
 			}
 		});
 	}
 	{{-- post hotel --}}
 
+	function postSearchProp() {
+		hideSpinIcon();
+		$('#loging_log').show();
+		var name = $('#filter_search').val();
+		postAccomo(idObject.crid, name);
+	}
+
+	function populateHtml(response, rid, showTop) {
+		$('#loging_log').hide();
+		var response = JSON.parse(response);
+		var ridObj 	= getRidObject(rid);
+		var accomos = [];
+
+		if (isset(response, 'hotels') && ridObj.mode == 'hotel') {
+			var accomos = response.hotels;
+		}
+		else if (isset(response, 'cruises') && ridObj.mode == 'cruise') {
+			var accomos = response.cruises;
+		}
+
+		var html = '';
+		$.each(accomos, function(i,v){
+			html = makeAccomoObject(i, v, rid);
+			if (showTop) {
+				$('#'+ridObj.elem_id).prepend(html);
+			}
+			else{
+				$('#'+ridObj.elem_id).append(html);
+			}
+		});
+	}
+
+	function handleError(xhr) {
+		$('#loging_log').hide();
+		if(xhr.status == 401){
+			window.open("{{ url('login') }}", '_blank');
+		}
+		else if(xhr.status == 500){
+			{{--postFgfAgoda(rid);--}}
+		}
+	}
 
 
 	{{-- make hotel object --}}
 	function makeAccomoObject(i, object, rid) {
+		/*console.log(object);*/
 		var code = object.id;
 		var ukey = code+'_'+object.vendor;   {{-- uniqueKye = rid_id_vendor --}}
 		var name = proper(object.name);
@@ -500,7 +519,6 @@
 	{{-- find next event --}}
 	function nextAccomoEvent(thisObj) {
 		$('#loging_log').show();
-		rid = $(thisObj).attr('data-rid');
 		ridObj = getRidObject(idObject.crid);
 		if (ridObj.nrid == "NaN") {
 			setTimeout(function () {    
@@ -522,37 +540,7 @@
 		idObject.crid = rid;
 	}
 
-	function postSearchHotel() {
-		hideSpinIcon();
-		$('#loging_log').show();
-		var name = $('#filter_search').val();
-		var rid = $('#tab_menu').find('.active').attr('data-rid');
-		var ridObj = getRidObject(rid);
-		var elem_id = ridObj.elem_id;
-		var data = {
-				'name' : name,
-				'_token' : csrf_token
-			};
 
-		$.ajax({
-			type:"post",
-			url: "{{ url('dashboard/hotels/search/') }}/"+rid+'?format=json',
-			data: data,
-			success: function(response, textStatus, xhr) {
-				var html = '';
-				var response = JSON.parse(response);
-				var hotels = response.hotels;
-
-				$('#loging_log').hide();
-				if (hotels.length) {
-					$.each(hotels, function(i,v){
-						html = makeHotelObject(i, v, rid);
-						$('#'+elem_id).append(html);
-					});
-				}
-			}
-		});
-	}
 
 
 

@@ -66,6 +66,7 @@ class BookingHotelModel extends Model
 		$long = $params->longitude;
 		$maxRating = $params->max_rating == '' ? $params->max_rating : 5;
 		$minRating = $params->min_rating == '' ? $params->min_rating : 0;
+		$name = $params->name;
 
 		$distance = DB::raw('3956 * 2 * ASIN(SQRT( POWER(SIN(('.$lat.' - latitude)*pi()/180/2),2) + COS('.$lat.'*pi()/180 )*
 			COS(latitude*pi()/180)*POWER(SIN(('.$long.' - longitude)
@@ -84,13 +85,14 @@ class BookingHotelModel extends Model
 			and ('.$lat.'+(25/69)) and class > '.$minRating.' and class < '.$maxRating;
 
 		$result = $this->select($columns)
-										->whereRaw($whereRaw)
-											->having('distance', '<', 20)
-												->orderBy('star_rating', 'desc')
-													->orderBy('distance', 'asc')
-														->skip(0)
-															->take(50)
-																->get();
+										->where([['name', 'like', '%'.$name.'%']])
+											->whereRaw($whereRaw)
+												->having('distance', '<', 20)
+													->orderBy('star_rating', 'desc')
+														->orderBy('distance', 'asc')
+															->skip(0)
+																->take(50)
+																	->get();
 		return $result;
 	}
 
