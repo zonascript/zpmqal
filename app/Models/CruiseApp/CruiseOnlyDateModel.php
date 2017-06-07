@@ -27,7 +27,9 @@ class CruiseOnlyDateModel extends Model
 	public function cruises(Array $params)
 	{
 		$params = (object) $params;
-		$params->name = is_null($params->name) ? '' : $params->name;
+		$params->name = isset($params->name) && !is_null($params->name) 
+									? $params->name
+									: '';
 		$where = [];
 		if (isset($params->code)) {
 			$where['id'] = $params->code;
