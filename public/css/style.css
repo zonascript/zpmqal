@@ -28,10 +28,7 @@
 	z-index: 2;
 }
 
-.wickedpicker{
-	z-index: 50;
-}
-
+.wickedpicker{z-index: 50;}
 
 .full-image{
 	background-size: cover;
@@ -147,6 +144,7 @@
 .black{ color: #000; }
 
 .bg-color-gray{ background-color: #ebebeb !important; }
+.bg-color-white{ background-color: #ffffff !important; }
 .bg-color-black-trans{ background-color : rgba(0,0,0,0.6); }
 .bg-color-lightcoral{ background-color: #f57385; }
 
@@ -246,6 +244,16 @@
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	background-image: url(http://b2b.flygoldfinch.dev/Images/navbar_translogo.png); 
+}
+
+.div-60{
+	width: 60px;
+	height: 60px;
+	background-color: #ffffff;
+}
+
+.m-tb-15-5{
+	margin: 10px 0 5px 0; 
 }
 
 .form-div{ padding: 20px 10px 20px 10px; }
@@ -552,8 +560,10 @@
 
 /* end padding section*/
 
-.btn-color-blue{ color: #fff;
-	background-color: #286090; }
+.btn-color-blue{ 
+	color: #fff;
+	background-color: #286090;
+}
 
 .right-5 { right: 5px ! important; }
 
@@ -607,11 +617,11 @@
 .m-bottom-20px{ margin-bottom: 20px ! important; }
 
 
-.table-p < td {
-	padding : 10px;
+.table-p < td {padding : 10px;}
+.nostyle{
+	background-color: #ffffff;
+	border: 0px ! important; 
 }
-.nostyle{ background-color: #ffffff;
-	border: 0px ! important; }
 
 
 .flex-list { position: relative;

@@ -5,12 +5,19 @@ use Illuminate\Http\Request;
 use App\MyLibrary\Verdant\XML2Array;
 use App\Http\Controllers\B2bApp\RoutePackageModesController;
 use App\Models\HotelApp\HotelModel;
+use Carbon\Carbon;
 
 class TestController extends Controller
 {
 
 	public function testCode()
 	{
+
+		$date = Carbon::createFromFormat('d/m/Y', '15/07/2017');
+		$date->subYear(); 
+		echo $date->format('d/m/Y'); // Previous year
+		dd();
+
 		dd(url('/'));
 
 		dd(mycrypt(329));
