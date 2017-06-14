@@ -1,5 +1,5 @@
 <?php
-$APP_URL = env('IS_LOCALHOST') || !isset($_SERVER['SERVER_NAME'])
+$APP_URL = !isset($_SERVER['SERVER_NAME'])
          ? env('APP_URL', 'http://localhost') 
          : url('/');
 

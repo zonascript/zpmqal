@@ -9,7 +9,7 @@ Confirm my account
 @endcomponent
 
 If you’re having trouble clicking the "Reset Password" button, copy and paste the URL below into your web browser
-<br>{!!$user->link!!}
+<br>{!! $user->link !!}
 <br>
 
 Thanks,<br>
