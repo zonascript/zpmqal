@@ -27,7 +27,7 @@
 											</div>
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<h4 class="m-top-20 text-right"><b>Assign To :</b> 
-													{{ $enquiry->user->firstname.' '. $enquiry->user->lastname." (".$enquiry->user->username.")" }}</h4>
+													{{ $enquiry->user->firstname.' '. $enquiry->user->lastname." (".$enquiry->user->email.")" }}</h4>
 											</div>
 										</div>
 										<hr>

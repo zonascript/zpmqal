@@ -10,4 +10,4 @@
 
 	// =====================Images Controller=====================
 	Route::post('image/upload', 'ImagesController@upload');
-	Route::resource('new/destination', 'DestinationController');
+	// Route::resource('new/destination', 'DestinationController');

@@ -6,12 +6,28 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\BackendApp\PlansController;
+use App\Http\Controllers\AdminApp\TransectionController;
 
 use App\Models\AdminApp\PackageModel;
+use Carbon\Carbon;
 use Auth;
 
 class PackageController extends Controller
 {
+	protected $viewPath = 'admin.protected.dashboard.pages.package';
+
+
+	public static function call()
+	{
+		return new PackageController;
+	}
+
+
+	public function model()
+	{
+		return new PackageModel; 
+	}
+
 
 	public function getShowPlans()
 	{
@@ -24,6 +40,7 @@ class PackageController extends Controller
 		return view($viewPath.'.index', $blade);
 	}
 
+
 	public function getCheckout(Request $request)
 	{
 		$auth = Auth::guard('admin')->user();
@@ -34,7 +51,8 @@ class PackageController extends Controller
 				'viewPath' => $viewPath,
 				'plan' => $plan,
 				'product' => $plan->name,
-				'txnid' => uid()
+				'txnid' => uid(),
+				'balance' => $auth->balance,
 			];
 
 		if ($plan->with_price) {
@@ -45,16 +63,22 @@ class PackageController extends Controller
 			$duration .= $duration > 1 ? ' Months' : ' Month';
 			$blade['duration'] = $duration;
 		}
-		else{
+		else {
 			$blade['price'] = $request->amount;
 			$blade['tax'] = round($request->amount*.15, 2);
 			$blade['duration'] = 'Unlimited';
 		}
 		
-		$blade['payumoney'] = round(($blade['price']+$blade['tax'])*.029, 2);
-		$blade['total'] = $blade['price']+$blade['tax']+$blade['payumoney'];
+		// $blade['payumoney'] = round(($blade['price']+$blade['tax'])*.029, 2);
+		$blade['total'] = $blade['price']+$blade['tax'];
+		// $blade['total'] += $blade['payumoney'];
+
+		$tempCost = $blade['price']+$blade['tax']-$blade['balance'];
+		$tempPayu = round($tempCost*.029, 2);
+		$blade['payable'] = $tempCost+$tempPayu;
 		return view($viewPath.'.index', $blade);
 	}
+
 
 	public function showInvoice($txnid)
 	{
@@ -67,6 +91,65 @@ class PackageController extends Controller
 				"addedon" => $request->addedon
 			];
 		return view('admin.protected.dashboard.pages.payumoney.success', $blade);
+	}
+
+
+	public function activatePlan($planId)
+	{
+		$auth = Auth::guard('admin')->user();
+		if ($auth->isPackageActive()) {
+			return $this->alreadyPackageActive();
+		}
+
+		$plan = PlansController::call()->model()->findOrExit($planId);
+		$totalPrice = $plan->total;
+
+		if ($totalPrice <= $auth->balance) {
+			$now = Carbon::now();
+			$end = Carbon::now();
+			$end->addDays($plan->duration);
+			$txnid = uid();
+			$package = $this->model();
+			$package->admin_id = $auth->id;
+			$package->plan_id = $planId;
+			$package->start_date = $now->format('Y-m-d');
+			$package->end_date = $end->format('Y-m-d');
+			$package->save();
+
+			// new Transection 
+			$trans = (object) [
+					'uid' => $txnid,
+					'plan_id' => $planId,
+					'withdrawn' => $totalPrice,
+					'is_success' => 1,
+					'tran_type' => 'withdrawn',
+					'conjoinly_id' => $package->id,
+					'conjoinly_type' => 'App\\Models\\AdminApp\\PackageModel'
+				];
+
+			TransectionController::call()->new($trans);
+
+			$auth->package_id = $package->id;
+			$auth->balance = $auth->balance - $totalPrice;
+			$auth->save();
+			
+			$blade = [
+					"balance" => $auth->balance,
+					"txnid" => $txnid
+				];
+			return view($this->viewPath.'.activated', $blade);
+		}
+		else {
+			$need = $totalPrice - $auth->balance;
+			return redirect()->route('addMoney', ['m' => $need]);
+		}
+	}
+
+
+
+	public function alreadyPackageActive()
+	{
+		return view($this->viewPath.'.already_active');
 	}
 
 

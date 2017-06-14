@@ -1,5 +1,6 @@
 <?php
 
+
 	Route::group(['namespace' => 'CommonApp'], function(){
 		Route::get(
 				'location/detail/fatch/airport', 

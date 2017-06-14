@@ -6,6 +6,7 @@ use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Auth;
 
 class RegisterController extends Controller
 {
@@ -27,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
@@ -36,7 +37,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('admin');
     }
 
     /**
@@ -50,7 +51,6 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'firstname' => 'required|max:255',
             'lastname' => 'required|max:255',
-            'username' => 'required|max:255',
             'mobile' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
@@ -65,14 +65,16 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $auth = Auth::guard('admin')->user();
         return User::create([
             'firstname' => $data['firstname'],
             'lastname' => $data['lastname'],
             'mobile' => $data['mobile'],
-            'username' => $data['username'],
             'email' => $data['email'],
             'type' => 'agent',
             'password' => bcrypt($data['password']),
+            'is_active' => 3,
+            'admin_id' => $auth->id,
         ]);
     }
 }

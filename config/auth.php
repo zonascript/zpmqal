@@ -114,7 +114,7 @@ return [
     'passwords' => [
         'admins' => [
             'provider' => 'admins',
-            'table' => 'admin_password_resets',
+            'table' => 'trawish_admin.admin_password_resets',
             'expire' => 60,
         ],
 

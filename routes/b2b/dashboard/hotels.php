@@ -35,7 +35,7 @@
 
 		// Booking Hotels 
 		Route::get('b/result/{id}', 'HotelsController@postHotelFromDb');
-		Route::get('b/rooms/{id}', 'HotelApp\BookingHotelRoomsController@hotelRoom');
+		// Route::get('b/rooms/{id}', 'HotelApp\BookingHotelRoomsController@hotelRoom');
 	});
 
 		

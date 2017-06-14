@@ -26,7 +26,7 @@
 						<option value="">Assign To?</option>
 						@foreach ($agents as $agent)
 							<option value="{{ $agent->id }}" name="agent">
-								{{ $agent->firstname.' '.$agent->lastname.' ('.$agent->username.')' }}
+								{{ $agent->firstname.' '.$agent->lastname.' ('.$agent->email.')' }}
 							</option>
 						@endforeach
 					</select>

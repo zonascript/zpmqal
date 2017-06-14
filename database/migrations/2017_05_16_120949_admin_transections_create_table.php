@@ -13,7 +13,7 @@ class AdminTransectionsCreateTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::connection('mysql3')->create('transections', function (Blueprint $table) {
+		Schema::connection('mysql3')->create('transactions', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('uid', 25)->nullable();
 			$table->integer('admin_id')->unsigned();
@@ -30,6 +30,6 @@ class AdminTransectionsCreateTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('mysql3')->dropIfExists('transections');
+		Schema::connection('mysql3')->dropIfExists('transactions');
 	}
 }

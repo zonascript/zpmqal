@@ -28,7 +28,6 @@ class EnquiryModel extends ClientModel
 										'trawish_b2b.users.admin_id', 
 										'trawish_b2b.users.firstname AS user_firstname', 
 										'trawish_b2b.users.lastname AS user_lastname', 
-										'trawish_b2b.users.username AS user_username', 
 										'trawish_b2b.users.mobile As user_mobile', 
 										'trawish_b2b.users.email As user_email', 
 										'trawish_b2b.users.type As user_type', 

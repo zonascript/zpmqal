@@ -20,5 +20,5 @@
 		'FlightsController@postSkyscannerFlightResult'
 	);
 
-	Route::get('tp/flights/result', 'TravelportAirController@index');
-	Route::get('skyscanner/flights', 'Api\SkyscannerFlightsApiController@postFlight');
+	// Route::get('tp/flights/result', 'TravelportAirController@index');
+	// Route::get('skyscanner/flights', 'Api\SkyscannerFlightsApiController@postFlight');

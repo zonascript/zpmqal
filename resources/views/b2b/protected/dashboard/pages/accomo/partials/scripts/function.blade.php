@@ -76,6 +76,7 @@
 		$.ajax({
 			type:"post",
 			url: "{{ urlAccomoApi('fatch') }}/"+rid+'?format=json',
+			dataType: 'JSON',
 			data: {'_token' : csrf_token, 'name' : name},
 			success: function(response, textStatus, xhr) {
 				var showTop = name == '' ? false : true;
@@ -97,7 +98,7 @@
 
 	function populateHtml(response, rid, showTop) {
 		$('#loging_log').hide();
-		var response = JSON.parse(response);
+		/*var response = JSON.parse(response);*/
 		var ridObj 	= getRidObject(rid);
 		var accomos = [];
 

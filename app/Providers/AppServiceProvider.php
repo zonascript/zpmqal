@@ -26,11 +26,10 @@ class AppServiceProvider extends ServiceProvider
 		View::composer('admin.*', function($view){
 			$view->with('auth', Auth::guard('admin')->user());
 		});
-		
 		View::composer('backend.*', function($view){
 			$view->with('auth', Auth::guard('backend')->user());
 		});
-		
+
 		$domain = isset($_SERVER['HTTP_HOST']) 
 						? $_SERVER['HTTP_HOST']
 						: env('B2B_DOMAIN');

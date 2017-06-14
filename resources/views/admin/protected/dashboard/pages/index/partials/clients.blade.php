@@ -40,7 +40,7 @@
 										<td>{{ $client->mobile }}</td>
 										<td>{{ $client->email }}</td>
 										<td>{{ $client->created_at }}</td>
-										<td>{!! $client->user_firstname.' '.$client->user_lastname.' ('.$client->user_username.')' !!}</td>
+										<td>{!! $client->user_firstname.' '.$client->user_lastname.' ('.$client->user_email.')' !!}</td>
 										<td>{{ $client->status }}</td>
 										<td>
 											<div class="row">

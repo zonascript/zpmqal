@@ -6,12 +6,61 @@ use App\MyLibrary\Verdant\XML2Array;
 use App\Http\Controllers\B2bApp\RoutePackageModesController;
 use App\Models\HotelApp\HotelModel;
 use Carbon\Carbon;
+use App\Mail\VerifyMail;
+use Crypt;
 
 class TestController extends Controller
 {
 
 	public function testCode()
 	{
+
+		$encrypted = Crypt::encrypt('Hello world.');
+		$decrypted = Crypt::decrypt($encrypted);
+		dd($encrypted, $decrypted);
+		dd(Crypt::encrypt(1));
+		$this->sendEmail();
+		dd('email sent');
+		$date = Carbon::parse('2017-07-01');
+		$now = Carbon::now();
+		dd($date->gte($now), $date, $now);
+
+		$array = [
+			"SID"  => '$SID',
+			"S_Firstname"  => '$S_Firstname',
+			"S_Lastname"  => '$S_Lastname',
+			"S_Phone"  => '$S_Phone',
+			"S_Email"  => '$S_Email\'',
+			"User_privledge_no"  => '$User_privledge_no',
+			"S_Username"  => '$S_Username',
+			"S_Password" => '$S_Password',
+		];
+
+		$colums = implode('`, `', array_keys($array));
+		$data = addslashes(implode("', '", $array));
+		$sql = "INSERT INTO staff (`".$colums."`) VALUES ('".$data."')"; // you can do inline code too
+		echo $sql;
+		dd();
+
+		$sql = "INSERT INTO staff (`".implode('`, `', array_keys($array))."`) VALUES ('".implode("', '", $array)."')";
+		dd();
+
+		$fread = 'is this \item gone yet? \"hmmm\". it\'s a ball.';
+		$search= ["\\", "item"]; // use double quote for backslash and escape with backslash
+	  $replace=['', ''];
+	  $fread = str_replace($search, $replace, $fread);
+	  dd($fread);
+
+		$xml = '<cas:serviceResponse xmlns:cas="http://www.yale.edu/tp/cas">
+		    <cas:authenticationSuccess>
+		        <cas:user>yassine458</cas:user>
+		    </cas:authenticationSuccess>
+		</cas:serviceResponse>';
+
+		$xml2array = XML2Array::createArray($xml);
+
+		echo $xml2array['cas:serviceResponse']['cas:authenticationSuccess']['cas:user'];
+		ddp($xml2array);
 
 		$date = Carbon::createFromFormat('d/m/Y', '15/07/2017');
 		$date->subYear(); 
@@ -105,6 +154,18 @@ class TestController extends Controller
 	}
 	// https://www.booking.com/hotel/za/house-of-house-guest-house.html
 
+
+
+	public function sendEmail()
+	{
+		$test = (object)[
+				"email" => "ajay@flygoldfinch.com",
+				"name" => "Ajay Kumar",
+				"link" => url('/')
+			];
+
+		\Mail::to($test)->send(new VerifyMail($test));
+	}
 
 	public function extractHtml($path)
 	{

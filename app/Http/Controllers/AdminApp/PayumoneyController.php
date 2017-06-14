@@ -4,6 +4,8 @@ namespace App\Http\Controllers\AdminApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\AdminApp\TransectionController;
+
 use App\Models\AdminApp\PayuPaymentModel;
 use Auth;
 
@@ -11,6 +13,7 @@ class PayumoneyController extends Controller
 {
 	private $data = [
 			"auth" => null,
+			"txnid" => null,
 			"mode" => 'secure',
 			"testUrl" => 'https://test.payu.in/_payment',
 			"secureUrl" => 'https://secure.payu.in/_payment',
@@ -28,101 +31,131 @@ class PayumoneyController extends Controller
 		return new PayuPaymentModel;
 	}
 
+	/*
+	| request must have these parameter
+	| amount, product
+	*/
 	public function pay(Request $request)
 	{
+		// dd(strtolower(hash("sha512", 'PC4HRz84|149700717566341|10.29|add_money|Aashwin|info@flygoldfinch.com|||||||||||yKLVumd1KE')));
+
 		$this->mode = 'test';
 
+		// credentials
+		$key = $this->key;
+		$salt = $this->salt;
+
+		// urls
+		$url = $this->url;
+		$surl = $this->surl;
+		$furl = $this->furl;
+
+		$txnid = $this->txnid;
 		// user detail here
 		$name = $this->auth->firstname;
 		$email = $this->auth->email;
 		$phone = $this->auth->mobile;
 
 		// Request data here
-		$txnid = $request->txnid;
 		$amount = $request->amount;
-		$productinfo = !is_null($request->product) 
+
+		$productinfo = isset($request->product) 
 								 ? $request->product
-								 : 'product';
+								 : 'add_money';
+		
 
 		// hashing here
-		$hashseq = $this->key.'|'.$txnid.'|'.$amount.'|'
+		$hashseq = $key.'|'.$txnid.'|'.$amount.'|'
 								.$productinfo.'|'.$name.'|'.$email
-									.'|||||||||||'.$this->salt;
+									.'|||||||||||'.$salt;
 
 		$hash = strtolower(hash("sha512", $hashseq)); 	
 
+
 		$blade = [
-			"url" => $this->url,
-			"key" => $this->key,
-			"salt" => $this->salt,
-			"surl" => $this->surl,
-			"furl" => $this->furl,
-			"name" => $name,
-			"hash" => $hash,
-			"txnid" => $txnid,
-			"phone" => $phone,
-			"email" => $email,
-			"amount" => $amount,
-			"hashseq" => $hashseq,
-			"productinfo" => $productinfo,
-		];
+				"key" 				=> $key,
+				"url" 				=> $url,
+				"salt" 				=> $salt,
+				"surl" 				=> $surl,
+				"furl" 				=> $furl,
+				"name" 				=> $name,
+				"hash" 				=> $hash,
+				"txnid" 			=> $txnid,
+				"phone" 			=> $phone,
+				"email" 			=> $email,
+				"amount" 			=> $amount,
+				"hashseq" 		=> $hashseq,
+				"productinfo" => $productinfo,
+			];
+
+		// dd($blade);
+
+
+		$request->merge($blade);
+		$this->store($request);
+
 		return view('admin.protected.dashboard.pages.payumoney.index', $blade);
 	}
 
 
 	public function success(Request $request)
 	{
-		$request->is_success = 1;
-		$payu = $this->store($request);
-		return is_null($payu) ? $this->exitView() :
-		redirect()->route('showInvoice', $payu->txnid);
-	}
-
-
-	public function exitView()
-	{
-		$blade = ["url" => urlReport()];
-		exit(view('b2b.protected.dashboard.404_main', $blade)->render());
-	}
-
-	public function store(Request $request)
-	{
-		$payu = null;
-		if (isset($request->txnid)) {
-			$payu = $this->model()->findByTxnid($request->txnid);
-			if (is_null($payu)) {
-				$payu = $this->model();
-				$payu->txnid = $request->txnid;
-				$payu->payable_id = $this->auth->id;
-				$payu->payable_type = 'App\\Admin';
-				$payu->is_success =  $request->is_success;
-				$payu->data = $request->input();
-				$payu->save();
-			}
-		}
-		return $payu;
+		$request->merge(['is_success' => 1]);
+		$payu = $this->update($request);
+		return redirect()->route('admin.showTransaction', $payu->txnid);
 	}
 
 
 	public function failure(Request $request)
 	{
-		$request->is_success = 0;
-		$payu = $this->store($request);
-		return is_null($payu) ? $this->exitView() :
-		redirect()->route('showInvoice', $payu->txnid);
+		$request->merge(['is_success' => 0]);
+		$payu = $this->update($request);
+		return redirect()->route('admin.showTransaction', $payu->txnid);
 	}
 
 
-	public function getUrlAttribute()
-  {
-    return 'tzsk-payu';
-  }
-
-	public function __construct()
+	public function store(Request $request)
 	{
-		$this->surl = url('agent/pay/success');
-		$this->furl = url('agent/pay/failure');
+		$payu = $this->model();
+		$payu->txnid = $request->txnid;
+		$payu->payable_id = $this->auth->id;
+		$payu->payable_type = 'App\\Admin';
+		$payu->amount = $request->amount;
+		$payu->net_amount = $request->net_amount;
+		$payu->request = $request->input();
+		$payu->save();
+		return $payu;
 	}
+
+
+	public function update(Request $request)
+	{
+		$payu = $this->model()->findByTxnidOrElse($request->txnid);
+		$payu->is_success =  $request->is_success;
+		$payu->data = $request->input();
+		$payu->save();
+
+		//  this call first for showing previous balance
+		$trans = (object) [
+				'uid' => $request->txnid,
+				'deposited' => $request->amount,
+				'is_success' => $request->is_success,
+				'tran_type' => 'deposited',
+				'conjoinly_id' => $payu->id,
+				'conjoinly_type' => 'App\\Models\\AdminApp\\PayuPaymentModel'
+			];
+
+		TransectionController::call()->new($trans);
+
+		// this call seconed for updating current balance
+		if ($request->is_success) {
+			$this->auth->balance += $payu->net_amount;
+			$this->auth->save();
+		}
+
+		return $payu;
+	}
+
 
 
 	public function __set($name, $value)
@@ -146,6 +179,9 @@ class PayumoneyController extends Controller
 			}
 			$value = $this->data['auth'];
 		}
+		elseif ($name == 'txnid') {
+			$value = uid();
+		}
 		elseif(isset($this->data[$name])) {
 			$value = $this->data[$name];
 		}
@@ -157,7 +193,7 @@ class PayumoneyController extends Controller
 				$value = env('PAYUMONEY_KEY');
 			}
 			elseif ($name == 'salt') {
-				$value = env('PAYUMONEY_KEY');
+				$value = env('PAYUMONEY_SALT');
 			}
 		}
 		elseif ($this->mode == 'test') {
@@ -173,4 +209,12 @@ class PayumoneyController extends Controller
 		}
 		return $value;
 	}
+
+
+	public function __construct()
+	{
+		$this->surl = url('agent/pay/success');
+		$this->furl = url('agent/pay/failure');
+	}
+
 }

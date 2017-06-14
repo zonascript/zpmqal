@@ -296,7 +296,7 @@ class ActivitiesController extends Controller
 		$auth = Auth::guard('backend')->user();
 		$activity = ActivityModel::find($id);
 		$activity->status = "inactive";
-		$activity->statusby = $auth->username;
+		$activity->statusby = $auth->email;
 
 		$activityId = $activity->prefix.$id;
 

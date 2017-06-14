@@ -29,6 +29,6 @@
 	Route::get('f/cruises/cabin/{id}', 'CruisesController@postFgfCruiseCabin');
 	Route::post('f/cruises/cabin/{id}', 'CruisesController@postFgfCruiseCabin');
 
-	Route::get('dashboard/api/cruise', 'Api\CruiseController@cruise');
-	Route::get('dashboard/api/cruise/cabin', 'Api\CruiseController@cruiseCabin');
+	// Route::get('dashboard/api/cruise', 'Api\CruiseController@cruise');
+	// Route::get('dashboard/api/cruise/cabin', 'Api\CruiseController@cruiseCabin');
 	

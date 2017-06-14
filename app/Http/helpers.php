@@ -50,6 +50,16 @@ function exitView($url = null)
 }
 
 
+function wrongView($url=null)
+{
+	if ($url == null) {
+		$url = urlReport();
+	}
+	$blade = ["url" => $url];
+	exit(view('b2b.protected.dashboard.404_main', $blade)->render());
+}
+
+
 function mycrypt($value)
 {
 	return md5(bcrypt($value));
@@ -57,11 +67,13 @@ function mycrypt($value)
 
 function myencrypt($value)
 {
+	// return base64_encode($value.'fgf_salt');
 	return openssl_encrypt($value,"AES-128-ECB",'FGF');
 }
 
 function mydecrypt($value)
 {
+	// return str_replace('fgf_salt', '', base64_decode($value));
 	return openssl_decrypt($value,"AES-128-ECB",'FGF');
 }
 
@@ -1182,4 +1194,23 @@ function sortBySeatingCapacity($x, $y) {
 
 function commonAsset($path){
 	return asset('common/'.$path);
+}
+
+
+function statusCss($id)
+{
+	$css = '';
+	if ($id == 0) {
+		$css = 'red';
+	}
+	elseif($id == 1) {
+		$css = 'green';
+	}
+	elseif($id == 2) {
+		$css = 'font-orenge';
+	}
+	elseif($id == 3) {
+		$css = 'font-orenge';
+	}
+	return $css;
 }

@@ -1,0 +1,30 @@
+<?php 
+
+	Route::group(['prefix' => 'dashboard'], function(){
+		
+		Route::get('/', 'DashboardController@getIndex');
+		
+		Route::post('enquiry/{id}/active', 'EnquiryController@active');
+		Route::resource('enquiry', 'EnquiryController');
+
+		// Admin Console
+		Route::group(['prefix' => 'console'], function(){
+			Route::resource('manage/users', 'UserController');
+			Route::group(['prefix' => 'manage/users'], function(){
+				Route::get('verify/{token}', 'UserController@resendVerifyEmail');
+				Route::get('suspend/{token}', 'UserController@suspendUser');
+				Route::get('activate/{token}', 'UserController@activateUser');
+				Route::get('password/{token}/reset', 'UserController@getResetPassword');
+				Route::put('password/{token}/reset', 'UserController@putResetPassword');
+			});
+		});
+
+		// Settings Section
+		Route::group(['prefix' => 'settings'], function(){
+			Route::post('text/{id}/active', 'TextController@active');
+			Route::resource('text', 'TextController');
+			Route::post('lead/vendor/{id}/active', 'LeadVendorController@active');
+			Route::resource('lead/vendor', 'LeadVendorController');
+		});
+
+	});

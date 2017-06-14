@@ -101,6 +101,11 @@
 	font-size:100px;
 }
 
+
+.no-decoration {
+    text-decoration: none !important;
+}
+
 .tile-title{
 	font-size: 30px;
 	margin: 20px 0 25px 0;	
@@ -297,7 +302,8 @@
 
 .font-white{ color: #ffffff !important;}
 .font-theme{ color: #73879c !important;}
-.font-gold{ color: #ffd119 !important; }
+.font-gold{ color: #ffd119 !important;}
+.font-orenge{ color: #f2930e !important;}
 .font-dark-red{ color: #ce5d5d !important; }
 
 /*font-size*/
@@ -448,6 +454,7 @@
 .height-100p{ height: 100% ! important; }
 
 
+.height-16{ height: 16px ! important; }
 .height-20{ height: 20px ! important; }
 .height-30{ height: 30px ! important; }
 .height-34{ height: 34px ! important; }
@@ -609,6 +616,7 @@
 .m-right-0{ margin-right: 0 ! important; }
 .m-right-5{ margin-right: 5px ! important; }
 .m-right-10{ margin-right: 10px ! important; }
+.m-right-20{ margin-right: 20px ! important; }
 
 .m-bottom-n-5{ margin-bottom: -5px ! important; }
 .m-bottom-5px{ margin-bottom: 5px ! important; }
@@ -682,7 +690,8 @@
 .border-blue-2px{border: 2px solid #337ab7 ! important;}
 .border-green-2px{border: 2px solid #388e22 ! important;}
 .border-green-3px{border: 3px solid #34d841 ! important;}
-.border-bottom-gray{ border-bottom: 1px solid #ccc; }
+.border-bottom-red{ border-bottom: 1px solid red ! important; }
+.border-bottom-gray{ border-bottom: 1px solid #ccc ! important; }
 
 .padding-5{ padding: 5px; }
 
