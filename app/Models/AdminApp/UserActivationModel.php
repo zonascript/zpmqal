@@ -53,6 +53,12 @@ class UserActivationModel extends Model
 			$this->updateUsed($user->user_id);
 		}
 
+		$flash = $rsp 
+					 ? 'You have already verified this account.'
+					 : 'You have successfully verified this account.';
+
+		session()->flash('success', $flash);
+
 		return $rsp;
 	}
 }

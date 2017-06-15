@@ -27,6 +27,13 @@
 							</div>
 						@endif
 
+						@if (Session::has('warning'))
+							<div class="alert alert-warning">
+								<ul>
+									<li>{{ Session::get('warning') }}</li>
+								</ul>
+							</div>
+						@endif
 
 						{{-- Errors message shows here --}}
 						@if (count($errors) > 0 || Session::has('danger'))

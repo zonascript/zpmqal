@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Auth;
 
 class User extends Authenticatable
 {
@@ -80,7 +79,7 @@ class User extends Authenticatable
 
 	public function findByIdOrFail($id)
 	{
-		$auth = Auth::guard('admin')->user();
+		$auth = auth()->guard('admin')->user();
 		return $this->where([
 												'id' => $id, 
 												'admin_id' => $auth->id
@@ -91,7 +90,7 @@ class User extends Authenticatable
 
 	public function findByEmailOrFail($email)
 	{
-		$auth = Auth::guard('admin')->user();
+		$auth = auth()->guard('admin')->user();
 		return $this->where([
 												'email' => $email, 
 												'admin_id' => $auth->id
@@ -102,9 +101,13 @@ class User extends Authenticatable
 
 	public function activate()
 	{
-		if (isset($this->id)) {
+		if (isset($this->id) && $this->is_active != 3) {
 			$this->is_active = 1;
 			$this->save();
+			session()->flash('success', 'User activated');
+		}
+		else{
+			session()->flash('warning', 'Verification pending.');
 		}
 		return $this;
 	}
@@ -112,9 +115,13 @@ class User extends Authenticatable
 
 	public function suspend()
 	{
-		if (isset($this->id)) {
+		if (isset($this->id) && $this->is_active != 3) {
 			$this->is_active = 2;
 			$this->save();
+			session()->flash('danger', 'User suspended');
+		}
+		else{
+			session()->flash('warning', 'Verification pending.');
 		}
 		return $this;
 	}

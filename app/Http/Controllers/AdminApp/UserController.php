@@ -4,13 +4,10 @@ namespace App\Http\Controllers\AdminApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Models\AdminApp\UserActivationModel;
 use App\Mail\VerifyMail;
 use App\User;
-use Session;
 use Mail;
-use Auth;
 
 class UserController extends Controller
 {
@@ -19,6 +16,12 @@ class UserController extends Controller
 	public function index()
 	{
 		return view($this->viewPath.'.index');
+	}
+
+	public function show($email)
+	{
+		$user = User::call()->findByEmailOrFail($email);
+		return view($this->viewPath.'.show', ['user' => $user]);
 	}
 
 
@@ -38,7 +41,8 @@ class UserController extends Controller
           'password' => 'required|min:6|confirmed',
         ]);
 
-		$auth = Auth::guard('admin')->user();
+		$auth = auth()->guard('admin')->user();
+
 		User::create([
         'firstname' => $request['firstname'],
         'lastname' => $request['lastname'],
@@ -76,7 +80,7 @@ class UserController extends Controller
 		$user->mobile = $request->mobile;
 		$user->email = $request->email;
 		$user->save();
-		Session::flash('success', 'User edit.');
+		session()->flash('success', 'User edit.');
 		return redirect('dashboard/console/manage/users');
 	}
 
@@ -98,26 +102,24 @@ class UserController extends Controller
 		$user = User::call()->findByEmailOrFail($email);
     $user->password = bcrypt($request->password);
     $user->save();
-		Session::flash('success', 'User('.$email.') password has been reset.');
+		session()->flash('success', 'User('.$email.') password has been reset.');
 		return redirect('dashboard/console/manage/users');
 	}
 
 
 
-	public function activateUser($id)
+	public function activateUser($email)
 	{
-		$user = User::call()->findByIdOrFail($id);
+		$user = User::call()->findByEmailOrFail($email);
 		$user->activate();
-		Session::flash('success', 'User activated.');
 		return redirect()->back();
 	}
 
 
-	public function suspendUser($id)
+	public function suspendUser($email)
 	{
-		$user = User::call()->findByIdOrFail($id);
+		$user = User::call()->findByEmailOrFail($email);
 		$user->suspend();
-		Session::flash('danger', 'User suspended.');
 		return redirect()->back();
 	}
 
@@ -126,7 +128,7 @@ class UserController extends Controller
 	{
 		$user = User::call()->findByEmailOrFail($email);
 		$user->delete();
-		Session::flash('danger', 'User has been deleted.');
+		session()->flash('danger', 'User has been deleted.');
 		return redirect()->back();
 	}
 
@@ -141,7 +143,7 @@ class UserController extends Controller
 				"link" => route('activatePendingUser', $token)	
 			];
 		Mail::to($data)->send(new VerifyMail($data));
-		Session::flash('success', 'Verification email sent.');
+		session()->flash('success', 'Verification email sent.');
 	}
 
 
@@ -165,12 +167,7 @@ class UserController extends Controller
 
 	public function activatePendingUser($token)
 	{
-		$rsp = UserActivationModel::call()->activateUser($token);
-		$flash = $rsp 
-					 ? 'You have already verified this account.'
-					 : 'You have successfully verified this account.';
-
-		Session::flash('success', $flash);
+		UserActivationModel::call()->activateUser($token);
 		return redirect('login');
 	}
 

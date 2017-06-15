@@ -12,9 +12,9 @@
 			Route::resource('manage/users', 'UserController');
 			Route::group(['prefix' => 'manage/users'], function(){
 				Route::get('verify/{token}', 'UserController@resendVerifyEmail');
-				Route::get('suspend/{token}', 'UserController@suspendUser');
-				Route::get('activate/{token}', 'UserController@activateUser');
 				Route::get('password/{token}/reset', 'UserController@getResetPassword');
+				Route::put('suspend/{token}', 'UserController@suspendUser');
+				Route::put('activate/{token}', 'UserController@activateUser');
 				Route::put('password/{token}/reset', 'UserController@putResetPassword');
 			});
 		});

@@ -33,32 +33,42 @@
 									<td>
 										<div class="row">
 											<div class="btn-group pull-right">
-                        <a href="" class="btn btn-default btn-success">Open</a>
-                        <div class="btn-group">
-                          <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button" aria-expanded="false"> More <span class="caret"></span> </button>
-                          <ul class="dropdown-menu">
-                            <li>
-                            	<a href="{{ url('dashboard/console/manage/users/'.$user->email.'/edit') }}">Edit</a>
-                            </li>
-                            @if ($user->is_active == 1)
-	                            <li>
-	                            	<a href="{{ url('dashboard/console/manage/users/suspend/'.$user->id) }}">Suspend</a>
-	                            </li>
-	                            <li>
-	                            	<a href="{{ url('dashboard/console/manage/users/password/'.$user->email.'/reset') }}">Reset Password</a>
-	                            </li>
-                            @endif
-                            @if ($user->is_active != 1)
-	                            <li>
-	                            	<a href="{{ url('dashboard/console/manage/users/activate/'.$user->id) }}">Activate</a>
-	                            </li>
-                            @endif
-                            <li>
-                            	<a class="user-delete" data-href="{{ url('dashboard/console/manage/users/'.$user->email) }}">Delete</a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
+												<a href="{{ url('dashboard/console/manage/users/'.$user->email) }}" class="btn btn-default btn-success">Open</a>
+												<div class="btn-group">
+													<button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button" aria-expanded="false"> More <span class="caret"></span> </button>
+													<ul class="dropdown-menu">
+														<li>
+															<a href="{{ url('dashboard/console/manage/users/'.$user->email.'/edit') }}">Edit</a>
+														</li>
+														@if ($user->is_active == 1)
+															<li>
+																<a class="trigger-form">Suspend</a>
+																<form method="POST" action="{{ url('dashboard/console/manage/users/suspend/'.$user->email) }}">
+																	{{ csrf_field() }}
+																	{{ method_field('put') }}
+																	<button type="submit" class="input-submit" hidden></button>
+																</form>
+															</li>
+															<li>
+																<a href="{{ url('dashboard/console/manage/users/password/'.$user->email.'/reset') }}">Reset Password</a>
+															</li>
+														@endif
+														@if (in_array($user->is_active,[0, 2]))
+															<li>
+																<a class="trigger-form">Activate</a>
+																<form method="POST" action="{{ url('dashboard/console/manage/users/activate/'.$user->email) }}">
+																	{{ csrf_field() }}
+																	{{ method_field('put') }}
+																	<button type="submit" class="input-submit" hidden></button>
+																</form>
+															</li>
+														@endif
+														<li>
+															<a class="user-delete" data-href="{{ url('dashboard/console/manage/users/'.$user->email) }}">Delete</a>
+														</li>
+													</ul>
+												</div>
+											</div>
 										</div>
 									</td>
 								</tr>
@@ -74,7 +84,6 @@
 
 @section('scripts')
 	<script>
-
 		$(document).on('click', '.user-delete', function () {
 			var url = $(this).attr('data-href');
 			$.confirm({
@@ -92,16 +101,11 @@
 						}
 					}
 				}
-				// onContentReady: function () {
-				// 	// bind to events
-				// 	var jc = this;
-				// 	this.$content.find('form').on('submit', function (e) {
-				// 		// if the user submits the form by pressing enter in the field.
-				// 		e.preventDefault();
-				// 		jc.$$formSubmit.trigger('click'); // reference the button and click it
-				// 	});
-				// }
 			});
+		});
+
+		$(document).on('click', '.trigger-form', function () {
+			$(this).closest('li').find('.input-submit').trigger('click');
 		});
 	</script>
 @endsection
