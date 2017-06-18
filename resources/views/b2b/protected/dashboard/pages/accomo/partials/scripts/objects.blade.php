@@ -7,8 +7,10 @@
 		$fid = '';
 		$fdid = '';
 		$accomoProps = [];
+		$isAccomo = 0;
 
 		if (!is_null($accomoRoute->fusion)) {
+			$isAccomo = 1;
 			$fdid = $accomoRoute->fusion->id;
 			if($accomoRoute->mode == 'hotel'){
 				$fid = $accomoRoute->fusion->hotel_code;
@@ -36,13 +38,21 @@
 				'mode'				=> $accomoRoute->mode,
 				'origin'			=> $accomoRoute->origin,
 				'destination' => $accomoRoute->destination,
+				'breakfast'		=> $accomoRoute->is_breakfast,
+				'is_drop_off'	=> $accomoRoute->is_drop_off,
+				'is_pick_up'	=> $accomoRoute->is_pick_up,
+				'drop_off'		=> $accomoRoute->drop_off,
+				'dinner'			=> $accomoRoute->is_dinner,
+				'lunch'				=> $accomoRoute->is_lunch,
+				'pick_up'			=> $accomoRoute->pick_up,
+				'is_accommo'	=> $isAccomo,
 			];
 
 		$nextAccomoRouteKey = $accomoRouteKey+1;
 		
 		if ($nextAccomoRouteKey < $package->accomoRoutes->count()) {
 			$idObject[$objectKey]['nrid'] = $package
-																					->accomoRoutes[$nextAccomoRouteKey]->id;
+																			->accomoRoutes[$nextAccomoRouteKey]->id;
 		}
 		
 		$rid[] = $accomoRoute->id;

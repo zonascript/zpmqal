@@ -14,6 +14,8 @@ class TestController extends Controller
 
 	public function testCode()
 	{
+		$true = null;
+		dd(displayNone($true));
 
 		$encrypted = Crypt::encrypt('Hello world.');
 		$decrypted = Crypt::decrypt($encrypted);

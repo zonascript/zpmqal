@@ -140,7 +140,36 @@ function alpha2num($a)
 	return $n-1;
 }
 
+function showIsChecked($bool) {
+	return $bool ? 'checked=""' : '';
+}
 
+
+function showTransferOption($type='')
+{
+	$transfers = [
+			"airport" => "Airport",
+			"bus" => "Bus/Coach",
+			"hotel" => "Hotel",
+			"cruise" => "Cruise/Ferry",
+		];
+
+	$transfersHtml = '';
+	$isSelected = '';
+
+	foreach ($transfers as $transferKey => $transfer) {
+		if ($type == $transferKey) $isSelected = 'selected';
+		$transfersHtml .= '<option value="'.$transferKey.'" '.$isSelected.'>'.$transfer.'</option>';
+	}
+
+	return $transfersHtml;
+}
+
+
+function displayNone($bool)
+{
+	return $bool ? 'style="display: none;"' : '';
+}
 
 function mylocal_path($path)
 {

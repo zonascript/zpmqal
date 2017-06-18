@@ -33,7 +33,7 @@
 							class="btn '+accomo.btnClass+' btn-block btn-chooseProp off" 
 							data-fid="'+accomo.code+'"
 							data-fdid="'+accomo.fdid+'" {{-- package_hotel_id --}}
-							data-vdr="'+accomo.vendor+'">'+accomo.btnName+'
+							data-vdr="'+accomo.vendor+'" '+accomo.isDisabled+'>'+accomo.btnName+'
 						</button>
 					</div>
 				</div>
@@ -60,21 +60,50 @@
 									<a href="#'+accomo.ukey+'_'+accomo.ridObj.rid+'_gallary" data-toggle="tab">Gallary</a>
 								</li>
 							</ul>
-							<div class="tab-content tab-container scroll-bar clearfix">
-								<div id="'+accomo.ukey+'_'+accomo.ridObj.rid+'_props" class="tab-pane active"></div>
-								<div id="'+accomo.ukey+'_'+accomo.ridObj.rid+'_about" class="tab-pane">
-									'+accomo.description+'
+							<div class="tab-content tab-container clearfix">
+								
+								<div id="'+accomo.ukey+'_'+accomo.ridObj.rid+'_props" class="tab-pane active">
+									{{-- <div class="row border-gray m-top-5">
+										<div class="col-md-5 col-sm-5 col-xs-5">
+											@include($viewDir.'.partials.html_partials.transfer')
+										</div>
+										<div class="col-md-7 col-sm-7 col-xs-7">
+											@include($viewDir.'.partials.html_partials.meal')
+										</div>
+									</div> --}}
+									<div class="row inner-tab-container scroll-bar m-top-5">
+										<div class="col-md-12 col-sm-12 col-xs-12 tab-room">
+										</div>
+									</div>
 								</div>
-								<div id="'+accomo.ukey+'_'+accomo.ridObj.rid+'_map" class="tab-pane" data-src="https://maps.google.com/maps?q='+accomo.latitude+','+accomo.longitude+'&hl=es;z=14&amp;output=embed"></div>
+
+								<div id="'+accomo.ukey+'_'+accomo.ridObj.rid+'_about" class="tab-pane">
+									<div class="row inner-tab-container scroll-bar m-top-5">
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											'+accomo.description+'
+										</div>
+									</div>
+								</div>
+
+								<div id="'+accomo.ukey+'_'+accomo.ridObj.rid+'_map" class="tab-pane" data-src="https://maps.google.com/maps?q='+accomo.latitude+','+accomo.longitude+'&hl=es;z=14&amp;output=embed">
+									<div class="row inner-tab-container scroll-bar m-top-5">
+										<div class="col-md-12 col-sm-12 col-xs-12 tab-map">
+										</div>
+									</div>
+								</div>
+
 								<div id="'+accomo.ukey+'_'+accomo.ridObj.rid+'_gallary" class="tab-pane">
-									<div class="col-md-12 col-sm-12 col-xs-12">
-										<div class="x_panel">
-											<div class="x_content" >
-												<div class="gallery cf"></div>
+									<div class="row inner-tab-container scroll-bar m-top-5">
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											<div class="x_panel">
+												<div class="x_content" >
+													<div class="gallery cf"></div>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
+
 							</div>
 						</div>
 					</div>

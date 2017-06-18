@@ -1,16 +1,20 @@
 <?php
 		
 	Route::group(['prefix' => 'dashboard/package/builder/accommodation'], function () {
-		Route::get('{token}', 'AccommodationController@getHotelsByToken')
+		$ac = 'AccommodationController';
+		Route::post('add/attributes/{rid}', $ac.'@postAddAttributes');
+		Route::post('prop/remove/{rid}', $ac.'@postRemoveProp');
+		Route::post('prop/add/{rid}', $ac.'@postAddProp');
+		Route::post('remove/{rid}', $ac.'@postRemoveAccomo');
+		Route::get('{token}', $ac.'@getHotelsByToken')
 						->middleware('packageIsLock')->name('accommo');
-		Route::post('remove/{rid}', 'AccommodationController@postRemoveAccomo');
-		Route::post('prop/add/{rid}', 'AccommodationController@postAddProp');
-		Route::post('prop/remove/{rid}', 'AccommodationController@postRemoveProp');
+
 	});
 
 
 	Route::group(['prefix' => 'api/package/accommodation'], function () {
-		Route::get('search/name/{rid}', 'AccommodationController@searchPropNames');
-		Route::post('fatch/prop/{rid}', 'AccommodationController@postAccomoProp');
-		Route::post('fatch/{rid}', 'AccommodationController@postAccomo');
+		$ac = 'AccommodationController';
+		Route::get('search/name/{rid}', $ac.'@searchPropNames');
+		Route::post('fatch/prop/{rid}', $ac.'@postAccomoProp');
+		Route::post('fatch/{rid}', $ac.'@postAccomo');
 	});

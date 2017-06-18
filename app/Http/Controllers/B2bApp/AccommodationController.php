@@ -117,4 +117,33 @@ class AccommodationController extends Controller
 		return $result;
 	}
 
+	public function postAddAttributes($rid, Request $request)
+	{
+		$route =  RouteController::call()->model()->find($rid);
+		if (isset($request->pick_up) && isset($request->is_pick_up)) {
+			$route->is_pick_up = $request->is_pick_up;
+			$route->pick_up = $request->pick_up;
+		}
+		
+		if (isset($request->drop_off) && isset($request->is_drop_off)) {
+			$route->is_drop_off = $request->is_drop_off;
+			$route->drop_off = $request->drop_off;
+		}
+
+		if (isset($request->breakfast)) {
+			$route->is_breakfast = $request->breakfast;
+		}
+
+
+		if (isset($request->lunch)) {
+			$route->is_lunch = $request->lunch;
+		}
+
+		if (isset($request->dinner)) {
+			$route->is_dinner = $request->dinner;
+		}
+
+		$route->save();
+	}
+
 }

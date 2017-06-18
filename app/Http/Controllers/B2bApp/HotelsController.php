@@ -68,8 +68,7 @@ class HotelsController extends Controller
 	{
 		$route = RouteController::call()->model()->find($routeId);
 		$packageHotelId = $request->fdid;
-		$packageHotel = $this->model()->find($packageHotelId);
-
+		$packageHotel = $route->fusion;
 		if (is_null($packageHotel)) {
 			$packageHotel = $this->model();
 			$packageHotel->hotel_code = $request->fid;
@@ -273,6 +272,7 @@ class HotelsController extends Controller
 		$route = RouteController::call()->model()->find($routeId);
 
 		$selected = [];
+		
 		if (!is_null($route->fusion) && is_null($request->name)) {
 			$selected = $route->fusion->hotelForView()->toArray();
 		}

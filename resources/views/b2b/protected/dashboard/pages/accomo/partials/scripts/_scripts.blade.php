@@ -10,6 +10,7 @@
 		}, function(start, end, label) {
 			console.log(start.toISOString(), end.toISOString(), label);
 		});
+		/*$('#loging_log').hide();*/
 		@foreach ($package->accomoRoutes as $hotelRouteKey => $hotelRoute)
 			postAccomo({{$hotelRoute->id}});
 		@endforeach
@@ -80,6 +81,23 @@
 		nextAccomoEvent(this);		
 	});
 	{{-- /next button --}}
+
+	$(document).on('change', '.transfer', function () {
+		if ($(this).hasClass('h-pick-up')) {
+			params = {
+						'is_pick_up' : 1,
+						'pick_up' : $(this).val(),
+					};
+			addAttributes(params);
+		}
+		else if ($(this).hasClass('h-drop-off')) {
+			params = {
+						'is_drop_off' : 1,
+						'drop_off' : $(this).val(),
+					};
+			addAttributes(params);
+		}
+	});
 </script>
 
 @include($viewDir.'.partials.scripts.function')

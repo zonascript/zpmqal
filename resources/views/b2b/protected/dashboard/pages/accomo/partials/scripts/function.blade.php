@@ -1,11 +1,3 @@
-<?php 
-	$accomoHtml = trimHtml(
-									view($viewDir.'.partials.html_partials.container')->render()
-								);
-	$accomoPropHtml = trimHtml(
-											view($viewDir.'.partials.html_partials.props')->render()
-										);
-?>
 <script>
 	{{-- get rid object --}}
 	function getRidObject(rid) {
@@ -34,6 +26,7 @@
 		var type = $(thisObj).attr('data-type');
 		var isChecked = $(thisObj).is(':checked');
 		var parent = $(thisObj).closest('.pick-drop-container');
+		var params = {};
 		/*console.log(parent);*/
 		if (type == 'pick_up') {
 			if (isChecked) {
@@ -42,9 +35,14 @@
 				$(parent).find('.h-pick-up').attr('data-selected', 1);
 			}
 			else{
+				params = {
+						'is_pick_up' : 0,
+						'pick_up' : '',
+					};
+				addAttributes(params);
 				$(parent).find('.select-pick-drop').hide();
 				$(parent).find('.pick-drop').show();
-				$(parent).find('.h-pick-up').attr('data-selected', 0);
+				$(parent).find('.h-pick-up').attr('data-selected', 0).val('');
 			}
 		}
 		else if (type == 'drop_off') {
@@ -54,21 +52,45 @@
 				$(parent).find('.h-drop-off').attr('data-selected', 1);
 			}
 			else{
+				params = {
+						'is_drop_off' : 0,
+						'drop_off' : '',
+					};
+				addAttributes(params);
 				$(parent).find('.select-pick-drop').hide();
 				$(parent).find('.pick-drop').show();
-				$(parent).find('.h-drop-off').attr('data-selected', 0);
+				$(parent).find('.h-drop-off').attr('data-selected', 0).val('');
 			}
 		}
 		else if(type == 'meal'){
 			if (isChecked) {
 				$(thisObj).addClass('selected');
+				var meal = $(thisObj).attr('data-meal');
+				params[meal] = 1;
+				addAttributes(params);
 			}
 			else{
+				var meal = $(thisObj).attr('data-meal');
+				params[meal] = 0;
+				addAttributes(params);
 				$(thisObj).removeClass('selected');
 			}
 		}
 	}
 	{{-- /check Change --}}
+
+	function addAttributes(params) {
+		params['_token'] = csrf_token;
+		$.ajax({
+			type:"post",
+			url: "{{ urlAccomoBuilder('add/attributes') }}/"+idObject.crid+'?format=json',
+			dataType: 'JSON',
+			data: params,
+			success: function(response, textStatus, xhr) {
+				
+			}
+		});
+	}
 
 
 	{{-- post hotel --}}
@@ -119,6 +141,8 @@
 				$('#'+ridObj.elem_id).append(html);
 			}
 		});
+
+		selectedTop('#'+ridObj.elem_id);
 	}
 
 	function handleError(xhr) {
@@ -147,13 +171,24 @@
 		var fdid = ridObj.fdid;
 		var btnClass = 'btn-primary';
 		var btnName = ridObj.mode  == 'hotel' ? 'Rooms' : 'Cabins';
+		var isDisabled = '';
+		var isTop = 0;
 
-		if (fid == code) {
-			btnClass = 'btn-danger';
-			btnName = 'Selected';
+		if (ridObj.is_accommo == 1) {
+			if (fid == code) {
+				btnClass = 'btn-danger';
+				btnName = 'Selected';
+				isTop = 1;
+			}
+			else{
+				btnClass = 'btn-dark';
+				btnName = 'Rooms';
+				isDisabled = 'disabled';
+			}
 		}
 
 		var hotel = {
+				"is_top" : isTop,
 				"ukey" : ukey,
 				"name" : name,
 				"code" : code,
@@ -171,9 +206,18 @@
 				"starRating" : object.star_rating,
 				"description" : object.description,
 				"starRatingHtml" : starRatingHtml,
-				"sortDescription" : sortDescription
+				"sortDescription" : sortDescription,
+				"is_drop_off" : ridObj.is_drop_off,
+				"drop_off" : ridObj.drop_off,
+				"is_pick_up" : ridObj.is_pick_up,
+				"pick_up" : ridObj.pick_up,
+				"breakfast" : ridObj.breakfast,
+				"dinner" : ridObj.dinner,
+				"lunch" : ridObj.lunch,
+				"isDisabled" : isDisabled
 			};
 
+		/*console.log(hotel);*/
 		var sameElem = $('#'+ridObj.elem_id).find('.li_'+ukey);
 
 		if (sameElem.length) {
@@ -188,15 +232,32 @@
 	{{-- make hotel object --}}
 
 
+	function showIsChecked(bool) {
+		return bool == 1 ? 'checked=""' : '';
+	}
+
 	{{-- make hotel html --}}
 	function makeAccomoHtml(accomo) {
 		var appendHtml = '';
 		var searchWord = '';
-		appendHtml += '{!!$accomoHtml!!}';
+		appendHtml += '@include($viewDir.'.partials.html_partials.container')';
 		return appendHtml;
 	}
 	{{-- make hotel html --}}
 
+
+	function selectedTop(parent) {
+		var elem = $(parent).find('.btn-chooseProp.btn-danger')
+													.closest('.main-list-item');
+		moveToTop(elem);
+	}
+
+
+	function setPickAndDropSelect(data) {
+		if (data.type == 'drop') {
+			$(data.elem).find('.h-pick-up').val(data.val);
+		}
+	}
 
 	{{-- Choose prop --}}
 	function chooseProp(thisObj) {
@@ -272,7 +333,7 @@
 				prop['proptype'] = prop.cabintype;
 			}
 
-			$('#'+ukey+'_props').append(makePropHtml(prop));
+			$('#'+ukey+'_props').find('.tab-room').append(makePropHtml(prop));
 			invokeIcheck('#'+ukey+'_props');
 		});
 
@@ -306,7 +367,7 @@
 			btnName = 'Remove';
 		}
 
-		return '{!! $accomoPropHtml !!}';
+		return '@include($viewDir.'.partials.html_partials.props')';
 	}
 	{{-- /make prop html --}}
 
@@ -321,7 +382,7 @@
 	{{-- invoke map --}}
 	function invokeMap(ukey) {
 		var src = $('#'+ukey+'_map').attr('data-src');
-		$('#'+ukey+'_map').html('<div class="m-top-5"><iframe width="100%" height="360" src="'+src+'" ></iframe></div>');
+		$('#'+ukey+'_map').find('.tab-map').html('<div class="m-top-5"><iframe width="100%" height="360" src="'+src+'" ></iframe></div>');
 	}
 	{{-- /invoke map --}}
 
@@ -362,7 +423,7 @@
 		else{
 			$(parentUl).find('.btn-chooseProp')
 										.addClass('btn-primary')
-											.text('Add')
+											.text('Rooms')
 												.removeClass('btn-dark')
 													.removeClass('btn-danger')
 														.prop('disabled', false);

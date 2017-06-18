@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
 		View::composer('admin.*', function($view){
 			$view->with('auth', Auth::guard('admin')->user());
 		});
+		
 		View::composer('backend.*', function($view){
 			$view->with('auth', Auth::guard('backend')->user());
 		});
@@ -34,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
 						? $_SERVER['HTTP_HOST']
 						: env('B2B_DOMAIN');
 
-		if (in_array($domain, [env('B2B_DOMAIN'), env('LOCAL_B2B_DOMAIN')]) ) {
+		if (in_array($domain, [env('B2B_DOMAIN')]) ) {
 			View::composer('b2b.*', function($view){
 				$view->with('todos', ToDoController::call()->all());
 			});

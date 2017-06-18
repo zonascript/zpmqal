@@ -54,9 +54,12 @@
 							@foreach ($package->accomoRoutes as $accomoRouteKey => $accomoRoute)
 								<div id="target_{{ $accomoRoute->id }}" 
 										class="tab-pane {{ $accomoRouteKey == 0 ? 'active' : ''}}">
-									<ul id="rid_{{ $accomoRoute->id }}" class="list list-unstyled" data-rid="{{ $accomoRoute->id }}"></ul>
+									@include($viewDir.'.partials.html_partials.meal_transfer')
+									<ul id="rid_{{ $accomoRoute->id }}" class="list list-unstyled" data-rid="{{ $accomoRoute->id }}">
+									</ul>
 								</div>
 							@endforeach
+							{{-- @include($viewDir.'.partials.html_partials.temp') --}}
 						</div>
 					</div>
 				</div>
