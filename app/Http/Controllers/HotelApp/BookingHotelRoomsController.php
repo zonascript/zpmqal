@@ -182,12 +182,14 @@ class BookingHotelRoomsController extends Controller
 			$html = @$dom->loadHTML($content);
 			$xpath = new \DomXPath($dom);
 			$query = "//table//td[contains(@class, 'ftd')]";
-	    $roomRows = $xpath->query($query);
-	   	$search = ['Special Offer - '];
-	   	$remove = [''];
-	    foreach ($roomRows as $roomRow){
-	      $rooms[] = str_replace($search, $remove, trim($roomRow->nodeValue));
-	    }
+			$roomRows = $xpath->query($query);
+			$search = ['special', 'offer', '-', 'included', 'breakfast'];
+			$remove = ['', '', '', '',''];
+			foreach ($roomRows as $roomRow){
+				$rooms[] = properString(trimHtml(str_replace(
+											$search, $remove, strtolower($roomRow->nodeValue)
+										)));
+			}
 			$this->storeRooms($rooms);
 			$this->getDbRooms();
 		}

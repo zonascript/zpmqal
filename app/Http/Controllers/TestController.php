@@ -14,6 +14,12 @@ class TestController extends Controller
 
 	public function testCode()
 	{
+		$strin = ' Superior Loft - Breakfast Included 1 twin bed and 1 full bed ';
+		// dd(findWord(['breakfast'], $strin));
+		$search = ['special', 'offer', '-', 'included', 'breakfast'];
+		$remove = ['', '', '', '',''];
+		$room = proper(trimHtml(str_replace($search, $remove, strtolower($strin))));
+		dd($room);
 		$jsondata = '{
 			    "nameFile": "Tester file.txt",
 			    "ext": "txt",

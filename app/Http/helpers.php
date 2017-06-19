@@ -181,16 +181,40 @@ function mylocal_path($path)
 | this function is for finding word from string 
 */
 
-function findWord($word, $string)
+function findWord($words, $string)
 {
 	$result = false;
+	if (is_array($words)) {
+		$tempResult = false;
+		
+		foreach ($words as $word) {
+			$tempResult = findWord($word, $string);			
+			if ($tempResult) {
+				break;
+			}
+		}
 
-	if (strpos($string, $word) !== false) {
-		$result = true;
+		$result = $tempResult;
+	}
+	else{
+		if (strpos(strtolower($string), strtolower($words)) !== false) {
+			$result = true;
+		}
 	}
 
 	return $result;
 }
+
+
+
+function properString($string)
+{
+	$string = proper($string);
+	$search = ['To', 'Or', 'And', 'Of', 'With'];
+	$replace = ['to', 'or', 'and', 'of', 'with'];
+	return str_replace($search, $replace, $string);
+}
+
 
 function pre_echo($array){
 	echo '<pre>';
