@@ -268,7 +268,7 @@
 		$(parent).find('.hotel-detail.off').hide();
 		$(parentLi).find('.hotel-detail').toggle();
 
-		var hasElem = $(parentLi).find('.btn-bookprop');
+		var hasElem = $(parentLi).find('.btn-bookProp');
 		if (hasElem.length == 0) {
 			$('#loging_log').show();
 			var rid = $(parent).attr('data-rid');
