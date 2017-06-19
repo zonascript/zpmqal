@@ -94,7 +94,8 @@ class BookingHotelRoomsController extends Controller
 
 	public function fatchFromDb($bookingHotelId = null)
 	{
-
+		$this->setPath();
+		dd($this->extractRooms());
 		$this->bookingHotelId = is_null($bookingHotelId) 
 													? $this->bookingHotelId
 													: $bookingHotelId;
@@ -172,6 +173,32 @@ class BookingHotelRoomsController extends Controller
 
 	public function extractRooms()
 	{
+		$rooms = [];
+
+		if (strlen($this->path)) {
+			$this->fileExist();
+			$content = trimHtml(file_get_contents($this->path));
+			$dom = new \DOMDocument();
+			$dom->recover = true;
+			$dom->strictErrorChecking = false;
+			$html = @$dom->loadHTML($content);
+			$xpath = new \DomXPath($dom);
+			$query = "//table//td[contains(@class, 'ftd')]";
+	    $roomRows = $xpath->query($query);
+
+	    foreach ($roomRows as $roomRow){
+	      $rooms[] = trim($roomRow->nodeValue);
+	    }
+			$this->storeRooms($rooms);
+			$this->getDbRooms();
+		}
+
+		return $this;
+	}
+
+
+	public function extractRoomsBySimpleHtmlDom()
+	{
 		include_once app_path('MyLibrary/simple_html_dom.php');
 		
 		$rooms = [];
@@ -190,6 +217,8 @@ class BookingHotelRoomsController extends Controller
 
 		return $this;
 	}
+
+
 
 
 	public function storeRooms(Array $rooms, $hotelId = null)
@@ -289,14 +318,18 @@ class BookingHotelRoomsController extends Controller
 	public function setPath($path = null)
 	{
 		$this->path = $path;
-
 		if (is_null($path)) {
 			$this->setBookingHotel();
 
 			if ($this->bookingHotel->is_stored_room && strlen($this->bookingHotel->stored_path)) {
-				$this->path = storage_path($this->bookingHotel->stored_path);
+
+				$this->path = findWord(storage_path(),$this->bookingHotel->stored_path) 
+										? $this->bookingHotel->stored_path
+										: storage_path($this->bookingHotel->stored_path);
 			}
 		}
+
+		$this->path = str_replace('//', '/', $this->path);
 		return $this;
 	}
 

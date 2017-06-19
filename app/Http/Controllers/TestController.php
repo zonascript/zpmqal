@@ -14,6 +14,14 @@ class TestController extends Controller
 
 	public function testCode()
 	{
+		$jsondata = '{
+			    "nameFile": "Tester file.txt",
+			    "ext": "txt",
+			    "scanResult": "Valid",
+			    "size": 8107
+			}';
+		$decode = json_decode($jsondata, true);
+		dd($decode["size"]);
 		$true = null;
 		dd(displayNone($true));
 
