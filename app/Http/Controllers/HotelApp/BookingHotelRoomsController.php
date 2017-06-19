@@ -94,8 +94,6 @@ class BookingHotelRoomsController extends Controller
 
 	public function fatchFromDb($bookingHotelId = null)
 	{
-		$this->setPath();
-		dd($this->extractRooms());
 		$this->bookingHotelId = is_null($bookingHotelId) 
 													? $this->bookingHotelId
 													: $bookingHotelId;
