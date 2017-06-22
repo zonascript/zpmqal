@@ -70,6 +70,39 @@ class HotelsController extends Controller
 		return $result;
 	}
 
+	public function hotelFacilities($params=[])
+	{
+		$params = (object) $params;
+		$result = [];
+
+		if ($params->vendor == 'b') {
+			$result = BookingHotelFacilitiesController::call()
+								->facilities($params->id);
+		}
+		elseif ($params->vendor == 'a') {
+			$result = AgodaHotelRoomsController::call()->facilities($params->id);
+		}
+
+		return $result;
+	}
+
+	public function hotelImages(Array $params = [])
+	{
+		$params = (object) $params;
+		$result = [];
+
+		if ($params->vendor == 'b') {
+			$result = BookingHotelImagesController::call()
+								->images($params->id);
+		}
+		elseif ($params->vendor == 'a') {
+			$result = AgodaHotelImagesController::call()
+								->images($params->id);
+		}
+
+		return $result;
+	}
+
 	public function searchHotels($params=[])
 	{
 		$params = (object) $params;

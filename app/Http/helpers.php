@@ -60,6 +60,34 @@ function wrongView($url=null)
 }
 
 
+function addDateColumns(Array $data)
+{
+	$data["created_at"] = date('Y-m-d H:i:s');
+	$data["updated_at"] = date('Y-m-d H:i:s');
+	return $data;
+}
+
+function loopImages(Array $data, Array $images, $type = 'object')
+{
+	$count = 0;
+	foreach ($data as $key => &$value) {
+		if ($key >= count($images)) {
+			$count = 0;
+		}
+
+		$value['image'] = $images[$count];
+		$count++;
+	}
+	if ($type == 'json') {
+		$data = json_encode($data);
+	}
+	elseif ($type == 'object') {
+		$data = rejson_decode($data);
+	}
+	return $data;
+}
+
+
 function mycrypt($value)
 {
 	return md5(bcrypt($value));

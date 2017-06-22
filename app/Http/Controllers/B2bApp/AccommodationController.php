@@ -68,6 +68,32 @@ class AccommodationController extends Controller
 	}
 
 
+	public function postAccomoFacilities($rid, Request $request)
+	{
+		$route =  RouteController::call()->model()->find($rid);
+		$result = [];
+		if ($route->mode == 'hotel') {
+			$result = HotelsController::call()->postHotelFacilities($request);
+		}
+		elseif ($route->mode == 'cruise') {
+			$result = CruisesController::call()->postCruiseFacilities($request);
+		}
+		return $result;
+	}
+
+
+	public function postAccomoImages($rid, Request $request)
+	{
+		$route =  RouteController::call()->model()->find($rid);
+		$result = [];
+		if ($route->mode == 'hotel') {
+			$result = HotelsController::call()->postHotelImages($request);
+		}
+		elseif ($route->mode == 'cruise') {
+			$result = CruisesController::call()->postCruiseImages($request);
+		}
+		return $result;
+	}
 
 	public function postAddProp($rid, Request $request)
 	{
@@ -83,6 +109,8 @@ class AccommodationController extends Controller
 
 		return $result;
 	}
+
+
 
 
 

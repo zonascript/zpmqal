@@ -19,7 +19,8 @@ class BookingHotelRoomModel extends Model
 	{
 		return $this->select(['id', 'roomtype'])
 										->where(["booking_hotel_id" => $bookingHotelId])
-											->get();
+											->groupBy('roomtype')
+												->get();
 	}
 
 

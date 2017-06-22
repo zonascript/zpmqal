@@ -8,6 +8,7 @@ use App\Models\HotelApp\BookingHotelImageModel;
 
 class BookingHotelImagesController extends Controller
 {
+	public $bookingHotelId;
 
 	public static function call()
 	{
@@ -19,10 +20,45 @@ class BookingHotelImagesController extends Controller
 		return new BookingHotelImageModel;
 	}
 
-	public function bulkInsert(Array $array)
+	/*public function bulkInsert(Array $array)
 	{
 		return BookingHotelImageModel::insert($array);
+	}*/
+
+
+	public function images($hotelId)
+	{
+		$this->bookingHotelId = (int) $hotelId;
+		$images = $this->model()->images($this->bookingHotelId);
+		if (!count($images)) {
+			$data = BookingScrapeController::call($this->bookingHotelId)
+								->extractImages();
+			$this->model()->insert($this->makeInsertArray($data));
+			$images = $this->model()->images($this->bookingHotelId);
+		}
+
+		if (!count($images)) {
+			$images[] = urlDefaultImageRoom();
+		}
+
+		return $images;
 	}
+
+
+	public function makeInsertArray(Array $images)
+	{
+		$data = [];
+		foreach ($images as $image) {
+			$data[] = addDateColumns([
+										"bimgid" => $image->id,
+										"booking_hotel_id" => $this->bookingHotelId,
+										"thumb_url" => $image->thumb_url,
+										"large_url" => $image->large_url,
+									]);
+		}
+		return $data;
+	}
+
 
 
 }

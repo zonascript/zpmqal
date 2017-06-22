@@ -1,4 +1,4 @@
-<?php
+addDateColumns(<?php
 
 namespace App\Http\Controllers\B2bApp;
 
@@ -39,12 +39,10 @@ class RoomGuestsController extends Controller
 
 		$childAgeParams = [];
 		foreach ($params->ChildAge as $childAge) {
-			$childAgeParams[] = [
+			$childAgeParams[] = addDateColumns([
 					'room_guest_id' => $roomGuest->id, 
-					'age' => $childAge,
-					'created_at' => date('Y-m-d H:i:s'),
-					'updated_at' => date('Y-m-d H:i:s') 
-				];
+					'age' => $childAge
+				]);
 		}
 
 		ChildAgeController::call()->bulkInsert($childAgeParams);	

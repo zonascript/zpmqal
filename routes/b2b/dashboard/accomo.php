@@ -16,5 +16,7 @@
 		$ac = 'AccommodationController';
 		Route::get('search/name/{rid}', $ac.'@searchPropNames');
 		Route::post('fatch/prop/{rid}', $ac.'@postAccomoProp');
+		Route::post('fatch/images/{rid}', $ac.'@postAccomoImages');
+		Route::post('fatch/facilities/{rid}', $ac.'@postAccomoFacilities');
 		Route::post('fatch/{rid}', $ac.'@postAccomo');
 	});

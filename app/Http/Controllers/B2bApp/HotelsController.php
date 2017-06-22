@@ -203,6 +203,30 @@ class HotelsController extends Controller
 	}
 
 
+	public function postHotelFacilities(Request $request)
+	{
+		$params = [
+				"id" => $request->fid,
+				"vendor" => $request->vdr
+			];
+
+		$rooms = DbHotelsController::call()->hotelFacilities($params);
+		return json_encode($rooms);
+	}
+
+
+	public function postHotelImages(Request $request)
+	{
+		$params = [
+				"id" => $request->fid,
+				"vendor" => $request->vdr
+			];
+
+		$rooms = DbHotelsController::call()->hotelImages($params);
+		return json_encode($rooms);
+	}
+
+
 	public function removeHotelRoom($id)
 	{
 		$packageHotel =  PackageHotelModel::find($id);

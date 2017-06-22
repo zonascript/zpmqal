@@ -23,4 +23,16 @@ class BookingHotelImageModel extends Model
 	}
 
 
+	public function images($hotelId)
+	{
+		$images = [];
+		$data = $this->findByHotelId($hotelId);
+		
+		foreach ($data as $image) {
+			$images[] = $image->thumb_url;
+		}
+
+		return array_values(array_unique($images));
+	}
+
 }
