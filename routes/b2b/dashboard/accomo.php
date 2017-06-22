@@ -1,7 +1,7 @@
 <?php
-		
-	Route::group(['prefix' => 'dashboard/package/builder/accommodation'], function () {
-		$ac = 'AccommodationController';
+	$ac = 'AccommodationController';
+
+	Route::group(['prefix' => 'dashboard/package/builder/accommodation'], function () use ($ac) {
 		Route::post('add/attributes/{rid}', $ac.'@postAddAttributes');
 		Route::post('prop/remove/{rid}', $ac.'@postRemoveProp');
 		Route::post('prop/add/{rid}', $ac.'@postAddProp');
@@ -11,12 +11,20 @@
 
 	});
 
+	Route::group(['prefix' => 'api/package/accommodation'], function () use ($ac){
 
-	Route::group(['prefix' => 'api/package/accommodation'], function () {
-		$ac = 'AccommodationController';
 		Route::get('search/name/{rid}', $ac.'@searchPropNames');
-		Route::post('fatch/prop/{rid}', $ac.'@postAccomoProp');
-		Route::post('fatch/images/{rid}', $ac.'@postAccomoImages');
-		Route::post('fatch/facilities/{rid}', $ac.'@postAccomoFacilities');
-		Route::post('fatch/{rid}', $ac.'@postAccomo');
+		Route::group(['prefix' => 'fatch'], function () use ($ac){
+
+			Route::post('facilities/{rid}', $ac.'@postAccomoFacilities');
+			Route::post('images/{rid}', $ac.'@postAccomoImages');
+			Route::post('prop/{rid}', $ac.'@postAccomoProp');
+			Route::post('{rid}', $ac.'@postAccomo');
+
+			if (isLocalhost()) {
+				Route::get('prop/{rid}', $ac.'@postAccomoProp');
+				Route::get('images/{rid}', $ac.'@postAccomoImages');
+				Route::get('facilities/{rid}', $ac.'@postAccomoFacilities');
+			}
+		});
 	});
