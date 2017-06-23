@@ -1,4 +1,4 @@
-addDateColumns(<?php
+<?php
 
 namespace App\Http\Controllers\B2bApp;
 
