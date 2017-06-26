@@ -9,7 +9,7 @@
 		<div class="col-md-5 col-sm-8 col-xs-12 form-group pull-right top_search">
 			<form action="{{ url('dashboard/manage/location/destination') }}" method="head">
 				<div class="input-group">
-					<input type="text" class="form-control location" name="s" placeholder="Enter Destination...">
+					<input type="text" class="form-control location" name="s" placeholder="Enter destination...">
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="submit">Go!</button>
 					</span>

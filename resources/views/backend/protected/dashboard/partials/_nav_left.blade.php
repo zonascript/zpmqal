@@ -38,6 +38,28 @@
 						</ul>
 					</li>
 				</ul>
+				<ul class="nav side-menu">
+					<li><a><i class="fa fa-file-text-o"></i> Inventory <span class="fa fa-chevron-down"></span></a>
+						<ul class="nav child_menu">
+							<li>
+								<a href="{{ url('dashboard/manage/images') }}">
+									Images
+								</a>
+							</li>
+							<li>
+								<a href="{{ url('dashboard/manage/location/country') }}">
+									Countries
+								</a>
+							</li>
+							<li>
+								<a href="{{ url('dashboard/manage/location/destination') }}">
+									Destinations
+								</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				
 				@if ($auth->type == 'su')
 					<ul class="nav side-menu">
 						<li><a><i class="fa fa-desktop"></i> Admin <span class="fa fa-chevron-down"></span></a>
