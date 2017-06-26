@@ -76,10 +76,201 @@
 
 					function init_map() {
 					  var geoPointCombinations = assembleGeoPoints();
+					  var styledMapType = new google.maps.StyledMapType([
+						  {
+						    "elementType": "geometry",
+						    "stylers": [
+						      {
+						        "color": "#212121"
+						      }
+						    ]
+						  },
+						  {
+						    "elementType": "labels.icon",
+						    "stylers": [
+						      {
+						        "visibility": "off"
+						      }
+						    ]
+						  },
+						  {
+						    "elementType": "labels.text.fill",
+						    "stylers": [
+						      {
+						        "color": "#757575"
+						      }
+						    ]
+						  },
+						  {
+						    "elementType": "labels.text.stroke",
+						    "stylers": [
+						      {
+						        "color": "#212121"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "administrative",
+						    "elementType": "geometry",
+						    "stylers": [
+						      {
+						        "color": "#757575"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "administrative.country",
+						    "elementType": "labels.text.fill",
+						    "stylers": [
+						      {
+						        "color": "#9e9e9e"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "administrative.land_parcel",
+						    "stylers": [
+						      {
+						        "visibility": "off"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "administrative.locality",
+						    "elementType": "labels.text.fill",
+						    "stylers": [
+						      {
+						        "color": "#bdbdbd"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "poi",
+						    "elementType": "labels.text.fill",
+						    "stylers": [
+						      {
+						        "color": "#757575"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "poi.park",
+						    "elementType": "geometry",
+						    "stylers": [
+						      {
+						        "color": "#181818"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "poi.park",
+						    "elementType": "labels.text.fill",
+						    "stylers": [
+						      {
+						        "color": "#616161"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "poi.park",
+						    "elementType": "labels.text.stroke",
+						    "stylers": [
+						      {
+						        "color": "#1b1b1b"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "road",
+						    "elementType": "geometry.fill",
+						    "stylers": [
+						      {
+						        "color": "#2c2c2c"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "road",
+						    "elementType": "labels.text.fill",
+						    "stylers": [
+						      {
+						        "color": "#8a8a8a"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "road.arterial",
+						    "elementType": "geometry",
+						    "stylers": [
+						      {
+						        "color": "#373737"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "road.highway",
+						    "elementType": "geometry",
+						    "stylers": [
+						      {
+						        "color": "#3c3c3c"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "road.highway.controlled_access",
+						    "elementType": "geometry",
+						    "stylers": [
+						      {
+						        "color": "#4e4e4e"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "road.local",
+						    "elementType": "labels.text.fill",
+						    "stylers": [
+						      {
+						        "color": "#616161"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "transit",
+						    "elementType": "labels.text.fill",
+						    "stylers": [
+						      {
+						        "color": "#757575"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "water",
+						    "elementType": "geometry",
+						    "stylers": [
+						      {
+						        "color": "#000000"
+						      }
+						    ]
+						  },
+						  {
+						    "featureType": "water",
+						    "elementType": "labels.text.fill",
+						    "stylers": [
+						      {
+						        "color": "#3d3d3d"
+						      }
+						    ]
+						  }
+						],{name: 'Dark'});
+
 					  var myOptions = {
-					    zoom: 8,
+					    zoom: 15,
 					    center: geoPointCombinations[0].P1.loc,
-					    mapTypeId: google.maps.MapTypeId.ROADMAP
+					    mapTypeId: google.maps.MapTypeId.ROADMAP,
+					    mapTypeControlOptions: {
+		            mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',
+		                    'styled_map']
+		          }
 					  };
 					  var bounds = new google.maps.LatLngBounds();
 					  for (var index = 0; index < geoPointCombinations.length; index++) {
@@ -87,6 +278,8 @@
 					    var geoPointCombination = geoPointCombinations[index];
 					    if (index == 0) {
 					      map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+					      map.mapTypes.set('styled_map', styledMapType);
+        				map.setMapTypeId('styled_map');
 					    }
 					    bounds.extend(geoPointCombination.P1.loc);
 					    bounds.extend(geoPointCombination.P2.loc);
@@ -106,6 +299,8 @@
 					        repeat: '100%',
 					      }]
 					    });
+
+
 					    FlightIconLines.push(FlightIcon);
 					    FlightIcon.setMap(map);
 					    animateFlight();
