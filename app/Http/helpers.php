@@ -60,6 +60,30 @@ function wrongView($url=null)
 }
 
 
+function backendTypes($type = "", $option = true)
+{
+	$types = [
+			"user" 	=> "User",
+			"admin" => "Admin",
+			"su" 		=> "Super User",
+		];
+
+	if ($option) {
+		$options = '';
+
+		foreach ($types as $key => $value) {
+			$selected = $key == $type ? 'selected' : '';
+			$options .= '<option value="'.$key.'" '
+									.$selected.'>'.$value.'</option>';
+		}
+
+		$types = $options;
+	}
+
+	return $types;
+}
+
+
 function addDateColumns(Array $data)
 {
 	$data["created_at"] = date('Y-m-d H:i:s');
@@ -419,7 +443,7 @@ function getInrCost($array){
 */
 function imageUpload($image)
 {
-	$imageName = md5(time()).'.'.$image->getClientOriginalExtension();
+	$imageName = md5(uid()).'.'.$image->getClientOriginalExtension();
 	$image->move(public_path('images/tmp'), $imageName);
 	
 	$domain = isLocalhost() 
@@ -429,8 +453,10 @@ function imageUpload($image)
 	$name = httpPost($domain.'image/download', [
 			'url' => url('images/tmp/'.$imageName)
 		]);
-
-	unlink(public_path('images/tmp/').$imageName);
+	
+	if (file_exists(public_path('images/tmp/').$imageName)) {
+		unlink(public_path('images/tmp/').$imageName);
+	}
 
 	return $name;
 }

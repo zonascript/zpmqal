@@ -4,6 +4,8 @@ namespace App\Models\CommonApp;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\CommonApp\GoogleMapController;
+use App\Models\CommonApp\ImagesModel;
+use App\Models\CommonApp\IndicationModel;
 use DB;
 
 class DestinationModel extends Model
@@ -16,6 +18,17 @@ class DestinationModel extends Model
 
 	public static function call(){
 		return new DestinationModel;
+	}
+
+
+	public function status()
+	{   
+		return $this->belongsTo(IndicationModel::class, 'is_active');
+	}
+
+	public function images()
+	{
+    return $this->morphMany(ImageModel::class, 'connectable');
 	}
 
 
@@ -83,6 +96,8 @@ class DestinationModel extends Model
 
 		return echoLocation($destination, $country);
 	}
+
+
 
 
 	public function pullGeocode()

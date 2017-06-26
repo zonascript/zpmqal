@@ -29,4 +29,6 @@
 	$(document).on('click', '.close-alert', function() {
 		$('#custom_alert_box').remove();
 	});
+
+	var csrf_token = $('[name="csrf_token"]').attr('content');
 </script>

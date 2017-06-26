@@ -6,16 +6,29 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 // ===================================Models===================================
-use App\Models\BackendApp\DestinationModel;
+use App\Models\CommonApp\DestinationModel;
 
 class DestinationController extends Controller
 {
+
+	protected $viewPath = 'backend.protected.dashboard.pages.destinations';
+
 	public static function call(){
 		return new DestinationController;
 	}
 
 	public function model(){
 		return new DestinationModel;
+	}
+
+
+	public function index(Request $request)
+	{
+		$dests = $this->model()
+										->where([['destination', 'like', '%'.$request->s.'%']])
+											->simplePaginate(25);
+											
+		return view($this->viewPath.'.index', ['destinations' => $dests]);
 	}
 
 	public function getDestination(Request $request)

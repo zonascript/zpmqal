@@ -3,7 +3,8 @@
 namespace App\Models\ActivityApp;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\CommonApp\ImageModel;
+use App\Models\CommonApp\DestinationModel;
 // =============================Models=============================
 use Auth;
 use DB;
@@ -35,13 +36,13 @@ class ActivityModel extends Model
 	
 	public function images()
 	{
-    return $this->morphMany('App\Models\CommonApp\ImageModel', 'connectable');
+    return $this->morphMany(ImageModel::class, 'connectable');
 	}
 
 
 	public function destination()
 	{
-		return $this->belongsTo('App\Models\CommonApp\DestinationModel', 'destination_code');
+		return $this->belongsTo(DestinationModel::class, 'destination_code');
 	}
 
 

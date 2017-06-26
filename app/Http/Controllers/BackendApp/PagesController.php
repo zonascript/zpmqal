@@ -9,11 +9,11 @@ use Auth;
 class PagesController extends Controller
 {
 	public function getIndex(){
-    return view('backend.home');
+    return redirect('dashboard');
 	}
 
   public function getHome(){
-    return view('backend.home');
+    return redirect('dashboard');
   }
 
 

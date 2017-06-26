@@ -1,11 +1,6 @@
 <?php 
 
 	Route::group(['prefix' => 'dashboard'], function(){
-		
-		Route::get('/', 'DashboardController@getIndex');
-		
-		Route::post('enquiry/{id}/active', 'EnquiryController@active');
-		Route::resource('enquiry', 'EnquiryController');
 
 		// Admin Console
 		Route::group(['prefix' => 'console'], function(){
@@ -27,4 +22,9 @@
 			Route::resource('lead/vendor', 'LeadVendorController');
 		});
 
+
+		Route::get('/', 'DashboardController@getIndex');
+		
+		Route::post('enquiry/{id}/active', 'EnquiryController@active');
+		Route::resource('enquiry', 'EnquiryController');
 	});

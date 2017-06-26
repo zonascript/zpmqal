@@ -38,6 +38,20 @@
 						</ul>
 					</li>
 				</ul>
+				@if ($auth->type == 'su')
+					<ul class="nav side-menu">
+						<li><a><i class="fa fa-desktop"></i> Admin <span class="fa fa-chevron-down"></span></a>
+							<ul class="nav child_menu">
+								<li class="hide">
+									<a href="{{ url('admin') }}">Users</a>
+								</li>
+								<li>
+									<a href="{{ url('admin/manage/users') }}">Users</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				@endif
 			</div>
 
 		</div>

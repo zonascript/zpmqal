@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\CommonApp\IndicationModel;
+use App\Admin;
 
 class User extends Authenticatable
 {
@@ -11,7 +13,7 @@ class User extends Authenticatable
 	use Notifiable;
 	protected $connection = 'mysql';
 	protected $table = 'users';
-	protected $appends = ['fullname', 'profile_pic', 'status'];
+	protected $appends = ['fullname', 'profile_pic'];
 	
 	/**
 	 * The attributes that are mass assignable.
@@ -48,32 +50,15 @@ class User extends Authenticatable
 
 
 
-	public function getStatusAttribute()
+	public function status()
 	{   
-		$status = '';
-		$isActive = $this->attributes['is_active'];
-		
-		if ($isActive == 1) {
-			$status = 'active';
-		}
-		elseif ($isActive == 2) {
-			$status = 'suspended';
-		}
-		elseif ($isActive == 3) {
-			$status = 'activation pending';
-		}
-		else {
-			$status = 'inactive';
-		}
-
-		return $status;
-
+		return $this->belongsTo(IndicationModel::class, 'is_active');
 	}
 
 
 	public function admin()
 	{
-		return $this->belongsTo('App\Admin', 'admin_id');
+		return $this->belongsTo(Admin::class, 'admin_id');
 	}
 
 

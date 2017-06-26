@@ -1,5 +1,5 @@
 <script>
-	var csrf_token = $('[name="csrf_token"]').attr('content');
+	{{--var csrf_token = $('[name="csrf_token"]').attr('content');--}}
 	{{-- Select2 --}}
 
 	$(document).ready(function() {

@@ -1,4 +1,4 @@
-@extends('admin.protected.dashboard.main')
+@extends('backend.protected.dashboard.main')
 @section('content')
 	<div class="row">
 		<div class="col-md-12 col-sm-12 col-xs-12">
@@ -6,7 +6,7 @@
 				<div class="x_title">
 					<h2>Users<small>Management</small></h2>
 					<span class="pull-right">
-						<a href="{{ url('dashboard/console/manage/users/create') }}" class="btn btn-success">Add New</a>
+						<a href="{{ url('admin/manage/users/create') }}" class="btn btn-success">Add New</a>
 					</span>
 					<div class="clearfix"></div>
 				</div>
@@ -21,51 +21,53 @@
 							</tr>
 						</thead>
 						<tbody>
-							@foreach ($auth->users as $user)
+							@foreach ($auth->users() as $user)
 								<tr>
 									<th scope="row">{{ $user->fullname }}</th>
 									<td>{{ $user->email }}</td>
 									<td class="{{ statusCss($user->is_active) }}">
 										{{ $user->status->name }}
 										@if ($user->is_active == 3)
-											<a href="{{ url('dashboard/console/manage/users/verify/'.$user->email) }}" class="btn btn-link">verify</a></td>
+											<a href="{{ url('admin/manage/users/verify/'.$user->email) }}" class="btn btn-link">verify</a></td>
 										@endif
 									<td>
 										<div class="row">
 											<div class="btn-group pull-right">
-												<a href="{{ url('dashboard/console/manage/users/'.$user->email) }}" class="btn btn-default btn-success">Open</a>
+												<a href="{{ url('admin/manage/users/'.$user->email) }}" class="btn btn-default btn-success">Open</a>
 												<div class="btn-group">
 													<button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button" aria-expanded="false"> More <span class="caret"></span> </button>
 													<ul class="dropdown-menu">
 														<li>
-															<a href="{{ url('dashboard/console/manage/users/'.$user->email.'/edit') }}">Edit</a>
+															<a href="{{ url('admin/manage/users/'.$user->email.'/edit') }}">Edit</a>
 														</li>
-														@if ($user->is_active == 1)
+														@if ($user->is_active == 1 && $auth->id != $user->id)
 															<li>
 																<a class="trigger-form">Suspend</a>
-																<form method="POST" action="{{ url('dashboard/console/manage/users/suspend/'.$user->email) }}">
+																<form method="POST" action="{{ url('admin/manage/users/suspend/'.$user->email) }}">
 																	{{ csrf_field() }}
 																	{{ method_field('put') }}
 																	<button type="submit" class="input-submit" hidden></button>
 																</form>
 															</li>
 															<li>
-																<a href="{{ url('dashboard/console/manage/users/password/'.$user->email.'/reset') }}">Reset Password</a>
+																<a href="{{ url('admin/manage/users/password/'.$user->email.'/reset') }}">Reset Password</a>
 															</li>
 														@endif
 														@if (in_array($user->is_active,[0, 2]))
 															<li>
 																<a class="trigger-form">Activate</a>
-																<form method="POST" action="{{ url('dashboard/console/manage/users/activate/'.$user->email) }}">
+																<form method="POST" action="{{ url('admin/manage/users/activate/'.$user->email) }}">
 																	{{ csrf_field() }}
 																	{{ method_field('put') }}
 																	<button type="submit" class="input-submit" hidden></button>
 																</form>
 															</li>
 														@endif
-														<li>
-															<a class="user-delete" data-href="{{ url('dashboard/console/manage/users/'.$user->email) }}">Delete</a>
-														</li>
+														@if ($auth->id != $user->id)
+															<li>
+																<a class="user-delete" data-href="{{ url('admin/manage/users/'.$user->email) }}">Delete</a>
+															</li>
+														@endif
 													</ul>
 												</div>
 											</div>

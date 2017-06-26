@@ -5,11 +5,11 @@
 			<div class="row">
 				<div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-12">
 					<div class="tile-stats">
-						<a href="{{ url('dashboard/activities/create') }}">
+						<a href="{{ url('dashboard/manage/location/country') }}">
 							<div class="height-200px font-size-30 vertical-parent">
 								<div class="vertical-child">
-									<i class="fa fa-futbol-o font-size-80"></i>
-									<div>New Activity</div>
+									<i class="fa fa-map-marker font-size-80"></i>
+									<div>Country Images</div>
 								</div>
 							</div>
 						</a>
@@ -17,11 +17,11 @@
 				</div>
 				<div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-12">
 					<div class="tile-stats">
-						<a href="{{ url('dashboard/activities') }}">
+						<a href="{{ url('dashboard/manage/location/destination') }}">
 							<div class="height-200px font-size-30 vertical-parent">
 								<div class="vertical-child">
-									<i class="fa fa-list font-size-80"></i>
-									<div>Activities List</div>
+									<i class="fa fa-map-marker font-size-80"></i>
+									<div>Destination Images</div>
 								</div>
 							</div>
 						</a>
