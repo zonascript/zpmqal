@@ -45,7 +45,6 @@
 
 					<div>
 						<select name="type" class="{{ $errors->has('type') ? 'border-bottom-red' : '' }}">
-							<option value="">Error</option>
 							{!! backendTypes(old('type')) !!}
 						</select>
 						@if ($errors->has('type'))

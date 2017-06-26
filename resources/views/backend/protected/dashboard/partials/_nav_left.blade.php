@@ -1,4 +1,4 @@
-{{-- Left bar --}}
+Left bar --}}
 <div class="col-md-3 left_col menu_fixed">
 	<div class="left_col scroll-view">
 		<div class="navbar nav_title" style="border: 0;">
@@ -33,8 +33,8 @@
 					<li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
 						<ul class="nav child_menu">
 							<li class="hide"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-							<li><a href="{{ url('dashboard/activities/create') }}">New Activity</a></li>
-							<li><a href="{{ url('dashboard/activities') }}">Activities List</a></li>
+							{{-- <li><a href="{{ url('dashboard/activities/create') }}">New Activity</a></li>
+							<li><a href="{{ url('dashboard/activities') }}">Activities List</a></li> --}}
 						</ul>
 					</li>
 				</ul>
@@ -101,4 +101,4 @@
 		{{-- /menu footer buttons --}}
 	</div>
 </div>
-{{-- /left end here --}}
+{{-- /left end here
