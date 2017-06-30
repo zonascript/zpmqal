@@ -6,6 +6,7 @@
 		@include('subway.pages.home_partials.head')
 	</head>
 	<body id="page" class="page home blog sidebar-a-right sidebar-b-right isblog wp-home wp-front_page transparency-75 system-transparent">
+		@include('subway.pages.home_partials.book')
 		<div id="page-body">
 			<div class="page-body-1">
 				<div id="socialbar">
@@ -48,5 +49,7 @@
 				<script type='text/javascript' src='{{ url('/') }}/subway/wp-includes/js/wp-embed.min1c9b.js?ver=4.6.1'></script>
 			</div>
 		</div>
+		@include('subway.pages.home_partials.scripts')
+
 	</body>
 </html>
