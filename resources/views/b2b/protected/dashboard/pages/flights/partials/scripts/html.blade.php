@@ -66,9 +66,9 @@ appendHtml += '<li class="min-height-110px main-list-item">
 			<div class="search-word" hidden>'+searchWord+'</div>
 			<div class="row m-tb-20px">
 				<button class="btn btn-primary btn-block btn-addtocart" 
-					data-vid="'+flight.vendor_id+'"
-					data-vdr="'+flight.vendor+'"
-					data-ind="'+flight.index+'"
+					data-vid="'+flight.vid+'"
+					data-vdr="'+flight.vdr+'"
+					data-ind="'+flight.ind+'"
 					>Select
 				</button>
 			</div>

@@ -7,13 +7,28 @@
 	});
 
 
+	Route::group(['prefix' => 'custom/flights'], function (){
+		Route::post('add/{rid}', 'FlightsController@saveCustomFlights');
+		Route::post('remove/{rid}', 'FlightsController@removeCustomFlights');
+	});
+
+
 	Route::group(['prefix' => 'api/flights'], function () {
+		Route::post(
+			'result/{vendor}/{rid}', 
+			'FlightsController@postFlightResult'
+		);
+
 		Route::get('tp/result/{id}', 'FlightsController@postTravelportFlight');
 	});
+
 	Route::post(
 		'qpx/flights/result/{id}', 
 		'FlightsController@postQpxFlightResult'
 	);
+
+
+
 	
 	Route::post(
 		'ss/flights/result/{id}', 

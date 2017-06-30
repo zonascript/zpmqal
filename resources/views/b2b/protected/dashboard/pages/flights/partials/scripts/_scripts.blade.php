@@ -11,26 +11,14 @@
 		}, function(start, end, label) {
 			console.log(start.toISOString(), end.toISOString(), label);
 		});
-
-		/*postSsFlight({{$package->flightRoutes[0]->id}});*/
-		postQpxFlight({{$package->flightRoutes[0]->id}});
-
+		$('#loging_log').hide();
+		fatchFlights({{$package->flightRoutes[0]->id}});
 	});
 
 	{{-- /bootstrap-daterangepicker --}}
 
-	{{-- autocomplete --}}
-
-	$(document).on('keypress paste', '.input-airport', function(){
-		console.log($(this).val());
-		$(this).autocomplete({source: "{{ route("fatchAirports") }}"});
-	});
-
-	{{-- /autocomplete --}}
-
 
 	{{-- filter List.js--}}
-
 	var filter = {
 		@foreach ($package->flightRoutes as $flightRouteKey => $flightRoute)
 			'flight_{{ $flightRoute->id }}' : '',
@@ -51,7 +39,6 @@
 
 	$(document).on('keypress keyup keydown', "#filter_search", function(){
 		var targetList = $('#tab_menu').find('.active').attr('data-list');
-		console.log(targetList);
 		var search = $(this).val();
 		@foreach ($package->flightRoutes as $flightRouteKey => $flightRoute)
 			if (targetList == "flight_{{ $flightRoute->id }}_div") {
@@ -69,6 +56,7 @@
 	});
 	{{-- /modify search --}}
 
+
 	{{-- Book Flight --}}
 	$(document).on('click', '.btn-addtocart', function(){
 		addToCart(this);
@@ -76,11 +64,34 @@
 	{{-- /Book Flight --}}
 
 
+	{{-- Book Flight --}}
+	$(document).on('click', '.btn-addtocart-custom', function(){
+		addToCartCustom(this);
+		return false;
+	});
+	{{-- /Book Flight --}}
+
+
 
 	$(document).on('click', '.a_tab_menu',function () {
 		clickAtab(this);
+		return false;
 	});
 
+	$(document).on('click', '.add-custom-flight', function () {
+		addCustomFlight(this);
+		return false;
+	});
+
+	$(document).on('click', '.add-custom-flight-cart', function () {
+		addCustomFlightCart(this);
+		return false;
+	});
+
+	$(document).on('click', '.remove-custom-flight-cart', function () {
+		removeCustomFlightCart(this);
+		return false;
+	});
 
 	{{-- refreash flights --}}
 	$(document).on('click', '.refreash-flights', function() {
@@ -195,5 +206,7 @@
 			}
 	});
 	{{-- /Adults-Child-button --}}
+
 </script>
+@include($viewPath.'.partials.scripts.autocomplete')
 @include($viewPath.'.partials.scripts.function')

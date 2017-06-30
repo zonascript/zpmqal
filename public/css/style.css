@@ -128,6 +128,18 @@
 	background-color : rgba(0,0,0,0.6);
 }
 
+.down-div{
+	line-height: 60px;
+	font-size: 36px;
+	font-family: "NewCicleFina";
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	color: #ffffff;
+}
+
+
+
 .subway-theme-font{
 	font-family: "NewCicleFina";
 }
@@ -139,6 +151,15 @@
 	background: -webkit-linear-gradient(-45deg, #5FA0C0 0%,#32839E 100%);
 	background: -o-linear-gradient(-45deg, #5FA0C0 0%,#32839E 100%);
 	background: linear-gradient(to bottom right, #5FA0C0 0%,#32839E 100%); 
+}
+
+.mod-box-color4 {
+	color: #ffffff;
+	background: #00a2d2;
+	background: -moz-linear-gradient(-45deg, #00a2d2 0%, #18c4e6 100%);
+	background: -webkit-linear-gradient(-45deg, #00a2d2 0%, #18c4e6 100%);
+	background: -o-linear-gradient(-45deg, #00a2d2 0%, #18c4e6 100%);
+	background: linear-gradient(to bottom right, #00a2d2 0%, #18c4e6 100%);
 }
 
 .capitalize{	text-transform: capitalize; }
@@ -209,6 +230,12 @@
 	right:10px;
 }
 
+.add-flight-manually{
+	position: fixed;
+  bottom: 55px;
+  left: 346px;
+  z-index: 100;
+}
 
 
 .circle {
@@ -257,9 +284,6 @@
 	background-color: #ffffff;
 }
 
-.m-tb-15-5{
-	margin: 10px 0 5px 0; 
-}
 
 .form-div{ padding: 20px 10px 20px 10px; }
 
@@ -419,6 +443,28 @@
 /*Form end here*/
 
 
+.middle{
+	width: 500px;
+	height: 450px;
+	background-color: rgba(0,0,0,0.6);
+	z-index:120;
+	position: fixed;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+}
+
+.down-div{
+
+}
+
+
+.radio-md{ 
+	transform: scale(1.5);
+	margin: 0px 8px 2px !important;
+}
 
 .radius-0{ border-radius: 0 !important; }
 .radius-6{ border-radius: 6px !important; }
@@ -582,6 +628,8 @@
 
 .margin-top{ margin-top: 70px; }
 
+.m-tb-15-5{ margin: 10px 0 5px 0; }
+
 .m-tb-10px{
 	margin-top: 10px ! important;
 	margin-bottom: 10px ! important;
@@ -627,10 +675,19 @@
 .m-bottom-20px{ margin-bottom: 20px ! important; }
 
 
-.table-p < td {padding : 10px;}
+.table-p < td { padding : 10px; }
 .nostyle{
 	background-color: #ffffff;
 	border: 0px ! important; 
+}
+
+.table-trip-sum td { 
+	padding: 5px;
+	width: 50%;
+	vertical-align: top;
+}
+.table-lborder tr td:first-child {
+	border-right: 1px solid #ffffff;
 }
 
 

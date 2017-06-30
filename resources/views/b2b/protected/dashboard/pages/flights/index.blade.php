@@ -5,6 +5,8 @@
 @section('css')
   <link rel="stylesheet" href="{{ asset('css/builder_spin.css') }}">
   <link rel="stylesheet" href="{{ commonAsset('css/themes/smoothness/jquery-ui.css') }}">
+	<link rel="stylesheet" href="{{ commonAsset('datetimepicker/jquery.datetimepicker.min.css') }}"/>
+
 @endsection
 
 @section('menutab')
@@ -55,7 +57,9 @@
 									<ul id="flight_{{ $flightRoute->id }}" 
 										data-rid="{{ $flightRoute->id }}"
 										class="list list-unstyled" data-ispulled="0">
+										{{-- @include($viewPath.'.partials.custom_flight') --}}
 									</ul>
+									{{-- <button class="btn btn-success add-custom-flight" data-id="flight_{{ $flightRoute->id }}">Add Flight</button> --}}
 								</div>
 							@endforeach
 						</div>
@@ -64,9 +68,11 @@
 			</div>
 		</div>
 	</div>
-
-	@include('common.protected.dashboard.partials._popupModel')
-
+	<div class="add-flight-manually">
+		<button class="btn btn-success add-custom-flight">
+			Add Flight Manually
+		</button>
+	</div>
 @endsection
 
 @section('js')
@@ -75,6 +81,7 @@
 	<script src="{{ asset('js/list.min.js') }}"></script>
 	<script src="{{ commonAsset('dashboard/js/moment/moment.min.js') }}"></script>
 	<script src="{{ commonAsset('dashboard/js/datepicker/daterangepicker.js') }}"></script>
+	<script src="{{ commonAsset('datetimepicker/jquery.datetimepicker.full.js') }}"></script>
 	{{-- /bootstrap-daterangepicker --}}
 @endsection
 

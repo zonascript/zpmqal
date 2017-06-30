@@ -8,6 +8,7 @@ use DB;
 class AirportModel extends Model
 {
 	protected $connection = 'mysql2';
+	protected $table = 'airports';
 
 	public static function call()
 	{
@@ -73,7 +74,57 @@ class AirportModel extends Model
 				) LIKE '%$search%'"
 			);
 		}
+		$sqlQuery .= 'limit 10';
+		
 		$result = DB::connection('mysql2')->select(DB::raw($sqlQuery));
+		return $result;
+	}
+
+	public function getAirportNames($search)
+	{
+		$sqlQuery = (
+			"SELECT CONCAT
+			  (
+			    a.`airport_code`, ', ',
+			    a.`airport_name`, ', ',
+			    IFNULL(d.`destination`, a.`city`),  ', ',
+			    IFNULL(d.`country`, a.`country`)
+			  ) AS `fullname`, a.`airport_code`, a.`airport_name`, 
+			  IFNULL(d.`destination`, a.`city`) AS city, 
+			  IFNULL(d.`country`, a.`country`) AS country
+			FROM
+			  `airports` a
+			LEFT JOIN
+			  `destinations` d 
+			  ON d.`country_code` = a.`country_code` 
+			  AND (d.`destination` LIKE a.`city` OR a.`city` LIKE d.`destination`)
+			WHERE "
+		);
+
+		if (strlen($search) <= 3) {
+			$sqlQuery .= "a.`airport_code` = '$search'";
+		}
+		else{
+			$sqlQuery .= (
+				"CONCAT(
+			    a.`airport_code`,', ',
+			    a.`airport_name`,', ',
+			    a.`city`,', ',
+			    a.`country`
+			  ) LIKE '%$search%' 
+
+				OR CONCAT(
+				  a.`airport_code`,' ',
+				  a.`airport_name`,' ',
+				  a.`city`,' ',
+				  a.`country`
+				) LIKE '%$search%'"
+			);
+		}
+
+		$sqlQuery .= 'limit 10';
+		$result = DB::connection('mysql2')
+							->select(DB::raw($sqlQuery));
 		return $result;
 	}
 

@@ -9,8 +9,10 @@ use App\Http\Controllers\Controller;
 
 // ========================Api Controller========================
 use App\Http\Controllers\FlightApp\QpxFlightsController;
+use App\Http\Controllers\FlightApp\AddedFlightsController;
 use App\Http\Controllers\FlightApp\TravelportAirController;
 use App\Http\Controllers\FlightApp\SkyscannerFlightsController;
+use App\Http\Controllers\FlightApp\AddedFlightSegmentsController;
 
 
 // ========================B2b Controller========================
@@ -63,15 +65,19 @@ class FlightsController extends Controller
 
 			// ===============booking flight here with respective vendor================
 			if ($vendor == 'qpx') {
+				$vendorModelName = 'App\\Models\\FlightApp\\QpxFlightModel';
 				$bookedFlightDetail = QpxFlightsController::call()
 															->book($vendorId, $vendorIndex);
-
-				$vendorModelName = 'App\\Models\\FlightApp\\QpxFlightModel';
 			}
 			elseif ($vendor == 'ss') {
 				$vendorModelName = 'App\\Models\\FlightApp\\SkyscannerFlightsModel';
 				$bookedFlightDetail = SkyscannerFlightsController::call()
 															->book($vendorId, $vendorIndex);	
+			}
+			elseif ($vendor == 'cust') {
+				$vendorModelName = 'App\\Models\\FlightApp\\AddedFlightModel';
+				$bookedFlightDetail = AddedFlightsController::call()
+															->book($vendorId);	
 			}//---if there is other fight service provider then use elseif here---
 
 			if (isset($bookedFlightDetail->startDateTime) && isset($bookedFlightDetail->endDateTime)) {
@@ -97,6 +103,36 @@ class FlightsController extends Controller
 		return json_encode($returnArray);
 	}
 
+
+	public function removeCustomFlights($rid, Request $request)
+	{
+		$res = AddedFlightSegmentsController::call()
+					->model()->removeSegment($request->vsid);
+		$status = $res ? 200 : 500;
+		return json_encode(['status' => $status]);
+	}
+
+
+	public function postFlightResult($vendor, $rid, Request $request)
+	{
+		return file_get_contents(storage_path('mylocal/faker/global_flights.json'));
+
+		$result = [];
+		$route = $this->findRoute($rid);
+		$result = '';
+
+		if (!is_null($route)) {
+			if ($vendor == 'qpx') {
+				$result = QpxFlightsController::call()->flights($route);
+			}
+			elseif ($vendor == 'ss') {
+
+			}// use elseif for another vendor
+		}
+
+		return json_encode($result);
+	}
+
 	
 	public function removeFlight($routeId)
 	{
@@ -108,11 +144,18 @@ class FlightsController extends Controller
 	}
 
 
+	public function saveCustomFlights($rid, Request $request)
+	{
+		$route = $this->findRoute($rid);
+		$res = AddedFlightsController::call()->saveFlight($route, $request);
+		return json_encode($res);
+	}
+
 	public function postQpxFlightResult($id)
 	{
 		// return file_get_contents(storage_path('mylocal/faker/qpx.json'));
 		$route = RouteController::call()->model()->find($id);
-		$result = '';
+		$result = [];
 
 		if (!is_null($route)) {
 			$result = QpxFlightsController::call()->flights($route);

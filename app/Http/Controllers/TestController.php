@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\MyLibrary\Verdant\XML2Array;
 use App\Http\Controllers\B2bApp\RoutePackageModesController;
+use App\Http\Controllers\FlightApp\QpxFlightsController;
 use App\Models\HotelApp\HotelModel;
 use Carbon\Carbon;
 use App\Mail\VerifyMail;
@@ -14,6 +15,13 @@ class TestController extends Controller
 
 	public function testCode()
 	{
+		dd(Carbon::createFromFormat('Y/m/d h:i', '2017/06/30 00:39')->toDateTimeString());
+		// $date = Carbon::parse('2017-05-06T06:50+05:30')->format('Y-m-d H:i');
+		// $date1 = Carbon::parse('2017-05-06T09:05+06:30')->format('Y-m-d H:i');
+		// dd($date, $date1);
+
+		QpxFlightsController::call()->makeGlobalArray();
+
 		$strin = ' Superior Loft - Breakfast Included 1 twin bed and 1 full bed ';
 		// dd(findWord(['breakfast'], $strin));
 		$search = ['special', 'offer', '-', 'included', 'breakfast'];
@@ -35,7 +43,6 @@ class TestController extends Controller
 		$decrypted = Crypt::decrypt($encrypted);
 		dd($encrypted, $decrypted);
 		dd(Crypt::encrypt(1));
-		$this->sendEmail();
 		dd('email sent');
 		$date = Carbon::parse('2017-07-01');
 		$now = Carbon::now();

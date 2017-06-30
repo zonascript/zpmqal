@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 // ===========================Model===========================
 use App\Models\FlightApp\QpxLimitModel;
 use App\Models\FlightApp\QpxFlightModel;
+use App\Models\B2bApp\RouteModel;
+use Carbon\Carbon;
 
 ini_set('max_execution_time', 90);
 
@@ -28,7 +30,7 @@ class QpxFlightsController extends Controller
 	}
 
 
-	public function flights($route)
+	public function flights(RouteModel $route)
 	{
 		$flights = [];
 		
@@ -121,18 +123,26 @@ class QpxFlightsController extends Controller
 		$qpxFlightModel->request = $params;
 		$qpxFlightModel->result = $result;
 		$qpxFlightModel->save();
-		
-		if (isset($result->trips)) {
-			$result->cities = $qpxFlightModel->cities;
-			$result->airlines = $qpxFlightModel->airlines;
-		}
 
-		if (is_null($result)) {
-			$result = (object)[];
-		}
+		
+		// if (isset($result->trips)) {
+		// 	$result->cities = $qpxFlightModel->cities;
+		// 	$result->airlines = $qpxFlightModel->airlines;
+		// }
+
+		// if (is_null($result)) {
+		// 	$result = (object)[];
+		// }
 
 		// ====================pushing db detail in array====================
-		$result->db = (object)["id" => $qpxFlightModel->id];
+		$result = (object)[
+				'flights' => $qpxFlightModel->toGlobalArray(),
+				'db' => (object)[
+								"id" => $qpxFlightModel->id,
+								"vdr" => 'qpx'								
+							],
+			];
+		// $result->db = (object)["id" => $qpxFlightModel->id];
 		return $result;
 	}
 
@@ -259,3 +269,4 @@ class QpxFlightsController extends Controller
 
 
 }
+

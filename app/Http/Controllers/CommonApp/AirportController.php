@@ -34,4 +34,13 @@ class AirportController extends Controller
 
 		return json_encode($airports);
 	}
+
+
+	public function names(Request $request)
+	{
+		$result = $this->model()
+										->getAirportNames($request->term);
+										
+		return json_encode($result);
+	}
 }

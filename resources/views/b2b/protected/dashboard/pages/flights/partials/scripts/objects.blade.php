@@ -24,6 +24,7 @@
 	}
 
 	$idObject['rid'] = $rid;
+	$idObject['crid'] = $package->flightRoutes[0]->id;
 	$idObject = rejson_decode($idObject);
 ?>
 {{-- making an object which contain some ids --}}

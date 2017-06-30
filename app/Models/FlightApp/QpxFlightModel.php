@@ -21,7 +21,7 @@ class QpxFlightModel extends Model
 		];
 
 
-	/*======================this function to get all airline code======================*/
+	/*==============this function to get all airline code==============*/
 
 	public function getAirlinesAttribute(){
 		$airlineCode = [];
@@ -32,7 +32,7 @@ class QpxFlightModel extends Model
 	}
 
 
-	/*===================this function for making index by city code===================*/
+	/*===========this function for making index by city code===========*/
 	public function getCitiesAttribute(){
 		$cityCode = [];
 		foreach ($this->result->trips->data->city as $city) {
@@ -183,6 +183,69 @@ class QpxFlightModel extends Model
 	{
 		return $this->result->trips->tripOption[$this->selected_index];
 	}
+
+	/*
+	| this function is returning global array which used for view
+		$Global_Array =  [
+				origin => Delhi
+				origin_code => DEL
+				destination => Calcutta
+				destination_code => CCU
+				airline_code => AI
+				airline_name => Air India Limited
+				airline_number => 401
+				arrival_date_time => 2017-05-06 06:50
+				departure_date_time => 2017-05-06 06:50
+			];
+	*/
+	public function toGlobalArray()
+	{
+		$cities = $this->cities;
+		$airlines = $this->airlines;
+		$tripOptions = $this->result->trips->tripOption;
+		$trips = [];
+		
+		foreach ($tripOptions as $index => $tripOption) {
+			$segments = [];
+			$slices = $tripOption->slice;
+			foreach ($slices as $slice) {
+				foreach ($slice->segment as  $segment) {
+					$carrier = $segment->flight->carrier;
+					foreach ($segment->leg as $leg) {
+						$tempLeg = (object) [];
+						$tempLeg->airline_name = $airlines->$carrier;
+						$tempLeg->airline_code = $segment->flight->carrier;
+						$tempLeg->airline_number = $segment->flight->number;
+
+						$tempLeg->departure_date_time = Carbon::parse($leg->departureTime)
+																					->format('Y-m-d H:i');
+
+						$tempLeg->arrival_date_time = Carbon::parse($leg->arrivalTime)
+																					->format('Y-m-d H:i');
+
+						$originCode = $leg->origin;
+						$tempLeg->origin = isset($cities->$originCode) 
+																 ? $cities->$originCode
+																 : $originCode;
+						$tempLeg->origin_code = $originCode;
+
+
+						$destinationCode = $leg->destination;
+						$tempLeg->destination_code = $destinationCode;
+						$tempLeg->destination = isset($cities->$destinationCode)
+																	? $cities->$destinationCode
+																	: $destinationCode;
+
+						$segments[] = $tempLeg;
+					}
+				}
+			}
+			$trips[] = $segments;
+		}
+
+		return $trips;
+	}
+
 
 
 	public function __construct()

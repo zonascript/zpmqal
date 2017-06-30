@@ -7,8 +7,8 @@ Route::get('logout', 'LoginController@logout');
 Route::post('logout', 'LoginController@logout');
 
 //Backend Register
-Route::get('register', 'RegisterController@showRegistrationForm');
-Route::post('register', 'RegisterController@register');
+// Route::get('register', 'RegisterController@showRegistrationForm');
+// Route::post('register', 'RegisterController@register');
 
 //Backend Passwords
 Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail');
