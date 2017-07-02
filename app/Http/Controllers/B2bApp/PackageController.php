@@ -314,37 +314,6 @@ class PackageController extends Controller
 	}
 
 
-
-	public function showPackageDetail($token, $page=null,  Request $request)
-	{
-		$package = $this->model()->findByTokenOrExit($token,false);
-		$package->costToken = $request->ctk;
-		// dd($package->routes[1]->fusion->cruise->itinerary);
-
-		if ($package->cost->total_cost < 1) {
-			exitView();
-		}
-
-
-		$url = $request->fullUrl();
-		if (is_null($page)) {
-			$page = 'home';
-			$url = str_replace($token, $token.'/'.$page, $url);
-		}
-		$tempUrl = str_replace($token.'/'.$page, $token.'/{}', $url);
-
-		$urlObj = new UrlController(['url' => $tempUrl]);
-
-		$blade = [
-				"url" => $url,
-				"package" => $package,
-				"urlObj" => $urlObj
-			];
-
-		return view('subway.pages.'.$page, $blade);
-	}
-
-
 	public function makePackageRaplica($pid)
 	{
 		$package = $this->model()->find($pid);

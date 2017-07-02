@@ -3,18 +3,41 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\MyLibrary\Verdant\XML2Array;
+use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\B2bApp\RoutePackageModesController;
 use App\Http\Controllers\FlightApp\QpxFlightsController;
 use App\Models\HotelApp\HotelModel;
 use Carbon\Carbon;
 use App\Mail\VerifyMail;
 use Crypt;
+use App\Models\ItineraryApp\PaymentModel;
 
 class TestController extends Controller
 {
 
 	public function testCode()
 	{
+		dd(PaymentModel::find(7)->payuPayment);
+
+		$data = ['a' => 'ds'];
+		return \Redirect::to('http://b2b.flygoldfinch.dev/test/showhtml', ['a' => 'ds']);
+		return redirect('http://b2b.flygoldfinch.dev/test/showhtml')
+	 					 ->with(compact('data'));
+		dd(route('payStatusUrl', ['success', newToken()]));
+		dd(newToken());
+		dd(addPercent(100,29));
+		$package = PackageController::call()
+								->model()->findByTokenOrExit('02c7691aedf5a056e6a8d41fe1e1f9d4', false);
+		dd($package->user->admin->payu_key);		
+		$req = new Request(['s' => 'success', 'f' => '$txnid']);
+		dd($req->all(), $req->s);
+		// $req->merge(['s' => 'success', 'f' => '$txnid']);
+
+		dd(route('payuRes', ['success', '$txnid']));
+
+		echo $_SERVER['HTTP_USER_AGENT'];
+		$browser = get_browser(null, true);
+		dd($browser);
 		dd(Carbon::createFromFormat('Y/m/d h:i', '2017/06/30 00:39')->toDateTimeString());
 		// $date = Carbon::parse('2017-05-06T06:50+05:30')->format('Y-m-d H:i');
 		// $date1 = Carbon::parse('2017-05-06T09:05+06:30')->format('Y-m-d H:i');
@@ -174,6 +197,54 @@ class TestController extends Controller
 		}*/
 		
 
+	}
+
+
+	public function checkData()
+	{
+		$data = [
+			"key" 				=> "required",
+			"url" 				=> "required",
+			"salt" 				=> "required",
+			"surl" 				=> "required",
+			"furl" 				=> "required",
+			"name" 				=> "required",
+			"hash" 				=> "required",
+			"txnid" 			=> "required",
+			"phone" 			=> "342423",
+			"email" 			=> 'ajay@fsaladfs.cm',
+			"amount" 			=> "389.90sd",
+			"hashseq" 		=> "required",
+			"productinfo" => "required",
+		];
+
+		$validator = \Validator::make($data, [
+			"key" 				=> "required",
+			"url" 				=> "required",
+			"salt" 				=> "required",
+			"surl" 				=> "required",
+			"furl" 				=> "required",
+			"name" 				=> "required",
+			"hash" 				=> "required",
+			"txnid" 			=> "required",
+			"phone" 			=> "required|numeric",
+			"email" 			=> 'required|email',
+			"amount" 			=> "required|regex:/^\d*(\.\d{1,4})?$/",
+			"hashseq" 		=> "required",
+			"productinfo" => "required",
+		]);
+    if ($validator->fails()) {
+			dd(jsonResponse(500, 'error', ['errors' => $validator->errors()]));
+    }else{
+    	dd('passed');
+    }
+
+	}
+
+	public function showHtml(Request $request)
+	{
+		dd($request->input());
+		return view('test.show');
 	}
 	// https://www.booking.com/hotel/za/house-of-house-guest-house.html
 

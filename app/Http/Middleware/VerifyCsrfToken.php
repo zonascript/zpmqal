@@ -12,6 +12,8 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     protected $except = [
-      'agent/pay/success'
+      'agent/pay/success',
+      'secure/payment/*',
+      'your/package/payment/success/*'
     ];
 }

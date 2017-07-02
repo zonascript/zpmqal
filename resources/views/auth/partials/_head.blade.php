@@ -2,6 +2,7 @@
 <!-- Meta, title, CSS, favicons, etc. -->
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="refresh" content="5400">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>@yield('app_name', config('app.name', 'Trawish')) @yield('title') </title>

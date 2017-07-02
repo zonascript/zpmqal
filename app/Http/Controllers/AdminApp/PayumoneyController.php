@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\AdminApp\TransectionController;
 
-use App\Models\AdminApp\PayuPaymentModel;
+use App\Models\CommonApp\PayuPaymentModel;
 use Auth;
 
 class PayumoneyController extends Controller

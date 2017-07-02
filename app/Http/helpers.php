@@ -112,6 +112,27 @@ function loopImages(Array $data, Array $images, $type = 'object')
 }
 
 
+function statusBool($status)
+{
+	$res = 0;
+
+	if ($status == 'success') {
+		$res = 1;
+	}
+	elseif ($status != 'failure') {
+		wrongView();
+	}
+
+	return $res; 
+}
+
+
+function newToken()
+{
+	return mycrypt(uid());
+}
+
+
 function mycrypt($value)
 {
 	return md5(bcrypt($value));
@@ -149,6 +170,11 @@ function removeAndSym($string){
 	}else{
 		return $string;
 	}
+}
+
+function addPercent($value, $per)
+{
+	return $value+(($value*$per)/100);
 }
 
 
@@ -1246,6 +1272,16 @@ function urlPdfPacakge($packageDbId){
 
 function jsonError($error = null){
 	return json_encode(error500($error));
+}
+
+function jsonResponse($status = 200, $response = 'ok', $data = [])
+{
+	$array = [
+		"status" => $status,
+		"response" => $response,
+	];
+	$array = array_merge($array, $data);
+	return json_encode($array);
 }
 
 

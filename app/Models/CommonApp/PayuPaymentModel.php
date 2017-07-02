@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models\AdminApp;
+namespace App\Models\CommonApp;
 
 use Illuminate\Database\Eloquent\Model;
 
 class PayuPaymentModel extends Model
 {
-	protected $connection = 'mysql3';
+	protected $connection = 'mysql2';
 	protected $table = 'payu_payments';
 	protected $casts = ['request' => 'object', 'data' => 'object'];
 
@@ -26,6 +26,21 @@ class PayuPaymentModel extends Model
 			exitView();
 		}
 		return $result;
+	}
+
+	public function backUrl($status)
+	{
+		$url = $this->furl;
+		if ($status) {
+			$url = $this->surl;
+		}
+		return $url;
+	}
+
+
+	public function payable()
+	{
+		$this->morphTo();
 	}
 
 

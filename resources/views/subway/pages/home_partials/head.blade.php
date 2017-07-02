@@ -36,6 +36,7 @@
 {{-- <link rel="stylesheet" href="{{ url('/') }}/subway/wp-content/themes/yoo_subway_wp/css/style.css" /> --}}
 {{-- <link rel="stylesheet" href="{{ url('/') }}/subway/wp-content/themes/yoo_subway_wp/css/print.css" /> --}}
 <link rel="stylesheet" href="{{ commonAsset('css/themes/smoothness/jquery-ui.css') }}">
+
 <link rel="stylesheet" href="{{ commonAsset('datepicker/bootstrap-datepicker.css') }}">
 
 
@@ -55,6 +56,9 @@
 <script src="{{ commonAsset('dashboard/js/moment/moment.min.js') }}"></script>
 	<script src="{{ commonAsset('dashboard/js/datepicker/daterangepicker.js') }}"></script>
 <script src="{{ url('/') }}/common/carousal/gi_carousal/scripts.min.js"></script>
+<script src="{{ url('/') }}/common/js/jquery-ui.min.js"></script>
+{{-- <script src="{{ url('/') }}/js/parsley.min.js"></script> --}}
+
 
 <script src="{{ url('/') }}/ninja-slider/scripts.js" type="text/javascript"></script>
 <script>

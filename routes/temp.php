@@ -10,6 +10,7 @@ Route::get('test/code', 'TestController@testCode');
 Route::get('test/code', 'TestController@testCode');
 Route::get('test/decode', 'TestController@decode');
 Route::get('test/showfile', 'TestController@showfile');
+Route::get('test/showhtml', 'TestController@showHtml');
 
 // vendor test
 Route::get('test/booking/html', 'TestController@testBookingHtml');

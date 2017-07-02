@@ -2,6 +2,11 @@
 
 
 	Route::group(['namespace' => 'CommonApp'], function(){
+		Route::any(
+						'secure/payment/{status}/{txnid}', 
+						'PayuPaymentsController@response'
+					)->name('payuRes');
+		
 		Route::get(
 				'location/detail/fatch/airport', 
 				'AirportController@getAirport'
@@ -16,6 +21,7 @@
 				'location/detail/fatch/destination', 
 				'DestinationController@getDestination'
 			)->name('fatchDestinations');
+
 	});
 
 	Route::group(['namespace' => 'FlightApp', 'prefix' => 'flights'], function(){

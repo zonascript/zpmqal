@@ -1,6 +1,5 @@
 <script>
 	$(document).on('change', '.radio-md.book', function () {
-		console.log('test');
 		var val = $(this).val();
 		var id = val == 'pay_now' ? '#form_pay_now' : '#form_reserve';
 		var oppid = val == 'pay_now' ? '#form_reserve' : '#form_pay_now';
@@ -21,12 +20,94 @@
 	});
 
 	$(document).on('click', '.show-book-popup', function () {
-		$('.book-popup.popup-model').show();
+		showBookPopup();
 	});
 
 
 	$(document).on('click', '.close.book-popup', function () {
-		$('.book-popup.popup-model').hide();
+		hideBookPopup();
 	});
 
+	$(document).on('click', '.btn-pay', function () {
+		var keys = ['name','mobile','email','date','pax','amount'];
+		var fromId = '#form_pay_now';
+		var isWrong = false;
+		var data  = {'format' : 'json'};
+
+		$.each(keys, function (i, v) {
+			var val = $(fromId).find('[name="'+v+'"]').val();
+			if (val == '') {
+				$(fromId).find('[name="'+v+'"]')
+														.addClass('border-red')
+															.effect( "shake" );
+				isWrong = true; 
+				return false
+			}else{
+				$(fromId).find('[name="'+v+'"]').removeClass('border-red');
+				$(fromId).find('[data-error="'+v+'"]').text('');
+				data[v] = val;
+			}
+		});
+
+		if (isWrong) { return false }
+		$(this).form().submit();
+	});
+
+
+	$(document).on('click', '.btn-reserve', function () {
+		var keys = ['name','mobile','email','date','pax'];
+		var isWrong = false;
+		var data  = {'format' : 'json'};
+		var fromId = '#form_reserve';
+
+		$.each(keys, function (i, v) {
+			var val = $(fromId).find('[name="'+v+'"]').val();
+			if (val == '') {
+				$('#form_reserve').find('[name="'+v+'"]')
+														.addClass('border-red')
+															.effect( "shake" );
+				isWrong = true; 
+				return false
+			}else{
+				$(fromId).find('[name="'+v+'"]').removeClass('border-red');
+				$(fromId).find('[data-error="'+v+'"]').text('');
+				data[v] = val;
+			}
+		});
+
+		console.log(data);
+
+		if (isWrong) { return false }
+
+		$.ajax({
+			url : "{{ route('reservePackage', [$token]) }}",
+			type : 'get',
+			data : data,
+			dataType : 'JSON',
+			success : function (res) {
+				if (res.status == 200) {
+					alert('we have successfully reserved your package our representative will get in touch with');
+					hideBookPopup();
+				}
+				else{
+					alert('something went wrong.');
+					$.each(res.errors, function (i, v) {
+						$(fromId).find('[name="'+i+'"]')
+																.addClass('border-red')
+																	.val('');
+						$(fromId).find('[data-error="'+i+'"]').text(v[0]);
+					});
+				}
+			}
+		});
+	});
+
+
+	function showBookPopup() {
+		$('.book-popup.popup-model').show();
+	}
+
+	function hideBookPopup() {
+		$('.book-popup.popup-model').hide();
+	}
 </script>
