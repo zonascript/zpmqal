@@ -1,12 +1,4 @@
 <script>
-	$(document).on('change', '.radio-md.book', function () {
-		var val = $(this).val();
-		var id = val == 'pay_now' ? '#form_pay_now' : '#form_reserve';
-		var oppid = val == 'pay_now' ? '#form_reserve' : '#form_pay_now';
-		$(oppid).hide();
-		$(id).show();
-	});
-
 	$(document).ready(function() {
 		$('.datepicker').daterangepicker({
 			singleDatePicker: true,
@@ -17,6 +9,14 @@
 		}, function(start, end, label) {
 			// console.log(start.toISOString(), end.toISOString(), label);
 		});
+	});
+	
+	$(document).on('change', '.radio-md.book', function () {
+		var val = $(this).val();
+		var id = val == 'pay_now' ? '#form_pay_now' : '#form_reserve';
+		var oppid = val == 'pay_now' ? '#form_reserve' : '#form_pay_now';
+		$(oppid).hide();
+		$(id).show();
 	});
 
 	$(document).on('click', '.show-book-popup', function () {
@@ -102,6 +102,16 @@
 		});
 	});
 
+
+	$(document).on('keyup', '[name="amount"]', function () {
+		var val = parseInt($(this).val());
+		var payu = parseFloat((val*0.029).toFixed(2));
+		if (!isNaN(payu) && val != '' && val != 0) {
+			$('#payu_charge').text(payu);
+		}else{
+			$('#payu_charge').text(0);
+		}
+	});
 
 	function showBookPopup() {
 		$('.book-popup.popup-model').show();

@@ -52,6 +52,12 @@
 		<div class="col-md-6 col-sm-6 col-xs-12">
 			<input type="text" name="amount" required="required" class="form-control col-md-7 col-xs-12">
 			<b><span class="red" data-error="amount"></span></b>
+			<div>
+				<span>Pay U Money Charge (2.9%) : </span>
+				<i class="fa fa-rupee"></i> 
+				<b id="payu_charge">0</b>
+				<span> /-</span>
+			</div>
 		</div>
 	</div>
 

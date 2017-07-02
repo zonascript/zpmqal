@@ -70,10 +70,10 @@ class PaymentsController extends Controller
 			"net_amount" 	=> $request->amount,
 			"productinfo" => 'Brought package',
 		];
-		// $data["key"] = env('TEST_PAYUMONEY_KEY');
-		// $data["salt"] = env('TEST_PAYUMONEY_SALT');
 
 		$newPayu = new PayuPaymentsController;
+		// $data["key"] = env('TEST_PAYUMONEY_KEY');
+		// $data["salt"] = env('TEST_PAYUMONEY_SALT');
 		// $newPayu->mode = 'test';
 		return $newPayu->index($data);
 	}
