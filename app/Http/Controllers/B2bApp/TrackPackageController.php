@@ -4,9 +4,9 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
-// ========================Models========================
 use App\Models\B2bApp\TrackPackageModel;
+use App\Http\Controllers\B2bApp\PackageController;
+use Auth;
 
 class TrackPackageController extends Controller
 {
@@ -21,13 +21,11 @@ class TrackPackageController extends Controller
 	}
 
 
+
 	public function index()
 	{
-		$auth = Auth::user();
-		$tracks = TrackPackageModel::select()
-							->where(['user_id' => $auth->id])
-								->get();
-		return view('b2b.protected.dashboard.pages.track.index', ["tracks" => $tracks]);
+		$blade = ["tracks" => $this->model()->fatchTracks()];
+		return view('b2b.protected.dashboard.pages.track.index', $blade);
 	}
 
 	/*
@@ -36,9 +34,7 @@ class TrackPackageController extends Controller
 	public function opened($packageId)
 	{
 		$this->inactiveOld($packageId);
-		$auth = Auth::user();
 		$trackPackage = new TrackPackageModel;
-		$trackPackage->user_id = isset($auth->id) ? $auth->id : '';
 		$trackPackage->package_id = $packageId;
 		$trackPackage->save();
 		return $trackPackage;
@@ -52,27 +48,10 @@ class TrackPackageController extends Controller
 		
 	}
 
-	public function activeTracks()
-	{
-		$auth = Auth::user();
-		
-		$result = [];
-
-		if ($auth->id) {
-			$result = TrackPackageModel::select()
-								->where([
-											'user_id' => $auth->id,
-											'status' => 1
-										])
-									->get();
-		}
-		return $result;
-	}
-
 
 	public function getActiveJson()
 	{
-		$activeTracks = $this->activeTracks();
+		$activeTracks = $this->model()->activeTracks();
 		$tracks = [];
 		if ($activeTracks->count()) {
 			foreach ($activeTracks as $track) {
@@ -87,6 +66,29 @@ class TrackPackageController extends Controller
 		}
 
 		return json_encode($tracks);
+	}
+
+
+	public function trackPing($token, Request $request)
+	{
+		$package = PackageController::call()
+								->model()->findByToken($token);
+
+		$track = $this->model()->find($request->id);
+
+		if (is_null($track)) {
+			$track = $this->model();
+		}
+
+		$track->package_id = $package->id;
+		$track->ip = $request->ip();
+		$track->time_duration += 5;
+		$track->status = 1;
+		$track->save();
+		return json_encode([
+					"status" => 200,
+					"id" => $track->id,
+			]);
 	}
 
 }

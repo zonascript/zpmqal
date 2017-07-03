@@ -17,6 +17,18 @@ class TestController extends Controller
 
 	public function testCode()
 	{
+		$new = new \App\Models\B2bApp\TrackPackageModel;
+		$new->package_id = 1;
+		$new->ip = 1;
+		$new->time_duration += 5;
+		$new->status = 1;
+		$new->save();
+		dd($new);
+
+		dd($_SERVER['REMOTE_ADDR']);
+		$request = new Request;
+		dd($request->ip());
+		dd(request()->ip());
 		dd(PaymentModel::find(7)->payuPayment);
 
 		$data = ['a' => 'ds'];
@@ -198,6 +210,19 @@ class TestController extends Controller
 		
 
 	}
+
+	public function getIp(){
+    foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key){
+        if (array_key_exists($key, $_SERVER) === true){
+            foreach (explode(',', $_SERVER[$key]) as $ip){
+                $ip = trim($ip); // just to be safe
+                if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false){
+                    return $ip;
+                }
+            }
+        }
+    }
+}
 
 
 	public function checkData()

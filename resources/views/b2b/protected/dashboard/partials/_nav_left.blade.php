@@ -50,10 +50,22 @@
 					</li>
 					<li><a><i class="fa fa-desktop"></i> Monitoring<span class="fa fa-chevron-down"></span></a>
 						<ul class="nav child_menu">
-							<li><a href="{{ url('dashboard/client-monitoring') }}">Client</a></li>
-							<li><a href="{{ url('dashboard/lead-monitoring') }}">Leads</a></li>
-							<li><a href="{{ url('dashboard/follow-up-monitoring') }}">Follow Up</a></li>
-							<li><a href="{{ url('dashboard/growth-chart') }}">Growth Chart</a></li>
+							<?php 
+								$pageNames = [
+										"client" => "Client",
+										"packages" => "Track Packages",
+										"lead" => "Leads",
+										"follow-up" => "Follow Ups" ,
+										"growth-chart" => "Growth Chart",
+									];
+							?>
+							@foreach ($pageNames as $pageNameKey => $pageName)
+								<li>
+									<a href="{{ url('dashboard/monitoring/'.$pageNameKey) }}">
+										{{ $pageName }}
+									</a>
+								</li>
+							@endforeach
 						</ul>
 					</li>
 					<li><a><i class="fa fa-bar-chart-o"></i>Activities<span class="fa fa-chevron-down"></span></a>

@@ -1,10 +1,11 @@
 <?php 
 
-	Route::post('todo/status', 'ToDoController@status');
-	Route::post('todo/remove', 'ToDoController@remove');
-	Route::post('todo/all/json', 'ToDoController@postAllJson');
-	Route::post('todo/all/html', 'ToDoController@postAllHtml');
-
+	Route::group(['prefix' => 'todo'], function (){
+		Route::post('status', 'ToDoController@status');
+		Route::post('remove', 'ToDoController@remove');
+		Route::post('all/json', 'ToDoController@postAllJson');
+		Route::post('all/html', 'ToDoController@postAllHtml');
+	});
 	Route::resource('todo', 'ToDoController');
 	
 	Route::get('profile/password', 'ProfileController@getPassword');
@@ -26,6 +27,11 @@
 
 		// contact resource 
 		Route::resource('contacts', 'ContactsController');
+	});
+
+	Route::group(['prefix' => 'monitoring'], function (){
+		Route::get('packages', 'TrackPackageController@index')
+					->name('packages.track');
 	});
 
 

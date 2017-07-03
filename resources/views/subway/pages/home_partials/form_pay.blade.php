@@ -1,6 +1,6 @@
 <form id="form_pay_now" action="{{ route('payPackage', [$token]) }}" data-parsley-validate="" method="post" class="form-horizontal form-label-left white" novalidate="">
 	<input type="hidden" name="back" value="{{ Request::fullUrl() }}">
-
+	{{ csrf_field() }}
 	<div class="form-group">
 		<label class="control-label col-md-4 col-sm-4 col-xs-12" for="name">Name <span class="required">*</span>
 		</label>

@@ -20,6 +20,7 @@
 									<th>Package Id</th>
 									<th>Client Name</th>
 									<th>Read Time</th>
+									<th>Duration</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -29,15 +30,21 @@
 									<td>{{ $track->package->uid }}</td>
 									<td>{{ $track->package->client->fullname }}</td>
 									<td>{{ $track->created_at }}</td>
+									<td>{{ $track->time_duration }}</td>
 									<td>
-										<div class="col-md-6 col-sm-6 col-xs-12 pull-right">
-											<a href="{{ route('openPackage', $track->package->token) }}" class="btn btn-block btn-success btn-xs">Open</a>
-										</div>
+										<a href="{{ route('openPackage', $track->package->token) }}" class="btn btn-success btn-xs">Open</a>
 									</td>
 								</tr>
 							@endforeach
 							</tbody>
 						</table>
+						<div class="row">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<span class="pull-right">
+									{{ $tracks->links() }}
+								</span>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

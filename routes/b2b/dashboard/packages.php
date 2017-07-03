@@ -26,5 +26,4 @@
 
 	Route::get('replica/{pid}', 'PackageController@makePackageRaplica');
 
-	Route::get('track', 'TrackPackageController@index');
 	Route::match(['get', 'post'], 'track/json', 'TrackPackageController@getActiveJson');

@@ -211,7 +211,7 @@
 					?>
 					$('#menu_track').append('{!! $trackJsHtml !!}');
 				});
-				$('#menu_track').append('<li><div class="text-center"><a href="{{ url('dashboard/package/track') }}"><strong>See All Track</strong><i class="fa fa-angle-right"></i></a></div></li>');
+				$('#menu_track').append('<li><div class="text-center"><a href="{{ route('packages.track') }}"><strong>See All Track</strong><i class="fa fa-angle-right"></i></a></div></li>');
 			}
 		});
 	}

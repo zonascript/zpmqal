@@ -1,4 +1,5 @@
 <script>
+
 	$(document).ready(function() {
 		$('.datepicker').daterangepicker({
 			singleDatePicker: true,
@@ -57,7 +58,7 @@
 	$(document).on('click', '.btn-reserve', function () {
 		var keys = ['name','mobile','email','date','pax'];
 		var isWrong = false;
-		var data  = {'format' : 'json'};
+		var data  = {'_token' : csrf_token, 'format' : 'json'};
 		var fromId = '#form_reserve';
 
 		$.each(keys, function (i, v) {
