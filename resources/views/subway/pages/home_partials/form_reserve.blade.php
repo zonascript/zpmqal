@@ -1,4 +1,4 @@
-<form id="form_reserve" data-parsley-validate="" class="form-horizontal form-label-left" action="{{ route('reservePackage', [$token]) }}" novalidate="" style="display: none;">
+<form id="form_reserve" data-parsley-validate="" class="form-horizontal form-label-left" action="{{ route('reservePackage', [$token]) }}" method="post" novalidate="" style="display: none;">
 	<input type="hidden" name="back" value="{{ Request::fullUrl() }}">
 	<div class="form-group">
 		<label class="control-label col-md-4 col-sm-4 col-xs-12" for="name">Name <span class="required">*</span>

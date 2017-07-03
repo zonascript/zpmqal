@@ -81,7 +81,7 @@
 
 		$.ajax({
 			url : "{{ route('reservePackage', [$token]) }}",
-			type : 'get',
+			type : 'post',
 			data : data,
 			dataType : 'JSON',
 			success : function (res) {
@@ -98,6 +98,10 @@
 						$(fromId).find('[data-error="'+i+'"]').text(v[0]);
 					});
 				}
+			},
+			error : function () {
+				alert('something went wrong.');
+				hideBookPopup();
 			}
 		});
 	});
