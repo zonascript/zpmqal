@@ -12,22 +12,20 @@
 						<select id="select_vendor" name="vendor">
 							<option id="op_vendor" value="">Lead From(Vendor)?</option>
 							@foreach ($leadVendors as $leadVendor)
-								<option 
-									value="{{ $leadVendor->id }}" name="vendor"
-									{{ isset($request->vendor) && $request->vendor == $leadVendor->id ? 'selected' : '' }}
-									>{{ $leadVendor->company_name }}
+								<option name="vendor" {{ old('vendor') == $leadVendor->id ? 'selected' : '' }}>
+									{{ $leadVendor->company_name }}
 								</option>
 							@endforeach
 						</select>
 
 						<input type="text" name="fullname" placeholder="Full Name" 
-							value="{{ isset($request->fullname) ? $request->fullname : '' }}" 
+							value="{{ old('fullname') }}" 
 						/>
 						<input type="text" name="mobile" placeholder="Mobile" maxlength="10"
-							value="{{ isset($request->mobile) ? $request->mobile : '' }}" 
+							value="{{ old('mobile') }}" 
 						/>
 						<input type="email" name="email" placeholder="Email" 
-							value="{{ isset($request->email) ? $request->email : '' }}" 
+							value="{{ old('email') }}" 
 						/>
 						{{-- <textarea name="note" placeholder="Message" onkeyup="adjust_textarea(this)"></textarea> --}}
 						<div class="row">

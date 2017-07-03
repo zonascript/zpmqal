@@ -3,15 +3,8 @@
 namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-// ===============================B2b Controller===============================
 use App\Http\Controllers\B2bApp\ClientController;
-
-use Auth;
-use Session;
 
 class EnquiryController extends Controller
 {
@@ -37,13 +30,11 @@ class EnquiryController extends Controller
 	 */
 	public function create()
 	{
-		$auth = Auth::user();
+		$auth = auth()->user();
 
 		$leadVendors = $auth->admin->leadVendors;
-		$request = Session::has('request') ? Session::get('request') : [];
 		$blade = [
 				"leadVendors" => $leadVendors,
-				"request" => $request
 			];
 
 		return view('b2b.protected.dashboard.pages.enquiry.create', $blade);
@@ -57,8 +48,6 @@ class EnquiryController extends Controller
 	 */
 	public function store(Request $request)
 	{
-		Session::flash('request', (object) $request->input());
-
 		$this->validate($request, [
 			'vendor' => 'required',
 			'fullname' => 'required|max:255',
@@ -67,36 +56,17 @@ class EnquiryController extends Controller
 		]);
 
 
-		$client = ClientController::call()
-							->model()
-								->findByMobileEmail($request->mobile, $request->mobile);
-		if (is_null($client)) {
-			$auth = Auth::user();
-			$client = ClientController::call()->model();
-			$client->user_id = $auth->id;
-			$client->lead_vendor_id = $request->vendor;
-			$client->fullname = $request->fullname;
-			$client->mobile = $request->mobile;
-			$client->email = $request->email;
-			// $client->note = $request->note;
-			$client->status = 'active';
-			$client->save();
-		}
-		else{
-			$client->fullname = $request->fullname." (".$client->fullname.")";
+		$client = ClientController::call()->model()
+							->duplicateOrNew($request->mobile, $request->mobile);
 
-			if ($client->mobile == $request->mobile) {
-				$client->note = 'Other email: '.$client->email.'.';
-			}
-			elseif ($client->email == $request->email){
-				$client->note = 'Other mob: '.$client->mobile.'.';
-			}
-			
-			$client->mobile = $request->mobile;
-			$client->email = $request->email;
-			$client->status = 'active';
-			$client->save();
-		}
+		$auth = auth()->user();
+		$client->user_id = $auth->id;
+		$client->lead_vendor_id = $request->vendor;
+		$client->fullname = $request->fullname;
+		$client->mobile = $request->mobile;
+		$client->email = $request->email;
+		$client->status = 'active';
+		$client->save();
 
 		return redirect(route('createRoute',$client->id));
 	}

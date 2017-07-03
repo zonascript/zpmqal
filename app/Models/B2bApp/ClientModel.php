@@ -3,8 +3,7 @@
 namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
-use DB;
-use Auth;
+use App\Models\B2bApp\ClientAliasModel;
 
 class ClientModel extends Model
 {
@@ -31,6 +30,11 @@ class ClientModel extends Model
 	}
 
 
+	public function aliases()
+	{
+		return $this->hasMany(ClientAliasModel::class, 'client_id');
+	}
+
 	public function leadVendor(){
 		return $this->belongsTo('App\Models\AdminApp\LeadVendorModel', 'lead_vendor_id');
 	}
@@ -38,7 +42,7 @@ class ClientModel extends Model
 
 	public function findByUser($id = null)
 	{
-		$auth = Auth::user();
+		$auth = auth()->user();
 		$where = ['user_id' => $auth->id];
 		if ($id) $where['id'] = $id;
 
@@ -50,29 +54,50 @@ class ClientModel extends Model
 	{
 		$result = $this->findByUser($id);
 		if (is_null($result)) {
-			$this->exitView();
+			exitView();
 		}
 		return $result;
-	}
-
-	public function exitView()
-	{
-		$blade = ["url" => urlReport()];
-		exit(view('b2b.protected.dashboard.404_main', $blade)->render());
 	}
 
 
 	public function findByMobileEmail($mobile, $email)
 	{
+		$auth = auth()->user();
 		$client = $this->select()
-							->where([["status", "<>", "deleted"]])
+							->where([
+										"user_id" => $auth->id,
+										["status", "<>", "deleted"]
+									])
 								->where(function ($query) use ($mobile, $email){
-										$query->where(["mobile" => $mobile])
-													->orWhere(["email" => $email]);
-									})
+											$query->where(["mobile" => $mobile])
+														->orWhere(["email" => $email]);
+										})
 									->first();
+		
 		return $client;
 	}
 
+
+	public function duplicateOrNew($mobile, $email)
+	{
+		$client = $this->findByMobileEmail($mobile, $email);
+
+		if (!is_null($client)) {
+			$alias = new ClientAliasModel;
+			$alias->client_id = $client->id;
+			$alias->user_id = $client->user_id;
+			$alias->lead_vendor_id = $client->lead_vendor_id;
+			$alias->fullname = $client->fullname;
+			$alias->mobile = $client->mobile;
+			$alias->email = $client->email;
+			$alias->created_at = $client->updated_at;
+			$alias->save();
+		}
+		else{
+			$client = new ClientModel;
+		}
+
+		return $client;
+	}
 
 }

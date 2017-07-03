@@ -3,14 +3,9 @@
 namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-/*=====================================Models=====================================*/
 use App\Models\B2bApp\ClientModel;
-use DB;
-use Auth;
+use App\Models\B2bApp\ClientAliasModel;
 
 
 /*
@@ -29,16 +24,21 @@ class ClientController extends Controller
 		return new ClientModel;
 	}
 
+	public function aliasModel()
+	{
+		return new ClientAliasModel;
+	}
+
 
 	public function all(){
-		$auth = Auth::user();
+		$auth = auth()->user();
 
 		$clients = $this->model()
 											->where([
 														'user_id' => $auth->id,
 														['status', '<>', 'deleted']
 													])
-												->get();;
+												->get();
 
 		return $clients;
 	}
@@ -55,7 +55,7 @@ class ClientController extends Controller
 
 	public function pendingClients()
 	{
-		$auth = Auth::user();
+		$auth = auth()->user();
 
 		return $this->model()
 						->select('id', 'fullname', 'mobile', 'note', 'created_at')
