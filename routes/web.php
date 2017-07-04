@@ -30,5 +30,5 @@ Route::group(['domain' => env('ITINERARY_DOMAIN')], function () {
 });
 
 if (env('IS_LOCALHOST')) {
-	include('temp.php');
+	include('mylocal/web.php');
 }

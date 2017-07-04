@@ -1,7 +1,7 @@
 <?php
 
-
 	Route::group(['namespace' => 'CommonApp'], function(){
+		
 		Route::any(
 						'secure/payment/{status}/{txnid}', 
 						'PayuPaymentsController@response'
@@ -28,3 +28,4 @@
 		Route::get('airline/names', 'AirlinesController@names')
 						->name('airlines.name');
 	});
+

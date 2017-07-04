@@ -8,5 +8,7 @@ Homestead.yaml
 /vendor
 /stackOverflow
 /storage/mylocal
+/routes/mylocal
+/app/Http/Controllers/LocalApp
 **/.trash/
 **/.temp/
