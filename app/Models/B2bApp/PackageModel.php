@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\B2bApp\ItineraryController;
 use App\Models\B2bApp\PackageActivityModel;
 use Carbon\Carbon;
-use Auth;
 use DB;
 
 
@@ -123,22 +122,21 @@ class PackageModel extends Model
 
 	public function findByToken($token)
 	{
-		return $this->where(['token' => $token])->first();
+		$auth = auth()->user();
+		return $this->where([
+												'token' 	=> $token, 
+												'user_id' => $auth->id
+											])
+										->first();
 	}
 
 
 	public function findByTokenOrExit($token, $next_auth = true)
 	{
 		$result = $this->findByToken($token);
-		$next_check = false;
-
-		if ($next_auth) {
-			$auth = Auth::user();
-			$next_check = $result->user_id != $auth->id;
-		}
-
-		if (is_null($result) || $next_check) {
-			$this->exitView();
+		
+		if (is_null($result)) {
+			exitView();
 		}
 
 		return $result;

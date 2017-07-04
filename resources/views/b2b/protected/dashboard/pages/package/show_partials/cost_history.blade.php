@@ -6,7 +6,7 @@
 		</ul>
 		<div class="clearfix"></div>
 	</div>
-	<div class="x_content">
+	<div class="x_content max-height-350px scroll-auto scroll-bar">
 
 		<table class="table table-striped">
 			<thead>

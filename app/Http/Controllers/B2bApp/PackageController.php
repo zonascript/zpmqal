@@ -62,6 +62,7 @@ class PackageController extends Controller
 	public function open($token)
 	{
 		$package = $this->model()->findByTokenOrExit($token);
+		dd($package);
 		TrackPackageController::call()->inactiveOld($package->id);
 		$bladeData = [
 					"package" => $package,

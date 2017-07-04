@@ -55,7 +55,7 @@ class TrackPackageController extends Controller
 		$tracks = [];
 		if ($activeTracks->count()) {
 			foreach ($activeTracks as $track) {
-				$tracks[] = [
+				$tracks[$track->package->id] = [
 						"pid" => $track->package->id,
 						"package_id" => $track->package->uid,
 						"url" => route('openPackage',$track->package->token),
@@ -64,8 +64,8 @@ class TrackPackageController extends Controller
 					];
 			}
 		}
-
-		return json_encode($tracks);
+		$tracks = json_encode(array_values($tracks));
+		return $tracks;
 	}
 
 

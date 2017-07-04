@@ -11,12 +11,17 @@ use Carbon\Carbon;
 use App\Mail\VerifyMail;
 use Crypt;
 use App\Models\ItineraryApp\PaymentModel;
+use Carbon\CarbonInterval;
 
 class TestController extends Controller
 {
 
 	public function testCode()
 	{
+		dd(convertSeconds(93000, false));
+		CarbonInterval::setLocale('en');
+		echo CarbonInterval::seconds(400);
+		dd(Carbon::createFromFormat('s', '05')->diffForHumans());
 		$new = new \App\Models\B2bApp\TrackPackageModel;
 		$new->package_id = 1;
 		$new->ip = 1;

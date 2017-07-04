@@ -825,6 +825,43 @@ function convertInHourMin($time){
 	}
 }
 
+function convertSeconds($seconds, $full = true)
+{  
+	$dt1 = new DateTime("@0");  
+	$dt2 = new DateTime("@$seconds");
+	$diff = $dt1->diff($dt2);
+
+	$array = [];
+
+	if ($full) {
+		$array = [
+				"day"		 => $diff->days,
+				"hour"	 => $diff->h,
+				"minute" => $diff->i,
+				"second" => $diff->s,
+			];
+	}
+	else{
+		$array = [
+				"day"		 => $diff->days,
+				"h"	 => $diff->h,
+				"min" => $diff->i,
+				"sec" => $diff->s,
+			];
+	}
+
+	$word = '';
+	foreach ($array as $key => $value) {
+		if ($value) {
+			$newKey = $value > 1 && $full ? $key.'s' : $key;
+			$word .= $value." ".$newKey." ";
+		}
+	}
+
+	return $word;
+	// return ->format('%a days, %h hours, %i minutes and %s seconds');
+}  
+
 
 function starRating($count){
 	$stars = '';

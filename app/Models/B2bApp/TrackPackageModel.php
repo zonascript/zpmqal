@@ -18,6 +18,11 @@ class TrackPackageModel extends Model
 		return $this->belongsTo('App\Models\B2bApp\PackageModel', 'package_id');
 	}
 
+	public function getTimeDurationAttribute($value)
+	{
+		return convertSeconds($value,false);
+	}
+
 
 	public function fatchTracks($take = 25)
 	{
