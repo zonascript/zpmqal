@@ -417,6 +417,8 @@
 			$('#'+elem_id).append(html);
 		});
 
+		dataIsPulled(rid);					
+		filter.initFilter(rid);
 	}
 
 
