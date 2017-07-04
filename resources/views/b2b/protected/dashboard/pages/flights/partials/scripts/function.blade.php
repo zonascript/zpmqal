@@ -326,6 +326,9 @@
 		var html = '@include($viewPath.'.partials.custom_flight')';
 		$(parent).append(html);
 		initDatetimePicker(parent);
+		$("html, body").animate({ 
+			scrollTop: $(document).height()-$(window).height()
+		});
 	}
 
 	function addCustomFlightCart(thisObj) {
