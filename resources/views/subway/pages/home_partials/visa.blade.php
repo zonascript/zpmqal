@@ -11,16 +11,18 @@
 					<?php
 						$visaDetail = $route->visaDetail();
 					?>
-					<li>
-						<div class="content clearfix">
-							{{-- <img height="195" width="195" class="align-left" alt="{{ $accomo->name }}" src="{{ $accomo->image }}" /> --}}
-							<h2 class="m-top-5"><b>{!! $visaDetail->country !!} VISA</b></h2>
-							<p>
-								<div>{!! $visaDetail->contacts !!}</div>
-							</p>
-							<p>{!! $visaDetail->details !!}</p>
-						</div>
-					</li>
+					@if (!is_null($visaDetail))
+						<li>
+							<div class="content clearfix">
+								{{-- <img height="195" width="195" class="align-left" alt="{{ $accomo->name }}" src="{{ $accomo->image }}" /> --}}
+								<h2 class="m-top-5"><b>{!! $visaDetail->country !!} VISA</b></h2>
+								<p>
+									<div>{!! $visaDetail->contacts !!}</div>
+								</p>
+								<p>{!! $visaDetail->details !!}</p>
+							</div>
+						</li>
+					@endif
 				@endforeach
 			</ul>
     </div>
