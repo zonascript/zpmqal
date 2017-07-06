@@ -5,13 +5,13 @@
 		</h1>
 	</header>
 	<div class="gi-carousel-main height-300px">
-    <div class="GICarousel visa carousel-box GI_C_wrapper">
-      <ul class="GI_IC_items height-100p scroll-auto scroll-bar" style="{{ $package->accomoRoutes->count() == 1 ? "display: block;" : ''}}">
+		<div class="GICarousel visa carousel-box GI_C_wrapper">
+			<ul class="GI_IC_items height-100p scroll-auto scroll-bar" style="{{ $package->accomoRoutes->count() == 1 ? "display: block;" : ''}}">
+				<?php $done = []; ?>
 				@foreach ($package->accomoRoutes as $key => $route)
-					<?php
-						$visaDetail = $route->visaDetail();
-					?>
-					@if (!is_null($visaDetail))
+					<?php $visaDetail = $route->visaDetail(); ?>
+					@if (!is_null($visaDetail) && !in_array($visaDetail->country, $done))
+						<?php $done[] = $visaDetail->country; ?>
 						<li>
 							<div class="content clearfix">
 								{{-- <img height="195" width="195" class="align-left" alt="{{ $accomo->name }}" src="{{ $accomo->image }}" /> --}}
@@ -25,9 +25,9 @@
 					@endif
 				@endforeach
 			</ul>
-    </div>
-  </div>
+		</div>
+	</div>
 	<script type="text/javascript">
-		$('.visa.carousel-box0').GICarousel({arrows:true});
+		$('.visa.carousel-box').GICarousel({arrows:true});
 	</script>
 </article>
