@@ -7,13 +7,13 @@
 		</header>
 		
 		<div class="gi-carousel-main">
-	    <div class="GICarousel carousel-box GI_C_wrapper">
-	      <ul class="GI_IC_items" style="{{ $package->accomoRoutes->count() == 1 ? "display: block;" : ''}}">
-		      @foreach ($package->accomoRoutes as $key => $route)
+			<div class="GICarousel carousel-box GI_C_wrapper">
+				<ul class="GI_IC_items" style="{{ $package->accomoRoutes->count() == 1 ? "display: block;" : ''}}">
+					@foreach ($package->accomoRoutes as $key => $route)
 						<?php
 							$accomo = $route->accomo();
 						?>
-		        <li>
+						<li>
 							<div class="content clearfix">
 								<img height="195" width="195" class="align-left" alt="{{ $accomo->name }}" src="{{ $accomo->image }}" />
 								<h2 class="m-top-5">{{ $accomo->name }} {!! $accomo->starRatingHtml !!} <small>({{$route->mode}})</small></h2>
@@ -31,12 +31,12 @@
 							@endif
 						</li>
 					@endforeach
-	      </ul>
-	    </div>
-	  </div>
+				</ul>
+			</div>
+		</div>
 		<script type="text/javascript">
 			$('.carousel-box').GICarousel({arrows:true});
-  	</script>
+		</script>
 	</article>
 	<div class="links">
 		<a href="{{ $urlObj->url('accommodation') }}" title="show more">show more</a>

@@ -77,6 +77,8 @@ class RouteModel extends Model
 	}
 
 
+
+
 	public function getStartDatetimeAttribute()
 	{
 		$startDateTime = $this->attributes['start_date'].' '.
@@ -281,6 +283,16 @@ class RouteModel extends Model
 		}
 		elseif ($this->mode == 'cruise') {
 			$result = $this->cruiseDetail();
+		}
+		return $result;
+	}
+
+
+	public function visaDetail()
+	{
+		$result = null;
+		if (in_array($this->mode, ['hotel', 'cruise'])) {
+			$result = $this->destination_detail->visaDetail;
 		}
 		return $result;
 	}

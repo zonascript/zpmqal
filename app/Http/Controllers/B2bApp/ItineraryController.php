@@ -4,18 +4,13 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// =================================B2b Controller=================================
 use App\Http\Controllers\B2bApp\RouteController;
 use App\Http\Controllers\B2bApp\ClientController;
 use App\Http\Controllers\B2bApp\CruisesController;
 use App\Http\Controllers\B2bApp\HotelsController;
 use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\B2bApp\ActivitiesController;
-
-
-// =====================================Session====================================
-use Auth;
+use App\Models\B2bApp\PackageModel;
 
 
 class ItineraryController extends Controller
@@ -37,7 +32,7 @@ class ItineraryController extends Controller
 		return $this->itinerary($package);
 	}
 
-	public function itinerary($package)
+	public function itinerary(PackageModel $package)
 	{
 		$itinerary = [];
 		foreach ($package->routes as $routeKey => $route) {
@@ -154,20 +149,26 @@ class ItineraryController extends Controller
 						$tempActivities[$date]['names'][] =  $activity->name;
 						if (!isset($tempActivities[$date]['activityImages'])) {
 							$tempActivities[$date]['activityImages'] = [];
+							$itinerary[$date]['activities'] = [];
 						}
-						$tempActivities[$date]['activityImages'] = array_merge($tempActivities[$date]['activityImages'],$activity->images);
+						$tempActivities[$date]['activityImages'] = array_merge(
+												$tempActivities[$date]['activityImages'],
+												$activity->images
+											);
+						$itinerary[$date]['activities'][] = $activity;
 					}
 
 					// pushing temp activities in to itinarary
 					foreach ($tempActivities as $tempActivityKey => $tempActivity) {
 						$itinerary[$tempActivityKey]['body'][] = [ 
-								'activity' => 'Depart for exciting activities ('.implode(', ', $tempActivity['names']).').'
+								'activity' => 'Depart for exciting activities'
+										// .' ('.implode(', ', $tempActivity['names']).').'
 							];
 
 						if (isset($itinerary[$tempActivityKey]['activityImages'])) {
 							$itinerary[$tempActivityKey]['activityImages'] = 
-											array_merge($itinerary[$tempActivityKey]['activityImages'], 
-												$tempActivity['activityImages']);
+									array_merge($itinerary[$tempActivityKey]['activityImages'], 
+									$tempActivity['activityImages']);
 						}
 						else{
 							$itinerary[$tempActivityKey]['activityImages'] = $tempActivity['activityImages'];
@@ -321,8 +322,5 @@ class ItineraryController extends Controller
 
 		return rejson_decode($itineraries);
 	}
-
-
-
-
+	
 }

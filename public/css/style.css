@@ -329,6 +329,7 @@
 .font-gold{ color: #ffd119 !important;}
 .font-orenge{ color: #f2930e !important;}
 .font-dark-red{ color: #ce5d5d !important; }
+.font-light-blue{ color: #adceea !important; }
 
 /*font-size*/
 .font-size-0{ font-size: 0px ! important; }
@@ -665,6 +666,7 @@
 .m-top-130{ margin-top: 130px ! important; }
 .m-top-135{ margin-top: 135px ! important; }
 
+.m-right-n-5{ margin-right: -5px ! important; }
 .m-right-0{ margin-right: 0 ! important; }
 .m-right-5{ margin-right: 5px ! important; }
 .m-right-10{ margin-right: 10px ! important; }

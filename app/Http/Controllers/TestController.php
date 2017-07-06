@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\MyLibrary\Verdant\XML2Array;
 use App\Http\Controllers\B2bApp\PackageController;
+use App\Http\Controllers\B2bApp\ItineraryController;
 use App\Http\Controllers\B2bApp\RoutePackageModesController;
 use App\Http\Controllers\FlightApp\QpxFlightsController;
 use App\Models\HotelApp\HotelModel;
@@ -16,8 +17,16 @@ use Carbon\CarbonInterval;
 class TestController extends Controller
 {
 
+	public function itineraryByRoute()
+	{
+		$package = PackageController::call()->model()->find(362);
+		return ItineraryController::call()->itinerary($package);
+	}
+
 	public function testCode()
 	{
+
+		// ddp($this->itineraryByRoute());
 		dd(convertSeconds(93000, false));
 		CarbonInterval::setLocale('en');
 		echo CarbonInterval::seconds(400);

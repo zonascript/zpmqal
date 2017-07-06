@@ -29,5 +29,6 @@
         </div>
       </div>
     </div>
+    @include('subway.pages.itinerary_partials.scripts')  
   </body>
 </html>

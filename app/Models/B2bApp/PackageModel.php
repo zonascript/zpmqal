@@ -123,11 +123,13 @@ class PackageModel extends Model
 	public function findByToken($token)
 	{
 		$auth = auth()->user();
-		return $this->where([
-												'token' 	=> $token, 
-												'user_id' => $auth->id
-											])
-										->first();
+		$where = ['token' 	=> $token];
+		
+		if (!is_null($auth)) {
+			$where['user_id'] = $auth->id;
+		}
+
+		return $this->where($where)->first();
 	}
 
 

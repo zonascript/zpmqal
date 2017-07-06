@@ -133,6 +133,14 @@ class DestinationModel extends Model
 
 
 
+	public function visaDetail()
+	{
+		return $this->hasOne('App\Models\CommonApp\VisaDetailModel', 'country', 'country');
+	}
+
+
+
+
 	public function search($value)
 	{
 		return $this->select()

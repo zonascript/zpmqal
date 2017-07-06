@@ -42,6 +42,17 @@
 							<div class="row font-size-0" style="color:transparent;">
 								@include('subway.pages.home_partials.slideshow')
 							</div>
+							<div class="row">
+								<section id="content" class="grid-block m-right-n-5">
+									<div id="system">
+										<div class="items items-col-1 grid-block">
+											<div class="grid-box width100">
+												@include('subway.pages.home_partials.visa')
+											</div>
+										</div>
+									</div>
+								</section>
+							</div>
 						</div>
 					</div>
 					{{-- @include('subway.pages.home_partials.footer') --}}

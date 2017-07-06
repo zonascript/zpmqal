@@ -25,6 +25,10 @@ class ActivityModel extends Model
 		return 'f';
 	}
 
+	public function getNameAttribute($value)
+	{
+		return str_replace(['(', ')'], ['',''], $value);
+	}
 
 	public function getImageUrlAttribute()
 	{

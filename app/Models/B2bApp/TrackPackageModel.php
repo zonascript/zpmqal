@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class TrackPackageModel extends Model
 {
 	protected $table = 'track_packages';
+	protected $appends = ['stay_time'];
 	
 	public static function call()
 	{
@@ -18,9 +19,9 @@ class TrackPackageModel extends Model
 		return $this->belongsTo('App\Models\B2bApp\PackageModel', 'package_id');
 	}
 
-	public function getTimeDurationAttribute($value)
+	public function getStayTimeAttribute()
 	{
-		return convertSeconds($value,false);
+		return convertSeconds($this->time_duration,false);
 	}
 
 

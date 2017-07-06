@@ -30,7 +30,7 @@
 									<td>{{ $track->package->uid }}</td>
 									<td>{{ $track->package->client->fullname }}</td>
 									<td>{{ $track->created_at }}</td>
-									<td>{{ $track->time_duration }}</td>
+									<td>{{ $track->stay_time }}</td>
 									<td>
 										<a href="{{ route('openPackage', $track->package->token) }}" class="btn btn-success btn-xs">Open</a>
 									</td>

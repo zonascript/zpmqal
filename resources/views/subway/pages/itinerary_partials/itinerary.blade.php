@@ -17,7 +17,33 @@
 								@foreach ($itinerary->body as $body)
 									@foreach ($body as $key => $value)
 										<h2 class="title c-title i-{{$key}}">
-											<p class="excerpt sans-serif font-size-14">{!!$value!!}</p>
+											<p class="excerpt sans-serif font-size-14">
+												{!!$value!!}
+												@if ($key == 'activity')
+													<?php 
+														$activityTags = []; 
+														foreach ($itinerary->activities as $activiyKey => $activity) {
+															$activityTags[] = '<a class="toggle-activity btn btn-link font-light-blue nopadding nomargin" data-id="'.$activity->ukey.'" >'.$activity->name.'</a>';
+														}
+													?>
+													{!! '('.implode(', ', $activityTags).')' !!}
+												@endif
+												@if ($key == 'activity')
+													@foreach ($itinerary->activities as $activiyKey => $activity)
+														<div id="{{ $activity->ukey }}" style="display: none;">
+															<h3>{{ $activity->name }}</h3>
+															<ul>
+																<li class="noborder">
+																	{{ $activity->description }}
+																</li>
+															</ul>
+															@if ($activiyKey != (count($itinerary->activities)-1))
+																<hr>
+															@endif
+														</div>
+													@endforeach
+												@endif
+											</p>
 										</h2>
 									@endforeach
 								@endforeach
@@ -26,7 +52,6 @@
 					</li>
 				@endforeach
 			</ul>
-
 		</div>
 	</div>
 </article>
