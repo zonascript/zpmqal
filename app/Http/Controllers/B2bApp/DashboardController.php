@@ -7,32 +7,35 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\View;
+use App\Http\Controllers\B2bApp\ClientController;
 ini_set('max_execution_time', 180);
 
 
 class DashboardController extends Controller
 {
+	public $viewPath = 'b2b.protected.dashboard.pages.index';
+
 	public function getIndex($page = 'index'){
 
 		if (View::exists('b2b.protected.dashboard.pages.'.$page.'.index')) {
 			
-			// $client = ClientController::call()->all();
-
+			$newClient = new ClientController;
+			$clientStatus = $newClient->model()->clientStatusData();
+			$vendorReport = $newClient->model()->vendorReportToArray();
 			/*
 			| this is for time or clock which is showing time,
 			| in that checking into that array which is second paramenter 
 			| that page is in array if yes then show clock
 			*/
 			$onload = '';
+
 			/* this code for clock
 			if (in_array($page, ['index'])) {
 				$onload = 'onload=startTime()';
 			}*/
 
 			$currenciesArray = ["USD", "SGD", "EUR", "AED", "IDR"];
-
 			$currencies = [];
-
 			
 			foreach ($currenciesArray as $currenciesValue) {
 				$exchange = currencyExchange($currenciesValue, "INR");
@@ -41,23 +44,23 @@ class DashboardController extends Controller
 				$currencies[$currenciesValue] = $rate;
 			}
 
-			// var_dump(max($currencies));
 			$maxCurrency = max($currencies);
 			$currencies = rejson_decode($currencies);
-			
-			// dd($currencies);
-			// ===============================Blade Object===============================
 
+			// =================Blade Object=================
 			// $travelFeeds = travelFeed();
-			// dd_pre_echo($travelFeeds);
 
 			$blade = [
 					"other" => (object)["onload" => $onload],
 					// "travelFeeds" => $travelFeeds,
-					"currencyData" =>(object)["currencies" => $currencies, "maxCurrency" => $maxCurrency],
+					"currencyData" =>(object)[
+								"currencies" => $currencies, 
+								"maxCurrency" => $maxCurrency
+							],
+					"viewPath" => $this->viewPath,
+					"clientStatus" => $clientStatus,
+					"vendorReport" => $vendorReport,
 				];
-
-			// dd($blade);
 
 			return view('b2b.protected.dashboard.pages.'.$page.'.index', $blade);
 		}

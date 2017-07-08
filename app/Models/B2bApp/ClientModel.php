@@ -100,4 +100,40 @@ class ClientModel extends Model
 		return $client;
 	}
 
+
+	public function clientStatusData()
+	{
+		$auth = auth()->user();
+		$userQuery = 'user_id = '.$auth->id;
+		$query = "COUNT(*) as total, (SELECT COUNT(*) FROM `clients` WHERE status = 'deleted' AND ".$userQuery.") as deleted, (SELECT COUNT(*) FROM `clients` WHERE status = 'pending' AND ".$userQuery.") as pending, (SELECT COUNT(*) FROM `clients` WHERE date(created_at) = '".date('Y-m-d')."' AND ".$userQuery.") as todays, (SELECT COUNT(*) FROM `follow_ups` WHERE date(datetime) = '".date('Y-m-d')."' AND ".$userQuery.") as follow_ups";
+
+		return $this->select(\DB::raw($query))
+									->where(['user_id' => $auth->id])
+										->first();
+	}
+
+	public function vendorReport()
+	{
+		// SELECT `lead_vendor_id`, COUNT(*) AS times FROM `clients` WHERE user_id = 1 GROUP BY `lead_vendor_id`
+		$auth = auth()->user();
+		$query = "COUNT(*) AS times";
+		return $this->select('lead_vendor_id', \DB::raw($query))
+									->where(['user_id' => $auth->id])
+										->groupBy('lead_vendor_id')
+											->get();
+	}
+
+
+	public function vendorReportToArray()
+	{
+		$data = $this->vendorReport();
+		$key = [];
+		$value = [];
+		foreach ($data as $client) {
+			$key[] = $client->leadVendor->company_name;
+			$value[] = $client->times;  
+		}
+		return (object)["key" => $key, 'value' => $value];
+	}
+
 }

@@ -3,7 +3,7 @@
 <meta nema="tracker" content="" />
 
 
-<link rel="shortcut icon" href="{{ url('/') }}/favicon.ico" />
+<link rel="shortcut icon" href="{{ url('/') }}/favicon.png" />
 
 {{-- Bootstrap --}}
 <link href="{{ commonAsset('dashboard/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">

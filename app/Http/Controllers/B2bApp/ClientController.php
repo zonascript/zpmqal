@@ -32,14 +32,12 @@ class ClientController extends Controller
 
 	public function all(){
 		$auth = auth()->user();
-
 		$clients = $this->model()
 											->where([
 														'user_id' => $auth->id,
 														['status', '<>', 'deleted']
 													])
 												->get();
-
 		return $clients;
 	}
 
@@ -65,5 +63,6 @@ class ClientController extends Controller
 									])
 								->get();
 	}
+
 
 }

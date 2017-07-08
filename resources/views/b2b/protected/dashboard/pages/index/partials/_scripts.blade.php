@@ -85,15 +85,11 @@
 			var mybarChart = new Chart(ctx, {
 				type: 'bar',
 				data: {
-					labels: ["January", "February", "March", "April", "May", "June", "July"],
+					labels: {!! json_encode($vendorReport->key) !!},
 					datasets: [{
-						label: '# of Votes',
+						label: 'Client From',
 						backgroundColor: "#26B99A",
-						data: [51, 30, 40, 28, 92, 50, 45]
-					}, {
-						label: '# of Votes',
-						backgroundColor: "#03586A",
-						data: [41, 56, 25, 48, 72, 34, 12]
+						data: {!! json_encode($vendorReport->value) !!}
 					}]
 				},
 
