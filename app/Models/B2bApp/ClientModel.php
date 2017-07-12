@@ -176,8 +176,10 @@ class ClientModel extends Model
 		$key = [];
 		$value = [];
 		foreach ($data as $client) {
-			$key[] = $client->leadVendor->company_name;
-			$value[] = $client->times;  
+			if (!is_null($client->leadVendor)) {
+				$key[] = $client->leadVendor->company_name;
+				$value[] = $client->times;  
+			}
 		}
 		return (object)["key" => $key, 'value' => $value];
 	}
