@@ -4,12 +4,8 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ================================B2b Controller================================
 use App\Http\Controllers\B2bApp\ClientController;
 use App\Http\Controllers\B2bApp\PackageController;
-
-// ====================================Models====================================
 use App\Models\B2bApp\RouteModel;
 use App\Models\B2bApp\PackageActivityModel;
 
@@ -32,15 +28,17 @@ class RouteController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create($id, $token = null)
+	public function create($ctoken, $token = null)
 	{
-		$client = ClientController::call()->model()->findByUser($id);
+		$client = ClientController::call()
+							->model()->findByTokenOrFail($ctoken);
+
 		$packageController = new PackageController;
 
 		if (is_null($token)) {
-			$package = $packageController->createTemp($id);
+			$package = $packageController->createTemp($ctoken);
 			$token = $package->token;
-			return redirect('dashboard/package/route/'.$id.'/'.$token);
+			return redirect()->route('createRoute', [$ctoken, $token]);
 		}
 		else{
 			$package = $packageController->model()->findByTokenOrExit($token);
@@ -61,17 +59,17 @@ class RouteController extends Controller
 
 		$startDate = date_formatter($request->startDate,'d/m/Y');
 
-		// ================Making Data for package inserting row=================
+		// =====Making Data for package inserting row======
 		$pacakgeData = (object)[
 				"req" => $request->req,
 				"start_date" => $startDate, 
 				"guests_detail" => $request->roomGuests,
 			];
 
-		// =================making package controller new object=================
+		// ========making package controller new object========
 		$packageController = new PackageController;
 
-		// ========================updating package here=========================
+		// ======updating package here=======
 		$package = $packageController->packageUpdate($request->pid, $pacakgeData);
 		$nextEvent = $packageController->findEvent($request->pid);
 
@@ -268,12 +266,12 @@ class RouteController extends Controller
 		$request->route = rejson_decode($request->route);
 
 		$nights = 0;
-		// =======================Calculation Total Nights=======================
+		// =====Calculation Total Nights=====
 		foreach ($request->route as $routeKey => $routeValue) {
 			$nights += isset($routeValue->nights) ? $routeValue->nights : 0;			
 		}
 
-		// ================Making Data for package inserting row=================
+		// =======Making Data for package inserting row========
 
 		$startDate = date_formatter($request->startDate,'d/m/Y');
 
@@ -285,11 +283,11 @@ class RouteController extends Controller
 				"req" => $request->req
 			];
 
-		// ========================creating package here=========================
+		// ======creating package here=======
 		$package = PackageController::call()->createNew($id, $pacakgeData);
 
 
-		// =============================initializing=============================
+		// ==initializing==
 		$previousNights = 0;
 		$firstRouteDbId = null;
 
@@ -297,7 +295,7 @@ class RouteController extends Controller
 		
 		foreach ($request->route as $key => $value) {
 
-			// =============================overwrited=============================
+			// ==overwrited==
 			$startDate = addDaysinDate($startDate, $previousNights);
 			$startDate = isset($value->origin_time) 
 								 ? $startDate.' '.timeFull($value->origin_time).':00'
@@ -305,7 +303,7 @@ class RouteController extends Controller
 
 			$previousNights = isset($value->nights) ? $value->nights : 0;
 
-			// ============================saving Route============================
+			// =saving Route=
 		
 
 			$route = new RouteModel;
@@ -322,7 +320,7 @@ class RouteController extends Controller
 			$route->save();
 			
 
-			// ===================storing first route id here===================
+			// =storing first route id here=
 			if ($firstRouteDbId == null) {
 				$firstRouteDbId =  $route->id;
 			}

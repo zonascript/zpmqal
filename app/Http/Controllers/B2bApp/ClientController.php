@@ -35,7 +35,7 @@ class ClientController extends Controller
 		$clients = $this->model()
 											->where([
 														'user_id' => $auth->id,
-														['status', '<>', 'deleted']
+														['is_active', '<>', 0]
 													])
 												->get();
 		return $clients;
@@ -46,7 +46,7 @@ class ClientController extends Controller
 	{
   	return $this->model()
 									->where(['id' => $id])
-										->update(['status' => 'active']);
+										->update(['is_active' => 1]);
 
 	}
 
@@ -59,7 +59,7 @@ class ClientController extends Controller
 						->select('id', 'fullname', 'mobile', 'note', 'created_at')
 							->where([
 										'user_id' => $auth->id,
-										'status' => 'pending'
+										'is_active' => 3
 									])
 								->get();
 	}

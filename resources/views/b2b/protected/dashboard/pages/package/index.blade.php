@@ -87,7 +87,7 @@
 							@forelse ($packages as $package)
 								<tr>
 									<td>
-										{{ getPackageId($package->id) }}
+										{{ $package->uid }}
 									</td>
 									<td>
 										{{ $package->created_at }}
@@ -111,6 +111,11 @@
 							@endforelse
 						</tbody>
 					</table>
+					<div class="row">
+						<span class="pull-right">
+							{{ $packages->links() }}
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -123,18 +128,15 @@
 	{{-- Datatables --}}
 	<script src="{{ commonAsset('dashboard/vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 	<script src="{{ commonAsset('dashboard/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
-		
+	<script src="{{ asset('js/mydatatable.js') }}"></script>
+	{{-- /Datatables --}}
 @endsection
 
 
 @section('scripts')
-	{{-- Datatables --}}
 	<script>
 		$(document).ready(function() {
-			$('#datatable').dataTable({
-				"pageLength": 50
-			});
+			datatableWithSearch('#datatable');
 		});
 	</script>
-	{{-- /Datatables --}}
 @endsection

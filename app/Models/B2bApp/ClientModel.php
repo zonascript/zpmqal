@@ -4,6 +4,7 @@ namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\B2bApp\ClientAliasModel;
+use App\Models\B2bApp\PackageModel;
 
 class ClientModel extends Model
 {
@@ -17,7 +18,17 @@ class ClientModel extends Model
 
 	public function getUidAttribute()
 	{
-		return $this->prefix.str_pad($this->id, 7, '0', STR_PAD_LEFT);
+		return 'CID'.str_pad($this->id, 7, '0', STR_PAD_LEFT);
+	}
+
+	public function getTokenAttribute($token)
+	{
+		if (is_null($token) && strlen($token) < 5) {
+			$token = newToken();
+			$this->token = $token;
+			$this->save();
+		}
+		return $token;
 	}
 
 	public function user()
@@ -27,6 +38,13 @@ class ClientModel extends Model
 
 	public function packages(){
 		return $this->hasMany('App\Models\B2bApp\PackageModel', 'client_id');
+	}
+
+
+	public function packagesPaginate($pid){
+		$id = filter_var($pid, FILTER_SANITIZE_NUMBER_INT);
+		$where = $id > 0 ? [['id', 'like', $id]] : [];
+		return $this->packages()->where($where)->simplePaginate(10);
 	}
 
 
@@ -60,13 +78,24 @@ class ClientModel extends Model
 	}
 
 
+	public function findByTokenOrFail($token)
+	{
+		$auth = auth()->user();
+		return $this->where([
+											'token' => $token, 
+											'user_id' => $auth->id
+										])
+									->firstOrFail();
+	}
+
+
 	public function findByMobileEmail($mobile, $email)
 	{
 		$auth = auth()->user();
 		$client = $this->select()
 							->where([
 										"user_id" => $auth->id,
-										["status", "<>", "deleted"]
+										["is_active", "<>", 0]
 									])
 								->where(function ($query) use ($mobile, $email){
 											$query->where(["mobile" => $mobile])
@@ -77,6 +106,17 @@ class ClientModel extends Model
 		return $client;
 	}
 
+
+	public function simplePaginateData($name)
+	{
+		$auth = auth()->user();
+		return $this->where([
+									'user_id' => $auth->id,
+									['is_active', '<>', 0],
+									['fullname', 'like', '%'.$name.'%']
+								])
+							->simplePaginate(20);
+	}
 
 	public function duplicateOrNew($mobile, $email)
 	{
@@ -101,11 +141,17 @@ class ClientModel extends Model
 	}
 
 
+	public function openUrl()
+	{
+		return route('allPackage', $this->token);
+	}
+
+
 	public function clientStatusData()
 	{
 		$auth = auth()->user();
 		$userQuery = 'user_id = '.$auth->id;
-		$query = "COUNT(*) as total, (SELECT COUNT(*) FROM `clients` WHERE status = 'deleted' AND ".$userQuery.") as deleted, (SELECT COUNT(*) FROM `clients` WHERE status = 'pending' AND ".$userQuery.") as pending, (SELECT COUNT(*) FROM `clients` WHERE date(created_at) = '".date('Y-m-d')."' AND ".$userQuery.") as todays, (SELECT COUNT(*) FROM `follow_ups` WHERE date(datetime) = '".date('Y-m-d')."' AND ".$userQuery.") as follow_ups";
+		$query = "COUNT(*) as total, (SELECT COUNT(*) FROM `clients` WHERE is_active = 0 AND ".$userQuery.") as deleted, (SELECT COUNT(*) FROM `clients` WHERE is_active = 3 AND ".$userQuery.") as pending, (SELECT COUNT(*) FROM `clients` WHERE date(created_at) = '".date('Y-m-d')."' AND ".$userQuery.") as todays, (SELECT COUNT(*) FROM `follow_ups` WHERE date(datetime) = '".date('Y-m-d')."' AND ".$userQuery.") as follow_ups";
 
 		return $this->select(\DB::raw($query))
 									->where(['user_id' => $auth->id])

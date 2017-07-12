@@ -21,33 +21,32 @@
 			</span>
 		</li>
 		<li class="text-left">
-			<label for="">Package Id : </label>
-			<span>{{ isset($package->uid) ? $package->uid : getPackageId($package->id) }}</span>
+			<label for="">Package Id :</label>
+			<span> {{ isset($package->uid) ? $package->uid : '' }}</span>
 		</li>
 		<li class="text-left">
 			<div>
-				<i class="fa fa-phone"> </i>
-				<span>{{ isset($client->mobile) ? $client->mobile : '' }}</span>
+				<i class="fa fa-phone"></i>
+				<span> {{ isset($client->mobile) ? $client->mobile : '' }}</span>
 			</div>
 			<div>
-				<i class="fa fa-envelope"> </i>
-				<span>{{ isset($client->email) ? $client->email : '' }}</span>
+				<i class="fa fa-envelope"></i>
+				<span> {{ isset($client->email) ? $client->email : '' }}</span>
 			</div>
 		</li>
 		<li>
 			<div><b>Message</b></div>
-			<span>
-				<div>
-					{{ isset($client->note) ? $client->note : '' }}
-				</div>
-			</span>
+			<div>{{ isset($client->note) ? $client->note : '' }}</div>
 		</li>
 		<li>
-			<div class="col-md-12 col-sm-12 col-xs-12 m-top-10">
-				<div class="row">
+			<div class="row">
+				<div class="col-md-6 col-sm-6 col-xs-12 m-top-10">
 					<a href="{{ route('openPackage', $package->token) }}" class="btn btn-success btn-block">
 						<i class="fa fa-arrow-left"> </i> Back to Package
 					</a>
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-12 m-top-10">
+					<a href="{{ route('createRoute', [$package->client->token, $package->token]) }}" class="btn btn-primary btn-block">Modify Route</a>
 				</div>
 			</div>
 		</li>

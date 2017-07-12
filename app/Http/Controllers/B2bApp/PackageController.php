@@ -4,8 +4,6 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// =================================B2b Contrller=================================
 use App\Http\Controllers\B2bApp\PdfController;
 use App\Http\Controllers\B2bApp\RouteController;
 use App\Http\Controllers\B2bApp\ClientController;
@@ -13,17 +11,8 @@ use App\Http\Controllers\B2bApp\PdfHtmlController;
 use App\Http\Controllers\B2bApp\PackageCostsController;
 use App\Http\Controllers\B2bApp\TrackPackageController;
 use App\Http\Controllers\B2bApp\PackageCodesController;
-
-// ===============================Common Contrller=================================
 use App\Http\Controllers\CommonApp\UrlController;
-
-// =====================================Models=====================================
 use App\Models\B2bApp\PackageModel;
-
-// =====================================Session====================================
-use Session;
-use Auth;
-
 
 class PackageController extends Controller
 {
@@ -48,11 +37,13 @@ class PackageController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index($id){
-		$client  = ClientController::call()->model()->findByUserOrExit($id);
+	public function index($token, Request $request){
+		$client  = ClientController::call()->model()
+							->findByTokenOrFail($token);
+
 		$bladeData = [
 				"client" => $client,
-				"packages" => $client->packages
+				"packages" => $client->packagesPaginate($request->search)
 			];
 
 		return view($this->viewPath.'.index', $bladeData);
@@ -74,7 +65,7 @@ class PackageController extends Controller
 
 	public function createNew($id, $request)
 	{
-		$auth = Auth::user();
+		$auth = auth()->user();
 		$package = new PackageModel;
 		$package->user_id= $auth->id;
 		$package->client_id = $id;
@@ -148,7 +139,7 @@ class PackageController extends Controller
 						 ? $request->package_code
 						 : PackageCodesController::call()->model()->newCode();
 
-		$auth = Auth::user();
+		$auth = auth()->user();
 		$package = $this->model();
 		$package->user_id= $auth->id;
 		$package->client_id = $id;
@@ -183,7 +174,7 @@ class PackageController extends Controller
 
 	public function createPdfHtml($packageDbId){
 
-		$auth = Auth::user();
+		$auth = auth()->user();
 		$package = PackageModel::find($packageDbId);
 		$pdfHtmlId = null;
 		if ($package->client->user_id == $auth->id) {

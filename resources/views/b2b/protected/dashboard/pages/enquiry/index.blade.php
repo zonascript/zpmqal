@@ -41,7 +41,7 @@
 									<td>
 										<div class="row">
 											<div class="col-md-6 col-sm-6 col-xs-6 p-right-5">
-												<a href="{{ url('dashboard/package/all/'.$client->id) }}" class="btn btn-success btn-xs btn-block">Open</a>
+												<a href="{{ $client->openUrl() }}" class="btn btn-success btn-xs btn-block">Open</a>
 											</div>	
 											<div class="col-md-6 col-sm-6 col-xs-6 p-left-5">
 												<button type="button" class="btn btn-danger btn-xs btn-block">Delete</button>
@@ -74,11 +74,9 @@
 @endsection
 
 @section('scripts')
-	{{-- Datatables --}}
 	<script>
 		$(document).ready(function() {
 			datatableWithSearch('#datatable');
 		});
 	</script>
-	{{-- /Datatables --}}
 @endsection

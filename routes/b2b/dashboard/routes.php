@@ -5,7 +5,7 @@
 	
 	// this route is gui to get information
 	Route::group(['prefix' => 'route'], function () {
-		Route::get('{id}/{token?}', 'RouteController@create')
+		Route::get('{ctoken}/{token?}', 'RouteController@create')
 						->name('createRoute');
 		Route::post('{id}/r', 'RouteController@storeRow');
 		Route::post('{id}/d', 'RouteController@deleteRow');

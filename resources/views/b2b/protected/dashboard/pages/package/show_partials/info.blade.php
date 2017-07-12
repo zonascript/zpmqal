@@ -1,7 +1,7 @@
 <div class="x_panel">
 	<div class="x_title">
 		<h2>
-			<a href="{{ route('allPackage',$package->client->id) }}" class="btn btn-link font-size-20 nopadding">{{ isset($package->client->fullname) ? $package->client->fullname : '' }}</a>
+			<a href="{{ $package->client->openUrl() }}" class="btn btn-link font-size-20 nopadding">{{ isset($package->client->fullname) ? $package->client->fullname : '' }}</a>
 			<small>(Information)</small>
 		</h2>
 		<ul class="nav navbar-right panel_toolbox panel_toolbox1">

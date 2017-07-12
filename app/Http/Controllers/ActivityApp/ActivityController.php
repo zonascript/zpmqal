@@ -4,16 +4,10 @@ namespace App\Http\Controllers\ActivityApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// =====================CommonApp=====================
+use App\Models\ActivityApp\ActivityModel;
 use App\Http\Controllers\CommonApp\DestinationController;
-
-// =====================ActivityApp====================
 use App\Http\Controllers\ActivityApp\AgentActivitiesController;
 use App\Http\Controllers\ActivityApp\ViatorActivitiesController;
-
-// ========================Models========================
-use App\Models\ActivityApp\ActivityModel;
 
 class ActivityController extends Controller
 {

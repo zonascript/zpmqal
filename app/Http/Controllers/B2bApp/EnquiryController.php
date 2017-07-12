@@ -17,15 +17,8 @@ class EnquiryController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$auth = auth()->user();
-		$clients = ClientController::call()
-							->model()
-								->where([
-											'user_id' => $auth->id,
-											['status', '<>', 'deleted'],
-											['fullname', 'like', '%'.$request->search.'%']
-										])
-									->simplePaginate(20);
+		$clients = ClientController::call()->model()
+							->simplePaginateData($request->search);
 
 		return view($this->viewPath.'.index', ['clients' => $clients]);
 	}
