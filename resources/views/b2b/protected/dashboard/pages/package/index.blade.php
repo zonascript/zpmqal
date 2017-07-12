@@ -19,7 +19,7 @@
 						</h2>
 					</div>
 					<div class="col-md-3 col-sm-3 col-xs-12 nopadding">
-						<a href="{{ route('createRoute', $client->id) }}" type="button" id="formSubmit" class="btn btn-success btn-block">Build New Package</a>
+						<a href="{{ $client->createRouteUrl() }}" type="button" id="formSubmit" class="btn btn-success btn-block">Build New Package</a>
 					</div>
 				</div>
 				<div class="x_content">

@@ -67,7 +67,7 @@ class EnquiryController extends Controller
 		$client->email = $request->email;
 		$client->save();
 
-		return redirect($client->openUrl());
+		return redirect($client->createRouteUrl());
 	}
 
 	/**

@@ -146,6 +146,11 @@ class ClientModel extends Model
 		return route('allPackage', $this->token);
 	}
 
+	public function createRouteUrl()
+	{
+		return route('createRoute', [$this->token]);
+	}
+
 
 	public function clientStatusData()
 	{
