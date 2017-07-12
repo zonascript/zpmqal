@@ -12,7 +12,7 @@
 						<select id="select_vendor" name="vendor">
 							<option id="op_vendor" value="">Lead From(Vendor)?</option>
 							@foreach ($leadVendors as $leadVendor)
-								<option name="vendor" {{ old('vendor') == $leadVendor->id ? 'selected' : '' }}>
+								<option name="vendor" value="{{ $leadVendor->id }}" {{ old('vendor') == $leadVendor->id ? 'selected' : '' }}>
 									{{ $leadVendor->company_name }}
 								</option>
 							@endforeach

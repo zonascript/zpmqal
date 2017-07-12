@@ -65,10 +65,9 @@ class EnquiryController extends Controller
 		$client->fullname = $request->fullname;
 		$client->mobile = $request->mobile;
 		$client->email = $request->email;
-		$client->status = 'active';
 		$client->save();
 
-		return redirect()->route('createRoute',$client->id);
+		return redirect($client->openUrl());
 	}
 
 	/**
