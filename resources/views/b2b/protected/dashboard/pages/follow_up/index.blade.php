@@ -30,31 +30,31 @@
 
 						<tbody>
 							@forelse ($follow_ups as $follow_up)
-								<tr>
-									<td>{{ getPackageId($follow_up->packageId) }}</td>
-									<td>
-										<a href="{{ url('dashboard/package-builder/'.$follow_up->id) }}" target="_blank">{{ $follow_up->fullname }}</a>
-									</td>
-									<td>{{ $follow_up->datetime }}</td>
-									<td>
-										{{ sub_string($follow_up->note) }}
-									</td>
-									<td>
-										<div class="row">
-											<div class="col-md-6 col-sm-6 col-xs-6 p-right-5">
-												<a class="btn btn-success btn-xs btn-block">Edit</a>
-											</div>	
-											<div class="col-md-6 col-sm-6 col-xs-6 p-left-5">
-												<button type="button" class="btn btn-danger btn-xs btn-block">Delete</button>
+								@if (!is_null($follow_up->package))
+									<tr>
+										<td>{{ $follow_up->package->uid }}</td>
+										<td>{{ $follow_up->package->client->fullname }}</td>
+										<td>{{ $follow_up->datetime }}</td>
+										<td>{{ sub_string($follow_up->note) }}</td>
+										<td>
+											<div class="row">
+												<div class="col-md-6 col-sm-6 col-xs-6 p-right-5">
+													<a href="{{ route('openPackage', $follow_up->package->token) }}" class="btn btn-success btn-xs btn-block">Action</a>
+												</div>
 											</div>
-										</div>
-									</td>
-								</tr>
-								@empty
-								    <p>No users</p>
+										</td>
+									</tr>
+								@endif
+							@empty
+								<p>No users</p>
 							@endforelse
 						</tbody>
 					</table>
+				</div>
+				<div class="row">
+					<span class="pull-right">
+						{{ $follow_ups->links() }}
+					</span>
 				</div>
 			</div>
 		</div>
@@ -65,16 +65,12 @@
 @section('js')
 	<script src="{{ commonAsset('dashboard/vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 	<script src="{{ commonAsset('dashboard/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+	<script src="{{ asset('js/mydatatable.js') }}"></script>
 @endsection
 
 @section('scripts')
 	<script>
-		$(document).ready(function() {
-			$('#datatable').dataTable({
-					"pageLength": 50,
-	       	"order": [[ 2, "asc" ]]
-	    	});
-		});
+		datatableWithSearch('#datatable', {"order": [[ 2, "asc" ]]});
 	</script>
 @endsection
 {{-- /datatable --}}

@@ -8,19 +8,26 @@ use App\Http\Controllers\B2bApp\ClientController;
 
 class EnquiryController extends Controller
 {
+	public $viewPath = 'b2b.protected.dashboard.pages.enquiry';
 
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
-		$clients = ClientController::call()->all();
-		return view(
-							'b2b.protected.dashboard.pages.enquiry.index', 
-							['clients' => $clients]
-						);
+		$auth = auth()->user();
+		$clients = ClientController::call()
+							->model()
+								->where([
+											'user_id' => $auth->id,
+											['status', '<>', 'deleted'],
+											['fullname', 'like', '%'.$request->search.'%']
+										])
+									->simplePaginate(20);
+
+		return view($this->viewPath.'.index', ['clients' => $clients]);
 	}
 
 	/**
@@ -37,7 +44,7 @@ class EnquiryController extends Controller
 				"leadVendors" => $leadVendors,
 			];
 
-		return view('b2b.protected.dashboard.pages.enquiry.create', $blade);
+		return view($this->viewPath.'.create', $blade);
 	}
 
 	/**
@@ -68,7 +75,7 @@ class EnquiryController extends Controller
 		$client->status = 'active';
 		$client->save();
 
-		return redirect(route('createRoute',$client->id));
+		return redirect()->route('createRoute',$client->id);
 	}
 
 	/**

@@ -101,10 +101,12 @@ class ActivityController extends Controller
 	public function viatorActivities()
 	{
 		$destination = $this->destination();
-		$cityId = $destination->viatorDestination->destinationId;
-		$activitiesData = ViatorActivitiesController::call()
-											->model()->findByDestination($cityId);
-		$this->activityObject($activitiesData);
+		if (!is_null($destination->viatorDestination)) {
+			$cityId = $destination->viatorDestination->destinationId;
+			$activitiesData = ViatorActivitiesController::call()
+												->model()->findByDestination($cityId);
+			$this->activityObject($activitiesData);
+		}
 		return $this;
 	}
 

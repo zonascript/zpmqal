@@ -7,19 +7,21 @@
 	<ul id="menu_followups" class="width-450 dropdown-menu list-unstyled msg_list" role="menu">
 		<li><h2>Follow-Ups</h2></li>
 		@foreach ($pendingFollowUps as $pendingFollowUp)
-		<li>
-			<a href="{{ route('openPackage', $pendingFollowUp->package->token) }}">
-				<span>
-					<span>
-						<b class="font-size-15">{{ $pendingFollowUp->fullname }}</b> 
-						({{ $pendingFollowUp->package->uid }})</span>
-					<span class="time">{{ $pendingFollowUp->datetime }}</span>
-				</span>
-				<span class="message">
-					{{ sub_string($pendingFollowUp->note)}}
-				</span>
-			</a>
-		</li>
+			@if (!is_null($pendingFollowUp->package))
+				<li>
+					<a href="{{ route('openPackage', $pendingFollowUp->package->token) }}">
+						<span>
+							<span>
+								<b class="font-size-15">{{ $pendingFollowUp->package->client->fullname }}</b> 
+								({{ $pendingFollowUp->package->uid }})</span>
+							<span class="time">{{ $pendingFollowUp->datetime }}</span>
+						</span>
+						<span class="message">
+							{{ sub_string($pendingFollowUp->note)}}
+						</span>
+					</a>
+				</li>
+			@endif
 		@endforeach
 
 		<li>

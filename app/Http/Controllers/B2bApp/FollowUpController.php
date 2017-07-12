@@ -3,19 +3,14 @@
 namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-// ======================================Models======================================
 use App\Models\B2bApp\FollowUpModel;
-
-// =====================================Session======================================
-use Session;
-use Auth;
 
 class FollowUpController extends Controller
 {
+
+	public $viewPath = 'b2b.protected.dashboard.pages.follow_up';
+
 	public static function call(){
 		return new FollowUpController;
 	}
@@ -25,11 +20,27 @@ class FollowUpController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
-		$follow_ups = $this->all();
+		$auth = auth()->user();
+		$name = $request->search;
+		$fups = FollowUpModel::select()
+					->with('package')
+					->where([
+								'status' => 'active', 
+								'user_id' => $auth->id
+							])
+					->whereHas('package', function ($q) use ($name){
+								$q->with('client')
+									->where([['id', '>', 1]])
+									->whereHas('client', function ($q) use ($name){
+												$q->where([['fullname', 'like', '%'.$name.'%']]);
+											});
+							})
+					->whereRaw("`datetime` > now()")
+					->simplePaginate(25);
 
-		return view('b2b.protected.dashboard.pages.follow_up.index', ["follow_ups" =>$follow_ups]);
+		return view($this->viewPath.'.index', ["follow_ups" => $fups]);
 	}
 
 	/**
@@ -50,19 +61,23 @@ class FollowUpController extends Controller
 	 */
 	public function store(Request $request)
 	{
+		$res = [
+					"status" => 200,
+					"response" => "Something went wrong"
+				];
+		if ($request->pid) {
+			$auth = auth()->user();
+			$followUp = new FollowUpModel;
+			$followUp->user_id = $auth->id;
+			$followUp->package_id = $request->pid;
+			$followUp->datetime = $request->datetime;
+			$followUp->note = $request->followup;
+			$followUp->status = 'active';
+			$followUp->save();
+			$res['response'] = "saved successfully...";
+		}
 
-		$auth = Auth::user();
-
-		$followUp = new FollowUpModel;
-		$followUp->user_id = $auth->id;
-		$followUp->packageId = $request->input('packageDbId');
-		$followUp->fullname = $request->input('fullname');
-		$followUp->datetime = $request->input('datetime');
-		$followUp->note = $request->input('followup');
-		$followUp->status = 'Active';
-		$followUp->save();
-
-		return json_encode(["status" => 200,"response" => "saved successfully..."]);
+		return json_encode($res);
 	}
 
 	/**
@@ -111,10 +126,11 @@ class FollowUpController extends Controller
 	}
 
 
-	// ==================this function to fatch all follow up from db==================
+	// ======this function to fatch all follow up from db======
 	public function all()
 	{
-		$auth = Auth::user();
+		$auth = auth()->user();
+
 		$result = FollowUpModel::select()
 							->with('package')
 								->where([

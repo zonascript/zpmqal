@@ -28,7 +28,7 @@
 						</thead>
 
 						<tbody>
-							@forelse ($clients as $client)
+							@foreach ($clients as $client)
 								<tr>
 									<a href="">
 										
@@ -50,30 +50,34 @@
 									</td>
 									</a>
 								</tr>
-							@empty
-							    <p>No users</p>
-							@endforelse
+							@endforeach
 						</tbody>
 					</table>
+					<div class="row">
+						<span class="pull-right">
+							{{ $clients->links() }}
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
+
 @endsection
 
 @section('js')
 	{{-- Datatables --}}
 	<script src="{{ commonAsset('dashboard/vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 	<script src="{{ commonAsset('dashboard/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+	<script src="{{ asset('js/mydatatable.js') }}"></script>
 @endsection
 
 @section('scripts')
 	{{-- Datatables --}}
 	<script>
 		$(document).ready(function() {
-			$('#datatable').dataTable({
-				"pageLength": 50
-			});
+			datatableWithSearch('#datatable');
 		});
 	</script>
 	{{-- /Datatables --}}

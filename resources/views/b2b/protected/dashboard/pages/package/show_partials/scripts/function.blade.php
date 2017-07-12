@@ -27,8 +27,7 @@
 		else{
 			var data = {
 					"_token" : csrf_token,
-					"packageDbId" : "{{ $package->id }}",
-					"fullname" : "{{ isset($package->client->fullname) ? $package->client->fullname : '' }}",
+					"pid" : "{{ $package->id }}",
 					"datetime" : datetime, 
 					"followup" : followup,
 				};
