@@ -4,7 +4,7 @@
 			<div class="col-md-8 col-sm-8 col-xs-12">
 				<h1>Routes</h1>
 			</div>
-			<div class="col-md-1 col-sm-1 col-xs-12 pull-right m-top-10">
+			{{-- <div class="col-md-1 col-sm-1 col-xs-12 pull-right m-top-10">
 				<ul class="nav navbar-right panel_toolbox panel_toolbox1">
 					<li>
 						<a class="collapse-link">
@@ -12,6 +12,9 @@
 						</a>
 					</li>
 				</ul>
+			</div> --}}
+			<div class="col-md-4 col-sm-4 col-xs-12 m-top-10">
+				<a href="{{ $package->createRouteUrl() }}" class="btn btn-success btn-block">Modify Route</a>
 			</div>
 		</div>
 		<div class="clearfix"></div>

@@ -3,11 +3,7 @@
 namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
-
-// ===============================Controller=============================== 
 use App\Http\Controllers\CommonApp\DestinationController;
-
-// ===============================Model=============================== 
 use App\Models\HotelApp\AgodaDestinationModel;
 use Carbon\Carbon;
 
@@ -240,7 +236,6 @@ class RouteModel extends Model
 
 		return $result;
 	}
-
 
 
 	public function hotelDetail()

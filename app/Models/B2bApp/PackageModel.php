@@ -327,6 +327,12 @@ class PackageModel extends Model
 		return $result->orderBy('date', 'asc');
 	}
 
+
+	public function createRouteUrl()
+	{
+		return route('createRoute', [$this->client->token, $this->token]);
+	}
+
 	
 	public function __construct(array $attributes = [])
 	{

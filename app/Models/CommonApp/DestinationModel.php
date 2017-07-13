@@ -146,13 +146,10 @@ class DestinationModel extends Model
 	}
 
 
-
 	public function visaDetail()
 	{
 		return $this->hasOne('App\Models\CommonApp\VisaDetailModel', 'country', 'country');
 	}
-
-
 
 
 	public function search($value)
@@ -189,8 +186,15 @@ class DestinationModel extends Model
 
 	public function findViatorDestination()
 	{
-		$result = $this->hasOne('App\Models\ActivityApp\ViatorDestinationModel', 'destinationName', 'destination');
-		return $result->orWhere('destinationName', 'like', '%'.$this->destination.'%');
+		$result = $this->hasOne(
+												ViatorDestinationModel::class, 
+												'destinationName', 'destination'
+											);
+
+		return $result->orWhere(
+												'destinationName', 'like', 
+												'%'.$this->destination.'%'
+											);
 	}
 
 
