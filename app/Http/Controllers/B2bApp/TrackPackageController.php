@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\B2bApp\TrackPackageModel;
 use App\Http\Controllers\B2bApp\PackageController;
-use Auth;
 
 class TrackPackageController extends Controller
 {

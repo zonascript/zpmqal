@@ -4,21 +4,23 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
-
-// ===========================B2b Controller===========================
-use App\Http\Controllers\Api\SkyscannerCarsApiController;
-
-// ===============================Models===============================
+use App\Http\Controllers\CarApp\SkyscannerCarsApiController;
 use App\Models\B2bApp\PackageCarModel;
 
 class CarsController extends Controller
 {
+	public $viewPath = 'b2b.protected.dashboard.pages.car';
+
 
 	public static function call(){
 		return new CarsController;      
 	}
 
+
+	public function model()
+	{
+		return new PackageCarModel;
+	}
 
 
 	/**
@@ -28,7 +30,7 @@ class CarsController extends Controller
 	 */
 	public function index()
 	{
-		return view('b2b.protected.dashboard.pages.car.index');
+		return view($this->viewPath.'.index');
 	}
 
 	/**
@@ -37,29 +39,27 @@ class CarsController extends Controller
 	 * @return \Illuminate\Http\Response
 	 | this function is to insert or create new row in db
 	 */
-	public function create($packageDbId)
+	public function create($pid)
 	{
-		$package = PackageController::call()->model()->usersFind($packageDbId);
-			
-		// dd($package);
-
+		$package = PackageController::call()
+							->model()->usersFind($pid);
 		$blade = [
 				"package" => $package,
 				"client" => $package->client,
-				"urlVariable" => (object)["packageDbId" => $packageDbId]
+				"urlVariable" => (object)["packageDbId" => $pid]
 			];
 
-		return view('b2b.protected.dashboard.pages.car.create', $blade);
+		return view($this->viewPath.'.create', $blade);
 	}
 
 
 	/*
 	| this function is to create new hotel table row using route data 
 	*/
-	public function createByPackageId($packageDbId, $data)
+	public function createByPackageId($pid, $data)
 	{
 		$packageCarModel = new PackageCarModel;
-		$packageCarModel->package_id = $packageDbId;
+		$packageCarModel->package_id = $pid;
 		$packageCarModel->request = $data->request;
 		$packageCarModel->skyscanner_car_id = $data->result->db->id;
 		$packageCarModel->status = 'active';
@@ -71,10 +71,10 @@ class CarsController extends Controller
 		/*
 	| this function is to find all data behalf of package table id  
 	*/
-	public function findByPackageId($packageDbId, $column='*', Array $where = [])
+	public function findByPackageId($pid, $column='*', Array $where = [])
 	{
 		$where = array_merge([
-									"package_id" => $packageDbId,
+									"package_id" => $pid,
 								], $where);
 
 		return PackageCarModel::select($column)->where($where)->get();
@@ -87,12 +87,12 @@ class CarsController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy($packageDbId, Request $request)
+	public function destroy($pid, Request $request)
 	{
 
 		$packageCarModel = PackageCarModel::find($request->pcid);
 
-		if (!is_null($packageCarModel) && $packageCarModel->package_id == $packageDbId) {
+		if (!is_null($packageCarModel) && $packageCarModel->package_id == $pid) {
 			$packageCarModel->status = 'inactive';
 			$packageCarModel->save();
 		}
@@ -102,7 +102,7 @@ class CarsController extends Controller
 	/*
 	| this function is to getting cars result usign post method 
 	*/
-	public function postCar($packageDbId, Request $request)
+	public function postCar($pid, Request $request)
 	{
 		
 		//return $this->fakePostCars();// this function is to get fake data use in offline
@@ -126,7 +126,7 @@ class CarsController extends Controller
 			}
 		}
 
-		$packageCarModelId = $this->createByPackageId($packageDbId, (object)[
+		$packageCarModelId = $this->createByPackageId($pid, (object)[
 				"request" => $params,
 				"result" => $skyscannerCars
 			]);
@@ -136,7 +136,7 @@ class CarsController extends Controller
 	}
 
 
-	public function chooseCar($packageDbId, Request $request)
+	public function chooseCar($pid, Request $request)
 	{
 
 		$packageCarModel = PackageCarModel::find($request->pcid);
@@ -148,7 +148,7 @@ class CarsController extends Controller
 					[$packageCarModel->package->token]),
 			];
 
-		if (!is_null($packageCarModel) && $packageCarModel->package_id == $packageDbId) {
+		if (!is_null($packageCarModel) && $packageCarModel->package_id == $pid) {
 			$returnArray->status = 200;
 			$returnArray->response = "ok";
 			
@@ -171,9 +171,9 @@ class CarsController extends Controller
 	}
 
 
-	public function postMenu($packageDbId)
+	public function postMenu($pid)
 	{
-		$carsData = $this->findByPackageId($packageDbId, '*', ['status' => 'complete']);
+		$carsData = $this->findByPackageId($pid, '*', ['status' => 'complete']);
 		$cars = [];
 
 		foreach ($carsData as $car) {

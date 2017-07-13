@@ -36,7 +36,7 @@ class RouteController extends Controller
 		$packageController = new PackageController;
 
 		if (is_null($token)) {
-			$package = $packageController->createTemp($ctoken);
+			$package = $packageController->createTemp($client->id);
 			$token = $package->token;
 			return redirect()->route('createRoute', [$ctoken, $token]);
 		}

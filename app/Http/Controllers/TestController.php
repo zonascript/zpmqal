@@ -13,6 +13,9 @@ use App\Mail\VerifyMail;
 use Crypt;
 use App\Models\ItineraryApp\PaymentModel;
 use Carbon\CarbonInterval;
+use App\Models\CommonApp\DestinationModel;
+use App\Models\ActivityApp\ViatorDestinationModel;
+
 
 class TestController extends Controller
 {
@@ -25,6 +28,9 @@ class TestController extends Controller
 
 	public function testCode()
 	{
+		$dest = DestinationModel::call()->find(751);
+		dd($dest->viatorDestination);
+
 		$str = 'In My Cart :008980hdksa 11 899 items';
 		$int = filter_var($str, FILTER_SANITIZE_NUMBER_INT);
 		dd($int);

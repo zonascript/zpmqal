@@ -4,11 +4,8 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ==================================Model==================================
-use App\Models\B2bApp\ToDoModel;
 use App\Models\B2bApp\UserTodoModel;
-use Auth;
+use App\Models\B2bApp\ToDoModel;
 
 class ToDoController extends Controller
 {
@@ -45,7 +42,7 @@ class ToDoController extends Controller
 	 */
 	public function store(Request $request)
 	{
-		$auth = Auth::user();
+		$auth = auth()->user();
 		
 		$toDo = new ToDoModel;
 		$toDo->text = $request->toDoText;
@@ -54,23 +51,19 @@ class ToDoController extends Controller
 		
 		$toDoSelects = [];
 
-		$toDoSelects[] = [
+		$toDoSelects[] = addDateColumns([
 				'user_id' => $auth->id, 
 				'todo_id' => $toDo->id,
 				'is_assigned' => 0,
-				'created_at'=>date('Y-m-d H:i:s'),
-				'updated_at'=> date('Y-m-d H:i:s')
-			];
+			]);
 
 		if (isset($request->toDoSelect)) {
 			foreach ($request->toDoSelect as $toDoSelect) {
-				$toDoSelects[] = [
+				$toDoSelects[] = addDateColumns([
 						'user_id' => $toDoSelect, 
 						'todo_id' => $toDo->id,
 						'is_assigned' => 1,
-						'created_at'=>date('Y-m-d H:i:s'),
-						'updated_at'=> date('Y-m-d H:i:s')
-					];
+					]);
 			}
 		}
 		

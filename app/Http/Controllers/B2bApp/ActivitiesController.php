@@ -4,20 +4,13 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
-
-// =============================ActivityApp Controller=============================
-use App\Http\Controllers\ActivityApp\ActivityController;
-use App\Http\Controllers\ActivityApp\AgentActivitiesController;
-
-// =============================B2b Controller=============================
 use App\Http\Controllers\B2bApp\RouteController;
 use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\B2bApp\FgfActivitiesController;
 use App\Http\Controllers\B2bApp\ViatorActivitiesController;
 use App\Http\Controllers\B2bApp\SelectedActivitiesController;
-
-// =================================Models=================================
+use App\Http\Controllers\ActivityApp\ActivityController;
+use App\Http\Controllers\ActivityApp\AgentActivitiesController;
 use App\Models\B2bApp\PackageActivityModel;
 
 
@@ -76,12 +69,10 @@ class ActivitiesController extends Controller
 	| or not behalf of route table id because one route 
 	| can contain only one row in db
 	*/
-	public function isExist($routeDbId)
+	public function isExist($rid)
 	{
 		$packageActivity = $this->model()
-											->where([
-														"route_id" => $routeDbId,
-													])
+											->where(["route_id" => $rid])
 												->get();
 
 			return $packageActivity;
@@ -269,16 +260,14 @@ class ActivitiesController extends Controller
 				$code = str_replace('ACTV', '', $code);
 			}
 
-			$selectedActivities[] = [
+			$selectedActivities[] = addDateColumns([
 					"package_activity_id" => $packageActivityId,
 					"code" => $code,
 					"mode" => $activity->mode,
 					"date" => date_formatter($activity->date, 'd/m/Y'),
 					"vendor" => $activity->vendor,
 					"timing" => $activity->timing,
-					"created_at" => date('Y-m-d H:i:s'),
-					"updated_at" => date('Y-m-d H:i:s') 
-				]; 
+				]); 
 		}
 
 		return $selectedActivities;

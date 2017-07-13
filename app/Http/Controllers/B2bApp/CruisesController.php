@@ -4,19 +4,12 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ================================B2bApp Controller===============================
-use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\B2bApp\RouteController;
-
-// ================================B2bApp Controller===============================
+use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\CruiseApp\CruiseOnlyDatesController;
-
-// =====================================Model======================================
+use App\Models\CruiseApp\CruiseOnlyDateModel;
 use App\Models\B2bApp\PackageCruiseModel;
-use App\Models\Api\CruiseOnlyDateModel;
 
-use Auth;
 
 
 class CruisesController extends Controller

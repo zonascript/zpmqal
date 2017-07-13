@@ -4,8 +4,9 @@ namespace App\Models\CommonApp;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\CommonApp\GoogleMapController;
-use App\Models\CommonApp\ImagesModel;
+use App\Models\ActivityApp\ViatorDestinationModel;
 use App\Models\CommonApp\IndicationModel;
+use App\Models\CommonApp\ImagesModel;
 use DB;
 
 class DestinationModel extends Model
@@ -13,7 +14,7 @@ class DestinationModel extends Model
 	protected $connection = 'mysql2';
 	protected $table = 'destinations';
 	protected $casts = ['geocode' => 'object'];
-	protected $appends = ['location', 'echo_location'];
+	protected $appends = ['location', 'echo_location', 'viatorDestination'];
 	protected $hidden = ['created_at', 'updated_at'];
 
 	public static function call(){
@@ -99,6 +100,19 @@ class DestinationModel extends Model
 
 
 
+	public function getViatorDestinationAttribute()
+	{
+		$result = $this->findViatorDestination;
+		
+		if (is_null($result)) {
+			$result = ViatorDestinationModel::call()
+								->findByLatLong($this->latitude, $this->longitude);
+		}
+
+		return $result;		
+	}
+
+
 
 	public function pullGeocode()
 	{
@@ -170,10 +184,15 @@ class DestinationModel extends Model
 	}
 
 
-	public function viatorDestination()
+
+
+
+	public function findViatorDestination()
 	{
 		$result = $this->hasOne('App\Models\ActivityApp\ViatorDestinationModel', 'destinationName', 'destination');
 		return $result->orWhere('destinationName', 'like', '%'.$this->destination.'%');
 	}
+
+
 
 }

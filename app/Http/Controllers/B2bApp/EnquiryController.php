@@ -57,7 +57,7 @@ class EnquiryController extends Controller
 
 
 		$client = ClientController::call()->model()
-							->duplicateOrNew($request->mobile, $request->mobile);
+							->duplicateOrNew($request->mobile, $request->email);
 
 		$auth = auth()->user();
 		$client->user_id = $auth->id;
