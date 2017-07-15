@@ -11,20 +11,13 @@ class PackageCostModel extends Model
 
 	public function setTokenAttribute()
 	{
-		$this->attributes['token'] = mycrypt($this->count());
+		$this->attributes['token'] = newToken();
 	}
 
 	public function getTotalCostAttribute()
 	{
-		$netCost = isset($this->attributes['net_cost']) 
-						 ? $this->attributes['net_cost'] 
-						 : 0;
-
-		$margin = isset($this->attributes['margin']) 
-						 ? $this->attributes['margin'] 
-						 : 0;
-
-		return $netCost+$margin;
+		$visa = $this->is_visa ? $this->visa_cost : 0;
+		return $this->net_cost+$this->margin+$visa;
 	}
 
 
