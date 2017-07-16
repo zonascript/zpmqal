@@ -13,7 +13,7 @@ class User extends Authenticatable
 	use Notifiable;
 	protected $connection = 'mysql';
 	protected $table = 'users';
-	protected $appends = ['fullname', 'profile_pic'];
+	protected $appends = ['fullname', 'profile_pic', 'indication'];
 	
 	/**
 	 * The attributes that are mass assignable.
@@ -50,8 +50,16 @@ class User extends Authenticatable
 
 
 
+	public function getIndicationAttribute()
+	{
+		return isset($this->status->name)
+					 ? $this->status->name
+					 : 'is in trouble please contact admin';
+	}
+
+
 	public function status()
-	{   
+	{
 		return $this->belongsTo(IndicationModel::class, 'is_active');
 	}
 

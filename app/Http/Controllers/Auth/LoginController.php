@@ -70,7 +70,7 @@ class LoginController extends Controller
 		$this->incrementLoginAttempts($request);
 		// Customization: If User status is inactive (0) return failed_status error.
 		if ($User->is_active !== 1) {
-			return $this->sendFailedLoginResponse($request, 'This account '.$User->status);
+			return $this->sendFailedLoginResponse($request, 'This account '.$User->indication);
 		}
 		return $this->sendFailedLoginResponse($request);
 	}
