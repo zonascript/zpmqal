@@ -11,13 +11,14 @@
 
 	});
 
-	Route::group(['prefix' => 'api/package/accommodation'], function () use ($ac){
+	Route::group(['prefix' => 'api/package/accommodation', 'middleware' => 'check.route'], function () use ($ac){
 		Route::match(
 								['get', 'post'], 
 								'search/name/{rid}',
 								 $ac.'@searchProp'
 							)
 						->name('accomo.searchProp');
+
 		Route::group(['prefix' => 'fatch'], function () use ($ac){
 			Route::post('facilities/{rid}', $ac.'@postAccomoFacilities');
 			Route::post('images/{rid}', $ac.'@postAccomoImages');

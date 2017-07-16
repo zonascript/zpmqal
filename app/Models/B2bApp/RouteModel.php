@@ -211,6 +211,17 @@ class RouteModel extends Model
 	}
 
 
+
+	public function isCorrectUser($id)
+	{
+		return $this->where(['id' => $id])
+									->whereHas('package', function ($q){
+												$auth = auth()->user();
+												$q->where(['user_id' => $auth->id]);
+											})
+										->count();
+	}
+
 	/*
 	| this function is to fix date 
 	| like every date is invalid when making package
