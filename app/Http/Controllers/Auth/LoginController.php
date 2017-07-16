@@ -69,9 +69,16 @@ class LoginController extends Controller
 		// user surpasses their maximum number of attempts they will get locked out.
 		$this->incrementLoginAttempts($request);
 		// Customization: If User status is inactive (0) return failed_status error.
-		if ($User->is_active !== 1) {
+
+		if (is_null($User)) {
+			return $this->sendFailedLoginResponse($request, 'Account not found');
+		}
+
+		if (!is_null($User) && $User->is_active !== 1) {
 			return $this->sendFailedLoginResponse($request, 'This account '.$User->indication);
 		}
+
+
 		return $this->sendFailedLoginResponse($request);
 	}
 	/**
