@@ -8,23 +8,26 @@ use App\Http\Controllers\B2bApp\RouteController;
 use App\Http\Controllers\B2bApp\HotelsController;
 use App\Http\Controllers\B2bApp\CruisesController;
 use App\Http\Controllers\B2bApp\PackageController;
+use App\Http\Controllers\HotelApp\HotelsController as DbHotelsController;
 
 class AccommodationController extends Controller
 {
-	
+	public $viewPath = 'b2b.protected.dashboard.pages.accomo';
+
 	/*
 	| this function is to get view on the browser using get request
 	*/
 	public function getHotelsByToken($token)
 	{
-		$package = PackageController::call()->model()->findByTokenOrExit($token);
-		$viewDir = 'b2b.protected.dashboard.pages.accomo';
+		$package = PackageController::call()
+								->model()->findByTokenOrExit($token);
 		$blade = [
-				'package' => $package,
-				'client' => $package->client,
-				'viewDir' => $viewDir,
+				'package'  => $package,
+				'viewPath' => $this->viewPath,
+				'client' 	 => $package->client,
+				'indication' => indication(),
 			];
-		return myView($viewDir.'.index', $blade);
+		return myView($this->viewPath.'.index', $blade);
 	}
 
 
@@ -129,21 +132,43 @@ class AccommodationController extends Controller
 
 	}
 
-	public function searchPropNames($rid, Request $request)
+
+	public function searchProp($rid, Request $request)
 	{
 		$result = [];
 		$route =  RouteController::call()->model()->find($rid);
 		if ($route->mode == 'hotel') {
-			$result = HotelsController::call()
-								->searchHotelNames($rid, $request);
+			$location = $route->destination_detail;
+			$params = [
+						'name' => $request->term,
+						'latitude' => $location->latitude, 
+						'longitude' => $location->longitude, 
+						'maxRating' => 5,
+						'minRating' => 0,
+					];
+
+			if ($request->want == 'name') {
+				$params['nameOnly'] = 1;
+			}
+
+			$result = DbHotelsController::call()
+								->model()->fatchHotels($params);
 		}
 		elseif ($route->mode == 'cruise') {
 			$result = CruisesController::call()
 								->searchCruiseNames($rid, $request);
 		}
 
+		if (strtolower($request->format) == 'json') {
+			$result = json_encode($result);
+		}
+
 		return $result;
 	}
+
+
+	
+
 
 	public function postAddAttributes($rid, Request $request)
 	{

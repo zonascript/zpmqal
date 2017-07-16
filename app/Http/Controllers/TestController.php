@@ -15,6 +15,7 @@ use App\Models\ItineraryApp\PaymentModel;
 use Carbon\CarbonInterval;
 use App\Models\CommonApp\DestinationModel;
 use App\Models\ActivityApp\ViatorDestinationModel;
+use App\Models\B2bApp\RouteModel;
 
 
 class TestController extends Controller
@@ -28,6 +29,13 @@ class TestController extends Controller
 
 	public function testCode()
 	{
+
+		$ind = indication()->toKeyValue('route_mode', ['' => 'Sel']);
+		dd($ind);
+		$dest = RouteModel::find(656);
+		dd($dest->origin_detail, $dest->destination_detail);
+
+		dd(strlen(null));
 		$dest = DestinationModel::call()->find(751);
 		dd($dest->viatorDestination);
 

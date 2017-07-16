@@ -1,9 +1,3 @@
-
-<?php 
-	$addActiviyHtml = view($viewPath.'.partials._add')->render();
-	$addActiviyHtml = trimHtml($addActiviyHtml);
-?>
-
 @include($viewPath.'.partials.scripts.objects')
 <script>
 	{{-- bootstrap-daterangepicker --}}

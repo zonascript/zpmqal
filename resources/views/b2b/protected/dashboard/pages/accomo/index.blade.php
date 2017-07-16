@@ -23,7 +23,7 @@
 					<h3><div class="text-center">Accommodation</div></h3>
 				</div>
 			</div>
-			@include($viewDir.'.partials._filter')
+			@include($viewPath.'.partials._filter')
 			{{-- @include('b2b.protected.dashboard.pages.accomos.partials._search') --}}
 			<div class="row m-top-70" align="center">
 				<div id="btn_next" class="circle-big bg-blue glowing-green-border cursor-pointer">
@@ -54,12 +54,12 @@
 							@foreach ($package->accomoRoutes as $accomoRouteKey => $accomoRoute)
 								<div id="target_{{ $accomoRoute->id }}" 
 										class="tab-pane {{ $accomoRouteKey == 0 ? 'active' : ''}}">
-									@include($viewDir.'.partials.html_partials.meal_transfer')
+									@include($viewPath.'.partials.html_partials.meal_transfer')
 									<ul id="rid_{{ $accomoRoute->id }}" class="list list-unstyled" data-rid="{{ $accomoRoute->id }}">
 									</ul>
 								</div>
 							@endforeach
-							{{-- @include($viewDir.'.partials.html_partials.temp') --}}
+							{{-- @include($viewPath.'.partials.html_partials.temp') --}}
 						</div>
 					</div>
 				</div>
@@ -82,6 +82,6 @@
 @endsection
 
 @section('scripts')
-	@include($viewDir.'.partials.scripts._scripts')
+	@include($viewPath.'.partials.scripts._scripts')
 @endsection
 

@@ -13,16 +13,12 @@ class B2bDropAndAddColumnsClientsTable extends Migration
      */
     public function up()
     {
+        \DB::statement("UPDATE `clients` SET `status`= 0 WHERE `status` = 'deleted'");
+
         Schema::table('clients', function (Blueprint $table) {
             $table->dropColumn('prefix');
-            $table->boolean('is_active')->default(1)->after('status');
-            $table->string('token',100)->after('is_active')->unique()->nullable();
-        });
-
-        \DB::statement("UPDATE `clients` SET `is_active`= 0 WHERE `status` = 'deleted'");
-
-        Schema::table('clients', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->boolean('status')->default(1)->change();
+            $table->string('token',100)->after('status')->unique()->nullable();
         });
     }
 
@@ -33,16 +29,13 @@ class B2bDropAndAddColumnsClientsTable extends Migration
      */
     public function down()
     {
+        \DB::statement("UPDATE `clients` SET `status` = 'deleted' WHERE `status`= 0;");
         Schema::table('clients', function (Blueprint $table) {
             $table->string('prefix', 7)->after('id')->default('CLNT');
-            $table->string('status', 25)->after('is_active')
-                                            ->default('active');
-        });
-
-        \DB::statement("UPDATE `clients` SET `status` = 'deleted' WHERE `is_active`= 0;");
-
-        Schema::table('clients', function (Blueprint $table) {
-            $table->dropColumn(['is_active', 'token']);
+            $table->string('status', 25)->after('status')
+                                        ->default('active')
+                                        ->change();
+            $table->dropColumn(['token']);
         });
     }
 }

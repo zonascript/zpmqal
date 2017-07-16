@@ -3,7 +3,7 @@
 namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
-use Auth;
+
 
 class UserTodoModel extends Model
 {
@@ -24,7 +24,7 @@ class UserTodoModel extends Model
 
 	public function todoByJoin()
 	{
-		$auth = Auth::user();
+		$auth = auth()->user();
 		
 		return $this->select('todos.id', 'todos.text', 'todos.status')
 									->leftjoin('todos', $this->table.'.todo_id', '=', 'todos.id')

@@ -1,16 +1,3 @@
-<?php
-	$transfers = [
-			"airport" => "Airport",
-			"bus" => "Bus/Coach",
-			"hotel" => "Hotel",
-			"cruise" => "Cruise/Ferry",
-		];
-
-	$transfersHtml = '';
-	foreach ($transfers as $transferKey => $transfer) {
-		$transfersHtml .= '<option value="'.$transferKey.'">'.$transfer.'</option>';
-	}
-?>
 <div class="col-md-12 col-sm-12 col-xs-12 x_panel glowing-border">
 	<div class="col-md-5 col-sm-5 col-xs-5">
 		<div class="row">
@@ -28,7 +15,7 @@
 						<select class="btn-block border-gray p-2-5 h-pick-up transfer"
 							data-selected="0">
 							<option value="">Pick-Up</option>
-							{!! showTransferOption($accomoRoute->pick_up) !!}
+							{!! $indication->htmlOptions('transfer_spot', $accomoRoute->pick_up) !!}
 						</select>
 					</div>
 				</div>
@@ -47,7 +34,7 @@
 						<select class="btn-block border-gray p-2-5 h-drop-off transfer" 
 							data-selected="0">
 							<option value="">Drop Off</option>
-							{!! showTransferOption($accomoRoute->drop_off) !!}
+							{!! $indication->htmlOptions('transfer_spot', $accomoRoute->drop_off) !!}
 						</select>
 					</div>
 				</div>

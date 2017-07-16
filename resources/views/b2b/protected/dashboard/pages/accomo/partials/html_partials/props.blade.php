@@ -18,7 +18,7 @@
 				</div>
 				<div class="row">
 					<div class="col-md-8 col-sm-8 col-xs-9">
-						{{-- @include($viewDir.'.partials.html_partials.pick_drop') --}}
+						{{-- @include($viewPath.'.partials.html_partials.pick_drop') --}}
 					</div>
 					<div class="col-md-4 col-sm-4 col-xs-12 pull-right">
 						<div class="row">
@@ -32,7 +32,7 @@
 					</div>
 				</div>
 					{{-- '+((mode == 'hotel') ? '
-					@include($viewDir.'.partials.html_partials.meal')
+					@include($viewPath.'.partials.html_partials.meal')
 					' : '')+' --}}
 				</div>
 		</div>

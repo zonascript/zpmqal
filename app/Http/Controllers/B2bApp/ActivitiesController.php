@@ -89,7 +89,8 @@ class ActivitiesController extends Controller
 		$blade = [
 				'package' => $package,
 				'client' => $package->client,
-				'viewPath' => $viewPath
+				'viewPath' => $viewPath, 
+				'indication' => indication(),
 			];
 		return trimHtml(view($viewPath.'.index', $blade)->render());
 	}

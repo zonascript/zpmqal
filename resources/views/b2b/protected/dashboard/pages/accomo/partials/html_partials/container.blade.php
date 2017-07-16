@@ -65,10 +65,10 @@
 								<div id="'+accomo.ukey+'_'+accomo.ridObj.rid+'_props" class="tab-pane active">
 									{{-- <div class="row border-gray m-top-5">
 										<div class="col-md-5 col-sm-5 col-xs-5">
-											@include($viewDir.'.partials.html_partials.transfer')
+											@include($viewPath.'.partials.html_partials.transfer')
 										</div>
 										<div class="col-md-7 col-sm-7 col-xs-7">
-											@include($viewDir.'.partials.html_partials.meal')
+											@include($viewPath.'.partials.html_partials.meal')
 										</div>
 									</div> --}}
 									<div class="row inner-tab-container scroll-bar m-top-5">

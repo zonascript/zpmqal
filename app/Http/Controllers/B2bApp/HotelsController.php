@@ -382,53 +382,6 @@ class HotelsController extends Controller
 	}
 
 
-	public function searchHotels($rid, Request $request)
-	{
-		$route = RouteController::call()->model()->find($rid);
-		$location = $route->destination_detail;
-		$params = [
-					'name' => $request->name,
-					'latitude' => $location->latitude, 
-					'longitude' => $location->longitude, 
-					'max_rating' => 5,
-					'min_rating' => 0,
-				];
-				
-		$hotelNames = DbHotelsController::call()
-									->searchHotels($params);
-		$result = ['hotels' => $hotelNames];
-
-		if ($request->format == 'json') {
-			$result = json_encode($result);
-		}
-		return $result;
-	}
-
-
-	public function searchHotelNames($rid, Request $request)
-	{
-		$route = RouteController::call()->model()->find($rid);
-		$location = $route->destination_detail;
-		$params = [
-					'name' => $request->term,
-					'latitude' => $location->latitude, 
-					'longitude' => $location->longitude, 
-					'max_rating' => 5,
-					'min_rating' => 0,
-					'is_name' => 1
-				];
-				
-		$hotelNames = DbHotelsController::call()
-									->searchHotelsByName($params);
-
-		if ($request->format == 'json') {
-			$hotelNames = json_encode($hotelNames);
-		}
-
-		return $hotelNames;
-	}
-
-
 	public function findHotel($id, Request $request)
 	{
 		$packageHotel = PackageHotelModel::find($id);

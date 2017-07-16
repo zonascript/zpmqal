@@ -747,6 +747,7 @@
 .noborder{ border: none !important; }
 .border-gray{ border: 1px solid #ccc; }
 .border-red{border: 1px solid red ! important;}
+.border-orange{border: 1px solid orange ! important;}
 .border-top-gray{ border-top: 1px solid #ccc; }
 .border-red-2px{border: 2px solid red ! important;}
 .border-blue-1px{border: 1px solid #337ab7 ! important;}

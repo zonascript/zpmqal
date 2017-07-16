@@ -3,7 +3,7 @@
 namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
-use Auth;
+
 use DB;
 
 class PackageCodeModel extends Model
@@ -12,7 +12,7 @@ class PackageCodeModel extends Model
 
 	public function newCode()
 	{
-		$auth = Auth::user();
+		$auth = auth()->user();
 		$adminId = $auth->admin->id;
 		$code = $this->where('admin_id', $adminId)->count();
 		$code = $code+1;

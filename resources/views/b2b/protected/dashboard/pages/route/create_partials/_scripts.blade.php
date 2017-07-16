@@ -152,50 +152,6 @@
 	{{-- /Adding or Removing-Destination --}}
 
 
-	{{-- autocomplete --}}
-
-	$(document).on('keyup keypress keydown paste', '.location', function(e) {
-		var parent = $(this).closest('.destinationList');
-		var mode = $(parent).find('.mode').val();
-		var name = $(this).attr('name');
-
-		if (mode != '') {
-			
-			var	url = '{{ route('fatchDestinations') }}';
-
-			if (mode == 'flight') {
-				url = '{{ route('fatchAirports') }}?tags=flight';
-			}
-			else if(mode == 'cruise'){
-				url += '?tags=cruise';
-			}
-
-			$(parent).find('.mode').removeClass('border-red');
-			
-			if ($(this).attr('data-match') != $(this).val()) {
-				$(this).addClass('inctv');
-				changeInRoute(parent);
-			}
-
-			$(this).autocomplete({ source: url });
-			
-		}else{
-			$(parent).find('.mode').addClass('border-red');
-		}
-	});
-
-
-
-	$(document).on('autocompleteselect', '.location', function (e, ui) {
-		$(this).attr('data-match', $(this).val())
-						.removeClass('inctv')
-							.removeClass('border-red');
-	});
-
-	{{-- /autocomplete --}}
-
-
-
 	$(document).on('change', '.nights', function () {
 		var nights = $(this).val();
 
@@ -378,4 +334,5 @@
 	{{-- /Adults-Child-button --}}
 </script>
 
-@include('b2b.protected.dashboard.pages.route.create_partials.function')
+@include($viewPath.'.create_partials.autocomplete')
+@include($viewPath.'.create_partials.function')

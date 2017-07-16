@@ -3,7 +3,7 @@
 namespace App\Models\AdminApp;
 
 use App\Models\B2bApp\ClientModel;
-use Auth;
+
 use DB;
 
 class EnquiryModel extends ClientModel
@@ -17,7 +17,7 @@ class EnquiryModel extends ClientModel
 
 	public function findByAdminId($where = [])
 	{
-		$auth = Auth::guard('admin')->user();
+		$auth = auth()->guard('admin')->user();
 		$where = array_merge(["admin_id" => $auth->id, ["status", "<>", "deleted"]], $where);
 
 		$clients = DB::table('trawish_b2b.clients')

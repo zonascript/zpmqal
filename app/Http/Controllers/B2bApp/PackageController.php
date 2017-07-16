@@ -11,6 +11,7 @@ use App\Http\Controllers\B2bApp\PdfHtmlController;
 use App\Http\Controllers\B2bApp\PackageCostsController;
 use App\Http\Controllers\B2bApp\TrackPackageController;
 use App\Http\Controllers\B2bApp\PackageCodesController;
+use App\Http\Controllers\B2bApp\PackageNotesController;
 use App\Http\Controllers\CommonApp\UrlController;
 use App\Models\B2bApp\PackageModel;
 
@@ -256,6 +257,26 @@ class PackageController extends Controller
 								"status" => 200, 
 								"response" => "saved successfully...",
 								"token" => $packageCost->token
+							]);
+	}
+
+
+	public function saveNote($token, Request $request)
+	{
+		$package = $this->model()->findByToken($token);
+		$noteId = PackageNotesController::call()
+							->creatOrUpdate(
+										$package->package_note_id, 
+										$request->note
+									);
+							
+		$package->package_note_id = $noteId;
+		$package->save();
+
+		return json_encode([
+								"status" => 200, 
+								"response" => "saved successfully...",
+								"id" => $noteId
 							]);
 	}
 

@@ -95,7 +95,7 @@ class ClientModel extends Model
 		$client = $this->select()
 							->where([
 										"user_id" => $auth->id,
-										["is_active", "<>", 0]
+										["status", "<>", 0]
 									])
 								->where(function ($query) use ($mobile, $email){
 											$query->where(["mobile" => $mobile])
@@ -112,7 +112,7 @@ class ClientModel extends Model
 		$auth = auth()->user();
 		return $this->where([
 									'user_id' => $auth->id,
-									['is_active', '<>', 0],
+									['status', '<>', 0],
 									['fullname', 'like', '%'.$name.'%']
 								])
 							->simplePaginate(20);
@@ -157,7 +157,7 @@ class ClientModel extends Model
 	{
 		$auth = auth()->user();
 		$userQuery = 'user_id = '.$auth->id;
-		$query = "COUNT(*) as total, (SELECT COUNT(*) FROM `clients` WHERE is_active = 0 AND ".$userQuery.") as deleted, (SELECT COUNT(*) FROM `clients` WHERE is_active = 3 AND ".$userQuery.") as pending, (SELECT COUNT(*) FROM `clients` WHERE date(created_at) = '".date('Y-m-d')."' AND ".$userQuery.") as todays, (SELECT COUNT(*) FROM `follow_ups` WHERE date(datetime) = '".date('Y-m-d')."' AND ".$userQuery.") as follow_ups";
+		$query = "COUNT(*) as total, (SELECT COUNT(*) FROM `clients` WHERE status = 0 AND ".$userQuery.") as deleted, (SELECT COUNT(*) FROM `clients` WHERE status = 3 AND ".$userQuery.") as pending, (SELECT COUNT(*) FROM `clients` WHERE date(created_at) = '".date('Y-m-d')."' AND ".$userQuery.") as todays, (SELECT COUNT(*) FROM `follow_ups` WHERE date(datetime) = '".date('Y-m-d')."' AND ".$userQuery.") as follow_ups";
 
 		return $this->select(\DB::raw($query))
 									->where(['user_id' => $auth->id])

@@ -2,12 +2,7 @@
 	<div class="col-md-2 col-sm-2 col-xs-12">
 		<select class="form-control nopadding p-left-10 mode inctv" required="" data-parsley-type="value">
 			<option value="" selected="">Select Mode</option>
-			<option value="flight">Flight</option>
-			<option value="train">Train</option>
-			<option value="hotel">Land</option>
-			<option value="bus">Bus</option>
-			<option value="ferry">Ferry</option>
-			<option value="cruise">Cruise</option>
+			{!! $indication->htmlOptions('route_mode') !!}
 		</select>
 	</div>
 	<div class="col-md-9 col-sm-9 col-xs-12">

@@ -3,7 +3,7 @@
 namespace App\Models\AdminApp;
 
 use Illuminate\Database\Eloquent\Model;
-use Auth;
+
 
 class TransectionModel extends Model
 {
@@ -13,13 +13,13 @@ class TransectionModel extends Model
 
 	public function setAdminIdAttribute()
 	{
-		$auth = Auth::guard('admin')->user();
+		$auth = auth()->guard('admin')->user();
 		$this->attributes['admin_id'] = $auth->id;
 	}
 
 	public function setBalanceAttribute()
 	{
-		$auth = Auth::guard('admin')->user();
+		$auth = auth()->guard('admin')->user();
 		$this->attributes['balance'] = $auth->balance;		
 	}
 

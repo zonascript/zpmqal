@@ -1,4 +1,4 @@
-@include($viewDir.'.partials.scripts.objects')
+@include($viewPath.'.partials.scripts.objects')
 <script>
 	{{-- bootstrap-daterangepicker --}}
 	$(document).ready(function() {
@@ -16,29 +16,6 @@
 		@endforeach
 	});
 	{{-- /bootstrap-daterangepicker --}}
-
-	{{-- autocomplete --}}
-	$(document).on('keypress paste', '#filter_search', function(e) {
-		var key = e.which;
-		if(key == 13){ /*the enter key code*/
-			postSearchProp();
-		}
-		else{
-			var name = $(this).val();
-			if (name.length > 2) {
-				showSpinIcon();
-				var ridObj = getRidObject(idObject.crid);
-				url = '{{ urlAccomoApi("search/name") }}/'+idObject.crid+'?format=json&_token='+csrf_token;
-				$(this).autocomplete({ source: url });
-			}
-		}
-	});
-
-
-	$(document).on('autocompleteselect', '#filter_search', function (e, ui) {
-		postSearchProp();
-	});
-	{{-- /autocomplete --}}
 
 	{{-- search hotel --}}
 	$(document).on('click', '#btn_filter_search', function() {
@@ -100,4 +77,5 @@
 	});
 </script>
 
-@include($viewDir.'.partials.scripts.function')
+@include($viewPath.'.partials.scripts.autocomplete')
+@include($viewPath.'.partials.scripts.function')

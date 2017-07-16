@@ -36,10 +36,9 @@
 				type:"post",
 				url: "{{ url('/dashboard/follow-up/') }}",
 				data: data,
+				dataType : "JSON",
 				success: function(response, textStatus, xhr) {
 					$('.datetime-followup, .text-followup').val('');
-					console.log(response);
-					response = JSON.parse(response);
 					alert(response.response);
 				},
 
@@ -86,8 +85,8 @@
 				type:"post",
 				url: "{{ route('saveCost', $package->token) }}",
 				data: data,
+				dataType : "JSON",
 				success: function(response, textStatus, xhr) {
-					response = JSON.parse(response);
 					setHref(response.token);
 					$.alert({
 						title: 'Success!',
@@ -141,8 +140,8 @@
 				type:"get",
 				url: "{{ url('/dashboard/package/html/'.$package->id) }}",
 				data: data,
+				dataType : "JSON",
 				success: function(response, textStatus, xhr) {
-					response = JSON.parse(response);
 					if (response.status == 200) {
 						var pdfUrl = '{{ url('/dashboard/package/pdf/') }}/'+response.hash_id;
 						var htmlUrl = '{{url('/your/package/detail/')}}/'+response.hash_id;
@@ -236,4 +235,24 @@
 	}
 
 	{{-- /calculateSum --}}
+
+	function savePackageNote() {
+		var data = {
+			"_token" : csrf_token,
+			"note" : tinymce.get('note_area').getContent()
+		};
+
+		$.ajax({
+			type : "post",
+			url : "{{ route('saveNote', $package->token) }}", 
+			data : data,
+			dataType : 'JSON',
+			success : function (response) {
+				$.alert({
+					title: 'Success!',
+					content: '<h2>'+response.response+'</h2>'
+				});
+			}
+		});
+	}
 </script>

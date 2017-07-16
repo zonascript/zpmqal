@@ -44,20 +44,7 @@
 {{-- making an object which contain some ids --}}
 <script>
 	var idObject = {!! json_encode($idObject) !!};
-	var modeObj = {
-						'' : 'Mode',
-						'no' : 'No Transfer', 
-						'private' : 'Private',
-						'sic' : 'SIC' , 
-						'selfdrive' : 'Self Drive'
-					};
+	var modeObj = {!! json_encode($indication->toKeyValue('act_mode', ['' => 'Mode'])) !!};
 
-	var timingObj = {
-					'' : 'Timing',
-					'morning' : 'Morning', 
-					'noon' : 'Noon',
-					'evening' : 'Evening' , 
-					'halfday' : 'Half Day',
-					'fullday' : 'Full Day'
-				};
+	var timingObj = {!! json_encode($indication->toKeyValue('timing', ['' => 'Timing'])) !!};
 </script>

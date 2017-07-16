@@ -5,6 +5,7 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ commonAsset('datetimepicker/jquery.datetimepicker.min.css') }}"/>
+	<link rel="stylesheet" type="text/css" id="u0" href="https://cdn.tinymce.com/4/skins/lightgray/skin.min.css">
 @endsection
 
 @section('content')
@@ -74,6 +75,10 @@
 		</div>
 		{{-- /Activitiy List --}}
 
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			@include($viewPath.'.show_partials.note')
+		</div>
+
 		{{-- Grand Total List --}}
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="row">
@@ -97,6 +102,27 @@
 	{{-- /bootstrap-daterangepicker --}}
 @endsection
 
+@section('headJs')
+	<script src="{{ asset('js/tinymce.min.js') }}"></script>
+	{{-- <script src="http://cloud.tinymce.com/stable/tinymce.min.js?apiKey=ojx87hfs53fqsef62yibco7kh4nk7gyzf1trcc14tt3vlmrn"></script> --}}
+	<script>
+		tinymce.init({ 
+			selector:'#note_area',
+			plugins : 'autolink link image lists preview table',
+			menu: {
+				file: {title: 'File', items: 'newdocument'},
+				edit: {title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall'},
+				insert: {title: 'Insert', items: 'link media | template hr'},
+				view: {title: 'View', items: 'visualaid'},
+				format: {title: 'Format', items: 'bold italic underline strikethrough superscript subscript | formats | removeformat'},
+				table: {title: 'Table', items: 'inserttable tableprops deletetable | cell row column'},
+				tools: {title: 'Tools', items: 'spellchecker code'}
+			},
+			menubar: 'file edit insert view format table tools',
+			height : 210
+		});
+	</script>
+@endsection
 
 @section('scripts')
 	@include($viewPath.'.show_partials._scripts')

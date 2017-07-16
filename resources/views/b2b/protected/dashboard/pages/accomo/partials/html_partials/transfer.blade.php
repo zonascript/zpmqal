@@ -1,15 +1,17 @@
 <?php
-	$transfers = [
-			"airport" => "Airport",
-			"bus" => "Bus/Coach",
-			"hotel" => "Hotel",
-			"cruise" => "Cruise/Ferry",
-		];
+	// $transfers = [
+	// 		"airport" => "Airport",
+	// 		"bus" => "Bus/Coach",
+	// 		"hotel" => "Hotel",
+	// 		"cruise" => "Cruise/Ferry",
+	// 	];
 
-	$transfersHtml = '';
-	foreach ($transfers as $transferKey => $transfer) {
-		$transfersHtml .= '<option value="'.$transferKey.'">'.$transfer.'</option>';
-	}
+	// $transfersHtml = '';
+	// foreach ($transfers as $transferKey => $transfer) {
+	// 	$transfersHtml .= '<option value="'.$transferKey.'">'.$transfer.'</option>';
+	// }
+
+	$transfersHtml = indication()->htmlOptions('transfer_spot');
 ?>
 <div class="row">
 	<div class="col-md-6 col-sm-6 col-xs-6 pick-drop-container">

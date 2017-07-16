@@ -162,6 +162,11 @@ function fakeObject()
 	return new \App\MyLibrary\MyData([]);
 }
 
+
+function indication()
+{
+	return new \App\Models\CommonApp\IndicationModel;
+}
  
 function removeAndSym($string){
 	if (findWord('&amp;', $string)) {
@@ -222,9 +227,12 @@ function showIsChecked($bool) {
 	return $bool ? 'checked=""' : '';
 }
 
-
+/* this function is removed because of 
+`indication->htmlOptions('transfer_spot')`
 function showTransferOption($type='')
 {
+	$transfersHtml = indication()->htmlOptions('transfer_spot');
+
 	$transfers = [
 			"airport" => "Airport",
 			"bus" => "Bus/Coach",
@@ -241,7 +249,7 @@ function showTransferOption($type='')
 	}
 
 	return $transfersHtml;
-}
+}*/
 
 
 function displayNone($bool)

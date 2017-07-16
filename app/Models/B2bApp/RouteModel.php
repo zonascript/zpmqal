@@ -5,6 +5,9 @@ namespace App\Models\B2bApp;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\CommonApp\DestinationController;
 use App\Models\HotelApp\AgodaDestinationModel;
+use App\Models\CommonApp\DestinationModel;
+use App\Models\CommonApp\IndicationModel;
+use App\Models\CommonApp\AirportModel;
 use Carbon\Carbon;
 
 
@@ -12,12 +15,10 @@ class RouteModel extends Model
 {
 	protected $table = 'routes';
 	protected $appends = [
-			'origin_code', 
 			'end_datetime',
 			'origin_detail', 
 			'explode_origin',
 			'start_datetime', 
-			'destination_code',
 			'destination_detail',
 			'explode_destination',
 		];
@@ -38,38 +39,86 @@ class RouteModel extends Model
 
 	public function getOriginDetailAttribute()
 	{
-		$location = $this->location($this->explode_origin);
-		return $this->searchDbLocation($location);
+		$result = $this->originMorphTo;
+
+		if (is_null($result) || $this->mode == 'flight') {
+			$location = $this->location($this->explode_origin);
+			$result = $this->searchDbLocation($location);
+			if (!is_null($result) && $this->mode != 'flight') {
+				$this->origin_code = $result->id;
+				$this->save();
+			}
+		}
+		
+		return $result;
 	}
 
 
 	public function getDestinationDetailAttribute()
 	{
-		$location = $this->location($this->explode_destination);
-		return $this->searchDbLocation($location);
-	}
+		$result = $this->destinationMorphTo;
 
-
-	public function getOriginCodeAttribute()
-	{
-		$originCode = null;
+		if (is_null($result) || $this->mode == 'flight') {
+			$location = $this->location($this->explode_destination);
+			$result = $this->searchDbLocation($location);
+			if (!is_null($result) && $this->mode != 'flight') {
+				$this->destination_code = $result->id;
+				$this->save();
+			}
+		}
 		
-		if ($this->attributes['mode'] == 'flight') {
-			$originCode = substr($this->attributes['origin'], 0, 3);
+		return $result;
+	}
+
+
+	public function originMorphTo()
+	{
+		$class = DestinationModel::class;
+		$col = 'id';
+
+		if ($this->mode == 'flight') {
+			$class = AirportModel::class;
+			$col = 'airport_code';
 		}
-		return $originCode;
+
+		return  $this->belongsTo($class, 'origin_code', $col);
+	}
+
+	public function destinationMorphTo()
+	{
+		$class = DestinationModel::class;
+		$col = 'id';
+
+		if ($this->mode == 'flight') {
+			$class = AirportModel::class;
+			$col = 'airport_code';
+		}
+
+		return  $this->belongsTo($class, 'destination_code', $col);
+	}
+
+
+	public function getOriginCodeAttribute($code)
+	{
+		if ($this->mode == 'flight' && !strlen($code)) {
+			$code = substr($this->attributes['origin'], 0, 3);
+			$this->origin_code = $code;
+			$this->save();
+		}
+		return $code;
 	}
 
 
 
-	public function getDestinationCodeAttribute()
+	public function getDestinationCodeAttribute($code)
 	{
-		$destinationCode = null;
-
-		if ($this->attributes['mode'] == 'flight') {
-			$destinationCode = substr($this->attributes['destination'], 0, 3);
+		if ($this->mode == 'flight' && !strlen($code)) {
+			$code = substr($this->attributes['destination'], 0, 3);
+			$this->destination_code = $code;
+			$this->save();
 		}
-		return $destinationCode;
+
+		return $code;
 	}
 
 

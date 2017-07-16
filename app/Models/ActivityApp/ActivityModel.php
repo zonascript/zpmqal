@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\CommonApp\ImageModel;
 use App\Models\CommonApp\DestinationModel;
 // =============================Models=============================
-use Auth;
+
 use DB;
 
 class ActivityModel extends Model
@@ -106,7 +106,7 @@ class ActivityModel extends Model
 	*/	
 	public function unionActivities($params)
 	{
-		$auth = Auth::user();
+		$auth = auth()->user();
 
 		$fgfCityId = $params['fgf_city_id'];
 		$viatorCityId = $params['viator_city_id'];
@@ -162,7 +162,7 @@ class ActivityModel extends Model
 	public function searchActivitiesByName($params, $index = 0, $take = 10)
 	{
 
-		$auth = Auth::user();
+		$auth = auth()->user();
 		$name = $params['name'];
 		$fgfCityId = $params['fgf_city_id'];
 		$viatorCityId = $params['viator_city_id'];
@@ -202,7 +202,7 @@ class ActivityModel extends Model
 	public function searchActivityByName($params, $index = 0, $take = 10)
 	{
 
-		$auth = Auth::user();
+		$auth = auth()->user();
 		$activityNames = [];
 		$name = $params['name'];
 		$fgfCityId = $params['fgf_city_id'];

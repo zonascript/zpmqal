@@ -12,6 +12,8 @@ use App\Models\B2bApp\PackageActivityModel;
 
 class RouteController extends Controller
 {
+	public $viewPath = 'b2b.protected.dashboard.pages.route';
+
 	public static function call()
 	{
 		return new RouteController;
@@ -45,18 +47,19 @@ class RouteController extends Controller
 		}
 
 		$blade = [
-				"client" => $client, 
-				"package" => $package,
-				"routes" => $package->routes
+				"client" 		=> $client, 
+				"package" 	=> $package,
+				"viewPath" 	=> $this->viewPath,
+				"routes" 		=> $package->routes,
+				"indication" => indication(),
 			];
 
-		return view('b2b.protected.dashboard.pages.route.create', $blade);
+		return view($this->viewPath.'.create', $blade);
 	}
 
 
 	public function packageUpdate($id, Request $request)
 	{
-
 		$startDate = date_formatter($request->startDate,'d/m/Y');
 
 		// =====Making Data for package inserting row======
@@ -91,7 +94,11 @@ class RouteController extends Controller
 		$route->package_id = $id;
 		$route->mode = $request->mode;
 		$route->origin = isset($request->origin) ? $request->origin : '';
+		$route->origin_code = isset($request->origin_code) 
+												? $request->origin_code 
+												: '';
 		$route->destination = $request->destination;
+		$route->destination_code = $request->destination_code;
 		$route->nights = isset($request->nights) ? $request->nights : 0;
 		if (isset($request->origin_time)) {
 			$route->start_time = timeFull($request->origin_time);
@@ -102,6 +109,10 @@ class RouteController extends Controller
 		}
 
 		$route->status = 'active';
+
+		if (in_array($request->mode, ['bus','ferry','train'])) {
+			$route->status = 'complete';
+		}
 
 		$route->save();
 		return $route->id;
@@ -166,7 +177,7 @@ class RouteController extends Controller
 	*/
 	public function allByPackageId($packageDbId)
 	{
-		return RouteModel::select()->where(["package_id" => $packageDbId])->get();
+		return RouteModel::where(["package_id" => $packageDbId])->get();
 	}
 
 

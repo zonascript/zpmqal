@@ -115,13 +115,25 @@
 		hideSpinIcon();
 		$('#loging_log').show();
 		var name = $('#filter_search').val();
-		postAccomo(idObject.crid, name);
+		var rid = idObject.crid;
+		$.ajax({
+			type:"post",
+			url: '{{ urlAccomoApi("search/name") }}/'+rid,
+			dataType: 'JSON',
+			data: {'format': 'json', '_token' : csrf_token, 'term' : name},
+			success: function(response) {
+				populateHtml({'hotels':[response]}, rid, true);
+			},
+			error: function(xhr, textStatus) {
+				handleError(xhr);
+			}
+		});
 	}
 
 	function populateHtml(response, rid, showTop) {
 		$('#loging_log').hide();
-		/*var response = JSON.parse(response);*/
 		var ridObj 	= getRidObject(rid);
+		console.log(response, ridObj);
 		var accomos = [];
 
 		if (isset(response, 'hotels') && ridObj.mode == 'hotel') {
@@ -135,6 +147,9 @@
 		$.each(accomos, function(i,v){
 			html = makeAccomoObject(i, v, rid);
 			if (showTop) {
+				$('#'+ridObj.elem_id).find('.glowing-border.border-orange')
+															.removeClass('border-orange');
+				html = html.replace('x_panel glowing-border', 'x_panel glowing-border border-orange');
 				$('#'+ridObj.elem_id).prepend(html);
 			}
 			else{
@@ -240,7 +255,7 @@
 	function makeAccomoHtml(accomo) {
 		var appendHtml = '';
 		var searchWord = '';
-		appendHtml += '@include($viewDir.'.partials.html_partials.container')';
+		appendHtml += '@include($viewPath.'.partials.html_partials.container')';
 		return appendHtml;
 	}
 	{{-- make hotel html --}}
@@ -367,7 +382,7 @@
 			btnName = 'Remove';
 		}
 
-		return '@include($viewDir.'.partials.html_partials.props')';
+		return '@include($viewPath.'.partials.html_partials.props')';
 	}
 	{{-- /make prop html --}}
 

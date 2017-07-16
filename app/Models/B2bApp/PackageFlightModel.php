@@ -4,7 +4,7 @@ namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
-use Auth;
+
 class PackageFlightModel extends Model
 {
 	protected $table = 'package_flights';

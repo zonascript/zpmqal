@@ -140,6 +140,7 @@
 			}
 
 			var origin = $(this).find('.origin').val();
+			var origin_code = $(this).find('.origin').attr('data-code');
 			if (origin == '' && mode == 'flight') {
 				$(this).find('.origin').addClass('border-red');
 				$.alert('You forgot to write origin.');
@@ -155,6 +156,7 @@
 			}
 
 			var destination = $(this).find('.destination').val();
+			var destination_code = $(this).find('.destination').attr('data-code');
 			if (destination == '') {
 				$(this).find('.destination').addClass('border-red');
 				$.alert('You forgot to write destination.');
@@ -182,8 +184,10 @@
 			var routeData = {
 				"mode" : mode,
 				"origin" : origin,
+				"origin_code" : origin_code,
 				"origin_time" : origin_time,
 				"destination" : destination,
+				"destination_code" : destination_code,
 				"destination_time" : destination_time,
 				"nights" : nights,
 			};
@@ -207,8 +211,10 @@
 				var rid = $(this).attr("data-rid");
 				var mode = $(this).find('.mode').val();
 				var origin = $(this).find('.origin').val();
+				var origin_code = $(this).find('.origin').attr('data-code');
 				var nights = $(this).find('.nights').val();
 				var destination = $(this).find('.destination').val();
+				var destination_code = $(this).find('.destination').attr('data-code');
 				var origin_time = $(this).find('.origin-time').val();
 				var destination_time = $(this).find('.destination-time').val();
 				var pid = $('#startDate').attr('data-pid');
@@ -219,8 +225,10 @@
 					"origin" : origin,
 					"nights" : nights,
 					"_token" : csrf_token,
+					"origin_code" : origin_code,
 					"origin_time" : origin_time,
 					"destination" : destination,
+					"destination_code" : destination_code,
 					"destination_time" : destination_time
 				};
 

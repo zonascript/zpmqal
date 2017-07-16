@@ -219,6 +219,7 @@
 			var data = getActInputs(this);
 			console.log(data);
 			var btnObj = this;
+
 			if (data == false) {
 				return false;
 			}
@@ -228,8 +229,8 @@
 					type:"post",
 					url: "{{ urlActivitiesBuilder('add') }}/"+rid,
 					data: data,
+					dataType : "JSON",
 					success : function (response) {
-						response = JSON.parse(response);
 						$(btnObj).attr('data-pdid', response.pdid)
 												.removeClass('unsaved');
 
@@ -253,8 +254,8 @@
 			type:"post",
 			url: "{{ urlActivitiesBuilder('remove') }}/"+rid,
 			data: data,
+			dataType : "JSON",
 			success : function (response) {
-				response = JSON.parse(response);
 				$(btnObj).attr('data-pdid', '')
 										.removeClass('unsaved');
 			}
@@ -414,7 +415,7 @@
 		count = parseInt(count)+1;
 		$(thisObj).attr('data-count', count);
 		var elemid = 'rid_'+rid;
-		var html = '{!! $addActiviyHtml !!}';
+		var html = '@include($viewPath.".partials._add")';
 		$('#'+elemid).append(html);
 		addDropzone('#uploadform_'+code);
 		initDatePicker(rid);

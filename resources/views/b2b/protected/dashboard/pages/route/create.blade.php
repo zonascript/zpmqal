@@ -12,11 +12,11 @@
 @endsection
 
 @section('menutab')
-	@include('b2b.protected.dashboard.pages.route.create_partials._menu')
+	@include($viewPath.'.create_partials._menu')
 @endsection
 
 @section('content')
-	@include('b2b.protected.dashboard.pages.route.create_partials.req')
+	@include($viewPath.'.create_partials.req')
 	<div class="row">
 		{{-- Hotel Serach --}}
 		<div class="col-md-12 col-sm-12 col-xs-12">
@@ -57,9 +57,9 @@
 								<div class="form-group">
 									<div class="destinationClass">
 										@if ($routes->count())
-											@include('b2b.protected.dashboard.pages.route.create_partials.non_empty')
+											@include($viewPath.'.create_partials.non_empty')
 										@else
-											@include('b2b.protected.dashboard.pages.route.create_partials.empty')
+											@include($viewPath.'.create_partials.empty')
 										@endif
 									</div>
 									<div class="col-md-12 col-sm-12 col-xs-12 m-top-10">
@@ -169,7 +169,7 @@
 	</div>
 	
 	{{-- Hidden template Html  --}}
-	@include('b2b.protected.dashboard.pages.route.create_partials._hidden')
+	@include($viewPath.'.create_partials._hidden')
 	{{-- /Hidden template Html  --}}
 
 @endsection
@@ -194,5 +194,5 @@
 @endsection
 
 @section('scripts')
-	@include('b2b.protected.dashboard.pages.route.create_partials._scripts')
+	@include($viewPath.'.create_partials._scripts')
 @endsection

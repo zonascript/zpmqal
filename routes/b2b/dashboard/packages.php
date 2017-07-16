@@ -12,6 +12,9 @@
 	// this will save package cost
 	Route::post('savecost/{token}', 'PackageController@saveCost')
 					->name('saveCost');
+
+	Route::post('savenote/{token}', 'PackageController@saveNote')
+					->name('saveNote');
 	
 	// it will generate html of a specific package
 	Route::get('html/{packageDbId}', 'PackageController@getCreatePdfHtml');

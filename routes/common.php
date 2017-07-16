@@ -22,6 +22,11 @@
 				'DestinationController@getDestination'
 			)->name('fatchDestinations');
 
+		Route::get(
+				'location/detail/destination/names', 
+				'DestinationController@names'
+			)->name('destination.names');
+
 	});
 
 	Route::group(['namespace' => 'FlightApp', 'prefix' => 'flights'], function(){

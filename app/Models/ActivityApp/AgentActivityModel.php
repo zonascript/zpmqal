@@ -3,7 +3,7 @@
 namespace App\Models\ActivityApp;
 
 use Illuminate\Database\Eloquent\Model;
-use Auth;
+
 use DB;
 class AgentActivityModel extends Model
 {
@@ -71,7 +71,7 @@ class AgentActivityModel extends Model
 	public function checkUser()
 	{
 		$adminId = null;
-		$auth = Auth::user();
+		$auth = auth()->user();
 
 		$domain = $_SERVER['HTTP_HOST'];
 		if (in_array($domain, [env('B2B_DOMAIN'), env('LOCAL_B2B_DOMAIN')])) {

@@ -48,20 +48,13 @@
 					<div class="row">
 						<select class="btn-block height-34 border-gray padding-5 act-timing">
 							<option value="">Timing</option>
-							<option value="morning">Morning</option>
-							<option value="noon">Noon</option>
-							<option value="evening">Evening</option>
-							<option value="halfday">Half Day</option>
-							<option value="fullday">Full Day</option>
+							{!! $indication->htmlOptions('timing') !!}
 						</select>
 					</div>
 					<div class="row m-top-10">
 						<select class="btn-block height-34 border-gray padding-5 mode">
 							<option value="">Mode</option>
-							<option value="no">No Transfer</option>
-							<option value="private">Private</option>
-							<option value="sic">SIC</option>
-							<option value="selfdrive">Self Drive</option>
+							{!! $indication->htmlOptions('act_mode') !!}
 						</select>
 					</div>
 					<div class="row m-top-10">

@@ -11,7 +11,7 @@ class TextModel extends Model
 
 	public function findByAdminId($adminId = null, array $where = [], $whereRaw = null)
 	{
-		$auth = Auth::guard('admin')->user();
+		$auth = auth()->guard('admin')->user();
 		$adminId = is_null($adminId) ? $auth->id : $adminId;
 
 		$where = array_merge(["admin_id" => $adminId], $where);

@@ -5,6 +5,7 @@ namespace App\Models\B2bApp;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\B2bApp\ItineraryController;
 use App\Models\B2bApp\PackageActivityModel;
+use App\Models\B2bApp\PackageModel;
 use Carbon\Carbon;
 use DB;
 
@@ -15,7 +16,7 @@ class PackageModel extends Model
 	protected $hidden = ['created_at', 'updated_at'];
 	protected $append = [
 								'uid', 'cost', 'nights', 'pax_detail',
-								'itinerary', 'package_url'
+								'itinerary', 'package_url', 'extra_word'
 							];
 
 	public $costToken = null;
@@ -74,6 +75,17 @@ class PackageModel extends Model
 	{
 		return ItineraryController::call()->itinerary($this);
 	}
+
+
+	public function getExtraWordAttribute()
+	{
+		$text = null;
+		if (!is_null($this->packageNote)) {
+			$text = $this->packageNote->note;
+		}
+		return $text;
+	}
+
 
 	public function getPackageUrlAttribute()
 	{
@@ -182,6 +194,15 @@ class PackageModel extends Model
 		return $this->hasMany('App\Models\B2bApp\PackageModel',
 											'package_code',
 											'package_code'
+										);
+	}
+
+
+	public function packageNote()
+	{
+		return $this->belongsTo(
+											PackageNoteModel::class,
+											'package_note_id'
 										);
 	}
 

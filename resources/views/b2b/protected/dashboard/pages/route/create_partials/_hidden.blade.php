@@ -19,12 +19,13 @@
 			<div class="col-md-2 col-sm-2 col-xs-12">
 				<select class="form-control nopadding p-left-10 mode inctv" required="" data-parsley-type="integer" data-parsley-gt="0">
 					<option value="" selected>Select Mode</option>
-					<option value="flight">Flight</option>
+					{!! $indication->htmlOptions('route_mode') !!}
+					{{-- <option value="flight">Flight</option>
 					<option value="train">Train</option>
 					<option value="hotel">Land</option>
 					<option value="bus">Bus</option>
 					<option value="ferry">Ferry</option>
-					<option value="cruise">Cruise</option>
+					<option value="cruise">Cruise</option> --}}
 				</select>
 			</div>
 			<div class="col-md-9 col-sm-9 col-xs-12">
@@ -66,7 +67,7 @@
 
 	<div id="destinationTemp">
 		<div class="col-md-6 col-sm-6 col-xs-12">
-			<input type="text" class="form-control has-feedback location destination inctv p-right-40" placeholder="Destination" name="destination" data-match="" required="">
+			<input type="text" class="form-control has-feedback location destination inctv p-right-40" placeholder="Destination" name="destination" data-match="" data-code="" required="">
 			<i class="fa fa-map-marker form-control-feedback right m-top-5" aria-hidden="true"></i>
 		</div>
 	</div>
@@ -87,7 +88,7 @@
 		<div class="col-md-6 col-sm-6 col-xs-12">
 			<div class="col-md-9 col-sm-9 col-xs-12">
 				<div class="row">
-					<input type="text" class="form-control has-feedback location temp-class inctv" data-match="" placeholder="Location">
+					<input type="text" class="form-control has-feedback location temp-class inctv" data-match="" data-code="" placeholder="Location">
 				</div>
 			</div>
 			<div class="col-md-3 col-sm-3 col-xs-12">
