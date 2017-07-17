@@ -16,13 +16,13 @@
 				select: function( event, ui ) {
 					$(this).val( ui.item.name )
 									.attr('data-code', ui.item.code);
-					hideSpinIcon();
-
 					populateHtml({'hotels' : [ui.item]}, rid, true);
+					hideSpinIcon();
 					return false;
 				}
 			})
 			.autocomplete().data("ui-autocomplete")._renderItem =  function( ul, item ) {
+				hideSpinIcon();
 				return $( "<li>" )
 				.append( "<a>" + item.name + "</a>" )
 				.appendTo( ul );

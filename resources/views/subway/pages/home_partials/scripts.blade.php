@@ -118,6 +118,12 @@
 		}
 	});
 
+	$(document).on('click', '.btn-more-less', function () {
+		var parent = $(this).closest('ul');
+		$(parent).find('li.more').toggle();
+		$(parent).find('.btn-more-less').toggle();
+	});
+
 	function showBookPopup() {
 		$('.book-popup.popup-model').show();
 	}

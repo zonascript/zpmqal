@@ -28,20 +28,26 @@
 					@if ($package->activities->count())
 						<ul>
 							@foreach ($package->activities as $key => $value)
-								<li>
-									{{ $value->activityObject()->name }}.
-									@if ($key == 4 && $key < ($package->activities->count()-1))
-										... <a href="{{ $urlObj->url('activities') }}">more</a>
-										@break
-									@endif
-								</li>
+								@if ($key < 6)
+									<li>
+										{{ $value->activityObject()->name }} | {{ proper($value->activityObject()->mode) }} basis.
+										@if ($key == 5 && $key < ($package->activities->count()-1))
+											<a href="#" class="btn-more-less" >... more</a>
+										@endif
+									</li>
+								@else
+									<li class="more" style="display: none;">
+										{{ $value->activityObject()->name }} | {{ proper($value->activityObject()->mode) }} basis.
+										@if ($key == ($package->activities->count()-1))
+											<a href="#" class="btn-more-less" style="display: none;">... less</a>
+										@endif
+									</li>
+								@endif
 							@endforeach
 						</ul>
 					@endif
 				</td>
 			</tr>
 		</table>
-
-		
 	</div>
 </article>
