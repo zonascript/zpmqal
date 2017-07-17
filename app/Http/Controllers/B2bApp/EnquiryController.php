@@ -49,7 +49,7 @@ class EnquiryController extends Controller
 	public function store(Request $request)
 	{
 		$this->validate($request, [
-			'vendor' => 'required|accepted',
+			'vendor' => 'required|numeric',
 			'fullname' => 'required|max:255',
 			'mobile' => 'required|numeric',
 			'email' => 'required|email|max:255',
