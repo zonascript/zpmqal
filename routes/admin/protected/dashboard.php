@@ -23,6 +23,17 @@
 		});
 
 
+		Route::group(['prefix' => 'inventories'], function(){
+			Route::group(['prefix' => 'activity'], function(){
+				Route::get('store/{id?}', 'ActivitiesController@createOrEdit');
+				Route::post('store', 'ActivitiesController@storeOrUpdate');
+				Route::put('{id}/deactivate', 'ActivitiesController@deactivate');
+				Route::put('{id}/activate', 'ActivitiesController@activate');
+			});
+			Route::resource('activity', 'ActivitiesController');
+		});
+
+
 		Route::get('/', 'DashboardController@getIndex');
 		
 		Route::post('enquiry/{id}/active', 'EnquiryController@active');

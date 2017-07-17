@@ -3,8 +3,8 @@
 namespace App\Models\ActivityApp;
 
 use Illuminate\Database\Eloquent\Model;
-
 use DB;
+
 class AgentActivityModel extends Model
 {
 	protected $connection = 'mysql6';
@@ -31,6 +31,43 @@ class AgentActivityModel extends Model
 		return urlImage($this->image_path);
 	}
 
+
+	public function images()
+	{
+		return $this->morphMany('App\Models\CommonApp\ImageModel', 'connectable');
+	}
+
+
+
+	public function destination()
+	{
+		return $this->belongsTo('App\Models\CommonApp\DestinationModel', 'destination_code');
+	}
+
+
+	public function status()
+	{
+		return $this->belongsTo('App\Models\CommonApp\IndicationModel', 'is_active');
+	}
+
+	public function findOrExit($id)
+	{
+		return $this->where([
+											'id' => $id,
+											'admin_id' => $this->checkUser()
+										])
+									->firstOrFail();
+	}
+
+
+	public function findCheckUser($id)
+	{
+		return $this->where([
+											'id' => $id,
+											'admin_id' => $this->checkUser()
+										])
+									->first();
+	}
 
 
 	public function findByCode($id)
@@ -68,20 +105,43 @@ class AgentActivityModel extends Model
 	}
 	
 
+	public function activitiesPaginate(Array $params)
+	{
+		$params = (object) $params;
+		$where = [
+							['title', 'like', '%'.$params->title.'%'],
+							'admin_id' => $this->checkUser()
+						];
+
+		if (isset($params->destCode)) {
+			$where['destination_code'] = $params->destCode;
+		}
+
+		return $this->where($where)->simplePaginate(20);
+	}
+
+
 	public function checkUser()
 	{
 		$adminId = null;
-		$auth = auth()->user();
 
 		$domain = $_SERVER['HTTP_HOST'];
-		if (in_array($domain, [env('B2B_DOMAIN'), env('LOCAL_B2B_DOMAIN')])) {
+		if ($domain == env('B2B_DOMAIN')) {
+			$auth = auth()->user();
 			$adminId = $auth->id;
 		}
-		elseif (in_array($domain, [env('ADMIN_DOMAIN'), env('LOCAL_ADMIN_DOMAIN')])) {
-			$adminId = $auth->admin->id;
+		elseif ($domain == env('ADMIN_DOMAIN')) {
+			$auth = auth()->guard('admin')->user();
+			$adminId = $auth->id;
 		}
 
 		return $adminId;
+	}
+
+
+	public function openUrl()
+	{
+		return url('dashboard/inventories/activity/'.$this->id);
 	}
 
 

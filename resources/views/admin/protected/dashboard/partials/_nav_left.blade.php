@@ -71,6 +71,14 @@
 							<li><a href="{{ url('dashboard/settings/lead/vendor') }}">Reports</a></li>
 						</ul>
 					</li>
+					
+					<li>
+						<a><i class="fa fa-cog"></i> Inventories <span class="fa fa-chevron-down"></span></a>
+						<ul class="nav child_menu">
+							<li><a href="{{ url('dashboard/inventories/activity') }}">Activity</a></li>
+						</ul>
+					</li>
+
 					<li>
 						<a><i class="fa fa-cog"></i> Settings <span class="fa fa-chevron-down"></span></a>
 						<ul class="nav child_menu">

@@ -28,4 +28,26 @@ class ImageModel extends Model
 		return  $this->morphTo();
 	}
 
+
+
+	/*
+	| $data must be like : ['path' => '', 'host' => '']
+	*/
+	public function makeAndSave(Array $data, $cid, $ctype)
+	{
+		$array = [];
+		foreach ($data as $value) {
+			if (isset($value['path'])) {
+				$array[] = addDateColumns([
+												"type" => 'path',
+												"image_path" => $value['path'],
+												"connectable_id"	=> $cid,
+												"connectable_type"	=> $ctype,
+											]);
+			}
+		}
+
+		return $this->insert($array);
+	}
+
 }

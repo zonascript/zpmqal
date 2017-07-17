@@ -497,6 +497,8 @@
 .h-w-10{height: 10px; width: 10px;}
 .h-w-17{height: 17px; width: 17px;}
 
+
+.height-auto{ height: auto ! important; }
 .height-85p{ height: 85% ! important; }
 .height-100p{ height: 100% ! important; }
 
@@ -558,6 +560,12 @@
 .min-max-height-170px{ 
 	min-height: 170px ! important;
 	max-height: 170px ! important;
+}
+
+
+.min-max-height-320px{ 
+	min-height: 320px ! important;
+	max-height: 320px ! important;
 }
 
 .line-through{text-decoration: line-through;}

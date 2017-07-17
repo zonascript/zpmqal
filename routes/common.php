@@ -1,6 +1,7 @@
 <?php
 
 	Route::group(['namespace' => 'CommonApp'], function(){
+		Route::post('api/image/upload', 'ImageController@upload');
 		
 		Route::any(
 						'secure/payment/{status}/{txnid}', 
