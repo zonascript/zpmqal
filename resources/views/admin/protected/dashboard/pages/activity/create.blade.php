@@ -57,7 +57,7 @@
 							<button class="btn btn-success btn-block btn-save">Save</button>
 						</div>
 						<div class="col-md-3 col-sm-3 col-xs-12">
-							<a href="{{ url('dashboard/inventories/activity') }}" class="btn btn-primary btn-block btn-save">Cancel</a>
+							<a href="{{ url('dashboard/inventories/activity') }}" class="btn btn-primary btn-block">Cancel</a>
 						</div>
 					</div>
 				</div>
