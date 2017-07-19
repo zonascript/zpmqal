@@ -12,7 +12,8 @@ class DashboardController extends Controller
 {
 
 	public function getIndex(){
-		$clients = EnquiryController::call()->model()->findByAdminId();
+		$clients = EnquiryController::call()
+							->model()->simplePaginateData('', true);
 		$blade = [
 				"clients" => $clients
 			];

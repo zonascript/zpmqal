@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Models\AdminApp;
-
 use App\Models\B2bApp\ClientModel;
-
 use DB;
 
 class EnquiryModel extends ClientModel
@@ -49,17 +47,5 @@ class EnquiryModel extends ClientModel
 		return $clients;
 
 	}
-
-
-	public function user()
-	{
-		return $this->belongsTo('App\Models\AdminApp\UserModel', 'user_id');
-	}
-
-	public function leadVendor()
-	{
-		return $this->belongsTo('App\Models\AdminApp\LeadVendorModel', 'lead_vendor_id');
-	}
-
 
 }

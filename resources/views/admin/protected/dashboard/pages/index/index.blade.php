@@ -24,15 +24,6 @@
 @endsection
 
 @section('scripts')
-	{{-- data table --}}
-	<script>
-		$(document).ready(function() {
-			$('#datatable').dataTable({
-				"pageLength": 50
-			});
-		});
-	</script>
-	{{-- data table --}}
 	{{-- Clock --}}
 	<script>
 		function startTime() {
@@ -50,16 +41,14 @@
 				if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
 				return i;
 		}
-	</script>
-	{{-- Clock --}}
+		{{-- Clock --}}
 
-	{{-- Chart.js --}}
-	<script>
+		{{-- Chart.js --}}
 		Chart.defaults.global.legend = {
 			enabled: false
 		};
 
-		// Line chart
+		{{-- Line chart --}}
 		var ctx = document.getElementById("lineChart");
 		var lineChart = new Chart(ctx, {
 			type: 'line',
@@ -100,7 +89,7 @@
 		});
 
 
-		// Bar chart
+		{{-- Bar chart --}}
 		var ctx = document.getElementById("mybarChart");
 		var mybarChart = new Chart(ctx, {
 			type: 'bar',

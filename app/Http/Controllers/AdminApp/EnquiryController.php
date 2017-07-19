@@ -4,14 +4,8 @@ namespace App\Http\Controllers\AdminApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ==========================B2b Controller==========================
 use App\Http\Controllers\AdminApp\LeadVendorController;
-
-// ==============================Models==============================
 use App\Models\AdminApp\EnquiryModel;
-
-use Auth;
 
 
 
@@ -21,6 +15,7 @@ class EnquiryController extends Controller
 	{
 		return new EnquiryController;
 	}
+
 
 	public function model()
 	{
@@ -34,7 +29,7 @@ class EnquiryController extends Controller
 	 */
 	public function index()
 	{
-		$clients = $this->model()->findByAdminId();
+		$clients = $this->model()->simplePaginateData('', true);
 		return view('admin.protected.dashboard.pages.enquiry.index', ['clients' => $clients]);
 	}
 
@@ -45,10 +40,11 @@ class EnquiryController extends Controller
 	 */
 	public function create()
 	{
-		$auth = Auth::guard('admin')->user();
+		$auth = auth()->guard('admin')->user();
 		$agents = $auth->users;
-		$leadVendors = LeadVendorController::call()->model()->findByAdminId();
-		// dd($leadVendors);
+		$leadVendors = LeadVendorController::call()
+									->model()->findByAdminId();
+
 		$blade = [
 				"agents" => $agents,
 				"leadVendors" => $leadVendors,
@@ -95,7 +91,7 @@ class EnquiryController extends Controller
 	 */
 	public function show($id)
 	{
-		$auth = Auth::guard('admin')->user();
+		$auth = auth()->guard('admin')->user();
 		$enquiry = $this->model()->find($id);
 
 		if (!is_null($enquiry) && $auth->id == $enquiry->user->admin->id) {
@@ -121,7 +117,7 @@ class EnquiryController extends Controller
 	 */
 	public function edit($id)
 	{
-		$auth = Auth::guard('admin')->user();
+		$auth = auth()->guard('admin')->user();
 		$enquiry = $this->model()->find($id);
 
 		if (!is_null($enquiry) && $auth->id == $enquiry->user->admin->id) {

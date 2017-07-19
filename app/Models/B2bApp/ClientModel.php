@@ -10,7 +10,7 @@ class ClientModel extends Model
 {
 
 	protected $table = 'clients';
-	protected $appends = ['uid'];
+	protected $appends = ['uid', 'assign_to'];
 
 	public static function call(){
 		return new ClientModel;
@@ -31,6 +31,12 @@ class ClientModel extends Model
 		return $token;
 	}
 
+
+	public function getAssignToAttribute()
+	{
+		return $this->user->fullname.' ('.$this->user->email.')';
+	}
+
 	public function user()
 	{
 		return $this->belongsTo('App\User', 'user_id');
@@ -40,14 +46,6 @@ class ClientModel extends Model
 		return $this->hasMany('App\Models\B2bApp\PackageModel', 'client_id');
 	}
 
-
-	public function packagesPaginate($pid){
-		$id = filter_var($pid, FILTER_SANITIZE_NUMBER_INT);
-		$where = $id > 0 ? [['id', 'like', $id]] : [];
-		return $this->packages()->where($where)->simplePaginate(10);
-	}
-
-
 	public function aliases()
 	{
 		return $this->hasMany(ClientAliasModel::class, 'client_id');
@@ -55,6 +53,14 @@ class ClientModel extends Model
 
 	public function leadVendor(){
 		return $this->belongsTo('App\Models\AdminApp\LeadVendorModel', 'lead_vendor_id');
+	}
+
+
+
+	public function packagesPaginate($pid){
+		$id = filter_var($pid, FILTER_SANITIZE_NUMBER_INT);
+		$where = $id > 0 ? [['id', 'like', $id]] : [];
+		return $this->packages()->where($where)->simplePaginate(10);
 	}
 
 
@@ -107,9 +113,12 @@ class ClientModel extends Model
 	}
 
 
-	public function simplePaginateData($name)
+	public function simplePaginateData($name, $guard = false)
 	{
-		$auth = auth()->user();
+		$auth = $guard 
+					? auth()->guard('admin')->user() 
+					: auth()->user();
+
 		return $this->where([
 									'user_id' => $auth->id,
 									['status', '<>', 0],
@@ -188,6 +197,25 @@ class ClientModel extends Model
 			}
 		}
 		return (object)["key" => $key, 'value' => $value];
+	}
+
+
+	public function borderCss()
+	{
+		$css = '';
+		if ($this->status== 0){
+			$css = "red";
+		}
+		elseif($this->status==3){
+			$css = "orange";
+		}
+		return $css;
+	}
+
+
+	public function statusCss()
+	{
+		return statusCss($this->status);
 	}
 
 }
