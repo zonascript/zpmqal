@@ -57,15 +57,14 @@ class ActivitiesController extends Controller
 	public function storeOrUpdate(Request $request)
 	{
 		$activity = $this->model()->findCheckUser($request->id);
-		$activity->class;
 		if (is_null($activity)) {
 			$activity = $this->model();
 		}
-
 		$activity->title =  $request->title;
 		$activity->description =  $request->description;
 		$activity->destination_code =  $request->dest_code;
 		$activity->save();
+		
 		$images = isset($request->images) && is_array($request->images) 
 						? $request->images
 						: [];

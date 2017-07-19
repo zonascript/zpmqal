@@ -16,6 +16,7 @@ use Carbon\CarbonInterval;
 use App\Models\CommonApp\DestinationModel;
 use App\Models\ActivityApp\ViatorDestinationModel;
 use App\Models\B2bApp\RouteModel;
+use App\Http\Controllers\ActivityApp\AgentActivitiesController;
 
 
 class TestController extends Controller
@@ -29,6 +30,17 @@ class TestController extends Controller
 
 	public function testCode()
 	{
+		$data = [
+				"mode" => "mode",
+				"name" => "title",
+				"cityId" => 78,
+				"timing" => "timing",
+				"description" => "description",
+				"image" => 'test.png',
+			];
+		AgentActivitiesController::call()->insertOwnActivities($data);
+		dd($data);
+		dd("INSERT INTO `trawish_common`.`images`(`type`, `image_path`, `connectable_id`, `connectable_type`, `created_at`, `updated_at`) SELECT 'path', `image_path`, `id`, 'App\\\Models\\\ActivityApp\\\AgentActivityModel', `created_at`, `updated_at` FROM `trawish_activities`.`agent_activities` WHERE `image_path` IS NOT NULL");
 
 		$ind = indication()->toKeyValue('route_mode', ['' => 'Sel']);
 		dd($ind);

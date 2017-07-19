@@ -28,7 +28,9 @@ class AgentActivityModel extends Model
 
 	public function getImageUrlAttribute()
 	{
-		return urlImage($this->image_path);
+		return	$this->images->count()
+					? $this->images[0]->url
+					: urlImage('images/default/activity.png');
 	}
 
 
@@ -36,7 +38,6 @@ class AgentActivityModel extends Model
 	{
 		return $this->morphMany('App\Models\CommonApp\ImageModel', 'connectable');
 	}
-
 
 
 	public function destination()

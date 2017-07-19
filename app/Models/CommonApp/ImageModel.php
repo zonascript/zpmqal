@@ -8,6 +8,7 @@ class ImageModel extends Model
 {
 	protected $table = 'images';
 	protected $connection = 'mysql2';
+	protected $guarded = ['id'];
 	protected $hidden = [
 							'id', 'type', 'status', 'path_or_url', 'image_path', 
 							'connectable_id', 'connectable_type','is_active	',
