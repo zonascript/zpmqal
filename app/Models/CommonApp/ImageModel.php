@@ -18,9 +18,8 @@ class ImageModel extends Model
 	public function getUrlAttribute($url)
 	{
 		if ($this->type == 'path') {
-			$url = urlImage().$this->image_path;			
+			$url = urlImage($this->image_path);			
 		}
-
 		return $url;
 	}
 
