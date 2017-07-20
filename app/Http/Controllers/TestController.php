@@ -30,6 +30,17 @@ class TestController extends Controller
 
 	public function testCode()
 	{
+		dd(urlImage('storage/fds/sdfjgsd/jsdfkalfjaks'));
+		return \Image::make(storage_path('1.jpg'))->response();
+		return '<img data-src= "'.asset('storage/mylocal/1-0199bc34be.jpg').'">';
+
+		dd(strlen('11886a9304b0fa04fbc9907fe58ba98c'));
+		dd(newToken());
+		$url = 'www.google.co.in/search?q=how+to+sparate+domain+from+a+url+in+php&oq=how+to+sparate+domain+from+a+url+in+php&aqs=chrome..69i57j0l5.16659j0j7&sourceid=chrome&ie=UTF-8';
+		$parse = parse_url($url);
+		dd($parse);
+		dd(strlen('https://www.google.co.in/imgres?imgurl=http%3A%2F%2Fwww.geeksengine.com%2Fimg%2Farticle%2Fdatabase%2Fenum.gif&imgrefurl=http%3A%2F%2Fwww.geeksengine.com%2Fdatabase%2Fdesign%2Fdata-type-constraint.php&docid=KgutfKtVY5BOsM&tbnid=ASlmWXVUFbwGmM%3A&vet=10ahUKEwirzcu5lpbVAhUKu7wKHe6uCSEQMwgnKAIwAg..i&w=395&h=231&bih=678&biw=1331&q=column%20type%20for%20url%20in%20mysql&ved=0ahUKEwirzcu5lpbVAhUKu7wKHe6uCSEQMwgnKAIwAg&iact=mrc&uact=8'));
+
 		$data = [
 				"mode" => "mode",
 				"name" => "title",
@@ -38,7 +49,7 @@ class TestController extends Controller
 				"description" => "description",
 				"image" => 'test.png',
 			];
-		AgentActivitiesController::call()->insertOwnActivities($data);
+		// AgentActivitiesController::call()->insertOwnActivities($data);
 		dd($data);
 		dd("INSERT INTO `trawish_common`.`images`(`type`, `image_path`, `connectable_id`, `connectable_type`, `created_at`, `updated_at`) SELECT 'path', `image_path`, `id`, 'App\\\Models\\\ActivityApp\\\AgentActivityModel', `created_at`, `updated_at` FROM `trawish_activities`.`agent_activities` WHERE `image_path` IS NOT NULL");
 
@@ -458,8 +469,17 @@ class TestController extends Controller
 
 	public function decode()
 	{
-		$file = file_get_contents(storage_path('mylocal/test/file.json'));
-		dd_pre_echo(json_decode($file));
+		$file = file_get_contents(storage_path('mylocal/data/ht.json'));
+		$data = json_decode($file);
+		// dd($data);
+		echo '<table>';
+		foreach ($data as $key => $value) {
+			echo '<tr><td>' //<td>'.$key.'</td>
+						.$value->name.'</td><td>'
+							.$value->number.'</td><td>'
+								.$value->country.'</td></tr>';
+		}
+		echo "</table>";
 	}
 
 	public function getAgodaHtml()

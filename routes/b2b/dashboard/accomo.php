@@ -24,7 +24,7 @@
 			Route::post('images/{rid}', $ac.'@postAccomoImages');
 			Route::post('prop/{rid}', $ac.'@postAccomoProp');
 			Route::post('{rid}', $ac.'@postAccomo');
-			if (isLocalhost()) {
+			if (env('IS_LOCALHOST')) {
 				Route::get('prop/{rid}', $ac.'@postAccomoProp');
 				Route::get('images/{rid}', $ac.'@postAccomoImages');
 				Route::get('facilities/{rid}', $ac.'@postAccomoFacilities');

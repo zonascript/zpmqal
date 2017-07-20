@@ -123,7 +123,7 @@ class PdfHtmlController extends Controller
 		$changeSomething = new \App\Models\B2bApp\ChangeSomethingModel;
 		$changeSomething->detail = 'Copying All id as hash in hash_id column in pdf_htmls table';
 
-		if (!isLocalHost()) {
+		if (!env('IS_LOCALHOST')) {
 			$htmls = PdfHtmlModel::select('id')->get();
 			if ($htmls->count()) {
 				foreach ($htmls as $html) {

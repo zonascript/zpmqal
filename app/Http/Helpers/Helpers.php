@@ -1,45 +1,5 @@
 <?php 
 
-function userDetail(){
-	$userdetail = null;
-		
-	for ($i=0; $i <5 ; $i++) { 
-		$userdetail = findUser();
-		if (isset($userdetail->id)) {
-			break;
-		}
-	}
-	return $userdetail;
-}
-
-function findUser()
-{
-	$user = [];
-
-	if (in_array(url('/'), [env('B2B_URL'), env('LOCAL_B2B_URL'),  env('TEST_URL')])) {
-		$user = Auth::user();
-		$user->profile_pic = urlImage($user->image_path);
-		$user->fullname = $user->firstname.' '.$user->lastname;
-	}
-	elseif (in_array(url('/'), [env('BACKEND_URL'), env('LOCAL_BACKEND_URL')])) {
-		$user = Auth::guard('backend')->user();
-		$user->profile_pic = urlImage($user->image_path);
-		$user->fullname = $user->firstname.' '.$user->lastname;
-	}
-	elseif (in_array(url('/'), [env('ADMIN_URL'), env('LOCAL_ADMIN_URL')])) {
-		$user = Auth::guard('admin')->user();
-		$user->profile_pic = urlImage('images/profile.jpg');
-		$user->fullname = $user->firstname.' '.$user->lastname;
-	}
-	return $user;
-}
-
-function isLocalhost()
-{
-	return env('IS_LOCALHOST');
-}
-
-
 function exitView($url = null)
 {
 	if ($url == null) {
@@ -83,6 +43,21 @@ function backendTypes($type = "", $option = true)
 	return $types;
 }
 
+function filePath($path)
+{
+	$fileParts = pathinfo($path);
+
+	if(!isset($fileParts['filename']))
+	{
+		$fileParts['filename'] = substr(
+				$fileParts['basename'], 0, 
+				strrpos($fileParts['basename'], '.')
+			);
+	}
+	  
+	return $fileParts;
+}
+
 
 function addDateColumns(Array $data)
 {
@@ -90,6 +65,7 @@ function addDateColumns(Array $data)
 	$data["updated_at"] = date('Y-m-d H:i:s');
 	return $data;
 }
+
 
 function loopImages(Array $data, Array $images, $type = 'object')
 {
@@ -157,16 +133,6 @@ function clean($string) {
 	 return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
 }
 
-function fakeObject()
-{
-	return new \App\MyLibrary\MyData([]);
-}
-
-
-function indication()
-{
-	return new \App\Models\CommonApp\IndicationModel;
-}
  
 function removeAndSym($string){
 	if (findWord('&amp;', $string)) {
@@ -227,31 +193,6 @@ function showIsChecked($bool) {
 	return $bool ? 'checked=""' : '';
 }
 
-/* this function is removed because of 
-`indication->htmlOptions('transfer_spot')`
-function showTransferOption($type='')
-{
-	$transfersHtml = indication()->htmlOptions('transfer_spot');
-
-	$transfers = [
-			"airport" => "Airport",
-			"bus" => "Bus/Coach",
-			"hotel" => "Hotel",
-			"cruise" => "Cruise/Ferry",
-		];
-
-	$transfersHtml = '';
-	$isSelected = '';
-
-	foreach ($transfers as $transferKey => $transfer) {
-		if ($type == $transferKey) $isSelected = 'selected';
-		$transfersHtml .= '<option value="'.$transferKey.'" '.$isSelected.'>'.$transfer.'</option>';
-	}
-
-	return $transfersHtml;
-}*/
-
-
 function displayNone($bool)
 {
 	return $bool ? 'style="display: none;"' : '';
@@ -259,7 +200,7 @@ function displayNone($bool)
 
 function mylocal_path($path)
 {
-	return storage_path('mylocal/'.$path);
+	return base_path('storage/mylocal/'.$path);
 }
 
 
@@ -313,16 +254,6 @@ function ddp($array){
 	exit;
 }
 
-function dd_pre_echo($array){
-	pre_echo($array);
-	exit;
-}
-
-function ddPreEcho($array){
-	pre_echo($array);
-	exit;
-}
-
 function echoHtml($html)
 {
 	echo trimHtml($html);
@@ -356,35 +287,14 @@ function countObject($object){
 
 
 
-function nested_jsonDecode($string, $is_array = false){
-
-	$string = is_object($string) ? json_decode(json_encode($string),true) : $string;
-	
-	if (is_string($string)) {
-		$json_decoded = json_decode($string,true);
-		$array = [];
-		if (is_array($json_decoded)) {
-			foreach ($json_decoded as $je_key => $je_value) {
-				$array[$je_key] = json_decodeMulti($je_value);
-			}
-			return rejson_decode($array, $is_array);
-		}
-		else{
-			return $string;
-		}
-	}
-	elseif(is_array($string)) {
-		$array = [];
-		foreach ($string as $key => $value) {
-			$array[$key] = json_decodeMulti($value);
-		}
-		return rejson_decode($array, $is_array);
-	}
-	else{
-		return $string;
-	}
-
+function ifset(&$var, $else = '') {
+	return isset($var) ? $var : $else;
 }
+
+function ifsetEqual(&$var, $value) {
+	return (isset($var) &&  $var == $value) ? true : false;
+}
+
 
 
 function is_url_exist($url){
@@ -402,6 +312,7 @@ function is_url_exist($url){
 	return $status;
 }
 
+
 function implode_kv($array){
 	return implode(', ', array_map(
 		function ($v, $k) { return sprintf("%s='%s'", $k, $v); },
@@ -410,10 +321,12 @@ function implode_kv($array){
 	));
 }
 
+
 function implodeEscape($glue, $pieces)
 {
 	return implode($glue, array_map('addslashes', $pieces));
 }
+
 
 function insertIgnoreQuery($array, $table)
 {
@@ -425,49 +338,6 @@ function insertIgnoreQuery($array, $table)
 	return $query;
 }
 
-/*
-| this function for get cost into inr passed array should be like this 
-| $array = ["USD" => 459];
-*/
-function getInrCost($array){
-
-	/*==================if object==================*/
-	$array = is_object($array) ? rejson_decode($array, true) : $array;
-
-	/*==============Initializing $cost here==============*/
-	$cost = 0;
-	
-	if (bool_array($array)) {
-		foreach ($array as $key => $value) {
-			$exchange = (object)[];
-			$rate = 1;
-			if ($key != 'INR') {
-
-				/*===========trying to get exchange into five attempt===========*/
-
-				for ($attempt = 1; $attempt <= 5 ; $attempt++) { 
-					$exchange = currencyExchange($key,'INR');
-					
-					/*saveInFile(
-						json_encode(["Currency" => $key, "Exchange" => $exchange]), 
-						'Api/Currency/attempt_'.$attempt.'getInrCost_', 'json'
-					);*/
-
-					if (isset($exchange->results->rate->Rate)) {
-						break;
-					}
-				}
-
-				$rate = ifset($exchange->results->rate->Rate, 1);
-			}
-
-			$cost += $value*$rate;
-		} 
-	}
-
-	return $cost;
-
-}
 
 /*
 | this function is save image locally and then send a http request
@@ -478,22 +348,24 @@ function getInrCost($array){
 function imageUpload($image)
 {
 	$imageName = md5(uid()).'.'.$image->getClientOriginalExtension();
-	$image->move(public_path('images/tmp'), $imageName);
-	
-	$domain = isLocalhost() 
-						? 'http://images.flygoldfinch.dev/' 
-						: 'http://images.trawish.com/';
+	$image->move(base_path('public/images/tmp'), $imageName);
+	$url = 'http://'.env('IMAGE_DOMAIN').'/image/download';
+	$name = httpPost($url, ['url' => url('images/tmp/'.$imageName)]);
 
-	$name = httpPost($domain.'image/download', [
-			'url' => url('images/tmp/'.$imageName)
-		]);
-	
-	if (file_exists(public_path('images/tmp/').$imageName)) {
-		unlink(public_path('images/tmp/').$imageName);
+	if (file_exists(base_path('public/images/tmp/').$imageName)) {
+		unlink(base_path('public/images/tmp/').$imageName);
 	}
 
 	return $name;
 }
+
+
+function trashImage($path)
+{
+	$url = 'http://'.env('IMAGE_DOMAIN').'/image/trash';
+	return httpPost($url, ['path' => $path]);
+}
+
 
 
 function httpGet($url){
@@ -585,54 +457,6 @@ function getPax($roomGuests){
 }
 
 
-/*
-| this function for decode array which contain it self and json with and json may 
-| contain json it self
-*/
-
-function json_decodeMulti($string, $is_array = true){
-
-	$result = null;
-
-	if (is_string($string)) {
-		$json_decoded = json_decode($string,true);
-		$array = [];
-		if (is_array($json_decoded)) {
-			foreach ($json_decoded as $je_key => $je_value) {
-				$array[$je_key] = json_decodeMulti($je_value);
-			}
-			$result = $array;
-		}
-		else{
-			$result = $string;
-		}
-	}
-	elseif(is_array($string)) {
-		$array = [];
-		foreach ($string as $key => $value) {
-			$array[$key] = json_decodeMulti($value);
-		}
-		$result = $array;
-	}
-	elseif (is_object($string)) {
-		$result = json_decodeMulti(rejson_decode($string, true), $is_array);
-	}
-	else{
-		$result = $string;
-	}
-
-	return rejson_decode($result, $is_array);
-
-}
-
-
-function ifset(&$var, $else = '') {
-	return isset($var) ? $var : $else;
-}
-
-function ifsetEqual(&$var, $value) {
-	return (isset($var) &&  $var == $value) ? true : false;
-}
 
 /*
 |--------------------------------------------------------------------------
@@ -695,19 +519,6 @@ function xmlToJson($xml){
 	return simplexml_load_string($xml, "SimpleXMLElement", LIBXML_NOCDATA);
 }
 
-function Move_ArrayUp($Array){
-	$new = [];
-	if (bool_array($Array)) {
-		foreach($Array as $key => $value) {
-				$new += $value;
-		}
-		return $new;
-	}
-	else{
-		return false;
-	}
-
-}
 
 /**
  * Simple function to replicate PHP 5 behaviour
@@ -755,20 +566,11 @@ function addDaysinDate($date,$days, $format = "Y-m-d"){
 }
 
 
-/*this function for fix array according to need like for hotel or flight*/
-function totalRoomGuest($roomGuests){
-	
-}
-
 function secToDay($sec)
 {
 	return $sec/(60*60*24);
 }
 
-function carbonParse($date = "0000-00-00")
-{
-	return \Carbon\Carbon::parse($date);
-}
 
 function date_differences($EndDate,$StartDate, $format = 'Y-m-d'){
 
@@ -1046,68 +848,28 @@ function do_get_request($url)
 	}
 }
 
-/*
-| Helper function for Url
-*/
-
-/*=====================Redirect Url=====================*/
-function newRedirectUrl($url){
-
-	$newUrlObj = new \App\Http\Controllers\CommonApp\RedirectController;
-	return $newUrlObj->newUrl($url);
-
-}
-
-/*=======================follow-ups======================*/
-
-function followUps(){
-	$followUpsObj = new \App\Http\Controllers\B2bApp\FollowUpController;
-	$followUps = $followUpsObj->all();
-	return $followUps;
-}
-
-/*=======================follow-ups======================*/
-function toDo(){
-	$toDoObj = new \App\Http\Controllers\B2bApp\ToDoController;
-	$toDo = $toDoObj->all();
-	return $toDo;
-}
-
-
-/*=======================follow-ups======================*/
-function pendingLeads(){
-	$leadsObj = new \App\Http\Controllers\B2bApp\ClientController;
-	$leads = $leadsObj->pendingClients();
-	return $leads;
-}
 
 /*=====================default image=====================*/
-
-function urlImage($path = '')
+function urlImage($path = '/')
 {
-	$url = '';
+	$path = ltrim($path,'/');
+	$array = explode('/', $path);
 
-	if (findWord('http://', $path) || findWord('https://', $path)) {
-		$url = $path;
-	}
-	else{
-
-		$path = ltrim(str_replace('//', '/', str_replace("\\", '/', $path)), '/');
-		$domain = isLocalhost() 
-						? 'http://images.flygoldfinch.dev/' 
-						: 'http://images.trawish.com/';
-		
-		$url = $domain.$path;
+	if (isset($array[0]) && $array[0] != 'storage') {
+		$path = 'storage/'.$path;
 	}
 	
-	return $url;
-
+	$storageUrl = 'http://'.env('IMAGE_DOMAIN');
+	return str_replace(url('/'), $storageUrl, url($path));
 }
+
+
 
 function flightImage($code = null)
 {
 	return urlImage('images/airlineImages/'.$code.'.gif');
 }
+
 
 /*
 | this function is to fix skyscanner images array
@@ -1124,8 +886,6 @@ function ssImageArrayFix($images = [], $imageHost = '')
 	}
 	return $result;
 }
-	
-
 	
 
 function activityMode($key)

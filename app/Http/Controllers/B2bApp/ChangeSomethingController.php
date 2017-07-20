@@ -20,7 +20,7 @@ class ChangeSomethingController extends Controller
 		$changeSomething = new ChangeSomethingModel;
 		$changeSomething->detail = 'Copying All id as hash in hash_id column in pdf_htmls table';
 
-		if (!isLocalHost()) {
+		if (!env('IS_LOCALHOST')) {
 			PdfHtmlController::call()->copyIdasHashPdfHtmls();
 		}
 
@@ -46,7 +46,7 @@ class ChangeSomethingController extends Controller
 	// 		$changeSomething->stack_id = $stackId;
 	// 		$changeSomething->detail = 'have to delete total_cost column in packages table and all data must copy into package_costs table';
 
-	// 		if (!isLocalHost()) {
+	// 		if (!env('IS_LOCALHOST')) {
 	// 			PackageController::call()->dbCostSapr();
 	// 		}
 
