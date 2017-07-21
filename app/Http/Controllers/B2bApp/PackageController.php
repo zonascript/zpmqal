@@ -14,6 +14,8 @@ use App\Http\Controllers\B2bApp\PackageCodesController;
 use App\Http\Controllers\B2bApp\PackageNotesController;
 use App\Http\Controllers\CommonApp\UrlController;
 use App\Models\B2bApp\PackageModel;
+use App\Mail\PackageMail;
+
 
 class PackageController extends Controller
 {
@@ -280,6 +282,26 @@ class PackageController extends Controller
 							]);
 	}
 
+
+
+	public function sendPackageEmail($token, Request $request)
+	{
+		$package = $this->model()->findByToken($token);
+
+		$data = (object)[
+				"email" => $package->client->email,
+				"name" => $package->client->fullname,
+				"package" => $package,
+				"subject" => $package->clientEmailSubject()
+			];
+
+		\Mail::to($data)->send(new PackageMail($data));
+
+		return json_encode([
+				"status" => 200,
+				"response" => 'email sent successfully'
+			]);
+	}
 
 	/*
 	| this function it to get all event of the package;

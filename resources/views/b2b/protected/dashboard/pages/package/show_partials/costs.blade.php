@@ -78,6 +78,17 @@
 					<a id="btn_pdf" href="{{ newRedirectUrl(urlPdfPacakge($package->id)) }}" class="btn btn-primary btn-block hide" target="_blank"></a> --}}
 				</div>
 			</div>
+
+			<div class="row m-top-20">
+				<div class="col-md-6 col-sm-6 col-xs-12">
+					<button type="button" id="btn_send_email" class="btn btn-primary btn-block" {{ is_null($package->package_url) ? 'disabled' : '' }}>Send Email</button>
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-12">
+					{{-- <button id="run_pdf" class="btn btn-primary btn-block" target="_blank">Generate PDF</button>
+					<a id="btn_pdf" href="{{ newRedirectUrl(urlPdfPacakge($package->id)) }}" class="btn btn-primary btn-block hide" target="_blank"></a> --}}
+				</div>
+			</div>
+
 			<?php
 				$aHref = '';
 				if (!is_null($package->package_url)) {

@@ -88,6 +88,7 @@
 				dataType : "JSON",
 				success: function(response, textStatus, xhr) {
 					setHref(response.token);
+					enableSendEmailBtn();
 					$.alert({
 						title: 'Success!',
 						content: '<h2>'+response.response+'</h2>'
@@ -112,6 +113,11 @@
 		var url = "{{ route('yourPackage', $package->token) }}?ctk="+token;
 		$('#input_html_link').val(url);
 		$('#a_html_link').attr('href', url);
+	}
+
+
+	function enableSendEmailBtn() {
+		$('#btn_send_email').prop("disabled",false);
 	}
 
 	{{-- run pdf --}}
@@ -245,6 +251,22 @@
 		$.ajax({
 			type : "post",
 			url : "{{ route('saveNote', $package->token) }}", 
+			data : data,
+			dataType : 'JSON',
+			success : function (response) {
+				$.alert({
+					title: 'Success!',
+					content: '<h2>'+response.response+'</h2>'
+				});
+			}
+		});
+	}
+
+	function sendPackageEmail() {
+		var data = { "_token" : csrf_token };
+		$.ajax({
+			type : "post",
+			url : "{{ route('sendPackageEmail', $package->token) }}", 
 			data : data,
 			dataType : 'JSON',
 			success : function (response) {

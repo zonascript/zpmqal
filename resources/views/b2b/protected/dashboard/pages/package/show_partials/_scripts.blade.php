@@ -56,6 +56,10 @@
 	$(document).on('click', '#save_note', function () {
 		savePackageNote();
 	});
+
+	$(document).on('click', '#btn_send_email', function () {
+		sendPackageEmail();
+	});
 </script>
 
 

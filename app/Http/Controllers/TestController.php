@@ -9,7 +9,7 @@ use App\Http\Controllers\B2bApp\RoutePackageModesController;
 use App\Http\Controllers\FlightApp\QpxFlightsController;
 use App\Models\HotelApp\HotelModel;
 use Carbon\Carbon;
-use App\Mail\VerifyMail;
+use App\Mail\PackageMail;
 use Crypt;
 use App\Models\ItineraryApp\PaymentModel;
 use Carbon\CarbonInterval;
@@ -28,7 +28,314 @@ class TestController extends Controller
 		return ItineraryController::call()->itinerary($package);
 	}
 
-	public function testCode()
+	public function testCode($value='')
+	{
+		// dd(str_plural('Adult', 2));
+		// dd(rand(0, 10));
+		dd($this->sendEmail());
+	}
+
+
+
+	public function getIp(){
+    foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key){
+        if (array_key_exists($key, $_SERVER) === true){
+            foreach (explode(',', $_SERVER[$key]) as $ip){
+                $ip = trim($ip); // just to be safe
+                if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false){
+                    return $ip;
+                }
+            }
+        }
+    }
+	}
+
+
+	public function checkData()
+	{
+		$data = [
+			"key" 				=> "required",
+			"url" 				=> "required",
+			"salt" 				=> "required",
+			"surl" 				=> "required",
+			"furl" 				=> "required",
+			"name" 				=> "required",
+			"hash" 				=> "required",
+			"txnid" 			=> "required",
+			"phone" 			=> "342423",
+			"email" 			=> 'ajay@fsaladfs.cm',
+			"amount" 			=> "389.90sd",
+			"hashseq" 		=> "required",
+			"productinfo" => "required",
+		];
+
+		$validator = \Validator::make($data, [
+			"key" 				=> "required",
+			"url" 				=> "required",
+			"salt" 				=> "required",
+			"surl" 				=> "required",
+			"furl" 				=> "required",
+			"name" 				=> "required",
+			"hash" 				=> "required",
+			"txnid" 			=> "required",
+			"phone" 			=> "required|numeric",
+			"email" 			=> 'required|email',
+			"amount" 			=> "required|regex:/^\d*(\.\d{1,4})?$/",
+			"hashseq" 		=> "required",
+			"productinfo" => "required",
+		]);
+    if ($validator->fails()) {
+			dd(jsonResponse(500, 'error', ['errors' => $validator->errors()]));
+    }else{
+    	dd('passed');
+    }
+
+	}
+
+	public function showHtml(Request $request)
+	{
+		// dd($request->input());
+		// return view('b2b.emails.template.1');
+		return view('b2b.emails.template.2');
+		return view('b2b.emails.temp');
+		// return view('test.show');
+	}
+	// https://www.booking.com/hotel/za/house-of-house-guest-house.html
+
+
+
+	public function sendEmail()
+	{
+		$package = PackageController::call()->model()->findByToken('02c7691aedf5a056e6a8d41fe1e1f9d4');
+
+		$test = (object)[
+				"email" => "ajay@flygoldfinch.com",
+				"name" => "Ajay Kumar",
+				"package" => $package,
+				"subject" => $package->clientEmailSubject()
+			];
+
+		\Mail::to($test)->send(new PackageMail($test));
+		return 'mail sent';
+	}
+
+	public function extractHtml($path)
+	{
+		include_once app_path('MyLibrary/simple_html_dom.php');
+
+		$html = file_get_html($path);
+		$titleObj = $html->find('td[class=room_col]');
+		dd($titleObj);
+		$title = isset($titleObj->plaintext) ? $titleObj->plaintext : '';
+
+		$result = false;
+		if (findWord('Object moved', $title)) {
+			$newUrlObj = $html->find('a', 0);
+		}
+
+		return $result;
+	}
+
+	public function testBookingHtml()
+	{
+		$html = httpGet('https://www.booking.com/hotel/za/house-of-house-guest-house.html');
+		dd($html);
+	}
+
+	public function testClearTrip()
+	{
+		return view('test.cleartrip');
+	}
+
+	public function test()
+	{
+
+		$url = 'http://partners.api.skyscanner.net/apiservices/hotels/liveprices/v2/NZ/USD/en-US/-36.84,174.76-latlong/2017-05-01/2017-05-03/2/1?apiKey=prtl6749387986743898559646983194';
+
+		// $url = 'http://partners.api.skyscanner.net/apiservices/hotels/livedetails/v2/details/H4sIAAAAAAAEAE2IMQ6DMBAE_7L12bo1DgbX1GkIDQihFOks00CF8vecUiGNdkdzYUde8Jwh-FQ3jfbTONiW97G5pvVdlLLXjSn61FoPyuQ0Gi_V_OdWqbcahAI2EkwehNSzlFVQkR1DT35_bQ2jI34AAAA1?apikey=_ClqLu_vLGuMJCqSmDq2Fs6EBKAs5WeiRAE4JWRoGyJipDSzrGM7iyojhHRnUc15A8CIfl_yDMXdeMK164_8O7Q%3D%3D&HotelIds=135466155';
+
+		$result = $this->httpGet($url);
+
+		pre_echo(json_decode($result));
+		dd(json_decode($result));
+
+		$city = 'auckland, new zealand';
+
+		$url = "http://maps.googleapis.com/maps/api/geocode/json?address=" . str_replace (" ", "+", $city) . "&sensor=false";
+
+		return httpGet($url);
+
+		return $this->geocode($city);
+
+		$result = $this->httpGet('https://maps.googleapis.com/maps/api/geocode/json?address=auckland+new+zealand&key=AIzaSyC-IDStnRaA8ueCCENLDL_s0nCzehhTrF0');
+
+		dd($result);
+	}
+
+	public function httpGet($url){
+		$ch = curl_init();  
+
+		curl_setopt($ch,CURLOPT_URL,$url);
+		curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+		curl_setopt($ch,CURLOPT_CUSTOMREQUEST,"GET");
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+
+		curl_setopt($ch, CURLOPT_HTTPHEADER,[
+				'Content-Type: application/x-www-form-urlencoded', 
+				'Accept: application/json'
+			]);
+
+		$output = curl_exec($ch);
+
+		curl_close($ch);
+		return $output;
+	}
+
+	public function geocode($city){
+
+   $details_url = "http://maps.googleapis.com/maps/api/geocode/json?address=" . str_replace (" ", "+", $city) . "&sensor=false";
+
+   $ch = curl_init();
+   curl_setopt($ch, CURLOPT_URL, $details_url);
+   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+   $geoloc = json_decode(curl_exec($ch), true);
+
+   return $geoloc;
+	}
+
+
+	public function helloTravel($id)
+	{
+		$html = '';
+		if (file_exists(public_path('HT/'.$id.'.html'))) {
+			$html = file_get_contents(public_path('HT/'.$id.'.html'));
+			$html = str_replace(['<script', '</script>'], ['<div hidden', '</div>'], $html);
+		}
+		return view('public.hello_travel', ['html' => $html,'id' => $id]);
+	}
+
+	public function saveHelloTravel($id, Request $request)
+	{
+		$files = listFolderFiles(public_path('HT'));
+
+
+		$html = file_get_contents(public_path('ht_a/index.html'));
+		$data = $html.$request->html;
+
+		$myfile = fopen(public_path('ht_a/index.html'), "w") or die("Unable to open file!");
+		fwrite($myfile, $data);
+		fclose($myfile);
+
+		if ($id < count($files)+1) {
+			$id = $id+1;
+			return url('hellotravel').'/'.$id;
+		}else{
+			return 'done';
+		}
+	}
+
+	public function showfile()
+	{
+		$file = file_get_contents(storage_path('mylocal/bookings/test.txt'));
+		dd($file);
+		dd_pre_echo(json_decode($file));
+		dd(json_decode($file));
+	}
+
+
+	public function decode()
+	{
+		$file = file_get_contents(storage_path('mylocal/data/ht.json'));
+		$data = json_decode($file);
+		// dd($data);
+		echo '<table>';
+		foreach ($data as $key => $value) {
+			echo '<tr><td>' //<td>'.$key.'</td>
+						.$value->name.'</td><td>'
+							.$value->number.'</td><td>'
+								.$value->country.'</td></tr>';
+		}
+		echo "</table>";
+	}
+
+	public function getAgodaHtml()
+	{
+		$rawHtml = $this->httpGetAgoda($url);
+		$filePath = saveInStorage($response, 'knysna-za', 'html', 'agoda');
+
+		$html = file_get_contents(storage_path('agoda/knysna-za_1489687261.html'));
+		preg_match_all("/images\s*:\s*\[.*?\],/s", $html, $matches);
+		$images = $matches[0][0];
+		$images = ltrim($images,"images: ");
+		$images = rtrim($images,",");
+		$images = json_decode($images);
+		// dd(json_decode($images));
+		include app_path('MyLibrary/simple_html_dom.php');
+		// $url = 'https://www.agoda.com/the-russel-hotel/hotel/knysna-za.html';
+		$url = 'http://b2b.flygoldfinch.dev/agoda_text.html';
+		$html = file_get_html(storage_path('agoda/test.html'));
+		$rooms = [];
+
+		foreach($html->find('tr') as $row) {
+	    $tdTexts = $row->find('td[class=room_col]',0);
+	    if (!is_null($tdTexts)) {
+		    $roomtypeObj = $tdTexts->find('span', 0);
+		    $roomtype = '';
+				if(isset($roomtypeObj->plaintext)){
+	    		$roomtype = $roomtypeObj->plaintext;
+				}
+
+				$imgObj = $tdTexts->find('img', 0);
+		    $img = '';
+				if(isset($imgObj->src)){
+	    		$img = $imgObj->src ;
+				}
+
+	   		$rooms[] = ['roomtype' => $roomtype, 'image' => $img];
+	    }
+		}
+		$result = (object)["rooms" => $rooms, "images" => $images];
+		dd_pre_echo($result);
+		
+	}
+
+	public function httpGetAgoda($url)
+	{
+		$curl = curl_init();
+
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => $url,
+		  CURLOPT_RETURNTRANSFER => true,
+		  CURLOPT_ENCODING => "",
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 30,
+		  CURLOPT_SSL_VERIFYPEER=> false,
+		  // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => "GET",
+		  CURLOPT_HTTPHEADER => array(
+		    "cache-control: no-cache",
+		  ),
+		));
+
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+
+		curl_close($curl);
+
+		return $response;
+	}
+
+	public function fixData()
+	{
+		$file = file_get_contents('D:/apis/Booking/data/Asia_1.tsv');
+		$file = str_replace('\\t\\n\\r', '[@]', $file);
+		fopen('D:/apis/Booking/data_new/Asia_1.tsv', "w") or die("Unable to open file!");
+		fwrite($myfile, $data);
+		fclose($myfile);
+	}
+
+
+public function testCodeOld()
 	{
 		dd($this->sendEmail());
 
@@ -271,298 +578,6 @@ class TestController extends Controller
 		
 
 	}
-
-	public function getIp(){
-    foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key){
-        if (array_key_exists($key, $_SERVER) === true){
-            foreach (explode(',', $_SERVER[$key]) as $ip){
-                $ip = trim($ip); // just to be safe
-                if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false){
-                    return $ip;
-                }
-            }
-        }
-    }
-}
-
-
-	public function checkData()
-	{
-		$data = [
-			"key" 				=> "required",
-			"url" 				=> "required",
-			"salt" 				=> "required",
-			"surl" 				=> "required",
-			"furl" 				=> "required",
-			"name" 				=> "required",
-			"hash" 				=> "required",
-			"txnid" 			=> "required",
-			"phone" 			=> "342423",
-			"email" 			=> 'ajay@fsaladfs.cm',
-			"amount" 			=> "389.90sd",
-			"hashseq" 		=> "required",
-			"productinfo" => "required",
-		];
-
-		$validator = \Validator::make($data, [
-			"key" 				=> "required",
-			"url" 				=> "required",
-			"salt" 				=> "required",
-			"surl" 				=> "required",
-			"furl" 				=> "required",
-			"name" 				=> "required",
-			"hash" 				=> "required",
-			"txnid" 			=> "required",
-			"phone" 			=> "required|numeric",
-			"email" 			=> 'required|email',
-			"amount" 			=> "required|regex:/^\d*(\.\d{1,4})?$/",
-			"hashseq" 		=> "required",
-			"productinfo" => "required",
-		]);
-    if ($validator->fails()) {
-			dd(jsonResponse(500, 'error', ['errors' => $validator->errors()]));
-    }else{
-    	dd('passed');
-    }
-
-	}
-
-	public function showHtml(Request $request)
-	{
-		dd($request->input());
-		return view('test.show');
-	}
-	// https://www.booking.com/hotel/za/house-of-house-guest-house.html
-
-
-
-	public function sendEmail()
-	{
-		$test = (object)[
-				"email" => "ajay@flygoldfinch.com",
-				"name" => "Ajay Kumar",
-				"link" => url('/')
-			];
-
-		\Mail::to($test)->queue(new VerifyMail($test));
-		return 'mail sent';
-	}
-
-	public function extractHtml($path)
-	{
-		include_once app_path('MyLibrary/simple_html_dom.php');
-
-		$html = file_get_html($path);
-		$titleObj = $html->find('td[class=room_col]');
-		dd($titleObj);
-		$title = isset($titleObj->plaintext) ? $titleObj->plaintext : '';
-
-		$result = false;
-		if (findWord('Object moved', $title)) {
-			$newUrlObj = $html->find('a', 0);
-		}
-
-		return $result;
-	}
-
-	public function testBookingHtml()
-	{
-		$html = httpGet('https://www.booking.com/hotel/za/house-of-house-guest-house.html');
-		dd($html);
-	}
-
-	public function testClearTrip()
-	{
-		return view('test.cleartrip');
-	}
-
-	public function test()
-	{
-
-		$url = 'http://partners.api.skyscanner.net/apiservices/hotels/liveprices/v2/NZ/USD/en-US/-36.84,174.76-latlong/2017-05-01/2017-05-03/2/1?apiKey=prtl6749387986743898559646983194';
-
-		// $url = 'http://partners.api.skyscanner.net/apiservices/hotels/livedetails/v2/details/H4sIAAAAAAAEAE2IMQ6DMBAE_7L12bo1DgbX1GkIDQihFOks00CF8vecUiGNdkdzYUde8Jwh-FQ3jfbTONiW97G5pvVdlLLXjSn61FoPyuQ0Gi_V_OdWqbcahAI2EkwehNSzlFVQkR1DT35_bQ2jI34AAAA1?apikey=_ClqLu_vLGuMJCqSmDq2Fs6EBKAs5WeiRAE4JWRoGyJipDSzrGM7iyojhHRnUc15A8CIfl_yDMXdeMK164_8O7Q%3D%3D&HotelIds=135466155';
-
-		$result = $this->httpGet($url);
-
-		pre_echo(json_decode($result));
-		dd(json_decode($result));
-
-		$city = 'auckland, new zealand';
-
-		$url = "http://maps.googleapis.com/maps/api/geocode/json?address=" . str_replace (" ", "+", $city) . "&sensor=false";
-
-		return httpGet($url);
-
-		return $this->geocode($city);
-
-		$result = $this->httpGet('https://maps.googleapis.com/maps/api/geocode/json?address=auckland+new+zealand&key=AIzaSyC-IDStnRaA8ueCCENLDL_s0nCzehhTrF0');
-
-		dd($result);
-	}
-
-	public function httpGet($url){
-		$ch = curl_init();  
-
-		curl_setopt($ch,CURLOPT_URL,$url);
-		curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-		curl_setopt($ch,CURLOPT_CUSTOMREQUEST,"GET");
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-
-		curl_setopt($ch, CURLOPT_HTTPHEADER,[
-				'Content-Type: application/x-www-form-urlencoded', 
-				'Accept: application/json'
-			]);
-
-		$output = curl_exec($ch);
-
-		curl_close($ch);
-		return $output;
-	}
-
-	public function geocode($city){
-
-   $details_url = "http://maps.googleapis.com/maps/api/geocode/json?address=" . str_replace (" ", "+", $city) . "&sensor=false";
-
-   $ch = curl_init();
-   curl_setopt($ch, CURLOPT_URL, $details_url);
-   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-   $geoloc = json_decode(curl_exec($ch), true);
-
-   return $geoloc;
-	}
-
-
-	public function helloTravel($id)
-	{
-		$html = '';
-		if (file_exists(public_path('HT/'.$id.'.html'))) {
-			$html = file_get_contents(public_path('HT/'.$id.'.html'));
-			$html = str_replace(['<script', '</script>'], ['<div hidden', '</div>'], $html);
-		}
-		return view('public.hello_travel', ['html' => $html,'id' => $id]);
-	}
-
-	public function saveHelloTravel($id, Request $request)
-	{
-		$files = listFolderFiles(public_path('HT'));
-
-
-		$html = file_get_contents(public_path('ht_a/index.html'));
-		$data = $html.$request->html;
-
-		$myfile = fopen(public_path('ht_a/index.html'), "w") or die("Unable to open file!");
-		fwrite($myfile, $data);
-		fclose($myfile);
-
-		if ($id < count($files)+1) {
-			$id = $id+1;
-			return url('hellotravel').'/'.$id;
-		}else{
-			return 'done';
-		}
-	}
-
-	public function showfile()
-	{
-		$file = file_get_contents(storage_path('mylocal/bookings/test.txt'));
-		dd($file);
-		dd_pre_echo(json_decode($file));
-		dd(json_decode($file));
-	}
-
-
-	public function decode()
-	{
-		$file = file_get_contents(storage_path('mylocal/data/ht.json'));
-		$data = json_decode($file);
-		// dd($data);
-		echo '<table>';
-		foreach ($data as $key => $value) {
-			echo '<tr><td>' //<td>'.$key.'</td>
-						.$value->name.'</td><td>'
-							.$value->number.'</td><td>'
-								.$value->country.'</td></tr>';
-		}
-		echo "</table>";
-	}
-
-	public function getAgodaHtml()
-	{
-		$rawHtml = $this->httpGetAgoda($url);
-		$filePath = saveInStorage($response, 'knysna-za', 'html', 'agoda');
-
-		$html = file_get_contents(storage_path('agoda/knysna-za_1489687261.html'));
-		preg_match_all("/images\s*:\s*\[.*?\],/s", $html, $matches);
-		$images = $matches[0][0];
-		$images = ltrim($images,"images: ");
-		$images = rtrim($images,",");
-		$images = json_decode($images);
-		// dd(json_decode($images));
-		include app_path('MyLibrary/simple_html_dom.php');
-		// $url = 'https://www.agoda.com/the-russel-hotel/hotel/knysna-za.html';
-		$url = 'http://b2b.flygoldfinch.dev/agoda_text.html';
-		$html = file_get_html(storage_path('agoda/test.html'));
-		$rooms = [];
-
-		foreach($html->find('tr') as $row) {
-	    $tdTexts = $row->find('td[class=room_col]',0);
-	    if (!is_null($tdTexts)) {
-		    $roomtypeObj = $tdTexts->find('span', 0);
-		    $roomtype = '';
-				if(isset($roomtypeObj->plaintext)){
-	    		$roomtype = $roomtypeObj->plaintext;
-				}
-
-				$imgObj = $tdTexts->find('img', 0);
-		    $img = '';
-				if(isset($imgObj->src)){
-	    		$img = $imgObj->src ;
-				}
-
-	   		$rooms[] = ['roomtype' => $roomtype, 'image' => $img];
-	    }
-		}
-		$result = (object)["rooms" => $rooms, "images" => $images];
-		dd_pre_echo($result);
-		
-	}
-
-	public function httpGetAgoda($url)
-	{
-		$curl = curl_init();
-
-		curl_setopt_array($curl, array(
-		  CURLOPT_URL => $url,
-		  CURLOPT_RETURNTRANSFER => true,
-		  CURLOPT_ENCODING => "",
-		  CURLOPT_MAXREDIRS => 10,
-		  CURLOPT_TIMEOUT => 30,
-		  CURLOPT_SSL_VERIFYPEER=> false,
-		  // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-		  CURLOPT_CUSTOMREQUEST => "GET",
-		  CURLOPT_HTTPHEADER => array(
-		    "cache-control: no-cache",
-		  ),
-		));
-
-		$response = curl_exec($curl);
-		$err = curl_error($curl);
-
-		curl_close($curl);
-
-		return $response;
-	}
-
-	public function fixData()
-	{
-		$file = file_get_contents('D:/apis/Booking/data/Asia_1.tsv');
-		$file = str_replace('\\t\\n\\r', '[@]', $file);
-		fopen('D:/apis/Booking/data_new/Asia_1.tsv', "w") or die("Unable to open file!");
-		fwrite($myfile, $data);
-		fclose($myfile);
-	}
-
 	
 
 }

@@ -15,7 +15,11 @@
 
 	Route::post('savenote/{token}', 'PackageController@saveNote')
 					->name('saveNote');
+
+	Route::post('sendpackageemail/{token}', 'PackageController@sendPackageEmail')
+					->name('sendPackageEmail');
 	
+
 	// it will generate html of a specific package
 	Route::get('html/{packageDbId}', 'PackageController@getCreatePdfHtml');
 

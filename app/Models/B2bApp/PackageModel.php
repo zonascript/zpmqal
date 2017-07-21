@@ -16,7 +16,8 @@ class PackageModel extends Model
 	protected $hidden = ['created_at', 'updated_at'];
 	protected $append = [
 								'uid', 'cost', 'nights', 'pax_detail',
-								'itinerary', 'package_url', 'extra_word'
+								'pax_string', 'itinerary', 'package_url',
+								'extra_word', 'duration'
 							];
 
 	public $costToken = null;
@@ -58,6 +59,12 @@ class PackageModel extends Model
 	{
 		return $this->routes->sum('nights');
 	}
+
+	public function getDurationAttribute()
+	{
+		return $this->nights.' Nights '.($this->nights+1).'Days';
+	}
+
 
 	public function getStartDateAttribute($value)
 	{
@@ -113,6 +120,26 @@ class PackageModel extends Model
 		}
 
 		return (object) $result;
+	}
+
+	public function getPaxStringAttribute()
+	{
+		$pax = $this->pax_detail;
+
+		$result = [];
+		if (isset($pax->adult) && $pax->adult) {
+			$result[] = $pax->adult.' '.str_plural('Adult', $pax->adult);
+		}
+
+		if (isset($pax->child) && $pax->child) {
+			$result[] = $pax->child.' '.str_plural('Child', $pax->child);
+		}
+
+		if (isset($pax->infant) && $pax->infant) {
+			$result[] = $pax->infant.' '.str_plural('Infant', $pax->infant);
+		}
+
+		return implode(', ', $result);
 	}
 
 
@@ -355,6 +382,22 @@ class PackageModel extends Model
 	}
 
 	
+
+	public function clientEmailSubject()
+	{
+		return 'Your package is ready!!! | '.$this->uid;
+	}
+
+
+	public function destinations()
+	{
+		$dests = [];
+		foreach ($this->accomoRoutes as $accomoRoute) {
+			$dests[] = $accomoRoute->destination_detail->echo_location;
+		}
+		return implode(' | ', $dests);
+	}
+
 	public function __construct(array $attributes = [])
 	{
 		$this->setTokenAttribute();
