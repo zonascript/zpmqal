@@ -142,7 +142,7 @@ class UserController extends Controller
 				"email" => $user->email,
 				"link" => route('activatePendingUser', $token)	
 			];
-		Mail::to($data)->send(new VerifyMail($data));
+		Mail::to($data)->queue(new VerifyMail($data));
 		session()->flash('success', 'Verification email sent.');
 	}
 

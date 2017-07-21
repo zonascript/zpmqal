@@ -30,7 +30,11 @@ class TestController extends Controller
 
 	public function testCode()
 	{
+		dd($this->sendEmail());
+
 		dd(urlImage('storage/fds/sdfjgsd/jsdfkalfjaks'));
+
+
 		return \Image::make(storage_path('1.jpg'))->response();
 		return '<img data-src= "'.asset('storage/mylocal/1-0199bc34be.jpg').'">';
 
@@ -340,7 +344,8 @@ class TestController extends Controller
 				"link" => url('/')
 			];
 
-		\Mail::to($test)->send(new VerifyMail($test));
+		\Mail::to($test)->queue(new VerifyMail($test));
+		return 'mail sent';
 	}
 
 	public function extractHtml($path)

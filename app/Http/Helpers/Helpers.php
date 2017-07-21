@@ -355,7 +355,6 @@ function imageUpload($image)
 	if (file_exists(base_path('public/images/tmp/').$imageName)) {
 		unlink(base_path('public/images/tmp/').$imageName);
 	}
-
 	return $name;
 }
 
