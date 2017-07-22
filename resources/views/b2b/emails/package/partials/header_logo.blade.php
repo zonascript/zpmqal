@@ -6,7 +6,7 @@
 					<tbody>
 						<tr>
 							<td>
-								<a> <img align="left" alt="logo" border="0" height="50" src="http://storage.flygoldfinch.dev/storage/images/package/icon/logo.png" style="display:block" class="CToWUd">
+								<a> <img align="left" alt="logo" border="0" height="50" src="http://storage.trawish.com/storage/images/package/icon/logo.png" style="display:block" class="CToWUd">
 								</a>
 							</td>
 						</tr>
