@@ -38,6 +38,7 @@
   <script>
     tinymce.init({ 
       selector:'textarea',
+      plugins : 'autolink link image lists preview table',
       menu: {
         file: {title: 'File', items: 'newdocument'},
         edit: {title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall'},

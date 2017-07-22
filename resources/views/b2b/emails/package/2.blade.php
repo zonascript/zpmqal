@@ -36,7 +36,8 @@
 					'color6' => '#ED4C76',
 					'color7' => '#222222',
 					'color8' => '#8B042A',
-					'color9' => '#ac4368'
+					'color9' => '#ac4368',
+					'color10' => '#E4000D'
 				],
 				(object)[
 					'color' => '#FFFFFF',
@@ -48,7 +49,8 @@
 					'color6' => '#6dd0ee',
 					'color7' => '#222222',
 					'color8' => '#04556f',
-					'color9' => '#62e6db'
+					'color9' => '#62e6db',
+					'color10' => '#00c3ff'
 				],
 			];
 
@@ -71,9 +73,10 @@
 		$companySite = $package->user->admin->website;
 		$companyEmail = $package->user->admin->email;
 		$companyAddr = $package->user->admin->address;
-		$img1 = urlImage('storage/images/package/big.jpg');
-		$img2 = urlImage('storage/images/package/sq.jpg');
-		$img3 = urlImage('storage/images/package/ls.jpg');
+		$texts = $package->user->admin->texts;
+		$img1 = 'http://storage.trawish.com/storage/images/package/big.jpg';
+		$img2 = 'http://storage.trawish.com/storage/images/package/sq.jpg';
+		$img3 = 'http://storage.trawish.com/storage/images/package/ls.jpg';
 
 	?>
 
@@ -98,9 +101,9 @@
 												@include($viewPath.'.info_details')
 												{{-- @include($viewPath.'.way_xpath') --}}
 												@include($viewPath.'.open_button')
-												@include($viewPath.'.inclusion')
+												{{-- @include($viewPath.'.inclusion') --}}
 												{{-- @include($viewPath.'.accommodation_option') --}}
-												@include($viewPath.'.exclusion')
+												{{-- @include($viewPath.'.exclusion') --}}
 												@include($viewPath.'.procedure')
 												@include($viewPath.'.agent_info')
 												@include($viewPath.'.office_info')

@@ -262,7 +262,10 @@
 		});
 	}
 
+
 	function sendPackageEmail() {
+		$('#btn_send_email').prop('disabled', true);
+		$('i.email-send.fa.fa-spinner').removeClass('hide');
 		var data = { "_token" : csrf_token };
 		$.ajax({
 			type : "post",
@@ -270,6 +273,8 @@
 			data : data,
 			dataType : 'JSON',
 			success : function (response) {
+				$('#btn_send_email').prop('disabled', false);
+				$('i.email-send.fa.fa-spinner').addClass('hide');
 				$.alert({
 					title: 'Success!',
 					content: '<h2>'+response.response+'</h2>'

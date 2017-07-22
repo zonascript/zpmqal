@@ -5,8 +5,8 @@
 				<p style="font-size:13px;color:#ffffff;font-family:Arial,sans-serif; text-align: center;">
 					{{ $companyAddr }}
 					<br> 
-					E-Mail: <a href="mailto:{{ $agentEmail }}" style="color:#ffffff;font-weight:bold" target="_blank">
-					{{ $agentEmail }}</a>
+					E-Mail: <a href="mailto:{{ $companyEmail }}" style="color:#ffffff;font-weight:bold" target="_blank">
+					{{ $companyEmail }}</a>
 					@if (strlen($companySite))
 						&nbsp;&nbsp;|&nbsp;&nbsp; 
 						Web: <a href="{{ $companySite }}" style="color:#ffffff;font-weight:bold" target="_blank">{{ $companySite }}</a>

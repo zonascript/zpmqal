@@ -81,7 +81,7 @@
 
 			<div class="row m-top-20">
 				<div class="col-md-6 col-sm-6 col-xs-12">
-					<button type="button" id="btn_send_email" class="btn btn-primary btn-block" {{ is_null($package->package_url) ? 'disabled' : '' }}>Send Email</button>
+					<button type="button" id="btn_send_email" class="btn btn-primary btn-block" {{ is_null($package->package_url) ? 'disabled' : '' }}>Send Email <i class="email-send fa fa-spinner fa-pulse fa-3x fa-fw font-size-20 hide"></i></button>
 				</div>
 				<div class="col-md-6 col-sm-6 col-xs-12">
 					{{-- <button id="run_pdf" class="btn btn-primary btn-block" target="_blank">Generate PDF</button>

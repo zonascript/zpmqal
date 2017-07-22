@@ -10,7 +10,7 @@
 					</div>
 				</div>
 			</td>
-			<td bgcolor="#E4000D" width="295">
+			<td bgcolor="{{ $theme->color10 }}" width="295">
 				<img src="{{ $img2 }}" style="display:block" width="295" class="CToWUd">
 			</td>
 		</tr>

@@ -94,9 +94,10 @@ class TestController extends Controller
 
 	public function showHtml(Request $request)
 	{
+		$package = PackageController::call()->model()->findByToken('02c7691aedf5a056e6a8d41fe1e1f9d4');
 		// dd($request->input());
 		// return view('b2b.emails.template.1');
-		return view('b2b.emails.template.2');
+		return view('b2b.emails.package.2', compact('package'));
 		return view('b2b.emails.temp');
 		// return view('test.show');
 	}
