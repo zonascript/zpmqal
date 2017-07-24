@@ -14,8 +14,8 @@ class AdminsChangeStatusColumnTextsTable extends Migration
     public function up()
     {
         Schema::connection('mysql3')->table('texts', function (Blueprint $table) {
-            $table->boolean('status')->default(1)->change();
-            $table->renameColumn('status', 'is_active');
+            $table->boolean('is_active')->after('text')->default(1);
+            $table->dropColumn('status');
         });
     }
 
@@ -27,8 +27,8 @@ class AdminsChangeStatusColumnTextsTable extends Migration
     public function down()
     {
         Schema::connection('mysql3')->table('texts', function (Blueprint $table) {
-            $table->string('is_active', 25)->nullable()->change();
-            $table->renameColumn('is_active', 'status');
+            $table->string('status', 25)->after('text')->nullable();
+            $table->dropColumn('is_active');
         });
     }
 }
