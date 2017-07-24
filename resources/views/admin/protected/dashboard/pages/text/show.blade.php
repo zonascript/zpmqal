@@ -34,58 +34,76 @@
 								<div class="col-md-2 col-sm-2 col-xs-12">
 									<a href="{{ url('dashboard/settings/text/'.$text->id.'/edit') }}" class="btn btn-success btn-block">Edit</a>
 								</div>
-								<div class="col-md-2 col-sm-2 col-xs-12">
-									<button data-toggle="modal" data-target=".bs-example-modal-warning"  class="btn btn-primary btn-block btn-delete-text" data-id="{{$text->id}}" data-status="{{ $text->status }}">Action</button>
+								<div class="btn-group col-md-2 col-sm-2 col-xs-12">
+									<button data-toggle="dropdown" class="btn btn-default btn-block dropdown-toggle" type="button" aria-expanded="false"> More <span class="caret"></span> </button>
+									<ul class="dropdown-menu">
+										<li>
+											<a href="{{ url('dashboard/settings/text/'.$text->id.'/edit') }}">Edit</a>
+										</li>
+										@if ($text->is_active == 1)
+											<li>
+												<a class="trigger-form">Deactivate</a>
+												<form method="POST" action="{{ url('dashboard/settings/text/'.$text->id.'/deactivate') }}">
+													{{ csrf_field() }}
+													{{ method_field('put') }}
+													<button type="submit" class="input-submit" hidden></button>
+												</form>
+											</li>
+										@endif
+										@if (in_array($text->is_active,[0, 2]))
+											<li>
+												<a class="trigger-form">Activate</a>
+												<form method="POST" action="{{ url('dashboard/settings/text/'.$text->id.'/activate') }}">
+													{{ csrf_field() }}
+													{{ method_field('put') }}
+													<button type="submit" class="input-submit" hidden></button>
+												</form>
+											</li>
+										@endif
+										<li>
+											<a class="btn-delete" data-href="{{ url('dashboard/settings/text/'.$text->id) }}">Delete</a>
+										</li>
+									</ul>
 								</div>
+								<span class="m-top-20 pull-right">
+									<b>Status : </b>(<span class="{{ statusCss($text->is_active) }}">{{ $text->status }}</span>)
+								</span>
 							</div>
 						</div>
 					</div>
 				</div>
-			@else
-				<p>Sorry... there is no vendor</p>
 			@endif
 		</div>
 	</div>  
+@endsection
 
-	<div class="modal fade bs-example-modal-warning" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog modal-sm">
-			<div class="modal-content">
 
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-					</button>
-					<h3 class="modal-title" id="myModalLabel2"><i class="fa fa-edit" ></i> Action</h3>
-				</div>
-				<div class="modal-body">
-					<h4>What <b>Action</b> you want to take?</h4>
-				</div>
-				<div class="modal-footer">
-					<div class="row">
+@section('scripts')
+	<script>
+		{{-- for more button --}}
+		$(document).on('click', '.btn-delete', function () {
+			var url = $(this).attr('data-href');
+			$.confirm({
+				title: 'Are you sure?',
+				content: 'If you delete activity you will never be able recover deleted data. <form action="'+url+'" method="post" class="hide">{{ csrf_field() }} {{ method_field('delete') }}<button type="Submit" id="btn_delete"><button></form>',
+				buttons: {
+					cancel: function () {
+						//close
+					},
+					formSubmit: {
+						text: 'Submit',
+						btnClass: 'btn-blue',
+						action: function () {
+							$('#btn_delete').trigger('click');
+						}
+					}
+				}
+			});
+		});
 
-						@if ($text->status != 'active')
-							<div id="active_button" class="col-md-6 col-sm-6 col-xs-6">
-								<form id="active_form" method="POST" action="{{url('dashboard/settings/text/'.$text->id.'/active')}}">
-									{{ csrf_field() }}
-									<input type="submit" class="btn btn-success btn-block" name="active" value="Active">
-								</form>
-							</div>
-						@endif
-
-						<form id="delete_form" method="POST" action="{{url('dashboard/settings/text/'.$text->id)}}">
-							{{ method_field('DELETE') }}
-							{{ csrf_field() }}
-							@if ($text->status != 'inactive')
-								<div id="inactive_button" class="col-md-6 col-sm-6 col-xs-6">
-									<input type="submit" class="btn btn-warning btn-block" name="inactive" value="Inactive">
-								</div>
-							@endif
-							<div class="col-md-6 col-sm-6 col-xs-6">
-								<input type="submit" class="btn btn-danger btn-block" name="delete" value="Delete">
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+		$(document).on('click', '.trigger-form', function () {
+			$(this).closest('li').find('.input-submit').trigger('click');
+		});
+		{{-- /for more button --}}
+	</script>
 @endsection

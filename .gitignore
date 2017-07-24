@@ -9,6 +9,7 @@ Homestead.yaml
 /stackOverflow
 /storage/mylocal
 /routes/mylocal
+/resources/views/example
 /app/Http/Controllers/LocalApp
 **/.trash/
 **/.temp/

@@ -23,6 +23,7 @@ class ImageModel extends Model
 		return $url;
 	}
 
+
 	public function connectable()
 	{
 		return  $this->morphTo();

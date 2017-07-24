@@ -349,9 +349,9 @@ function imageUpload($image)
 {
 	$imageName = md5(uid()).'.'.$image->getClientOriginalExtension();
 	$image->move(base_path('public/images/tmp'), $imageName);
-	$url = 'http://'.env('IMAGE_DOMAIN').'/image/download';
-	$name = httpPost($url, ['url' => url('images/tmp/'.$imageName)]);
-
+	$postUrl = 'http://'.env('IMAGE_DOMAIN').'/image/download';
+	$url = url('images/tmp/'.$imageName);
+	$name = httpPost($postUrl, ['url' => $url]);
 	if (file_exists(base_path('public/images/tmp/').$imageName)) {
 		unlink(base_path('public/images/tmp/').$imageName);
 	}
@@ -474,7 +474,7 @@ function getPax($roomGuests){
 |
 */
 
-function Isset_Multi($search,$array){
+function isset_multi($search,$array){
 	$array = is_object($array) ? json_decode(json_encode($array), true) : $array;
 
 	$return = (
@@ -1145,6 +1145,25 @@ function commonAsset($path){
 
 
 function statusCss($id)
+{
+	$css = '';
+	if ($id == 0) {
+		$css = 'red';
+	}
+	elseif($id == 1) {
+		$css = 'green';
+	}
+	elseif($id == 2) {
+		$css = 'font-orenge';
+	}
+	elseif($id == 3) {
+		$css = 'font-orenge';
+	}
+	return $css;
+}
+
+
+function statusCssBorder($id)
 {
 	$css = '';
 	if ($id == 0) {

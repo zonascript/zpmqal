@@ -16,10 +16,20 @@
 
 		// Settings Section
 		Route::group(['prefix' => 'settings'], function(){
-			Route::post('text/{id}/active', 'TextController@active');
+			
+			Route::group(['prefix' => 'text/{id}'], function(){
+				Route::put('activate', 'TextController@activate');
+				Route::put('deactivate', 'TextController@deactivate');
+			});
 			Route::resource('text', 'TextController');
-			Route::post('lead/vendor/{id}/active', 'LeadVendorController@active');
-			Route::resource('lead/vendor', 'LeadVendorController');
+
+			Route::group(['prefix' => 'vendor'], function(){
+				Route::group(['prefix' => 'lead/{id}'], function(){
+					Route::put('activate', 'LeadVendorController@activate');
+					Route::put('deactivate', 'LeadVendorController@deactivate');
+				});
+				Route::resource('lead', 'LeadVendorController');
+			});
 		});
 
 
@@ -38,4 +48,8 @@
 		
 		Route::post('enquiry/{id}/active', 'EnquiryController@active');
 		Route::resource('enquiry', 'EnquiryController');
+
+		Route::get('profile', 'ProfileController@index');
+		Route::get('profile/edit', 'ProfileController@edit');
+		Route::post('profile/update', 'ProfileController@update');
 	});

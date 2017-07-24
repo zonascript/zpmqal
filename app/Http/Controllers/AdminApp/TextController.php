@@ -4,16 +4,14 @@ namespace App\Http\Controllers\AdminApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ==================================Models==================================
 use App\Models\AdminApp\TextModel;
-
-use Auth;
 
 class TextController extends Controller
 {
+	public $viewPath = 'admin.protected.dashboard.pages.text';
 
-	public function call()
+
+	public static function call()
 	{
 		return new TextController;
 	}
@@ -30,14 +28,9 @@ class TextController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$auth = Auth::guard('admin')->user();
-
 		$where = "CONCAT(`title`, '', `text`) LIKE '%".$request->t."%'";
-		
 		$texts = $this->model()->findByAdminId(null, [], $where);
-
-		$blade = ["texts" => $texts];
-		return view('admin.protected.dashboard.pages.text.index', $blade); 
+		return view($this->viewPath.'.index', compact('texts')); 
 	}
 
 	/**
@@ -47,7 +40,7 @@ class TextController extends Controller
 	 */
 	public function create()
 	{
-		return view('admin.protected.dashboard.pages.text.create'); 
+		return view($this->viewPath.'.create'); 
 	}
 
 	/**
@@ -63,21 +56,7 @@ class TextController extends Controller
 				"text" => "required"
 			]);
 
-		$auth = Auth::guard('admin')->user();
-		$maxOrder = $this->maxOrderNumber();
-		$maxOrderNumber = 1;
-		if (!is_null($maxOrder) && !is_null($maxOrder->order)) {
-			$maxOrderNumber = $maxOrder->order+1;
-		}
-
-		$text = new TextModel;
-		$text->admin_id = $auth->id;
-		$text->order = $maxOrderNumber;
-		$text->title = $request->title;
-		$text->text = $request->text;
-		$text->status = 'active';
-		$text->save();
-
+		$this->createOrUpdate($request, $id);
 		return redirect('dashboard/settings/text');
 	}
 
@@ -89,18 +68,8 @@ class TextController extends Controller
 	 */
 	public function show($id)
 	{
-		$auth = Auth::guard('admin')->user();
-		$text = TextModel::find($id);
-
-		if (!is_null($text) && $text->admin_id == $auth->id) {
-			
-			$blade = ["text" => $text];
-
-			return view('admin.protected.dashboard.pages.text.show', $blade); 
-		}
-		else{
-			return view('errors.404'); 
-		}
+		$text = $this->model()->adminId()->findOrFail($id);
+		return view($this->viewPath.'.show', compact('text')); 
 	}
 
 	/**
@@ -111,18 +80,9 @@ class TextController extends Controller
 	 */
 	public function edit($id)
 	{
-		$auth = Auth::guard('admin')->user();
-		$text = TextModel::find($id);
+		$text = $this->model()->adminId()->findOrFail($id);
+		return view($this->viewPath.'.edit', compact('text')); 
 
-		if (!is_null($text) && $text->admin_id == $auth->id) {
-			
-			$blade = ["text" => $text];
-
-			return view('admin.protected.dashboard.pages.text.edit', $blade); 
-		}
-		else{
-			return view('errors.404'); 
-		}
 	}
 
 	/**
@@ -139,24 +99,31 @@ class TextController extends Controller
 				"text" => "required"
 			]);
 
-		$auth = Auth::guard('admin')->user();
-		$text = TextModel::find($id);
-		$text->admin_id = $auth->id;
-		$text->title = $request->title;
-		$text->text = $request->text;
-		$text->status = 'active';
-		$text->save();
+		$this->createOrUpdate($request, $id);
 
 		return redirect('dashboard/settings/text');
 	}
 
 	/*
-	| this function to active vendor
+	| this function to activate 
 	*/
-	public function active($id)
+	public function activate($id)
 	{
-		$text = TextModel::find($id);
-		$text->status = 'active';
+		$text = $this->model()->adminId()->findOrFail($id);
+		$text->is_active = 1;
+		$text->save();
+		return redirect('dashboard/settings/text');
+	}
+
+
+
+	/*
+	| this function to deactivate
+	*/
+	public function deactivate($id)
+	{
+		$text = $this->model()->adminId()->findOrFail($id);
+		$text->is_active = 0;
 		$text->save();
 		return redirect('dashboard/settings/text');
 	}
@@ -170,27 +137,28 @@ class TextController extends Controller
 	 */
 	public function destroy($id, Request $request)
 	{
-		$text = TextModel::find($id);
-		
-		if (isset($request->inactive)) {
-			$text->status = 'inactive';
-		}elseif (isset($request->delete)) {
-			$text->status = 'deleted';
-		}
-
-		$text->save();
+		$text = $this->model()->adminId()->findOrFail($id);
+		$text->delete();
 		return redirect('dashboard/settings/text');
 	}
 
 
 
-	public function maxOrderNumber()
+	public function createOrUpdate(Request $request, $id = null)
 	{
-		$auth = Auth::guard('admin')->user();
-		return TextModel::select('order')
-						->where(["admin_id" => $auth->id])
-							->orderBy("order","desc")
-								->first();
+		$text = $this->model()->adminId()->findOrFail($id);
+
+		if (is_null($text)) {
+			$text = $this->model();
+		}
+
+		$auth = auth()->guard('admin')->user();
+		$text->admin_id = $auth->id;
+		$text->title = $request->title;
+		$text->text = $request->text;
+		$text->save();
+
+		return $text;
 	}
 
 

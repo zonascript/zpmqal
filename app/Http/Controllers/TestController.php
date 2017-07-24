@@ -30,6 +30,9 @@ class TestController extends Controller
 
 	public function testCode($value='')
 	{
+		dd(strtolower('SADFKAFD'));
+		$req = new Request(['title'=> 'jdsaklf']);
+		dd($req->class());
 		// dd(str_plural('Adult', 2));
 		// dd(rand(0, 10));
 		dd($this->sendEmail());

@@ -51,24 +51,22 @@ class AgentActivityModel extends Model
 		return $this->belongsTo('App\Models\CommonApp\IndicationModel', 'is_active');
 	}
 
+
+	public function scopeAdminId($query)
+	{
+		return $query->where([
+											'admin_id' => $this->checkUser()
+										]);
+	}
+
 	public function findOrExit($id)
 	{
 		return $this->where([
 											'id' => $id,
-											'admin_id' => $this->checkUser()
 										])
 									->firstOrFail();
 	}
 
-
-	public function findCheckUser($id)
-	{
-		return $this->where([
-											'id' => $id,
-											'admin_id' => $this->checkUser()
-										])
-									->first();
-	}
 
 
 	public function findByCode($id)

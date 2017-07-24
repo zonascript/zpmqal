@@ -104,6 +104,8 @@
 			datatableWithSearch('#datatable', {}, '', 'Destination: <input type="text" data-code="" class="form-control location input-sm m-right-10" placeholder="">');
 		});
 
+
+		{{-- for more button --}}
 		$(document).on('click', '.user-delete', function () {
 			var url = $(this).attr('data-href');
 			$.confirm({
@@ -127,6 +129,8 @@
 		$(document).on('click', '.trigger-form', function () {
 			$(this).closest('li').find('.input-submit').trigger('click');
 		});
+		{{-- /for more button --}}
+
 
 		$(document).on('keyup paste', '.location', function(){
 			$(this).autocomplete({

@@ -73,6 +73,7 @@
 		$companySite = $package->user->admin->website;
 		$companyEmail = $package->user->admin->email;
 		$companyAddr = $package->user->admin->address;
+		$companyAbout = $package->user->admin->about;
 		$texts = $package->user->admin->texts;
 		$img1 = 'http://storage.trawish.com/storage/images/package/big.jpg';
 		$img2 = 'http://storage.trawish.com/storage/images/package/sq.jpg';

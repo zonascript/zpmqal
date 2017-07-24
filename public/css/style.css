@@ -562,11 +562,19 @@
 	max-height: 170px ! important;
 }
 
+.min-max-height-65px{ 
+	min-height: 170px ! important;
+	max-height: 170px ! important;
+}
+
 
 .min-max-height-320px{ 
 	min-height: 320px ! important;
 	max-height: 320px ! important;
 }
+
+
+.valign-bottom{	vertical-align: bottom ! important; }
 
 .line-through{text-decoration: line-through;}
 

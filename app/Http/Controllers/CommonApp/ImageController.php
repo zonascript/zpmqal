@@ -24,7 +24,10 @@ class ImageController extends Controller
 	public function upload(Request $request)
 	{
 		$imagePath = imageUpload($request->file);
-		return ['path' => $imagePath, 'host' => urlimage()];
+		return [
+							'path' => $imagePath, 
+							'host' => 'http://'.env('IMAGE_DOMAIN')
+						];
 	}
 
 
@@ -42,8 +45,25 @@ class ImageController extends Controller
 			$image->save();
 		}
 
-		return json_encode(['status' => 200, 'response' => 'deleted successfully.'])
+		return json_encode(['status' => 200, 'response' => 'deleted successfully.']);
 
+	}
+
+
+	public function createOrUpdate(Request $request, $id)
+	{
+		$image = $this->model()->find($id);
+		if (is_null($image)) {
+			$image = $this->model();
+		}
+
+		$image->type = $request->type;
+		$image->image_path = $request->image_path;
+		$image->caption = $request->caption;
+		$image->connectable_id = $request->connectable_id;
+		$image->connectable_type = $request->connectable_type;
+		$image->save();
+		return $image;
 	}
 
 }

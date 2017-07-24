@@ -44,7 +44,7 @@ class ActivitiesController extends Controller
 
 	public function createOrEdit($id = null)
 	{
-		$activity = $this->model()->findCheckUser($id);
+		$activity = $this->model()->adminId()->find($id);
 
 		if (is_null($activity)) {
 			$activity = $this->model();
@@ -56,7 +56,7 @@ class ActivitiesController extends Controller
 
 	public function storeOrUpdate(Request $request)
 	{
-		$activity = $this->model()->findCheckUser($request->id);
+		$activity = $this->model()->adminId()->find($request->id);
 		if (is_null($activity)) {
 			$activity = $this->model();
 		}

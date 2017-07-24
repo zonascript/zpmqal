@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\AdminApp\LeadVendorModel;
 use App\Models\AdminApp\PackageModel;
+use App\Models\CommonApp\ImageModel;
 use App\Models\AdminApp\UserModel;
 use App\Models\AdminApp\TextModel;
 
@@ -15,7 +16,7 @@ class Admin extends Authenticatable
 	use Notifiable;
 	
 	protected $connection = 'mysql3';
-	protected $appends = ['fullname', 'profile_pic'];
+	protected $appends = ['fullname', 'profile_pic', 'logo', 'about'];
 
 	/**
 	 * The attributes that are mass assignable.
@@ -23,7 +24,9 @@ class Admin extends Authenticatable
 	 * @var array
 	 */
 	protected $fillable = [
-		'firstname','lastname', 'companyname', 'username', 'mobile', 'email', 'password', 'type',
+		'firstname','lastname', 'companyname', 
+		'username', 'mobile', 'email', 
+		'password', 'type',
 	];
 
 	/**
@@ -47,21 +50,39 @@ class Admin extends Authenticatable
 	}
 
 	
-  public function getFullnameAttribute()
-  {
-    return $this->attributes['firstname'] .' '.$this->attributes['lastname'];
-  }
-
-  public function getProfilePicAttribute()
-  {
-    return urlImage($this->attributes['image_path']);
-  }
+	public function getFullnameAttribute()
+	{
+		return $this->attributes['firstname'] .' '.$this->attributes['lastname'];
+	}
 
 
-  public function getBalanceAttribute($value)
-  {
-  	return round($value, 2);
-  }
+
+	public function getProfilePicAttribute()
+	{
+		return is_null($this->imageProfile)
+				 ? urlDefaultImageProfile()
+				 : $this->imageProfile->url;
+	}
+
+
+	public function getLogoAttribute()
+	{
+		return is_null($this->imageLogo)
+				 ? urlDefaultImageProfile()
+				 : $this->imageLogo->url;
+	}
+
+
+	public function getAboutAttribute($value)
+	{
+		return is_null($this->textAbout) ? '' : $this->textAbout->text;
+	}
+
+
+	public function getBalanceAttribute($value)
+	{
+		return round($value, 2);
+	}
 
 
 	public function users()
@@ -73,13 +94,16 @@ class Admin extends Authenticatable
 	{
 		$result = $this->hasMany(TextModel::class, 'admin_id');
 		
-		return $result->where(["status" => 'active'])->orderBy("order","asc");
+		return $result->where([
+												'is_active' => 1 , 
+												['id', '<>', $this->text_about_id]
+											])
+										->orderBy("order","asc");
 	}
 
 	public function leadVendors()
 	{
 		$result = $this->hasMany(LeadVendorModel::class, 'admin_id');
-		
 		return $result->where(["status" => 'active']);
 	}
 
@@ -87,6 +111,24 @@ class Admin extends Authenticatable
 	public function package()
 	{
 		return $this->belongsTo(PackageModel::class, 'package_id');
+	}
+
+
+
+	public function imageProfile()
+	{
+		return $this->belongsTo(ImageModel::class, 'image_profile_id');
+	}
+
+
+	public function imageLogo()
+	{
+		return $this->belongsTo(ImageModel::class, 'image_logo_id');
+	}
+
+	public function textAbout()
+	{
+		return $this->belongsTo(TextModel::class, 'text_about_id');
 	}
 
 

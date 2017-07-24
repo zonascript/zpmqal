@@ -15,7 +15,7 @@
 				
 				{{-- @include('common.protected.dashboard.partials._nav_top') --}}
 				
-				<div class="right_col" role="main">
+				<div class="right_col" role="main" style="min-height: 100vh">
 					{{-- Errors Content --}}
 					<div class="row">
 						<div class="col-md-12 col-sm-12 col-xs-12">

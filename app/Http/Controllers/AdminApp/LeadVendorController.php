@@ -4,19 +4,19 @@ namespace App\Http\Controllers\AdminApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ===============================Models===============================
+use App\Http\Controllers\CommonApp\ImageController;
 use App\Models\AdminApp\LeadVendorModel;
-
-use Session;
 
 class LeadVendorController extends Controller
 {
+
+	public $viewPath = 'admin.protected.dashboard.pages.lead_vendor.';
 
 	public static function call()
 	{
 		return new LeadVendorController;
 	}
+
 
 	public function model()
 	{
@@ -30,17 +30,10 @@ class LeadVendorController extends Controller
 	 */
 	public function index(Request $request)
 	{
-
-		$where = "CONCAT(`company_name`, '', `contact_person`, ' ', `contact_number`, ' ', `email_id`) LIKE '%".$request->v."%'";
-
-		$vendors = $this->model()->findByAdminId(null, [], $where);
-
-		$blade = [
-				"vendors" => $vendors,
-			];
-
-		return view('admin.protected.dashboard.pages.lead_vendor.index', $blade); 
+		$vendors = $this->model()->paginatedData($request->v);
+		return view($this->viewPath.'index', compact('vendors')); 
 	}
+
 
 	/**
 	 * Show the form for creating a new resource.
@@ -49,8 +42,9 @@ class LeadVendorController extends Controller
 	 */
 	public function create()
 	{
-		return view('admin.protected.dashboard.pages.lead_vendor.create'); 
+		return view($this->viewPath.'create_edit'); 
 	}
+
 
 	/**
 	 * Store a newly created resource in storage.
@@ -60,42 +54,12 @@ class LeadVendorController extends Controller
 	 */
 	public function store(Request $request)
 	{
-
-		$this->validate($request, [
-			'company_name' => 'required|max:255',
-			'contact_person' => 'required|max:255',
-			'contact_number' => 'numeric',
-			'email_id' => 'email|max:255',
-			'image_path' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-		]);
-
-		$user = userdetail();
-
-		$leadVendorModel = new LeadVendorModel;
-		$leadVendorModel->admin_id = $user->id;
-		$leadVendorModel->company_name = $request->company_name;
-		$leadVendorModel->contact_person = $request->contact_person;
-		$leadVendorModel->contact_number = $request->contact_number;
-		$leadVendorModel->email_id = $request->email_id;
-		$leadVendorModel->address = $request->address;
-		$leadVendorModel->website = $request->website;
-		$leadVendorModel->note = $request->note;
-
-		if (!is_null($request->logo)) {
-			$leadVendorModel->image_path = imageUpload($request->logo);
-		}
-		else{
-			$leadVendorModel->image_path = 'images/default/profile.jpg';
-		}
-		
-		$leadVendorModel->status = 'active';
-
-		$leadVendorModel->save();
-
-		Session::flash('success', 'Contact added successfully!');
-
-		return redirect('dashboard/settings/lead/vendor');
+		$this->createOrUpdate($request);
+		session()->flash('success', 'Vendor added successfully!');
+		return redirect('dashboard/settings/vendor/lead');
 	}
+
+
 	/**
 	 * Display the specified resource.
 	 *
@@ -104,9 +68,8 @@ class LeadVendorController extends Controller
 	 */
 	public function show($id)
 	{
-		$vendor = LeadVendorModel::find($id);
-		$blade = ["vendor" => $vendor];
-		return view('admin.protected.dashboard.pages.lead_vendor.show', $blade); 
+		$vendor = $this->model()->adminId()->findOrFail($id);
+		return view($this->viewPath.'show', compact('vendor')); 
 	}
 
 	/**
@@ -117,9 +80,9 @@ class LeadVendorController extends Controller
 	 */
 	public function edit($id)
 	{
-		$vendor = LeadVendorModel::find($id);
-		$blade = ["vendor" => $vendor];
-		return view('admin.protected.dashboard.pages.lead_vendor.edit', $blade); 
+		$vendor = $this->model()->adminId()->findOrFail($id);
+		$blade = [ "vendor" => $vendor, "edit" => 1 ];
+		return view($this->viewPath.'create_edit', $blade);
 	}
 
 	/**
@@ -131,50 +94,29 @@ class LeadVendorController extends Controller
 	 */
 	public function update(Request $request, $id)
 	{
-		
-		$this->validate($request, [
-			'company_name' => 'required|max:255',
-			'contact_person' => 'required|max:255',
-			'contact_number' => 'numeric',
-			'email_id' => 'email|max:255',
-			'image_path' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-		]);
-
-		$user = userdetail();
-
-		$leadVendorModel = LeadVendorModel::find($id);
-		$leadVendorModel->admin_id = $user->id;
-		$leadVendorModel->company_name = $request->company_name;
-		$leadVendorModel->contact_person = $request->contact_person;
-		$leadVendorModel->contact_number = $request->contact_number;
-		$leadVendorModel->email_id = $request->email_id;
-		$leadVendorModel->address = $request->address;
-		$leadVendorModel->website = $request->website;
-		$leadVendorModel->note = $request->note;
-
-		if (!is_null($request->logo)) {
-			$leadVendorModel->image_path = imageUpload($request->logo);
-		}
-		
-		$leadVendorModel->status = 'active';
-
-		$leadVendorModel->save();
-
-		Session::flash('success', 'Contact added successfully!');
-
-		return redirect('dashboard/settings/lead/vendor');
+		$this->createOrUpdate($request, $id);
+		session()->flash('success', 'Vendor updated successfully!');
+		return redirect('dashboard/settings/vendor/lead');
 	}
 
 
 	/*
 	| this function to active vendor
 	*/
-	public function active($id)
+	public function activate($id)
 	{
-		$vendor = LeadVendorModel::find($id);
-		$vendor->status = 'active';
+		$vendor = $this->model()->adminId()->findOrFail($id);
+		$vendor->is_active = 1;
 		$vendor->save();
-		return redirect('dashboard/settings/lead/vendor');
+		return redirect('dashboard/settings/vendor/lead');
+	}
+
+	public function deactivate($id)
+	{
+		$vendor = $this->model()->adminId()->findOrFail($id);
+		$vendor->is_active = 0;
+		$vendor->save();
+		return redirect('dashboard/settings/vendor/lead');
 	}
 
 	/**
@@ -185,15 +127,59 @@ class LeadVendorController extends Controller
 	 */
 	public function destroy($id, Request $request)
 	{
-		$vendor = LeadVendorModel::find($id);
-		
-		if (isset($request->inactive)) {
-			$vendor->status = 'inactive';
-		}elseif (isset($request->delete)) {
-			$vendor->status = 'deleted';
+		$vendor = $this->model()->adminId()->findOrFail($id);
+		$vendor->delete();
+		return redirect('dashboard/settings/vendor/lead');
+	}
+
+
+	public function createOrUpdate(Request $request, $id = null)
+	{
+		$this->validate($request, [
+			'company_name' => 'required|max:255',
+			'contact_person' => 'required|max:255',
+			'contact_number' => 'numeric',
+			'email_id' => 'email|max:255',
+			'image_path' => 'min:6',
+		]);
+
+		$leadVendor = !is_null($id)
+								? $this->model()->adminId()->find($id)
+								: null;
+
+		if (is_null($leadVendor)) {
+			$leadVendor = $this->model();
 		}
 
-		$vendor->save();
-		return redirect('dashboard/settings/lead/vendor');
+		$auth  = auth()->guard('admin')->user();
+
+		$leadVendor->admin_id = $auth->id;
+		$leadVendor->company_name = $request->company_name;
+		$leadVendor->contact_person = $request->contact_person;
+		$leadVendor->contact_number = $request->contact_number;
+		$leadVendor->email_id = $request->email_id;
+		$leadVendor->address = $request->address;
+		$leadVendor->website = $request->website;
+		$leadVendor->note = $request->note;
+		$leadVendor->save();
+
+		if (strlen($request->image_path) > 3) {
+			$image = ImageController::call()->createOrUpdate(
+									new Request([
+											'type' => 'path',
+											'image_path' => $request->image_path, 
+											'caption' => 'Admin Profile Image',
+											'connectable_id' => $leadVendor->id,
+											'connectable_type' => LeadVendorModel::class
+										]),
+									$leadVendor->image_id
+								);
+
+			$leadVendor->image_id = $image->id;
+		}
+
+		$leadVendor->save();
+		return $leadVendor;
 	}
+
 }
