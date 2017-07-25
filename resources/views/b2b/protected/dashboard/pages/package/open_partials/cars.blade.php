@@ -17,7 +17,7 @@
 		<div class="x_content">
 			@foreach ($package->cars as $car)
 				@if ($car->selected_car_vendor == 'ss')
-					@include($viewPath.'.show_partials.car_partials.ss')
+					@include($viewPath.'.open_partials.car_partials.ss')
 				@endif
 			@endforeach
 		</div>

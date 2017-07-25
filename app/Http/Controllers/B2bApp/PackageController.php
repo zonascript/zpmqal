@@ -40,7 +40,16 @@ class PackageController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index($token, Request $request){
+	public function index(Request $request){
+		$packages = $this->model()->userId()
+								->search($request->search)
+									->orderBy('id', 'desc')
+										->simplePaginate(25);
+		return view($this->viewPath.'.index', compact('packages'));
+	}
+
+
+	public function show($token, Request $request){
 		$client  = ClientController::call()->model()
 							->findByTokenOrFail($token);
 
@@ -49,7 +58,7 @@ class PackageController extends Controller
 				"packages" => $client->packagesPaginate($request->search)
 			];
 
-		return view($this->viewPath.'.index', $bladeData);
+		return view($this->viewPath.'.show', $bladeData);
 	}
 
 
@@ -61,7 +70,7 @@ class PackageController extends Controller
 					"package" => $package,
 					"viewPath" => $this->viewPath,
 				];
-		return view($this->viewPath.'.show',$bladeData);
+		return view($this->viewPath.'.open',$bladeData);
 	}
 
 	// this if function is for storing and creating new row in db

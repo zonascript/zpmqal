@@ -189,6 +189,26 @@ class PackageModel extends Model
 		exit(view('b2b.protected.dashboard.404_main', $blade)->render());
 	}
 
+
+	public function scopeUserId($query)
+	{
+		return $query->whereHas('client', function ($q){
+												$auth = auth()->user();
+												$q->where(['user_id' => $auth->id]);
+											});
+	}	
+
+
+	public function scopeSearch($query, $word)
+	{
+		return $query->whereHas('client', function ($q) use ($word){
+										$q->where('fullname', 'like', '%'.$word.'%');
+										$q->orWhere('mobile', 'like', '%'.$word.'%');
+										$q->orWhere('email', 'like', '%'.$word.'%');
+									});
+	}
+
+
 	public function user()
 	{
 		return $this->belongsTo('App\User', 'user_id');		

@@ -23,7 +23,7 @@
 		</div>
 		<div class="x_content">
 			@foreach ($package->cruiseRoutes as $cruiseRoute)
-				@include($viewPath.'.show_partials.cruise_partials.index')
+				@include($viewPath.'.open_partials.cruise_partials.index')
 			@endforeach
 		</div>
 	</div>

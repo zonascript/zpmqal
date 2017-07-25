@@ -6,9 +6,12 @@
 					->name('openPackage');
 
 	// Here all Package will show like list of package 
-	Route::get('all/{token}', 'PackageController@index')
+	Route::get('all/{token}', 'PackageController@show')
 					->name('allPackage');
-	
+
+	Route::get('all', 'PackageController@index')
+					->name('package.all');
+
 	// this will save package cost
 	Route::post('savecost/{token}', 'PackageController@saveCost')
 					->name('saveCost');

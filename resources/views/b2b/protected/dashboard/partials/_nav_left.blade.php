@@ -34,6 +34,7 @@
 						<ul class="nav child_menu">
 							<li class="hide"><a href="{{ url('dashboard') }}">Dashboard</a></li>
 							<li><a href="{{ url('dashboard/enquiry/create') }}">New Enquiry</a></li>
+							<li><a href="{{ url('dashboard/package/all') }}">All Packages</a></li>
 							<li><a href="{{ url('dashboard/enquiry') }}">Client List</a></li>
 							<li><a href="{{ url('dashboard/follow-up') }}">Follow Up</a></li>
 						</ul>

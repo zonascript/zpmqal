@@ -64,4 +64,4 @@
 
 
 
-@include($viewPath.'.show_partials.scripts.function')
+@include($viewPath.'.open_partials.scripts.function')

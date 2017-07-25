@@ -44,7 +44,7 @@
 							<div class="row">
 								<ul class="list list-unstyled">
 									@foreach ($selectedActivities as $selectedActivity)
-										@include($viewPath.'.show_partials.activities_partials.index')
+										@include($viewPath.'.open_partials.activities_partials.index')
 									@endforeach
 								</ul>
 							</div>
