@@ -68,7 +68,7 @@
 						<ul class="nav child_menu">
 							<li><a href="{{ url('dashboard/console/manage/users') }}">Users</a></li>
 							<li class="hide"><a href="{{ url('dashboard/settings/text/create') }}"></a></li>
-							<li><a href="{{ url('dashboard/settings/lead/vendor') }}">Reports</a></li>
+							<li><a href="{{ url('dashboard/settings/vendor/lead') }}">Reports</a></li>
 						</ul>
 					</li>
 					

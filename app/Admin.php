@@ -104,7 +104,7 @@ class Admin extends Authenticatable
 	public function leadVendors()
 	{
 		$result = $this->hasMany(LeadVendorModel::class, 'admin_id');
-		return $result->where(["status" => 'active']);
+		return $result->where(['is_active' => 1]);
 	}
 
 

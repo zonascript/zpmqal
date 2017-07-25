@@ -14,7 +14,7 @@
 
 	<div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-12">
 		<div class="tile-stats">
-			<a href="{{ url('dashboard/settings/lead/vendor/create') }}">
+			<a href="{{ url('dashboard/settings/vendor/lead/create') }}">
 				<div class="height-200px font-size-30 vertical-parent">
 					<div class="vertical-child">
 						<i class="fa fa-list font-size-80"></i>

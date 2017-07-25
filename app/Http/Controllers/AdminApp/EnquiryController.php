@@ -11,6 +11,10 @@ use App\Models\AdminApp\EnquiryModel;
 
 class EnquiryController extends Controller
 {
+
+	public $viewPath = 'admin.protected.dashboard.pages.enquiry';
+
+
 	public static function call()
 	{
 		return new EnquiryController;
@@ -27,10 +31,10 @@ class EnquiryController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
-		$clients = $this->model()->simplePaginateData('', true);
-		return view('admin.protected.dashboard.pages.enquiry.index', ['clients' => $clients]);
+		$clients = $this->model()->simplePaginateData($request->search, true);
+		return view($this->viewPath.'.index', ['clients' => $clients]);
 	}
 
 	/**
@@ -40,17 +44,7 @@ class EnquiryController extends Controller
 	 */
 	public function create()
 	{
-		$auth = auth()->guard('admin')->user();
-		$agents = $auth->users;
-		$leadVendors = LeadVendorController::call()
-									->model()->findByAdminId();
-
-		$blade = [
-				"agents" => $agents,
-				"leadVendors" => $leadVendors,
-			];
-
-		return view('admin.protected.dashboard.pages.enquiry.create', $blade);
+		return view($this->viewPath.'.create_edit');
 	}
 
 	/**
@@ -77,7 +71,7 @@ class EnquiryController extends Controller
 		$client->mobile = $request->mobile;
 		$client->email = $request->email;
 		$client->note = $request->note;
-		$client->status = 'pending';
+		$client->status = 3;
 		$client->save();
 
 		return redirect('dashboard/enquiry');
@@ -91,22 +85,8 @@ class EnquiryController extends Controller
 	 */
 	public function show($id)
 	{
-		$auth = auth()->guard('admin')->user();
-		$enquiry = $this->model()->find($id);
-
-		if (!is_null($enquiry) && $auth->id == $enquiry->user->admin->id) {
-			$agents = $auth->users;
-			$leadVendors = LeadVendorController::call()->model()->findByAdminId();
-			$blade = [
-					"agents" => $agents,
-					"enquiry" => $enquiry,
-					"leadVendors" => $leadVendors,
-				];
-
-			return view('admin.protected.dashboard.pages.enquiry.show', $blade);
-		}else{
-			return view('errors.404');
-		}
+		$enquiry = $this->model()->adminId(1)->findOrFail($id);
+		return view($this->viewPath.'.show', compact('enquiry'));
 	}
 
 	/**
@@ -117,22 +97,8 @@ class EnquiryController extends Controller
 	 */
 	public function edit($id)
 	{
-		$auth = auth()->guard('admin')->user();
-		$enquiry = $this->model()->find($id);
-
-		if (!is_null($enquiry) && $auth->id == $enquiry->user->admin->id) {
-			$agents = $auth->users;
-			$leadVendors = LeadVendorController::call()->model()->findByAdminId();
-			$blade = [
-					"agents" => $agents,
-					"enquiry" => $enquiry,
-					"leadVendors" => $leadVendors,
-				];
-
-			return view('admin.protected.dashboard.pages.enquiry.edit', $blade);
-		}else{
-			return view('errors.404');
-		}
+		$enquiry = $this->model()->adminId(1)->findOrFail($id);
+		return view($this->viewPath.'.create_edit', compact('enquiry'));
 	}
 
 	/**
@@ -159,7 +125,7 @@ class EnquiryController extends Controller
 		$client->mobile = $request->mobile;
 		$client->email = $request->email;
 		$client->note = $request->note;
-		$client->status = 'pending';
+		$client->status = 3;
 		$client->save();
 
 		return redirect('dashboard/enquiry');
@@ -168,7 +134,7 @@ class EnquiryController extends Controller
 	public function active($id)
 	{
 		$enquiry = $this->model()->find($id);
-		$enquiry->status = 'active';
+		$enquiry->status = 1;
 		$enquiry->save();
 		return redirect('dashboard/enquiry');
 	}
@@ -184,11 +150,11 @@ class EnquiryController extends Controller
 		$enquiry = $this->model()->find($id);
 
 		if (isset($request->inactive)) {
-			$enquiry->status = 'inactive';
+			$enquiry->status = 0;
 		}
-		elseif(isset($request->delete)){
-			$enquiry->status = 'deleted';
-		}
+		// elseif(isset($request->delete)){
+		// 	$enquiry->status = 'deleted';
+		// }
 
 		$enquiry->save();
 		return redirect('dashboard/enquiry');

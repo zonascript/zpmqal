@@ -34,8 +34,9 @@ class ClientModel extends Model
 
 	public function getAssignToAttribute()
 	{
-		return $this->user->fullname.' ('.$this->user->email.')';
+		return $this->user->assign_to;
 	}
+
 
 	public function user()
 	{
@@ -56,6 +57,17 @@ class ClientModel extends Model
 	}
 
 
+
+	public function scopeAdminId($query, $guard = false)
+	{
+		$auth = $guard 
+					? auth()->guard('admin')->user() 
+					: auth()->user();
+
+		return $query->whereHas('user', function($q) use ($auth) {
+											$q->where(['admin_id' => $auth->id]);
+										});
+	}
 
 	public function packagesPaginate($pid){
 		$id = filter_var($pid, FILTER_SANITIZE_NUMBER_INT);
@@ -127,6 +139,8 @@ class ClientModel extends Model
 							->simplePaginate(20);
 	}
 
+
+
 	public function duplicateOrNew($mobile, $email)
 	{
 		$client = $this->findByMobileEmail($mobile, $email);
@@ -172,6 +186,8 @@ class ClientModel extends Model
 									->where(['user_id' => $auth->id])
 										->first();
 	}
+
+
 
 	public function vendorReport()
 	{

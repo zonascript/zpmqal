@@ -32,7 +32,7 @@
 										</div>
 										<hr>
 										<div class="col-md-12 col-sm-12 col-xs-12">
-											<p><b>Status : </b>(<span class="{{$enquiry->status == 'inactive' ? 'red' : ''}}">{{$enquiry->status}}</span>)</p>
+											<p><b>Status : </b>(<span class="{{ statusCss($enquiry->status) }}">{{ $enquiry->status }}</span>)</p>
 										</div>
 										<div class="col-md-12 col-sm-12 col-xs-12">
 											<p><b>Enquiry From : </b> {{ $enquiry->leadVendor->company_name }}</p>

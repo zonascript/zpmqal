@@ -13,7 +13,7 @@ class User extends Authenticatable
 	use Notifiable;
 	protected $connection = 'mysql';
 	protected $table = 'users';
-	protected $appends = ['fullname', 'profile_pic', 'indication'];
+	protected $appends = ['fullname', 'profile_pic', 'indication', 'assign_to'];
 	
 	/**
 	 * The attributes that are mass assignable.
@@ -55,6 +55,12 @@ class User extends Authenticatable
 		return isset($this->status->name)
 					 ? $this->status->name
 					 : 'is in trouble please contact admin';
+	}
+
+
+	public function getAssignToAttribute()
+	{
+		return $this->fullname.' ('.$this->email.')';
 	}
 
 
