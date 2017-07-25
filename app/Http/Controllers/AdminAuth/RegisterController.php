@@ -7,6 +7,7 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AdminApp\LeadVendorModel;
 
 class RegisterController extends Controller
 {
@@ -52,7 +53,8 @@ class RegisterController extends Controller
             'firstname' => 'required|max:255',
             'lastname' => 'required|max:255',
             'companyname' => 'required|max:255',
-            'username' => 'required|max:255|unique:mysql3.admins',
+            'prefix' => 'required|min:3',
+            // 'username' => 'required|max:255|unique:mysql3.admins',
             'mobile' => 'required|max:255',
             'email' => 'required|email|max:255|unique:mysql3.admins',
             'password' => 'required|min:6|confirmed',
@@ -67,17 +69,20 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return Admin::create([
+        $admin = Admin::create([
             'firstname' => $data['firstname'],
+            'prefix' => $data['prefix'],
             'lastname' => $data['lastname'],
             'companyname' => $data['companyname'],
             'mobile' => $data['mobile'],
-            'username' => $data['username'],
             'email' => $data['email'],
             'type' => 'agent',
             'password' => bcrypt($data['password']),
             'is_active' => 3
         ]);
+
+        LeadVendorModel::call()->createDefaultVendor($admin->id);
+        return $admin;
     }
 
     /**

@@ -100,10 +100,12 @@
   <script>
     {{-- for more button --}}
     $(document).on('click', '.btn-delete', function () {
-      var url = $(this).attr('data-href');
+      var url = $(this).attr('data-href'),
+      content = 'If you delete this vendor then all related <span class="red">client will be shift to the default vendor</span> and you will never be able recover deleted data. <form action="'+url+'" method="post" class="hide">{{ csrf_field() }} {{ method_field('delete') }}<button type="Submit" id="btn_delete_jquery_confirm"><button></form>';
+
       $.confirm({
         title: 'Are you sure?',
-        content: 'If you delete activity you will never be able recover deleted data. <form action="'+url+'" method="post" class="hide">{{ csrf_field() }} {{ method_field('delete') }}<button type="Submit" id="btn_delete"><button></form>',
+        content: content,
         buttons: {
           cancel: function () {
             //close
@@ -112,7 +114,7 @@
             text: 'Submit',
             btnClass: 'btn-blue',
             action: function () {
-              $('#btn_delete').trigger('click');
+              $('#btn_delete_jquery_confirm').trigger('click');
             }
           }
         }

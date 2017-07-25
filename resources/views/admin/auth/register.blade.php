@@ -42,11 +42,27 @@
 							<label for="companyname" class="col-md-4 control-label">Company Name</label>
 
 							<div class="col-md-6">
-								<input id="companyname" type="text" class="form-control" name="companyname" value="{{ old('companyname') }}" required autofocus>
+								<input id="companyname" type="text" class="form-control" name="companyname" placeholder="Stark Industries" value="{{ old('companyname') }}" required autofocus>
 
 								@if ($errors->has('companyname'))
 									<span class="help-block">
 										<strong>{{ $errors->first('companyname') }}</strong>
+									</span>
+								@endif
+							</div>
+						</div>
+
+						<div class="form-group{{ $errors->has('prefix') ? ' has-error' : '' }}">
+							<label for="prefix" class="col-md-4 control-label">
+								Company Name Acronyms
+							</label>
+
+							<div class="col-md-6">
+								<input id="prefix" type="text" class="form-control" name="prefix" placeholder="if name is 'Stark Industries' can use 'SIN' " value="{{ old('prefix') }}" required autofocus>
+
+								@if ($errors->has('prefix'))
+									<span class="help-block">
+										<strong>{{ $errors->first('prefix') }}</strong>
 									</span>
 								@endif
 							</div>

@@ -30,6 +30,10 @@ class TestController extends Controller
 
 	public function testCode($value='')
 	{
+
+		$s = 'Fly Goldfinch';
+		$a = acronyms($s);
+		dd($a);
 		dd(strtolower('SADFKAFD'));
 		$req = new Request(['title'=> 'jdsaklf']);
 		dd($req->class());

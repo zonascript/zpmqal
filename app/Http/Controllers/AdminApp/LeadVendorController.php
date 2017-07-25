@@ -125,10 +125,11 @@ class LeadVendorController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy($id, Request $request)
+	public function destroy($id)
 	{
-		$vendor = $this->model()->adminId()->findOrFail($id);
-		$vendor->delete();
+		$vendor = $this->model()->unlockOnly()
+											->adminId()->findOrFail($id);
+		$vendor->updateVendorId()->delete();
 		return redirect('dashboard/settings/vendor/lead');
 	}
 

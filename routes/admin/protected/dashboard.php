@@ -21,6 +21,7 @@
 				Route::put('activate', 'TextController@activate');
 				Route::put('deactivate', 'TextController@deactivate');
 			});
+			
 			Route::resource('text', 'TextController');
 
 			Route::group(['prefix' => 'vendor'], function(){

@@ -717,6 +717,13 @@ function getUniqueId($id, $prefix = '', $count = 5){
 	return $prefix.str_pad($id, $count, '0', STR_PAD_LEFT);
 }
 
+
+function acronyms($string, $length = 3)
+{
+	$acro = preg_replace('~\b(\w)|.~', '$1', $string);
+	return substr($acro, 0,$length);
+}
+
 function uid()
 {
 	return time().rand(1000,99999);
