@@ -12,11 +12,11 @@
     <div class="col-md-10 col-sm-10 col-md-offset-1 col-xs-12">
       <div class="form-style-8 width-100-p height-80vh" >
         <h2 class="font-white">Text</h2>
-        <form method="post" action="{{url('dashboard/settings/text/'.$text->id)}}" enctype="multipart/form-data">
-        	{{ method_field("PUT") }}
+        <form method="post" action="{{ url('dashboard/settings/text/'.(isset($text->id) ? $text->id : '')) }}" enctype="multipart/form-data">
+        	{{ isset($text->id) ? method_field('PUT') : '' }}
           {{ csrf_field() }}
-          <input type="text" name="title" placeholder="Title" value="{{ $text->title }}" />
-          <textarea name="text" placeholder="text">{!! $text->text !!}</textarea>
+          <input type="text" name="title" placeholder="Title" value="{{ isset($text->title) ? $text->title : '' }}" />
+          <textarea name="text" placeholder="text">{!! isset($text->text) ? $text->text : '' !!}</textarea>
 
           <div class="row padding-tb-10">
             <div class="col-md-6 col-sm-6 col-xs-12">

@@ -40,7 +40,7 @@ class TextController extends Controller
 	 */
 	public function create()
 	{
-		return view($this->viewPath.'.create'); 
+		return view($this->viewPath.'.create_edit'); 
 	}
 
 	/**
@@ -81,7 +81,7 @@ class TextController extends Controller
 	public function edit($id)
 	{
 		$text = $this->model()->adminId()->findOrFail($id);
-		return view($this->viewPath.'.edit', compact('text')); 
+		return view($this->viewPath.'.create_edit', compact('text')); 
 
 	}
 
