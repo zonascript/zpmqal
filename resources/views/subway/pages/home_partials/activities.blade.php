@@ -31,6 +31,6 @@
   	</script>
 	</article>
 	<div class="links">
-		<a href="{{ $urlObj->url('accommodation') }}" title="show more">show more</a>
+		<a href="{{ $urlObj->url('activities') }}" title="show more">show more</a>
 	</div>
 @endif
