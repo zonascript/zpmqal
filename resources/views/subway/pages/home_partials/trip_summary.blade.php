@@ -6,7 +6,6 @@
 		<table width="100%" class="table-lborder table-trip-sum">
 			<tr>
 				<td>
-					<div class="m-top-15"></div>
 					@if ($package->flightRoutes->count())
 						<strong>Flights Included {{-- ({{$package->flightRoutes->count()}} X Hotel) --}}</strong>
 						<ul class="nomargin">
@@ -62,7 +61,8 @@
 				</td>
 				<td>
 					@if ($package->activities->count())
-						<ul>
+						<strong>Activities : {{-- ({{$package->flightRoutes->count()}} X Hotel) --}}</strong>
+						<ul class="nomargin">
 							@foreach ($package->activities as $key => $value)
 								@if ($key < 6)
 									<li>
