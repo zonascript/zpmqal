@@ -13,7 +13,7 @@ Route::group(['namespace' => 'ItineraryApp'], function(){
 
 		Route::get('reserve/{token}', 'ReservesController@reserve')
 						->name('reservePackage');
-		Route::get('pay/{token}', 'PaymentsController@payNow')
+		Route::any('pay/{token}', 'PaymentsController@payNow')
 						->name('payPackage');
 	});
 });
