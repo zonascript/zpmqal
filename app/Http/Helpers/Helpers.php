@@ -847,32 +847,11 @@ function pdfHotelDesc($html){
 	return str_replace(['<b>', '</b> <br />'], ['<b class="capitalize">', '</b>'], $html);
 }
 
-
-function echoLocation($origin = '', $destination = '')
+function echoLocation($origin = '', $destination = '', $glue = ', ')
 {
-	$location = '';
-	// =====================if origin is null===================
-	if ($origin == '') {
-		$location = $destination;
-	}
-	
-	// ==================if destination is null=================
-	elseif ($destination == '') {
-		$location = $origin;
-	}
-
-	// =============if origin same as destination is null=============
-	elseif ($origin == $destination) {
-		$location = $origin;
-	}
-
-	// =============if origin and destination is not same=============
-	else{
-		$location = $origin.' - '.$destination;
-	}
-
-	// returning location but if it is not null 
-	return $location == '' ? 'In transit' : $location;
+	$dests = array_unique([$origin, $destination]); 
+	$dests = implode($glue, $dests);
+	return $dests == '' ? 'In transit' : $dests;
 }
 
 

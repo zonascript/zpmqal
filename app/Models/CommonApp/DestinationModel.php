@@ -81,7 +81,7 @@ class DestinationModel extends Model
 						 ? $this->attributes['destination']
 						 : '';
 
-		return $destination.", ".$country;
+		return echoLocation($destination, $country);
 	}
 
 
@@ -95,7 +95,7 @@ class DestinationModel extends Model
 						 ? $this->attributes['destination']
 						 : '';
 
-		return echoLocation($destination, $country);
+		return echoLocation($destination, $country, '-');
 	}
 
 

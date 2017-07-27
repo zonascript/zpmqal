@@ -28,9 +28,26 @@ class TestController extends Controller
 		return ItineraryController::call()->itinerary($package);
 	}
 
+
 	public function testCode($value='')
 	{
+		$string = '{"key":"required","url":"required","salt":"required","surl":"required","furl":"required","name":"required","hash":"required","txnid":"required","phone":"342423","email":"ajay@fsaladfs.cm","amount":"389.90sd","hashseq":"required","productinfo":"required"}';
 
+		ddp(json_encode([
+					"key" 				=> "required",
+					"url" 				=> "required",
+					"salt" 				=> "required",
+					"surl" 				=> "required",
+					"furl" 				=> "required",
+					"name" 				=> "required",
+					"hash" 				=> "required",
+					"txnid" 			=> "required",
+					"phone" 			=> "342423",
+					"email" 			=> 'ajay@fsaladfs.cm',
+					"amount" 			=> "389.90sd",
+					"hashseq" 		=> "required",
+					"productinfo" => "required",
+				]));
 		$s = 'Fly Goldfinch';
 		$a = acronyms($s);
 		dd($a);
