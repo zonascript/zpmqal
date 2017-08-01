@@ -378,4 +378,9 @@ class PackageController extends Controller
 	}
 
 
+	public function notModifiable()
+	{
+		return view($this->viewPath.'.not_modifiable');
+	}
+
 }

@@ -1,7 +1,11 @@
 <?php 
 	
 	// using this route url like ww...com/dashboard/package/*
-	/*---------------------------Package all Route---------------------------*/
+	/*-----------Package all Route-----------*/
+
+	Route::get('not-modifiable', 'PackageController@notModifiable')
+					->name('package.notmodifiable');
+	
 	Route::get('open/{token}', 'PackageController@open')
 					->name('openPackage');
 

@@ -19,7 +19,11 @@ class VerifyPackageIsLock
 		$packageObj = new PackageController; 
 		$package = $packageObj->model()->byUser()
 								->byToken($request->token)->firstOrFail();
-		
+
+		if (!$package->modifiable()) {
+			return redirect(route('package.notmodifiable'));
+		}
+
 		if ($package->is_locked) {
 			$newPackage = $packageObj->makePackageRaplica($package->id);
 			$token = $newPackage->token;

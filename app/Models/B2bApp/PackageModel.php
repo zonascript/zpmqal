@@ -150,6 +150,12 @@ class PackageModel extends Model
 		return $this->where('package_code', $code)->count();
 	}
 
+	public function modifiable()
+	{
+		$now = Carbon::now();
+		return $this->start_date->gt($now);
+	}
+
 
 	public function scopeByToken($query, $token)
 	{

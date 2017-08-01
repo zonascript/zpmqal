@@ -31,6 +31,10 @@ class TestController extends Controller
 
 	public function testCode($value='')
 	{
+		$date = Carbon::parse('2017-09-01');
+		$now = Carbon::now();
+		dd($date->gt($now), $date, $now);
+
 		$r = new RouteModel;
 		dd($r->byPackageUser()->find(679));
 		dd(json_decode('nkasd'));
@@ -476,9 +480,6 @@ public function testCodeOld()
 		dd($encrypted, $decrypted);
 		dd(Crypt::encrypt(1));
 		dd('email sent');
-		$date = Carbon::parse('2017-07-01');
-		$now = Carbon::now();
-		dd($date->gte($now), $date, $now);
 
 		$array = [
 			"SID"  => '$SID',
