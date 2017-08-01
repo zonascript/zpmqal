@@ -19,6 +19,14 @@ class TrackPackageModel extends Model
 		return $this->belongsTo('App\Models\B2bApp\PackageModel', 'package_id');
 	}
 
+
+	public function scopeByUser($query)
+	{
+		return $query->whereHas('package', function($q) {
+										$q->byUser();
+									});
+	}
+
 	public function getStayTimeAttribute()
 	{
 		return convertSeconds($this->time_duration,false);
@@ -27,11 +35,7 @@ class TrackPackageModel extends Model
 
 	public function fatchTracks($take = 25)
 	{
-		return $this->with('package')
-									->whereHas('package', function($q) {
-												$q->where('user_id','=', auth()->user()->id);
-											})
-										->simplePaginate($take);
+		return $this->byUser()->orderBy('id', 'desc')->simplePaginate($take);
 	}
 
 	

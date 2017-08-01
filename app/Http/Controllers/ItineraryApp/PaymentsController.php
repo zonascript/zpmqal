@@ -37,8 +37,8 @@ class PaymentsController extends Controller
     	return wrongView();
     }
 
-		$package = PackageController::call()
-								->model()->findByTokenOrExit($token, false);
+		$package = PackageController::call()->model()
+							->byUser()->byToken($token)->firstOrFail();
 
 		$date = is_null($request->date) 
 					? Carbon::now()
@@ -82,7 +82,7 @@ class PaymentsController extends Controller
 	public function response($status, $token, Request $request)
 	{
 		$statusBool = statusBool($status);
-		$payment = $this->model()->findByTokenOrFail($token);
+		$payment = $this->model()->byToken($token)->firstOrFail();
 		return redirect($payment->back_url);
 	}
 

@@ -4,20 +4,12 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ================================B2bApp Controller===============================
 use App\Http\Controllers\B2bApp\RouteController;
 use App\Http\Controllers\B2bApp\PackageController;
-
-// ==============================HotelApp Controller===============================
 use App\Http\Controllers\HotelApp\TravelportHotelController;
 use App\Http\Controllers\HotelApp\HotelsController as DbHotelsController;
-
-// =================================Api Controller=================================
 use App\Http\Controllers\Api\TbtqHotelApiController;
 use App\Http\Controllers\Api\SkyscannerHotelApiController;
-
-// =====================================Model======================================
 use App\Models\B2bApp\PackageHotelModel;
 
 class HotelsController extends Controller
@@ -39,7 +31,7 @@ class HotelsController extends Controller
 	public function getHotelsByToken($token)
 	{
 		$package = PackageController::call()->model()
-							->findByTokenOrExit($token);
+							->byUser()->byToken($token)->firstOrFail();
 		$blade = [
 				'package' => $package,
 				'client' => $package->client,

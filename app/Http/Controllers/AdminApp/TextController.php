@@ -28,8 +28,10 @@ class TextController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$where = "CONCAT(`title`, '', `text`) LIKE '%".$request->t."%'";
-		$texts = $this->model()->findByAdminId(null, [], $where);
+		$texts = $this->model()->byAdmin()
+							->searchQuery($request->t)
+								->orderBy("order","asc")->get();
+
 		return view($this->viewPath.'.index', compact('texts')); 
 	}
 
@@ -68,7 +70,7 @@ class TextController extends Controller
 	 */
 	public function show($id)
 	{
-		$text = $this->model()->adminId()->findOrFail($id);
+		$text = $this->model()->byAdmin()->findOrFail($id);
 		return view($this->viewPath.'.show', compact('text')); 
 	}
 
@@ -80,7 +82,7 @@ class TextController extends Controller
 	 */
 	public function edit($id)
 	{
-		$text = $this->model()->adminId()->findOrFail($id);
+		$text = $this->model()->byAdmin()->findOrFail($id);
 		return view($this->viewPath.'.create_edit', compact('text')); 
 
 	}
@@ -109,7 +111,7 @@ class TextController extends Controller
 	*/
 	public function activate($id)
 	{
-		$text = $this->model()->adminId()->findOrFail($id);
+		$text = $this->model()->byAdmin()->findOrFail($id);
 		$text->is_active = 1;
 		$text->save();
 		return redirect('dashboard/settings/text');
@@ -122,7 +124,7 @@ class TextController extends Controller
 	*/
 	public function deactivate($id)
 	{
-		$text = $this->model()->adminId()->findOrFail($id);
+		$text = $this->model()->byAdmin()->findOrFail($id);
 		$text->is_active = 0;
 		$text->save();
 		return redirect('dashboard/settings/text');
@@ -137,7 +139,7 @@ class TextController extends Controller
 	 */
 	public function destroy($id, Request $request)
 	{
-		$text = $this->model()->adminId()->findOrFail($id);
+		$text = $this->model()->byAdmin()->findOrFail($id);
 		$text->delete();
 		return redirect('dashboard/settings/text');
 	}
@@ -146,7 +148,7 @@ class TextController extends Controller
 
 	public function createOrUpdate(Request $request, $id = null)
 	{
-		$text = $this->model()->adminId()->findOrFail($id);
+		$text = $this->model()->byAdmin()->findOrFail($id);
 
 		if (is_null($text)) {
 			$text = $this->model();

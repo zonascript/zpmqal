@@ -31,6 +31,10 @@ class TestController extends Controller
 
 	public function testCode($value='')
 	{
+		$r = new RouteModel;
+		dd($r->byPackageUser()->find(679));
+		dd(json_decode('nkasd'));
+
 		$string = '{"key":"required","url":"required","salt":"required","surl":"required","furl":"required","name":"required","hash":"required","txnid":"required","phone":"342423","email":"ajay@fsaladfs.cm","amount":"389.90sd","hashseq":"required","productinfo":"required"}';
 
 		ddp(json_encode([
@@ -118,12 +122,12 @@ class TestController extends Controller
 
 	public function showHtml(Request $request)
 	{
-		$package = PackageController::call()->model()->findByToken('02c7691aedf5a056e6a8d41fe1e1f9d4');
+		// $package = PackageController::call()->model()->findByToken('02c7691aedf5a056e6a8d41fe1e1f9d4');
 		// dd($request->input());
 		// return view('b2b.emails.template.1');
 		// return view('b2b.emails.package.2', compact('package'));
 		// return view('b2b.emails.temp');
-		return view('test.show');
+		return view('example.plus_minus_button');
 	}
 	// https://www.booking.com/hotel/za/house-of-house-guest-house.html
 

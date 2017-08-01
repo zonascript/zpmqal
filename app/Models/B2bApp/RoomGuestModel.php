@@ -15,6 +15,30 @@ class RoomGuestModel extends Model
 	}
 
 
+	public function package()
+	{
+		return $this->belongsTo('App\Models\B2bApp\PackageModel', 'package_id');
+	}
+
+
+	public function scopeByUser($query)
+	{
+		return $query->whereHas('package', function ($q){
+								$q->byUser();
+							});
+	}
+
+
+	public function childAgeIds()
+	{
+		$ids = [];
+		foreach ($this->childAge as $value) {
+			$ids[] = ['id' => $value->id, 'age' => $value->age];
+		}
+		return $ids;
+	}
+
+
 	public function copyGuests($pid)
 	{
 		$newGuest = $this;

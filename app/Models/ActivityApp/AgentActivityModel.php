@@ -52,19 +52,29 @@ class AgentActivityModel extends Model
 	}
 
 
-	public function scopeAdminId($query)
+	public function scopeByAdmin($query)
 	{
-		return $query->where([
-											'admin_id' => $this->checkUser()
-										]);
+		return $query->where('admin_id', $this->checkUser());
 	}
 
-	public function findOrExit($id)
+
+	public function scopeByDestinationCode($query, $code)
 	{
-		return $this->where([
-											'id' => $id,
-										])
-									->firstOrFail();
+		if (!is_null($code)) {
+			return $query->where('destination_code', $code);
+		}
+	}
+
+
+	public function scopeByIsActive($query, $bool=1)
+	{
+		return $query->where('is_active', $bool);
+	}
+
+
+	public function scopeBySearch($query, $title)
+	{
+		return $query->where("title", 'like', '%'.$title.'%');
 	}
 
 
@@ -85,22 +95,11 @@ class AgentActivityModel extends Model
 	}
 
 
-	public function findByDestination($cityId, $name = null)
+	public function findByDestination($cityId, $title = '')
 	{
-		$where = [
-						"admin_id" => $this->checkUser(),
-						"destination_code" => $cityId,
-						"is_active" => 1
-					];
-
-		if (!is_null($name)) {
-			$where[] = ["title", 'like', '%'.$name.'%'];
-		}
-
-		return $this->where($where)
-									->skip(0)
-										->take(20)
-											->get();
+		return $this->byAdmin()->bySearch($title)
+									->byDestinationCode($cityId)
+										->byIsActive()->skip(0)->take(20)->get();
 	}
 	
 

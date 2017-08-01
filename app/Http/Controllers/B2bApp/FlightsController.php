@@ -36,7 +36,7 @@ class FlightsController extends Controller
 	public function getFlightsByToken($token)
 	{
 		$package = PackageController::call()->model()
-									->findByTokenOrExit($token);
+									->byUser()->byToken($token)->firstOrFail();
 		$viewPath = 'b2b.protected.dashboard.pages.flights';
 		$blade = [
 				'package'  => $package,

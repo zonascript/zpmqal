@@ -358,7 +358,7 @@
 	}
 
 	function defaultAirlineIcon(thisObj) {
-		thisObj.src='http://images.flygoldfinch.dev/images/airlineImages/__.gif';
+		thisObj.src = "{{ urlImage('images/airlineImages/__.gif') }}";
 		return false;
 	}
 

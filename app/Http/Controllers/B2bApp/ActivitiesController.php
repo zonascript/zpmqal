@@ -84,7 +84,8 @@ class ActivitiesController extends Controller
 	*/
 	public function getActivitiesByToken($token)
 	{
-		$package = PackageController::call()->model()->findByTokenOrExit($token);
+		$package = PackageController::call()->model()
+							->byUser()->byToken($token)->firstOrFail();
 		$viewPath = 'b2b.protected.dashboard.pages.activities';
 		$blade = [
 				'package' => $package,

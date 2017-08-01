@@ -16,18 +16,11 @@ class UserActivationModel extends Model
 	}
 
 
-	public function findByTokenOrExit($token)
+	public function scopeByToken($query, $token)
 	{
-		return $this->where(['token' => $token])->firstOrFail();
+		return $query->where(['token' => $token]);
 	}
 
-
-	public function updateUsed($userId)
-	{
-		$this->call()
-						->where(['user_id' => $userId, 'is_used' =>  0])
-							->update(['is_used' => 1]);
-	}
 
 
 	public function user()
@@ -36,11 +29,20 @@ class UserActivationModel extends Model
 	}
 
 
+	
+	public function updateUsed($userId)
+	{
+		$this->call()
+						->where(['user_id' => $userId, 'is_used' =>  0])
+							->update(['is_used' => 1]);
+	}
+
+
+
 	public function activateUser($token)
 	{
 		$rsp = true;
-		$user = $this->where(['token' => $token])
-									->first();
+		$user = $this->byToken($token)->first();
 		if (is_null($user)) {
 			exit('Sorry the link has been expired. <a href="'.url('/login').'">back</a>');
 		}

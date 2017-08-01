@@ -58,16 +58,51 @@ class ClientModel extends Model
 
 
 
-	public function scopeAdminId($query, $guard = false)
+
+	public function scopeByAdmin($query, $guard = false)
 	{
 		$auth = $guard 
 					? auth()->guard('admin')->user() 
-					: auth()->user();
+					: auth()->user()->admin;
 
 		return $query->whereHas('user', function($q) use ($auth) {
 											$q->where(['admin_id' => $auth->id]);
 										});
 	}
+
+	public function scopeByUser($query)
+	{
+		$auth = auth()->user();
+		return $query->where(['user_id' => $auth->id]);
+	}
+
+
+	public function scopeByToken($query, $token)
+	{
+		return $query->where(['token' => $token]);
+	}
+
+
+	public function scopeMobileOrEmail($query, $mobile, $email)
+	{
+		return $query->where(function ($q) use ($mobile, $email){
+											$q->where(["mobile" => $mobile])
+												->orWhere(["email" => $email]);
+										});
+	}
+
+
+	public function scopeNotInactive($query)
+	{
+		return $query->where("status", "<>", 0);
+	}
+
+
+	public function scopeSearchName($query, $name)
+	{
+		return $query->where('fullname', 'like', '%'.$name.'%');
+	}
+
 
 	public function packagesPaginate($pid){
 		$id = filter_var($pid, FILTER_SANITIZE_NUMBER_INT);
@@ -76,67 +111,17 @@ class ClientModel extends Model
 	}
 
 
-	public function findByUser($id = null)
-	{
-		$auth = auth()->user();
-		$where = ['user_id' => $auth->id];
-		if ($id) $where['id'] = $id;
-
-		return $this->where($where)->first();
-	}
-
-
-	public function findByUserOrExit($id)
-	{
-		$result = $this->findByUser($id);
-		if (is_null($result)) {
-			exitView();
-		}
-		return $result;
-	}
-
-
-	public function findByTokenOrFail($token)
-	{
-		$auth = auth()->user();
-		return $this->where([
-											'token' => $token, 
-											'user_id' => $auth->id
-										])
-									->firstOrFail();
-	}
-
-
 	public function findByMobileEmail($mobile, $email)
 	{
-		$auth = auth()->user();
-		$client = $this->select()
-							->where([
-										"user_id" => $auth->id,
-										["status", "<>", 0]
-									])
-								->where(function ($query) use ($mobile, $email){
-											$query->where(["mobile" => $mobile])
-														->orWhere(["email" => $email]);
-										})
-									->first();
-		
-		return $client;
+		return $this->mobileOrEmail($mobile, $email)
+									->byUser()->notInactive()->first();
 	}
 
 
 	public function simplePaginateData($name, $guard = false)
 	{
-		$auth = $guard 
-					? auth()->guard('admin')->user() 
-					: auth()->user();
-
-		return $this->where([
-									'user_id' => $auth->id,
-									['status', '<>', 0],
-									['fullname', 'like', '%'.$name.'%']
-								])
-							->simplePaginate(20);
+		return $this->byAdmin($guard)->notInactive()
+									->searchName($name)->simplePaginate(20);
 	}
 
 
@@ -191,13 +176,9 @@ class ClientModel extends Model
 
 	public function vendorReport()
 	{
-		// SELECT `lead_vendor_id`, COUNT(*) AS times FROM `clients` WHERE user_id = 1 GROUP BY `lead_vendor_id`
-		$auth = auth()->user();
 		$query = "COUNT(*) AS times";
 		return $this->select('lead_vendor_id', \DB::raw($query))
-									->where(['user_id' => $auth->id])
-										->groupBy('lead_vendor_id')
-											->get();
+									->byUser()->groupBy('lead_vendor_id')->get();
 	}
 
 

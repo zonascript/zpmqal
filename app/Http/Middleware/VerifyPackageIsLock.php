@@ -17,7 +17,8 @@ class VerifyPackageIsLock
 	public function handle($request, Closure $next)
 	{
 		$packageObj = new PackageController; 
-		$package = $packageObj->model()->findByTokenOrExit($request->token);
+		$package = $packageObj->model()->byUser()
+								->byToken($request->token)->firstOrFail();
 		
 		if ($package->is_locked) {
 			$newPackage = $packageObj->makePackageRaplica($package->id);

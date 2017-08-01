@@ -33,7 +33,7 @@ class CruisesController extends Controller
 	public function getCruisesByToken($token)
 	{
 		$package = PackageController::call()->model()
-							->findByTokenOrExit($token);
+							->byUser()->byToken($token)->firstOrFail();
 		$blade = [
 				'package' => $package,
 				'client' => $package->client,

@@ -21,7 +21,7 @@ appendHtml += '<li class="min-height-110px main-list-item">
 					<div class="row m-tb-10px text-left">
 						<div class="col-md-3 col-sm-3 col-xs-12">
 							<div class="row">
-								<img src="{{ urlImage('images/airlineImages/') }}'+flightCode+'.gif" alt="">
+								<img src="{{ urlImage('images/airlineImages') }}/'+flightCode+'.gif" onerror="defaultAirlineIcon(this)" alt="">
 							</div>
 						</div>
 						<div class="col-md-9 col-sm-9 col-xs-12">

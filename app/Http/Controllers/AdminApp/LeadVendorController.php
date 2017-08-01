@@ -10,7 +10,7 @@ use App\Models\AdminApp\LeadVendorModel;
 class LeadVendorController extends Controller
 {
 
-	public $viewPath = 'admin.protected.dashboard.pages.lead_vendor.';
+	public $viewPath = 'admin.protected.dashboard.pages.lead_vendor';
 
 	public static function call()
 	{
@@ -30,8 +30,11 @@ class LeadVendorController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$vendors = $this->model()->paginatedData($request->v);
-		return view($this->viewPath.'index', compact('vendors')); 
+		$vendors = $this->model()->byAdmin()
+								->search($request->v)
+									->simplePaginate(6);
+
+		return view($this->viewPath.'.index', compact('vendors')); 
 	}
 
 
@@ -42,7 +45,7 @@ class LeadVendorController extends Controller
 	 */
 	public function create()
 	{
-		return view($this->viewPath.'create_edit'); 
+		return view($this->viewPath.'.create_edit'); 
 	}
 
 
@@ -68,8 +71,8 @@ class LeadVendorController extends Controller
 	 */
 	public function show($id)
 	{
-		$vendor = $this->model()->adminId()->findOrFail($id);
-		return view($this->viewPath.'show', compact('vendor')); 
+		$vendor = $this->model()->byAdmin()->findOrFail($id);
+		return view($this->viewPath.'.show', compact('vendor')); 
 	}
 
 	/**
@@ -80,9 +83,8 @@ class LeadVendorController extends Controller
 	 */
 	public function edit($id)
 	{
-		$vendor = $this->model()->adminId()->findOrFail($id);
-		$blade = [ "vendor" => $vendor, "edit" => 1 ];
-		return view($this->viewPath.'create_edit', $blade);
+		$vendor = $this->model()->byAdmin()->findOrFail($id);
+		return view($this->viewPath.'.create_edit', compact('vendor'));
 	}
 
 	/**
@@ -105,7 +107,7 @@ class LeadVendorController extends Controller
 	*/
 	public function activate($id)
 	{
-		$vendor = $this->model()->adminId()->findOrFail($id);
+		$vendor = $this->model()->byAdmin()->findOrFail($id);
 		$vendor->is_active = 1;
 		$vendor->save();
 		return redirect('dashboard/settings/vendor/lead');
@@ -113,7 +115,7 @@ class LeadVendorController extends Controller
 
 	public function deactivate($id)
 	{
-		$vendor = $this->model()->adminId()->findOrFail($id);
+		$vendor = $this->model()->byAdmin()->findOrFail($id);
 		$vendor->is_active = 0;
 		$vendor->save();
 		return redirect('dashboard/settings/vendor/lead');
@@ -128,7 +130,7 @@ class LeadVendorController extends Controller
 	public function destroy($id)
 	{
 		$vendor = $this->model()->unlockOnly()
-											->adminId()->findOrFail($id);
+											->byAdmin()->findOrFail($id);
 		$vendor->updateVendorId()->delete();
 		return redirect('dashboard/settings/vendor/lead');
 	}
@@ -145,7 +147,7 @@ class LeadVendorController extends Controller
 		]);
 
 		$leadVendor = !is_null($id)
-								? $this->model()->adminId()->find($id)
+								? $this->model()->byAdmin()->find($id)
 								: null;
 
 		if (is_null($leadVendor)) {

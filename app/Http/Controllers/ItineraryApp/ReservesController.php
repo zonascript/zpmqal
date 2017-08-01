@@ -34,8 +34,8 @@ class ReservesController extends Controller
 			return jsonResponse(500, 'error', ['errors' => $validator->errors()]);
     }
 
-		$package = PackageController::call()
-								->model()->findByTokenOrExit($token, false);
+		$package = PackageController::call()->model()
+								->byUser()->byToken($token)->firstOrFail();
 
 		$date = is_null($request->date) 
 					? Carbon::now()

@@ -25,29 +25,12 @@
 	{{-- Adding or Removing-room --}}
 
 	$(document).on('click','#btn-addRoom',function(){
-		var currentRoom = $('#room').children(":visible").length;
-	
-		$('#room_'+(currentRoom+1)).show();
-		
-		if(currentRoom == 1){
-			$('#btn-removeRoom, #pipeSapr').show();
-		}
-		if(currentRoom == 3){
-			$('#btn-addRoom, #pipeSapr').hide();
-		}
+		storeRoom();
+		addRoom();
 	});
 
-	$(document).on('click','#btn-removeRoom',function(){
-		var currentRoom = $('#room').children(":visible").length;
-
-		$('#room_'+(currentRoom)).hide();
-		
-		if(currentRoom == 2){
-			$('#btn-removeRoom, #pipeSapr').hide();
-		}
-		if(currentRoom == 4){
-			$('#btn-addRoom, #pipeSapr').show();
-		}
+	$(document).on('click', '.rmv-room', function(){
+		removeRoom(this);
 	});
 
 	{{-- /Adding or Removing-room --}}
@@ -221,117 +204,28 @@
 	{{-- form submition --}}
 
 	$(document).on('click','#formSubmit', function(){
-		formSubmit(this);
+		if(postRoute()){
+			bootSubmitEvent(this);
+			storeRoom();
+			setTimeout(function () {
+				formSubmit(this);
+			}, 2000);
+		}
 	});
 
 	{{-- /form submition --}}
 
 
-	{{-- Adults-Child-button --}}
-
-	$('.btn-number').click(function(e){
-			e.preventDefault();
-			
-			fieldName = $(this).attr('data-field');
-			type      = $(this).attr('data-type');
-			dataName = $(this).attr('data-name');
-			var input = $("input[name='"+fieldName+"']");
-			var spanWord_elem = $("span[name='"+fieldName+"']");
-			var currentVal = parseInt(input.val());
-			var spanWord = spanWord_elem.text(); 
-			
-			if (!isNaN(currentVal)) {
-					if(type == 'minus') {
-							
-							if(currentVal > input.attr('min')) {
-									input.val(currentVal - 1).change();
-							} 
-							if(parseInt(input.val()) == input.attr('min')) {
-									$(this).attr('disabled', true);
-							}
-
-							if(currentVal == 2 && spanWord == 'Adults'){
-								spanWord_elem.text('Adult');
-							}
-
-							if(dataName == 'child'){
-								$("[data-age='"+fieldName+"'] div:nth-child("+currentVal+")").remove();
-							}
-							
-							if(currentVal == 2 && spanWord == 'Children'){
-								spanWord_elem.text('Child');
-							}
-
-					} else if(type == 'plus') {
-
-							if(currentVal < input.attr('max')) {
-									input.val(currentVal + 1).change();
-							}
-							if(parseInt(input.val()) == input.attr('max')) {
-									$(this).attr('disabled', true);
-							}
-
-							if(currentVal >= 1 && spanWord == 'Adult'){
-								spanWord_elem.text('Adults');
-							}
-
-							if(dataName == 'child'){
-								var chhild_elem = $("#age_temp").html();
-								$("[data-age='"+fieldName+"']").append(chhild_elem);
-							}
-
-							if(currentVal >= 1 && spanWord == 'Child'){
-								spanWord_elem.text('Children');
-							}
-					}
-			} else {
-					input.val(0);
-			}
+	$(document).on('click', '.btn-child', function () {
+		var id = $(this).attr('field');
+		var val = $(id).val();
+		childAgeElem(this, val, 2);
 	});
 
-	$('.input-number').focusin(function(){
-		 $(this).data('oldValue', $(this).val());
+	$(document).on('click change', '.btn-number, .age-elem', function () {
+		addInactiveClass(this);
 	});
 
-	$('.input-number').change(function() {
-			
-			minValue =  parseInt($(this).attr('min'));
-			maxValue =  parseInt($(this).attr('max'));
-			valueCurrent = parseInt($(this).val());
-			
-			name = $(this).attr('name');
-			if(valueCurrent >= minValue) {
-					$(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
-			} else {
-					$.alert('Sorry, the minimum value was reached');
-					$(this).val($(this).data('oldValue'));
-			}
-			if(valueCurrent <= maxValue) {
-					$(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
-			} else {
-					$.alert('Sorry, the maximum value was reached');
-					$(this).val($(this).data('oldValue'));
-			}
-			
-	});
-
-	$(".input-number").keydown(function (e) {
-			// Allow: backspace, delete, tab, escape, enter and .
-			if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
-					 // Allow: Ctrl+A
-					(e.keyCode == 65 && e.ctrlKey === true) || 
-					 // Allow: home, end, left, right
-					(e.keyCode >= 35 && e.keyCode <= 39)) {
-							 // let it happen, don't do anything
-							 return;
-			}
-			// Ensure that it is a number and stop the keypress
-			if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-					e.preventDefault();
-			}
-	});
-
-	{{-- /Adults-Child-button --}}
 </script>
 
 @include($viewPath.'.create_partials.autocomplete')

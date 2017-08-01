@@ -90,7 +90,7 @@
 		</div>
 		<form action="{{ url('dashboard/settings/vendor/lead/'.(isset($vendor->id) ? $vendor->id : '')) }}" method="post" id="main_form" hidden="">
 			{{ csrf_field() }}
-			{{ isset($edit) ? method_field('put') : "" }}
+			{{ isset($vendor->id) ? method_field('put') : "" }}
 			<input type="hidden" name="company_name" value="">
 			<input type="hidden" name="contact_person" value="">
 			<input type="hidden" name="contact_number" value="">

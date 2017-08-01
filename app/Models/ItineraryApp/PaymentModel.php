@@ -10,10 +10,12 @@ class PaymentModel extends Model
 	protected $connection = 'mysql8';
 	protected $table = 'payments';
 
-	public function findByTokenOrFail($token)
+	public function scopeByToken($query, $token)
 	{
-		return $this->where(['token' => $token])->firstOrFail();
+		return $query->where(['token' => $token]);
 	}
+
+
 
 	public function payuPayment()
 	{

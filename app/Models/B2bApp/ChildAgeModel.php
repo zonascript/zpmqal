@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class ChildAgeModel extends Model
 {
 	protected $table = 'children_age';
+	protected $hidden = ['created_at', 'updated_at'];
 
-	protected $hidden = [
-		'created_at', 'updated_at',
-	];
+
+	public function scopeNotInIds($query, Array $ids)
+	{
+		return $query->whereNotIn('id', $ids);
+	}
 
 
 	public function copyChildAge($rgid)

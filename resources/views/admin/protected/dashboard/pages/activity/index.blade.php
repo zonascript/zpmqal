@@ -77,7 +77,7 @@
 					</table>
 					<div class="row">
 						<span class="pull-right">
-							{{ $activities->links() }}
+							{{ $activities->appends(request()->input())->links() }}
 						</span>
 					</div>
 				</div>

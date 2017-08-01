@@ -19,8 +19,8 @@ class AccommodationController extends Controller
 	*/
 	public function getHotelsByToken($token)
 	{
-		$package = PackageController::call()
-								->model()->findByTokenOrExit($token);
+		$package = PackageController::call()->model()
+							->byUser()->byToken($token)->firstOrFail();
 		$blade = [
 				'package'  => $package,
 				'viewPath' => $this->viewPath,

@@ -234,7 +234,7 @@
 
 				$.ajax({
 					type:"post",
-					url: "{{ url('dashboard/package/route/'.$package->id.'/r') }}",
+					url: "{{ url('dashboard/package/route/'.$package->token.'/r') }}",
 					data: data,
 					success : function (rid) {
 						$(thisElem).attr('data-rid', rid);
@@ -252,52 +252,148 @@
 	}
 
 
+	function bootSubmitEvent(thisObj) {
+		showWaitingLogo();
+		$(thisObj).addClass('disabled');
+		$(thisObj).prop('disabled', true);
+	}
+
 
 	function formSubmit(thisObj) {
-		if(postRoute()){
-			showWaitingLogo();
-			var startDate = $('#startDate').val();
-			var pid = $('#startDate').attr('data-pid');
+		var startDate = $('#startDate').val();
+		var pid = $('#startDate').attr('data-pid');
 
-			var roomGuests = $('.room-guest:visible').map(function() {
+		/*var roomGuests = $('.room-guest:visible').map(function() {
 
-				var childAge = $(this).find('.age-elem').map(function() {
-					return $(thisObj).val();
-				}).get();
-
-				return {
-					'NoOfAdults': $(this).find('.adults').val(),
-					'ChildAge': JSON.stringify(childAge),
-				}
+			var childAge = $(this).find('.age-elem').map(function() {
+				return $(this).val();
 			}).get();
 
-			$(thisObj).addClass('disabled');
-			$(thisObj).prop('disabled', true);
-			var req = $('#show_req').text();
-			var data = {
-				"_token" : csrf_token,
-				"pid" : pid,
-				"req" : req,
-				"startDate" : startDate,
-				"roomGuests" : roomGuests
+			return {
+				'NoOfAdults': $(this).find('.adults').val(),
+				'ChildAge': childAge,
 			}
+		}).get();*/
+
+
+		var req = $('#show_req').text();
+		var data = {
+			"_token" : csrf_token,
+			"pid" : pid,
+			"req" : req,
+			"startDate" : startDate,
+			// "roomGuests" : roomGuests
+		}
+
+		$.ajax({
+			type:"post",
+			url: "{{ url('dashboard/package/route/'.$package->token.'/u') }}",
+			data: data,
+			dataType : 'JSON',
+			success: function(response, textStatus, xhr) {
+				if(xhr.status == 200){
+					document.location.href = response.nextUrl;
+				}
+			},
+			error: function(xhr, textStatus) {
+				if(xhr.status == 401){
+					window.open("{{ url('login') }}", '_blank');
+				}
+			}
+		});
+	}
+
+
+	function addRoom() {
+		var count = parseInt($('#btn-addRoom').attr('data-count'), 10);
+		count++;
+		$('#btn-addRoom').attr('data-count', count);
+		var html = '{!! myView($viewPath.'.create_partials.room_temp') !!}';
+		$('#room').append(html);
+	}
+
+	function storeRoom() {
+		$('.room-guest.inctv').each(function (i, v) {
+			var id = $(this).attr('data-id');
+			var rooms = $(this).find('.room-count').val();
+			var adults = $(this).find('.adults').val();
+			var childAge = $(this).find('.age-elem').map(function() {
+					return {
+							'id' : $(this).attr('data-id'),
+							'age': $(this).val()
+						};
+				}).get();
+
+			var data = {
+				"id" : id,
+				"rooms" : rooms,
+				"adults" : adults,
+				"_token" : csrf_token,
+				"children_age" : childAge
+			};
 
 			$.ajax({
 				type:"post",
-				url: "{{ url('dashboard/package/route/'.$package->id.'/u') }}",
+				url: "{{ url('dashboard/package/route/'.$package->token.'/room') }}",
 				data: data,
-				success: function(response, textStatus, xhr) {
-					if(xhr.status == 200){
-						response_obj = JSON.parse(response);
-						document.location.href = response_obj.nextUrl;
-					}
-				},
-				error: function(xhr, textStatus) {
-					if(xhr.status == 401){
-						window.open("{{ url('login') }}", '_blank');
+				dataType : "JSON",
+				success : function (response) {
+					$(v).attr('data-id', response.id).removeClass('inctv');
+					setAgeId(v, response.age_ids);
+				}
+			});
+		});
+		return true;
+	}
+
+
+	function removeRoom(thisObj) {
+		var roomGuest = $(thisObj).closest('.room-guest');
+		var id = parseInt($(roomGuest).attr('data-id'), 10);
+		if (id > 0) {
+			$.ajax({
+				type:"post",
+				url: "{{ url('dashboard/package/route') }}/"+id+"/removeroom",
+				data: {"_token" : csrf_token},
+				dataType : "JSON",
+				success : function (response) {
+					if (response.status == 200) {
+						$(roomGuest).remove();
 					}
 				}
 			});
 		}
+		else{
+			$(roomGuest).remove();
+		}
+	}
+
+
+	function childAgeElem(thisObj, count, max) {
+		var childAgeHtml = $('#age_temp').html();
+		var roomGuests = $(thisObj).closest('.room-guest');
+		var childAgeBox = $(roomGuests).find('.age');
+		if (childAgeBox.children().length <= max) {
+			if ((count-1) < childAgeBox.children().length) {
+				childAgeBox.children().eq(count).remove();
+			}
+			else{
+				$(childAgeBox).append(childAgeHtml);
+			}
+		}
+	}
+
+
+	function addInactiveClass(thisObj) {
+		$(thisObj).closest('.room-guest').addClass('inctv');
+		return false;
+	}
+
+	function setAgeId(thisObj, data) {
+		$(thisObj).find('.age-elem').each(function (i, v) {
+			var value = data[i];
+			$(this).attr('data-id', value.id);
+		});
+		return false;
 	}
 </script>

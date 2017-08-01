@@ -42,10 +42,16 @@ class TextModel extends Model
 		return $order->order;
 	}
 
-	public function scopeAdminId($query)
+	public function scopeByAdmin($query)
 	{
 		$auth = auth()->guard('admin')->user();
 		return $query->where('admin_id', $auth->id);
+	}
+
+	public function scopeSearchQuery($query, $word)
+	{
+		return $query->where('title', 'like', '%'.$word.'%')
+									->orWhere('text', 'like', '%'.$word.'%');
 	}
 
 
@@ -53,21 +59,6 @@ class TextModel extends Model
 	{
 		return $this->belongsTo(IndicationModel::class, 'is_active');
 	}
-
-
-	public function findByAdminId($adminId = null, array $where = [], $whereRaw = null)
-	{
-		$adminId = is_null($adminId) 
-						 ? auth()->guard('admin')->user()->id 
-						 : $adminId;
-						 
-		$where = array_merge(["admin_id" => $adminId], $where);
-		return $this->where($where)
-									->whereRaw($whereRaw)
-										->orderBy("order","asc")
-											->get();
-	}
-
 
 
 }

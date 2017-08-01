@@ -1,5 +1,5 @@
-{{--  Left bar --}}
 
+{{--  Left bar --}}
 <div class="col-md-3 left_col menu_fixed">
 	<div class="left_col scroll-view">
 		<div class="navbar nav_title" style="border: 0;">
@@ -41,23 +41,23 @@
 					</li>
 					<li><a><i class="fa fa-cogs"></i> Tools <span class="fa fa-chevron-down"></span></a>
 						<ul class="nav child_menu">
-							<li class="hide"><a href="{{ url('dashboard/tools') }}">Tools</a></li>
+								<li class="hide"><a href="{{ url('dashboard/tools') }}">Tools</a></li>
 							<li><a href="{{ url('dashboard/tools/calendar') }}">Calendar</a></li>
 							<li><a href="{{ url('dashboard/tools/contacts') }}">Contact List</a></li>
-							<li><a href="{{ url('dashboard/tools/invoice') }}">Invoice</a></li>
+							{{-- <li><a href="{{ url('dashboard/tools/invoice') }}">Invoice</a></li>
 							<li><a href="{{ url('dashboard/tools/inbox') }}">Inbox</a></li>
-							<li><a href="{{ url('dashboard/tools/vouchers') }}">Vouchers</a></li>
+							<li><a href="{{ url('dashboard/tools/vouchers') }}">Vouchers</a></li> --}}
 						</ul>
 					</li>
 					<li><a><i class="fa fa-desktop"></i> Monitoring<span class="fa fa-chevron-down"></span></a>
 						<ul class="nav child_menu">
 							<?php 
 								$pageNames = [
-										"client" => "Client",
+										// "client" => "Client",
 										"packages" => "Track Packages",
-										"lead" => "Leads",
+										// "lead" => "Leads",
 										"follow-up" => "Follow Ups" ,
-										"growth-chart" => "Growth Chart",
+										// "growth-chart" => "Growth Chart",
 									];
 							?>
 							@foreach ($pageNames as $pageNameKey => $pageName)
@@ -69,13 +69,13 @@
 							@endforeach
 						</ul>
 					</li>
-					<li><a><i class="fa fa-bar-chart-o"></i>Activities<span class="fa fa-chevron-down"></span></a>
+					{{-- <li><a><i class="fa fa-bar-chart-o"></i>Activities<span class="fa fa-chevron-down"></span></a>
 						<ul class="nav child_menu">
 							<li><a href="{{ url('activity-report') }}">Activity Reports</a></li>
 							<li><a href="{{ url('performance') }}">Your Performance</a></li>
 							<li><a href="{{ url('activity-report') }}">Activity Reports</a></li>
 						</ul>
-					</li>
+					</li> --}}
 				</ul>
 			</div>
 

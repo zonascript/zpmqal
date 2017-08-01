@@ -31,12 +31,10 @@ class ActivitiesController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$params = [
-				'title'	=> $request->search,
-				'destCode' => $request->city,
-			];
-
-		$activities = $this->model()->activitiesPaginate($params);
+		$activities = $this->model()->byAdmin()
+									->bySearch($request->search)
+										->byDestinationCode($request->city)
+											->simplePaginate(20);
 
 		return view($this->viewPath.'.index', compact('activities'));
 	}
@@ -44,7 +42,7 @@ class ActivitiesController extends Controller
 
 	public function createOrEdit($id = null)
 	{
-		$activity = $this->model()->adminId()->find($id);
+		$activity = $this->model()->byAdmin()->find($id);
 
 		if (is_null($activity)) {
 			$activity = $this->model();
@@ -56,7 +54,7 @@ class ActivitiesController extends Controller
 
 	public function storeOrUpdate(Request $request)
 	{
-		$activity = $this->model()->adminId()->find($request->id);
+		$activity = $this->model()->byAdmin()->find($request->id);
 		if (is_null($activity)) {
 			$activity = $this->model();
 		}

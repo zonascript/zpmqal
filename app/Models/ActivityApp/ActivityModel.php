@@ -3,10 +3,8 @@
 namespace App\Models\ActivityApp;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\CommonApp\ImageModel;
 use App\Models\CommonApp\DestinationModel;
-// =============================Models=============================
-
+use App\Models\CommonApp\ImageModel;
 use DB;
 
 class ActivityModel extends Model
@@ -50,21 +48,29 @@ class ActivityModel extends Model
 	}
 
 
-	public function findByDestination($cityId, $name = null)
+	public function scopebyIsActive($query, $bool = 1)
 	{
-		$where = [
-						"destination_code" => $cityId,
-						"is_active" => 1
-					];
+		return $query->where("is_active", $bool);
+	}
 
-		if (!is_null($name)) {
-			$where[] = ["name", 'like', '%'.$name.'%'];
-		}
 
-		return $this->where($where)
-									->skip(0)
-										->take(20)
-											->get();
+	public function scopeSearchQuery($query, $name)
+	{
+		return $query->where('name', 'like', '%'.$name.'%');
+	}
+
+
+	public function scopeByDestinationCode($query, $code)
+	{
+		return $query->where("destination_code", $code);
+	}
+
+
+	public function findByDestination($code, $name = null)
+	{
+		return $this->byDestinationCode($code)
+									->byIsActive(1)->searchQuery($name)
+										->skip(0)->take(20)->get();
 	}
 
 

@@ -5,6 +5,8 @@ namespace App\Models\B2bApp;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\B2bApp\ItineraryController;
 use App\Models\B2bApp\PackageActivityModel;
+use App\Models\B2bApp\PackageCostModel;
+use App\Models\B2bApp\RoomGuestModel;
 use App\Models\B2bApp\PackageModel;
 use Carbon\Carbon;
 use DB;
@@ -149,54 +151,24 @@ class PackageModel extends Model
 	}
 
 
-	public function findOrExit($id)
+	public function scopeByToken($query, $token)
 	{
-		$package = $this->find($id);
-		if (is_null($package)) {
-			$this->exitView();
-		}
-		return $package;
+		return $query->where(['token' => $token]);
 	}
 
-
-	public function findByToken($token)
-	{
-		$auth = auth()->user();
-		$where = ['token' 	=> $token];
-		
-		if (!is_null($auth)) {
-			$where['user_id'] = $auth->id;
-		}
-
-		return $this->where($where)->first();
-	}
-
-
-	public function findByTokenOrExit($token, $next_auth = true)
-	{
-		$result = $this->findByToken($token);
-		
-		if (is_null($result)) {
-			exitView();
-		}
-
-		return $result;
-	}
-
-	public function exitView()
-	{
-		$blade = ["url" => urlReport()];
-		exit(view('b2b.protected.dashboard.404_main', $blade)->render());
-	}
-
-
-	public function scopeUserId($query)
+	public function scopeByClientUser($query)
 	{
 		return $query->whereHas('client', function ($q){
-												$auth = auth()->user();
-												$q->where(['user_id' => $auth->id]);
-											});
+											$q->byUser();
+										});
+	}
+
+	public function scopeByUser($query)
+	{
+		$auth = auth()->user();
+		return $query->where(['user_id' => $auth->id]);
 	}	
+
 
 
 	public function scopeSearch($query, $word)
@@ -216,6 +188,11 @@ class PackageModel extends Model
 
 
 	public function roomGuest()
+	{
+		return $this->hasMany('App\Models\B2bApp\RoomGuestModel', 'package_id')->with('childAge');
+	}
+
+	public function roomGuests()
 	{
 		return $this->hasMany('App\Models\B2bApp\RoomGuestModel', 'package_id')->with('childAge');
 	}
@@ -276,7 +253,7 @@ class PackageModel extends Model
 	}
 
 
-	public function tempCost($value='')
+	public function tempCost()
 	{
 		$where = is_null($this->costToken) 
 					 ? ["is_current" => 1]

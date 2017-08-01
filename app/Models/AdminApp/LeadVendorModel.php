@@ -51,10 +51,21 @@ class LeadVendorModel extends Model
 	}
 
 
-	public function scopeAdminId($query)
+	public function scopeByAdmin($query)
 	{
 		$auth = $this->adminData();
 		return $query->where('admin_id', $auth->id);
+	}
+
+	public function scopeSearch($query, $keyword = '')
+	{
+		return $query->where(function ($q) use ($keyword){
+								$q->orWhere('email_id', 'like', '%'.$keyword.'%');
+								$q->orWhere('company_name', 'like', '%'.$keyword.'%');
+								$q->orWhere('contact_person', 'like', '%'.$keyword.'%');
+								$q->orWhere('contact_number', 'like', '%'.$keyword.'%');
+							});
+		
 	}
 
 
@@ -117,24 +128,6 @@ class LeadVendorModel extends Model
 		ClientModel::where($where)->update($data);
 		ClientAliasModel::where($where)->update($data);
 		return $this;
-	}
-
-	public function scopeSearch($query, $keyword = '')
-	{
-		return $query->where(function ($q) use ($keyword){
-								$q->orWhere('email_id', 'like', '%'.$keyword.'%');
-								$q->orWhere('company_name', 'like', '%'.$keyword.'%');
-								$q->orWhere('contact_person', 'like', '%'.$keyword.'%');
-								$q->orWhere('contact_number', 'like', '%'.$keyword.'%');
-							});
-		
-	}
-
-	public function paginatedData($keyword = '')
-	{
-		return $this->adminId()
-									->search($keyword)
-										->simplePaginate(6);
 	}
 
 

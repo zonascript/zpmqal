@@ -41,7 +41,7 @@ class PackageController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Request $request){
-		$packages = $this->model()->userId()
+		$packages = $this->model()->byUser()
 								->search($request->search)
 									->orderBy('id', 'desc')
 										->simplePaginate(25);
@@ -51,7 +51,7 @@ class PackageController extends Controller
 
 	public function show($token, Request $request){
 		$client  = ClientController::call()->model()
-							->findByTokenOrFail($token);
+							->byToken($token)->firstOrFail();
 
 		$bladeData = [
 				"client" => $client,
@@ -64,7 +64,7 @@ class PackageController extends Controller
 
 	public function open($token)
 	{
-		$package = $this->model()->findByTokenOrExit($token);
+		$package = $this->model()->byUser()->byToken($token)->firstOrFail();
 		TrackPackageController::call()->inactiveOld($package->id);
 		$bladeData = [
 					"package" => $package,
@@ -108,38 +108,46 @@ class PackageController extends Controller
 		return $package;
 	}
 
-	public function packageUpdate($packageDbId, $request)
+	/*$pid is "package id"*/
+	public function packageUpdate($pid, $request)
 	{
-
-		$package = PackageModel::find($packageDbId);
+		$package = PackageModel::byUser()->find($pid);
 
 		if (!is_null($package)) {
-			
-			if (isset($request->start_date)) $package->start_date = $request->start_date;
-			if (isset($request->end_date)) $package->end_date = $request->end_date;
-			if (isset($request->req)) $package->req = $request->req;
+			if (isset($request->start_date)) {
+				$package->start_date = $request->start_date;
+			}
+
+			if (isset($request->end_date)) { 
+				$package->end_date = $request->end_date;
+			}
+
+			if (isset($request->req)){
+				$package->req = $request->req;
+			}
 
 			$package->route_status = 1;
 			$package->save();
 			$package->fixRouteDates();
+			
+			if (!is_null($package->cost)) {
+				$costParams = (object)[
+													"currency" => "INR", 
+													"isVisa" => 0,
+													"visaCost" => 0, 
+													"netCost" => 0, 
+													"margin" => 0
+												];
 
-			// ==============this function is to save multiple room data=============
-			$guestsDetail = [
-					"packageDbId" => $package->id, 
-					"roomGuest" => json_decodeMulti($request->guests_detail),
-				];
+				PackageCostsController::call()
+							->createNew($package->id, $costParams);
+			}
 
-			$costParams = (object)[
-												"currency" => "INR", 
-												"isVisa" => 0,
-												"visaCost" => 0, 
-												"netCost" => 0, "margin" => 0
-											];
-
-			PackageCostsController::call()->createNew($package->id, $costParams);
-			RoomGuestsController::call()->createNewMulti($guestsDetail);
+			if (isset($request->guests_detail)) {
+				RoomGuestsController::call()
+						->createNewMulti($package->id, $request->guests_detail);
+			}
 		}
-
 		return $package;
 	}
 
@@ -184,10 +192,10 @@ class PackageController extends Controller
 	}
 
 
-	public function createPdfHtml($packageDbId){
+	public function createPdfHtml($pid){
 
 		$auth = auth()->user();
-		$package = PackageModel::find($packageDbId);
+		$package = PackageModel::find($pid);
 		$pdfHtmlId = null;
 		if ($package->client->user_id == $auth->id) {
 			$texts = $auth->admin->texts;
@@ -198,16 +206,16 @@ class PackageController extends Controller
 			];
 
 			$html = view($this->viewPath.'.pdf', $bladeData)->render();
-			$pdfHtmlId = PdfHtmlController::call()->createNew($packageDbId, $html);
+			$pdfHtmlId = PdfHtmlController::call()->createNew($pid, $html);
 		}
 		return $pdfHtmlId;
 	}
 	
 
 	
-	public function getCreatePdfHtml($packageDbId)
+	public function getCreatePdfHtml($pid)
 	{
-		$pdfHtml = $this->createPdfHtml($packageDbId);
+		$pdfHtml = $this->createPdfHtml($pid);
 
 		$return = [
 					"status" => 500, 
@@ -247,7 +255,7 @@ class PackageController extends Controller
 
 	public function saveCost($token, Request $request)
 	{
-		$package = $this->model()->findByToken($token);
+		$package = $this->model()->byToken($token)->first();
 		if (!$package->is_locked) {
 			$package->is_locked = 1;
 			$package->save();
@@ -274,7 +282,7 @@ class PackageController extends Controller
 
 	public function saveNote($token, Request $request)
 	{
-		$package = $this->model()->findByToken($token);
+		$package = $this->model()->byToken($token)->first();
 		$noteId = PackageNotesController::call()
 							->creatOrUpdate(
 										$package->package_note_id, 
@@ -295,7 +303,7 @@ class PackageController extends Controller
 
 	public function sendPackageEmail($token, Request $request)
 	{
-		$package = $this->model()->findByToken($token);
+		$package = $this->model()->byToken($token)->first();
 
 		$data = (object)[
 				"email" => $package->client->email,
@@ -318,10 +326,11 @@ class PackageController extends Controller
 	public function findEvent($value, $findType = 'id', $current = '')
 	{
 		if ($findType == 'token') {
-			$package = $this->model()->findByTokenOrExit($value);
+			$package = $this->model()->byUser()
+									->byToken($value)->firstOrFail();
 		}
-		else{
-			$package = $this->model()->findOrExit($value);
+		else {
+			$package = $this->model()->findOrFail($value);
 		}
 
 		$token = $package->token;
@@ -339,12 +348,14 @@ class PackageController extends Controller
 		else{
 			$nextUrl = route('openPackage',$token);
 		}
+
 		/*elseif ($package->activeHotelRoutes->count()) {
 			$nextUrl = url('dashboard/package/builder/hotels/'.$token);
 		}
 		elseif($package->activeCruiseRoutes->count()){
 			$nextUrl = url('dashboard/package/builder/cruises/'.$token);
 		}*/
+
 		return json_encode(["nextUrl" => $nextUrl]);
 	}
 	

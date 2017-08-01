@@ -302,7 +302,7 @@ function trimHtml($html)
 }
 
 
-function myView($path, $blade)
+function myView($path, $blade = [])
 {
 	// return view($path, $blade);
 	return trimHtml(view($path, $blade)->render());

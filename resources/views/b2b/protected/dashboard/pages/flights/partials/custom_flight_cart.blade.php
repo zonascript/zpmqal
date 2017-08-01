@@ -2,7 +2,7 @@
 	<hr class="hide">
 	<div class="col-md-1 col-sm-1 col-xs-1">
 		<div class="row">
-			<img class="flight-logo" src="http://images.flygoldfinch.dev/images/airlineImages/__.gif" onerror="defaultAirlineIcon(this)" alt="">
+			<img class="flight-logo" src="{{ urlImage('images/airlineImages/__.gif') }}" onerror="defaultAirlineIcon(this)" alt="">
 		</div>
 		<div class="row m-top-20 text-center">
 			<a href="#" class="hide">

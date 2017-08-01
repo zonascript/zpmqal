@@ -11,10 +11,11 @@ class PagesController extends Controller
 {
 	public function pages($token, $page=null,  Request $request)
 	{
-		$package = PackageController::call()
-								->model()->findByTokenOrExit($token,false);
+		$package = PackageController::call()->model()
+								->byToken($token)->firstOrFail();
 
 		$package->costToken = $request->ctk;
+		
 		// dd($package->routes[1]->fusion->cruise->itinerary);
 
 		if ($package->cost->total_cost < 1) {

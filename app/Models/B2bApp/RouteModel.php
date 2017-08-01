@@ -159,6 +159,20 @@ class RouteModel extends Model
 		return explode(', ', $this->destination);
 	}
 
+
+	public function scopeByPackageUser($query)
+	{
+		return $query->whereHas('package',function ($q){
+											$q->byUser();
+										});
+	}
+
+
+	public function scopeByPackageId($query, $pid)
+	{
+		return $query->where(['package_id' => $pid]);
+	}
+
 	public function searchDbLocation($word)
 	{
 		$result = DestinationController::call()->model();

@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\B2bApp\ClientController;
 use App\Http\Controllers\B2bApp\PackageController;
-use App\Models\B2bApp\RouteModel;
+use App\Http\Controllers\B2bApp\RoomGuestsController;
 use App\Models\B2bApp\PackageActivityModel;
+use App\Models\B2bApp\RouteModel;
 
 
 class RouteController extends Controller
@@ -32,8 +33,8 @@ class RouteController extends Controller
 	 */
 	public function create($ctoken, $token = null)
 	{
-		$client = ClientController::call()
-							->model()->findByTokenOrFail($ctoken);
+		$client = ClientController::call()->model()
+							->byUser()->byToken($ctoken)->firstOrFail();
 
 		$packageController = new PackageController;
 
@@ -43,7 +44,8 @@ class RouteController extends Controller
 			return redirect()->route('createRoute', [$ctoken, $token]);
 		}
 		else{
-			$package = $packageController->model()->findByTokenOrExit($token);
+			$package = $packageController->model()
+									->byUser()->byToken($token)->first();
 		}
 
 		$blade = [
@@ -58,40 +60,38 @@ class RouteController extends Controller
 	}
 
 
-	public function packageUpdate($id, Request $request)
+	public function packageUpdate($pToken, Request $request)
 	{
-		$startDate = date_formatter($request->startDate,'d/m/Y');
+		$newPkg = new PackageController;
+		$package = $newPkg->model()->byUser()
+							->byToken($pToken)->first();
 
-		// =====Making Data for package inserting row======
-		$pacakgeData = (object)[
+		$data = new Request([
 				"req" => $request->req,
-				"start_date" => $startDate, 
-				"guests_detail" => $request->roomGuests,
-			];
-
-		// ========making package controller new object========
-		$packageController = new PackageController;
+				"start_date" => date_formatter($request->startDate,'d/m/Y'), 
+				// "guests_detail" => $this->makeGuestArray($request->roomGuests),
+			]);
 
 		// ======updating package here=======
-		$package = $packageController->packageUpdate($request->pid, $pacakgeData);
-		$nextEvent = $packageController->findEvent($request->pid);
+		$package = $newPkg->packageUpdate($package->id, $data);
+		$nextEvent = $newPkg->findEvent($request->pid);
 
 		return $nextEvent;
 	}
 
 
-	public function storeRow($id, Request $request)
+	public function storeRow($pToken, Request $request)
 	{
-		$route = null;
+		$route = $this->model()->byPackageUser()->find($request->rid);
 
-		if (isset($request->rid) && $request->rid) {
-			$route = RouteModel::find($request->rid);
-		}
-		else{
-			$route = new RouteModel;
+		if (is_null($route)) { 
+			$route = new RouteModel; 
 		}
 
-		$route->package_id = $id;
+		$package = PackageController::call()->model()
+							 ->byUser()->byToken($pToken)->first();
+
+		$route->package_id = $package->id;
 		$route->mode = $request->mode;
 		$route->origin = isset($request->origin) ? $request->origin : '';
 		$route->origin_code = isset($request->origin_code) 
@@ -100,6 +100,7 @@ class RouteController extends Controller
 		$route->destination = $request->destination;
 		$route->destination_code = $request->destination_code;
 		$route->nights = isset($request->nights) ? $request->nights : 0;
+		
 		if (isset($request->origin_time)) {
 			$route->start_time = timeFull($request->origin_time);
 		}
@@ -116,26 +117,6 @@ class RouteController extends Controller
 
 		$route->save();
 		return $route->id;
-	}
-
-
-	public function updateRoute($id, Request $request)
-	{
-		$route = RouteModel::find($id);
-		if (isset($request->origin)) { $route->origin = $request->origin; }
-		if (isset($request->destination)) { 
-				$route->destination = $request->destination; 
-		}
-
-		$route->save();
-
-		$return = $route->id;
-
-		if ($request->format == 'json') {
-			$return = json_encode(["status" => 200, "response" => "route updated"]);
-		}
-
-		return $return;
 	}
 
 
@@ -160,13 +141,48 @@ class RouteController extends Controller
 
 
 
-
-
-	public function inactiveByPackageId($packageDbId)
+	public function storeRoom($pToken, Request $request)
 	{
-		$result = RouteModel::where(['package_id' => $packageDbId])
-													->update(['status' => 'inactive']);
+		$package = PackageController::call()->model()
+							 ->byUser()->byToken($pToken)->firstOrFail();
 
+		$childAge = is_array($request->children_age) 
+							? $request->children_age
+							: [];
+		$room = new Request([
+				'package_id' => $package->id,
+				'rooms' => $request->rooms,
+				'no_of_adult' => $request->adults,
+				'children_age' => $childAge
+			]);
+		
+		$roomGuests = RoomGuestsController::call()
+									->createOrUpdate($request->id, $room);
+
+		return json_encode([
+								'status' => 200,
+								'id' => $roomGuests->id,
+								'age_ids' => $roomGuests->childAgeIds(),
+								'response' => 'saved successfully'
+							]);
+	}
+
+
+	public function removeRoom($id)
+	{
+		RoomGuestsController::call()->destroy($id);
+		return json_encode([
+								'status' => 200,
+								'response' => 'deleted successfully'
+							]);
+	}
+
+
+
+	public function inactiveByPackageId($pid)
+	{
+		$result = $this->model()->byPackageId($pid)
+										->update(['status' => 'inactive']);
 		return $result; 
 	}
 
@@ -174,20 +190,17 @@ class RouteController extends Controller
 
 	/*
 	| this function is to find route by using package table id 
+	public function allByPackageId($pid)
+	{
+		return $this->model()->byPackageId($pid)->get();
+	}
+
+
+	public function findByPackageid($pid)
+	{
+		return $this->model()->byPackageId($pid)->get();
+	}
 	*/
-	public function allByPackageId($packageDbId)
-	{
-		return RouteModel::where(["package_id" => $packageDbId])->get();
-	}
-
-
-
-
-
-	public function findByPackageid($packageDbId)
-	{
-		return RouteModel::where(["package_id" => $packageDbId])->get();
-	}
 
 
 
@@ -207,138 +220,26 @@ class RouteController extends Controller
 	*/
 	public function complete($id)
 	{
-		return RouteModel::where('id', $id)->update(['status' => 'complete']);
+		return $this->model()->where('id', $id)
+						->update(['status' => 'complete']);
 	}
 
 
-
-	/*
-	| this function is to find next route id 
-	| if there is no route then it will return 'null'
-	*/
-	public function findNextRoute($packageDbId, $routeDbId)
-	{	
-		$route = RouteModel::select()
-						->where([
-									["package_id", "=", $packageDbId], 
-									["id", ">", $routeDbId]
-								])
-							->first();
-		return $id;
-	}
-
-
-
-
-	/*
-	| this function is to find all route after give id included with current route id
-	*/
-	public function findAfterRouteId($packageDbId, $routeDbId){
-		$result = RouteModel::select()
-							->where([
-										["package_id", "=", $packageDbId], 
-										["id", ">=", $routeDbId]
-									])
-								->get();
-		return $result;
-	}
-
-
-	public function deleteRow($id)
+	public function deleteRow($rid)
 	{
-		$this->makeStatusDelete($id);
+		$this->makeStatusDelete($rid);
 		return json_encode(['status' => 200, 'deleted']);
 	}
 
 
 	public function makeStatusDelete($id)
 	{
-		$route = RouteModel::find($id);
+		$route = $this->model()->find($id);
 		if (!is_null($route)) {
 			$route->status = 'deleted';
 			$route->save();
 		}
 		return true;
-	}
-
-
-
-	/**
-	 * !!!!!! not in used due to change in route saving every time
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function storeOld($id, Request $request)
-	{
-  	ClientController::call()->activeClient($id);
-		
-		$request->route = rejson_decode($request->route);
-
-		$nights = 0;
-		// =====Calculation Total Nights=====
-		foreach ($request->route as $routeKey => $routeValue) {
-			$nights += isset($routeValue->nights) ? $routeValue->nights : 0;			
-		}
-
-		// =======Making Data for package inserting row========
-
-		$startDate = date_formatter($request->startDate,'d/m/Y');
-
-		$pacakgeData = (object)[
-				"client_id" => $id, 
-				"start_date" => $startDate, 
-				"end_date" => addDaysinDate($startDate,$nights+1),
-				"guests_detail" => $request->roomGuests,
-				"req" => $request->req
-			];
-
-		// ======creating package here=======
-		$package = PackageController::call()->createNew($id, $pacakgeData);
-
-
-		// ==initializing==
-		$previousNights = 0;
-		$firstRouteDbId = null;
-
-		$this->inactiveByPackageId($package->id);
-		
-		foreach ($request->route as $key => $value) {
-
-			// ==overwrited==
-			$startDate = addDaysinDate($startDate, $previousNights);
-			$startDate = isset($value->origin_time) 
-								 ? $startDate.' '.timeFull($value->origin_time).':00'
-								 : $startDate.' 00:00:00';
-
-			$previousNights = isset($value->nights) ? $value->nights : 0;
-
-			// =saving Route=
-		
-
-			$route = new RouteModel;
-			$route->package_id = $package->id;
-			$route->mode = $value->mode;
-			$route->origin = isset($value->origin) ? $value->origin : '';
-			$route->destination = $value->destination;
-			$route->nights = isset($value->nights) ? $value->nights : 0;
-			$route->start_date = $startDate;
-			$route->end_date = isset($value->destination_time) 
-												 ? '0000-00-00 '.timeFull($value->destination_time).':00'
-												 : '0000-00-00 00:00:00';
-			$route->status = 'active';
-			$route->save();
-			
-
-			// =storing first route id here=
-			if ($firstRouteDbId == null) {
-				$firstRouteDbId =  $route->id;
-			}
-		}
-
-		$nextEvent = PackageController::call()->findEvent($package->id);
-		return $nextEvent;
 	}
 
 
@@ -382,6 +283,24 @@ class RouteController extends Controller
 		}
 
 		return $routes;
+	}
+
+
+	public function makeGuestArray(Array $roomGuests)
+	{
+		$result = [];
+		foreach ($roomGuests as $roomGuest) {
+			$childAge = isset($roomGuest['ChildAge'])
+								? $roomGuest['ChildAge']
+								: [];
+
+			$result[] = [
+					"NoOfAdult" => $roomGuest['NoOfAdults'],
+					"ChildAge" => $childAge
+				];
+		}
+
+		return $result;
 	}
 
 

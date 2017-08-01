@@ -71,7 +71,7 @@ class TrackPackageController extends Controller
 	public function trackPing($token, Request $request)
 	{
 		$package = PackageController::call()
-								->model()->findByToken($token);
+								->model()->byToken($token)->first();
 
 		$track = $this->model()->find($request->id);
 
