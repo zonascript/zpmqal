@@ -1,7 +1,6 @@
 {{-- jQuery --}}
 
-@yield('jquery', '<script src="'.asset('common/dashboard/vendors/jquery/dist/jquery.min.js').'"></script>')
-
+@yield('jquery')
 
 {{-- Bootstrap --}}
 <script src="{{ commonAsset('dashboard/vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>

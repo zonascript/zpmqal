@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\B2bApp\ClientController;
 
-class EnquiryController extends Controller
+class EnquiryController extends ClientController
 {
 	public $viewPath = 'b2b.protected.dashboard.pages.enquiry';
 
@@ -17,10 +16,8 @@ class EnquiryController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$clients = ClientController::call()->model()
-							->simplePaginateData($request->search);
-
-		return view($this->viewPath.'.index', ['clients' => $clients]);
+		$clients = $this->model()->simplePaginateData($request->search);
+		return view($this->viewPath.'.index', compact('clients'));
 	}
 
 	/**
@@ -30,14 +27,7 @@ class EnquiryController extends Controller
 	 */
 	public function create()
 	{
-		$auth = auth()->user();
-
-		$leadVendors = $auth->admin->leadVendors;
-		$blade = [
-				"leadVendors" => $leadVendors,
-			];
-
-		return view($this->viewPath.'.create', $blade);
+		return view($this->viewPath.'.create');
 	}
 
 	/**
@@ -56,8 +46,10 @@ class EnquiryController extends Controller
 		]);
 
 
-		$client = ClientController::call()->model()
-							->duplicateOrNew($request->mobile, $request->email);
+		$client = $this->model()->duplicateOrNew(
+													$request->mobile, 
+													$request->email
+												);
 
 		$auth = auth()->user();
 		$client->user_id = $auth->id;
@@ -70,55 +62,4 @@ class EnquiryController extends Controller
 		return redirect($client->createRouteUrl());
 	}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
-
-
-	public function pending(Request $request)
-	{
-		$clients = ClientController::call()->pendingClients();
-		return json_encode($clients);
-	}
 }

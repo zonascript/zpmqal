@@ -11,7 +11,7 @@
 
 						<select id="select_vendor" name="vendor">
 							<option id="op_vendor" value="">Lead From(Vendor)?</option>
-							@foreach ($leadVendors as $leadVendor)
+							@foreach ($auth->admin->leadVendors as $leadVendor)
 								<option name="vendor" value="{{ $leadVendor->id }}" {{ old('vendor') == $leadVendor->id ? 'selected' : '' }}>
 									{{ $leadVendor->company_name }}
 								</option>
@@ -38,12 +38,4 @@
 			</div>
 		</div>
 	</div>
-@endsection
-
-@section('scripts')
-	<script>
-		$(document).ready(function () {
-			$('#select_vendor').find('option').show();
-		});
-	</script>
 @endsection

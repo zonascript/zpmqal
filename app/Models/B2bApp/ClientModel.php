@@ -34,7 +34,9 @@ class ClientModel extends Model
 
 	public function getAssignToAttribute()
 	{
-		return $this->user->assign_to;
+		return isset($this->user->assign_to) 
+				 ? $this->user->assign_to
+				 : '';
 	}
 
 
@@ -43,19 +45,21 @@ class ClientModel extends Model
 		return $this->belongsTo('App\User', 'user_id');
 	}
 
+
 	public function packages(){
 		return $this->hasMany('App\Models\B2bApp\PackageModel', 'client_id');
 	}
+
 
 	public function aliases()
 	{
 		return $this->hasMany(ClientAliasModel::class, 'client_id');
 	}
 
+
 	public function leadVendor(){
 		return $this->belongsTo('App\Models\AdminApp\LeadVendorModel', 'lead_vendor_id');
 	}
-
 
 
 
@@ -92,9 +96,15 @@ class ClientModel extends Model
 	}
 
 
-	public function scopeNotInactive($query)
+	public function scopeByNotStatus($query, $status = 0)
 	{
-		return $query->where("status", "<>", 0);
+		return $query->where("status", "<>", $status);
+	}
+
+
+	public function scopeByStatus($query, $status)
+	{
+		return $query->where("status", "=", $status);
 	}
 
 
@@ -114,13 +124,13 @@ class ClientModel extends Model
 	public function findByMobileEmail($mobile, $email)
 	{
 		return $this->mobileOrEmail($mobile, $email)
-									->byUser()->notInactive()->first();
+									->byUser()->byNotStatus()->first();
 	}
 
 
 	public function simplePaginateData($name, $guard = false)
 	{
-		return $this->byAdmin($guard)->notInactive()
+		return $this->byAdmin($guard)->byNotStatus()
 									->searchName($name)->simplePaginate(20);
 	}
 

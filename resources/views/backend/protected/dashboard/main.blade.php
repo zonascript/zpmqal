@@ -1,5 +1,9 @@
 @extends('common.protected.dashboard.main')
 
+@section('jquery')
+	<script src="{!! asset('common/dashboard/vendors/jquery/dist/jquery.min.js') !!}"></script>
+@endsection
+
 @section('app_name', config('app.backend_name', 'Trawish'))
 
 @section('customCss')

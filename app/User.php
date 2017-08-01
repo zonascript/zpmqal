@@ -13,7 +13,10 @@ class User extends Authenticatable
 	use Notifiable;
 	protected $connection = 'mysql';
 	protected $table = 'users';
-	protected $appends = ['fullname', 'profile_pic', 'indication', 'assign_to'];
+	protected $appends = [
+								'fullname', 'profile_pic', 
+								'indication', 'assign_to'
+							];
 	
 	/**
 	 * The attributes that are mass assignable.

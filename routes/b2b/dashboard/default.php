@@ -38,6 +38,7 @@
 	/*-------------------------Enquiry Route-------------------------*/
 	Route::resource('enquiry/', 'EnquiryController');
 	Route::post('enquiry/pending', 'EnquiryController@pending');
+	Route::get('enquiry/pending', 'EnquiryController@pending');
 
 	/*------------------------Follow Up Route------------------------*/
 	Route::get('follow-up/', 'FollowUpController@index');

@@ -1,5 +1,9 @@
 @extends('common.protected.dashboard.main')
 
+@section('jquery')
+	<script src="{!! asset('common/dashboard/vendors/jquery/dist/jquery.min.js') !!}"></script>
+@endsection
+
 @section('customCss')
 	<link href="{{ asset('b2b/css/custom.min.css') }}" rel="stylesheet">
 @endsection

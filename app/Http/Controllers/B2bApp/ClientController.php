@@ -30,18 +30,6 @@ class ClientController extends Controller
 	}
 
 
-	public function all(){
-		$auth = auth()->user();
-		$clients = $this->model()
-											->where([
-														'user_id' => $auth->id,
-														['status', '<>', 0]
-													])
-												->get();
-		return $clients;
-	}
-
-
 	public function activeClient($id)
 	{
   	return $this->model()
@@ -51,18 +39,24 @@ class ClientController extends Controller
 	}
 
 
-	public function pendingClients()
+	public function pending()
 	{
-		$auth = auth()->user();
-
-		return $this->model()
-						->select('id', 'fullname', 'mobile', 'note', 'created_at')
-							->where([
-										'user_id' => $auth->id,
-										'status' => 3
-									])
-								->get();
+		$clients = [];
+		$data = $this->model()->byUser()->byStatus(3)->get();
+		foreach ($data as $value) {
+			$clients[] = [
+					"id" => $value->id,
+					"uid" => $value->uid,
+					"note" => $value->note,
+					"mobile" => $value->mobile,
+					"fullname" => $value->fullname,
+					"assign_to" => $value->assign_to,
+					"created_at" => $value->created_at->format('Y-d-m'),
+				];
+		}
+		return json_encode($clients);
 	}
+
 
 
 }

@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
 			});
 
 			View::composer('b2b.*', function($view){
-				$view->with('pendingLeads',  ClientController::call()->pendingClients());
+				// $view->with('pendingLeads',  ClientController::call()->pendingClients());
 			});
 
 			View::composer('b2b.*', function($view){
