@@ -56,7 +56,7 @@
 										// "client" => "Client",
 										"packages" => "Track Packages",
 										// "lead" => "Leads",
-										"follow-up" => "Follow Ups" ,
+										// "follow-up" => "Follow Ups" ,
 										// "growth-chart" => "Growth Chart",
 									];
 							?>

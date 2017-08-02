@@ -1,12 +1,12 @@
 <li role="presentation" class="dropdown">
 	<a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
 		<i class="fa fa-bell"></i>
-		<span class="badge bg-green">{{ $pendingFollowUps->count() ? $pendingFollowUps->count() : ''  }}</span>
+		<span class="badge bg-green">{{-- {{ $pendingFollowUps->count() ? $pendingFollowUps->count() : ''  }} --}}</span>
 	</a>
 	
 	<ul id="menu_followups" class="width-450 dropdown-menu list-unstyled msg_list" role="menu">
 		<li><h2>Follow-Ups</h2></li>
-		@foreach ($pendingFollowUps as $pendingFollowUp)
+		{{-- @foreach ($pendingFollowUps as $pendingFollowUp)
 			@if (!is_null($pendingFollowUp->package))
 				<li>
 					<a href="{{ route('openPackage', $pendingFollowUp->package->token) }}">
@@ -22,7 +22,7 @@
 					</a>
 				</li>
 			@endif
-		@endforeach
+		@endforeach --}}
 
 		<li>
 			<div class="text-center">
