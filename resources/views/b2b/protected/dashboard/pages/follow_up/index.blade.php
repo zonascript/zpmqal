@@ -1,8 +1,7 @@
 @extends('b2b.protected.dashboard.main')
 
 @section('css')
-		{{-- Datatables --}}
-		<link href="{{ commonAsset('dashboard/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+	<link href="{{ commonAsset('dashboard/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -10,13 +9,10 @@
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Client List</h2>
+					<h2>Follow Ups</h2>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
-					{{-- <p class="text-muted font-13 m-b-30">
-						DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function: <code>$().DataTable();</code>
-					</p> --}}
 					<table id="datatable" class="table table-striped table-bordered">
 						<thead>
 							<tr>
@@ -29,7 +25,7 @@
 						</thead>
 
 						<tbody>
-							@forelse ($follow_ups as $follow_up)
+							@foreach ($follow_ups as $follow_up)
 								@if (!is_null($follow_up->package))
 									<tr>
 										<td>{{ $follow_up->package->uid }}</td>
@@ -45,9 +41,7 @@
 										</td>
 									</tr>
 								@endif
-							@empty
-								<p>No users</p>
-							@endforelse
+							@endforeach
 						</tbody>
 					</table>
 				</div>
