@@ -26,7 +26,7 @@
 							<input type="text" id="title" class="form-control" placeholder="Title" value="{{ $activity->title }}" required />
 						</div>
 						<div class="col-md-4 col-sm-4 col-xs-4 form-group has-feedback">
-							<input type="text" id="destination" data-code="{{ $activity->destination_code }}" class="form-control destination" placeholder="Title" value="{{ isset($activity->destination->location) ? $activity->destination->location : '' }}" required />
+							<input type="text" id="destination" data-code="{{ $activity->destination_code }}" class="form-control destination" placeholder="Destination" value="{{ isset($activity->destination->location) ? $activity->destination->location : '' }}" required />
 						</div>
 					</div>
 					<div class="form-group">

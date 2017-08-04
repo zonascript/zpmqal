@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\CommonApp\ImageController;
+use App\Http\Controllers\CommonApp\DestinationController;
 use App\Http\Controllers\ActivityApp\AgentActivitiesController;
 
 
@@ -36,7 +37,15 @@ class ActivitiesController extends Controller
 										->byDestinationCode($request->city)
 											->simplePaginate(20);
 
-		return view($this->viewPath.'.index', compact('activities'));
+		$blade = ['activities' => $activities];
+		if (isset($request->city)) {
+			$destination = DestinationController::call()
+										->model()->find($request->city);
+			if (!is_null($destination)) {
+				$blade['destination'] = $destination;
+			}
+		}
+		return view($this->viewPath.'.index', $blade);
 	}
 
 
@@ -48,7 +57,7 @@ class ActivitiesController extends Controller
 			$activity = $this->model();
 		}
 
-		return view($this->viewPath.'.create', compact('activity'));
+		return view($this->viewPath.'.create_edit', compact('activity'));
 	}
 
 
@@ -113,7 +122,7 @@ class ActivitiesController extends Controller
 	 */
 	public function show($id)
 	{
-		$activity = $this->model()->findOrExit($id);
+		$activity = $this->model()->findOrFail($id);
 		return view($this->viewPath.'.show', compact('activity'));
 	}
 
@@ -148,7 +157,7 @@ class ActivitiesController extends Controller
 	 */
 	public function destroy($id)
 	{
-		$activity = $this->model()->findOrExit($id);
+		$activity = $this->model()->findOrFail($id);
 		$activity->delete();
 		return redirect('dashboard/inventories/activity');
 	}
@@ -169,7 +178,7 @@ class ActivitiesController extends Controller
 
 	public function changeStatus($id, $status)
 	{
-		$activity = $this->model()->findOrExit($id);
+		$activity = $this->model()->findOrFail($id);
 		$activity->is_active = $status;
 		$activity->save();
 		return $this;

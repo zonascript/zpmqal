@@ -16,34 +16,21 @@ class PackageActivityModel extends Model
 		return new PackageActivityModel;
 	}
 
-	public function activity()
+	public function scopeByIsActive($query, $bool = 1)
 	{
-		return $this->morphTo();
+		return $query->where('is_active', $bool);
 	}
-	
 
-	public function findOrExit($id)
+	public function scopeByRouteId($query, $id)
 	{
-		$result = $this->find($id);
-		
-		if (is_null($result)) {
-			exitView();
-		}
-
-		return $result;
+		return $query->where('route_id', $id);
 	}
 
 
-	public function findByTokenOrExit($token)
+	public function scopeByToken($query, $token)
 	{
 		$id = mydecrypt($token);
-		return $this->findOrExit($id); 
-	}
-
-
-	public function findByRouteId($rid)
-	{
-		return $this->where(['route_id' => $rid, 'is_active' => 1])->get();
+		return $query->where('id', $id);
 	}
 
 
@@ -51,6 +38,14 @@ class PackageActivityModel extends Model
 	{
 		return $this->belongsTo('App\Models\B2bApp\RouteModel', 'route_id');
 	}
+
+
+	public function activity()
+	{
+		return $this->morphTo();
+	}
+
+
 
 
 	public function activityObject($attribute = [])

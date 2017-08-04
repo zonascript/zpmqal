@@ -1,3 +1,5 @@
+{{-- {{ dd(request()->search) }} --}}
+
 @extends('admin.protected.dashboard.main')
 
 @section('css')
@@ -98,10 +100,16 @@
 	<script src="{{ asset('js/mydatatable.js') }}"></script>
 @endsection
 
+
 @section('scripts')
 	<script>
 		$(document).ready(function() {
-			datatableWithSearch('#datatable', {}, '', 'Destination: <input type="text" data-code="" class="form-control location input-sm m-right-10" placeholder="">');
+			var params = {
+				'prepend' : 'Destination: <input type="text" data-code="{{ isset($destination->id) ? $destination->id : '' }}" class="form-control location input-sm m-right-10" value="{{ isset($destination->location) ? $destination->location : '' }}">',
+				'inputs' : '<input type="hidden" name="city" value="{{ request()->city }}">'
+
+			};
+			datatableWithSearch('#datatable', {}, params);
 		});
 
 

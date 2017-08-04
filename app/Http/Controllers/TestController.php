@@ -439,12 +439,6 @@ public function testCodeOld()
 		dd(route('payStatusUrl', ['success', newToken()]));
 		dd(newToken());
 		dd(addPercent(100,29));
-		$package = PackageController::call()
-								->model()->findByTokenOrExit('02c7691aedf5a056e6a8d41fe1e1f9d4', false);
-		dd($package->user->admin->payu_key);		
-		$req = new Request(['s' => 'success', 'f' => '$txnid']);
-		dd($req->all(), $req->s);
-		// $req->merge(['s' => 'success', 'f' => '$txnid']);
 
 		dd(route('payuRes', ['success', '$txnid']));
 

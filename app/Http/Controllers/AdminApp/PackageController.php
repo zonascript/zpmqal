@@ -101,7 +101,7 @@ class PackageController extends Controller
 			return $this->alreadyPackageActive();
 		}
 
-		$plan = PlansController::call()->model()->findOrExit($planId);
+		$plan = PlansController::call()->model()->findOrFail($planId);
 		$totalPrice = $plan->total;
 
 		if ($totalPrice <= $auth->balance) {

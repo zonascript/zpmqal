@@ -4,8 +4,6 @@ namespace App\Http\Controllers\CommonApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-/*===================================Models===================================*/
 use App\Models\CommonApp\DestinationModel;
 
 class DestinationController extends Controller

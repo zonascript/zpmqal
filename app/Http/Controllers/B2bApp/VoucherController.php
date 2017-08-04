@@ -30,10 +30,11 @@ class VoucherController extends Controller
 		return view($this->viewPath.'.self');
 	}
 
+
 	public function activity(Request $request)
 	{
-		$activity = ActivitiesController::call()
-								->model()->findByTokenOrExit($request->tk);
+		$activity = ActivitiesController::call()->model()
+								->byToken($request->tk)->firstOrFail();
 
 		return $this->activityVoucherHtml($activity->voucherData());
 	}

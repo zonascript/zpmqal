@@ -182,11 +182,14 @@ class ActivitiesController extends Controller
 
 	public function selectedActivities($rid)
 	{
-		$packageActivities = $this->model()->findByRouteId($rid);
+		$data = $this->model()->byIsActive()
+										->byRouteId($rid)->get();
 		$activities = [];
-		foreach ($packageActivities as $packageActivity) {
-			$activity = $packageActivity->activityObject();
-			if (!is_null($activity)) $activities[$activity->ukey] = $activity;
+		foreach ($data as $value) {
+			$activity = $value->activityObject();
+			if (!is_null($activity)) {
+				$activities[$activity->ukey] = $activity;
+			}
 		}
 		return $activities;
 	}

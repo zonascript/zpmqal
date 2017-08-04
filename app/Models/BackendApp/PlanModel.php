@@ -23,13 +23,4 @@ class PlanModel extends Model
 		return $this->price+$this->tax;
 	}
 
-
-	public function findOrExit($id)
-	{
-		$result = $this->find($id);
-		if (is_null($result)) {
-			exitView();
-		}
-		return $result;
-	}
 }
