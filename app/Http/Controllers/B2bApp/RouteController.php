@@ -9,17 +9,14 @@ use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\B2bApp\RoomGuestsController;
 use App\Models\B2bApp\PackageActivityModel;
 use App\Models\B2bApp\RouteModel;
+use App\Traits\CallTrait;
 
 
 class RouteController extends Controller
 {
+	use CallTrait;
+	
 	public $viewPath = 'b2b.protected.dashboard.pages.route';
-
-	public static function call()
-	{
-		return new RouteController;
-	}
-
 
 	public function model()
 	{

@@ -8,8 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\AdminApp\LeadVendorModel;
 use App\Models\AdminApp\PackageModel;
 use App\Models\CommonApp\ImageModel;
-use App\Models\AdminApp\UserModel;
 use App\Models\AdminApp\TextModel;
+use App\User;
 
 class Admin extends Authenticatable
 {
@@ -87,7 +87,7 @@ class Admin extends Authenticatable
 
 	public function users()
 	{
-		return $this->hasMany(UserModel::class, 'admin_id');
+		return $this->hasMany(User::class, 'admin_id');
 	}
 
 	public function texts()

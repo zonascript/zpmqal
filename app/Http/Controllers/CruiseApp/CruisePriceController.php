@@ -4,16 +4,12 @@ namespace App\Http\Controllers\CruiseApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ====================================Models====================================
 use App\Models\CruiseApp\CruisePriceModel;
+use App\Traits\CallTrait;
 
 class CruisePriceController extends Controller
 {
-	public static function call()
-	{
-		return new CruisePriceController;
-	}
+	use CallTrait;
 
 	public function model()
 	{

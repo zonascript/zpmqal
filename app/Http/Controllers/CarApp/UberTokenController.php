@@ -4,16 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-//====================================Model====================================
 use App\Models\Api\UberTokenModel;
+use App\Traits\CallTrait;
 
 class UberTokenController extends Controller
 {
-	public static function call()
-	{
-		return new UberTokenController;
-	}
+	use CallTrait;
 
 	public function fatchToken()
 	{

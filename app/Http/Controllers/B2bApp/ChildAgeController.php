@@ -5,14 +5,11 @@ namespace App\Http\Controllers\B2bApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\B2bApp\ChildAgeModel;
+use App\Traits\CallTrait;
 
 class ChildAgeController extends Controller
 {
-	public static function call()
-	{
-		return new ChildAgeController;
-	}
-
+	use CallTrait;
 
 	public function model()
 	{

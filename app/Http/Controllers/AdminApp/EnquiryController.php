@@ -5,25 +5,19 @@ namespace App\Http\Controllers\AdminApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\AdminApp\LeadVendorController;
-use App\Models\AdminApp\EnquiryModel;
-
-
+use App\Models\B2bApp\ClientModel;
+use App\Traits\CallTrait;
 
 class EnquiryController extends Controller
 {
+	use CallTrait;
 
 	public $viewPath = 'admin.protected.dashboard.pages.enquiry';
 
 
-	public static function call()
-	{
-		return new EnquiryController;
-	}
-
-
 	public function model()
 	{
-		return new EnquiryModel;
+		return new ClientModel;
 	}
 
 	/**
@@ -33,8 +27,10 @@ class EnquiryController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$clients = $this->model()->simplePaginateData($request->search, true);
-		return view($this->viewPath.'.index', ['clients' => $clients]);
+		$clients = $this->model()
+							->simplePaginateData($request->search, true);
+
+		return view($this->viewPath.'.index', compact('clients'));
 	}
 
 	/**
@@ -64,7 +60,7 @@ class EnquiryController extends Controller
 		]);
 
 
-		$client = new EnquiryModel;
+		$client = new ClientModel;
 		$client->user_id = $request->agent;
 		$client->lead_vendor_id = $request->vendor;
 		$client->fullname = $request->fullname;

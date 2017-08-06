@@ -6,11 +6,12 @@ use App\Notifications\BackendResetPassword;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\CommonApp\IndicationModel;
+use App\Traits\CallTrait;
 
 
 class Backend extends Authenticatable
 {
-	use Notifiable;
+	use Notifiable, CallTrait;
 
 	protected $connection = 'mysql1';
 	protected $appends = ['fullname', 'profile_pic'];
@@ -45,12 +46,6 @@ class Backend extends Authenticatable
 	public function sendPasswordResetNotification($token)
 	{
 		$this->notify(new BackendResetPassword($token));
-	}
-
-
-	public static function call()
-	{
-		return new Backend;
 	}
 
 	

@@ -4,17 +4,16 @@ namespace App\Http\Controllers\HotelApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ==========================HotelApp Controller==========================
 use App\Http\Controllers\HotelApp\AgodaHotelsController;
 use App\Http\Controllers\HotelApp\AgodaHotelImagesController;
 use App\Http\Controllers\HotelApp\AgodaHotelDetailsController;
-
-// ==============================Models==============================
 use App\Models\HotelApp\AgodaHotelRoomModel;
+use App\Traits\CallTrait;
 
 class AgodaHotelRoomsController extends Controller
 {
+	use CallTrait;
+
 	public $url = '';
 	public $path = '';
 	public $attmpt = 5;
@@ -24,11 +23,6 @@ class AgodaHotelRoomsController extends Controller
 	public $agodaHotel = null;
 	public $agodaHotelId = null;
 
-
-	public static function call()
-	{
-		return new AgodaHotelRoomsController;
-	}
 
 	public function model()
 	{

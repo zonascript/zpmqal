@@ -39,4 +39,10 @@ class SelectedActivityModel extends Model
 		return $result;
 	}
 
+
+	public function scopeByPackageActivityId($query, $id)
+	{
+		return $query->where('package_activity_id', $id);
+	}
+
 }

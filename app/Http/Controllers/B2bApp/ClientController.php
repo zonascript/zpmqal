@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\B2bApp\ClientModel;
 use App\Models\B2bApp\ClientAliasModel;
-
+use App\Traits\CallTrait;
 
 /*
 | This Controller made of checking client is valid or not
@@ -15,10 +15,7 @@ use App\Models\B2bApp\ClientAliasModel;
 
 class ClientController extends Controller
 {
-
-	public static function call(){
-		return new ClientController;
-	}
+	use CallTrait;
 
 	public function model(){
 		return new ClientModel;

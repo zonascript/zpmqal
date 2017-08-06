@@ -5,21 +5,19 @@ namespace App\Http\Controllers\FlightApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\MyLibrary\Verdant\XML2Array;
+use App\Traits\CallTrait;
 
 
 class TravelportAirController extends Controller
 {
+	use CallTrait;
+
 	public $provider = '1G';
 	public $credentials = '';
 	public $requestPath = '';
 	public $responsePath = '';
 	public $targetBranch = 'P7004112';
 	public $flights = [];
-
-	public static function call()
-	{
-		return new TravelportAirController;
-	}
 
 
 

@@ -3,10 +3,13 @@
 namespace App\Models\HotelApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 use DB;
 
 class BookingHotelModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql4';
 	protected $table = 'booking_hotels';
 	protected $appends = ['country', 'city', 'vendor'];
@@ -15,11 +18,7 @@ class BookingHotelModel extends Model
 								'distance', 'zip', 'countryDetail'
 							];
 
-	public static function call()
-	{
-		return new BookingHotelModel;
-	}
-
+	
 	public function getAddressAttribute($value)
 	{
 		$value = $value.', '.$this->city.' - '.$this->zip.', '.$this->country;

@@ -5,16 +5,13 @@ namespace App\Http\Controllers\AdminApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\AdminApp\TextModel;
+use App\Traits\CallTrait;
 
 class TextController extends Controller
 {
+	use CallTrait;
 	public $viewPath = 'admin.protected.dashboard.pages.text';
 
-
-	public static function call()
-	{
-		return new TextController;
-	}
 
 	public function model()
 	{

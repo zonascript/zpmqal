@@ -4,22 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
 use App\Http\Controllers\CommonApp\GoogleMapController; 
-
-// ===================================Models===================================
-use App\Models\Api\SkyscannerHotelModel;
 use App\Models\Api\SkyscannerHotelDetailModel;
+use App\Models\Api\SkyscannerHotelModel;
+use App\Traits\CallTrait;
+
 
 class SkyscannerHotelApiController extends Controller
 {
+	use CallTrait;
 
 	private $apiKey = '';
-
-	public static function call()
-	{
-		return new SkyscannerHotelApiController;
-	}
 
 
 	/*

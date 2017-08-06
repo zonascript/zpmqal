@@ -3,21 +3,18 @@
 namespace App\Models\Api;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 
 class SkyscannerHotelModel extends Model
 {
+	use CallTrait;
+
 	protected $table = 'skyscanner_hotels';
 	protected $appends = ['hotel'];
 	protected $casts = [
 			'request' => 'object',
 			'result' => 'object'
 		];
-
-
-	public static function call()
-	{
-		return new SkyscannerHotelModel;
-	}
 	
 
 	public function setRequestAttribute($value)

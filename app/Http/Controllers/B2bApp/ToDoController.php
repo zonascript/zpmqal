@@ -6,13 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\B2bApp\UserTodoModel;
 use App\Models\B2bApp\ToDoModel;
+use App\Traits\CallTrait;
 
 class ToDoController extends Controller
 {
-	public static function call()
-	{
-		 return new ToDoController;
-	}
+	use CallTrait;
 
 	/**
 	 * Display a listing of the resource.

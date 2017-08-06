@@ -4,13 +4,11 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Traits\CallTrait;
 
 class PdfController extends Controller
 {
-	public static function call()
-	{
-		return new PdfController;
-	}
+	use CallTrait;
 
 	public function createPdf($name = 'pdf', $html = ''){
 		

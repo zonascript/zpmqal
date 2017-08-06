@@ -6,19 +6,16 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\B2bApp\TrackPackageModel;
 use App\Http\Controllers\B2bApp\PackageController;
+use App\Traits\CallTrait;
 
 class TrackPackageController extends Controller
 {
-	public static function call()
-	{
-		return new TrackPackageController;
-	}
+	use CallTrait;
 
 	public function model()
 	{
 		return new TrackPackageModel;
 	}
-
 
 
 	public function index()

@@ -5,14 +5,12 @@ namespace App\Http\Controllers\HotelApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\HotelApp\BookingHotelModel;
+use App\Traits\CallTrait;
+
 
 class BookingHotelsController extends Controller
 {
-
-	public static function call()
-	{
-		return new BookingHotelsController;
-	}
+	use CallTrait;
 
 	public function model()
 	{

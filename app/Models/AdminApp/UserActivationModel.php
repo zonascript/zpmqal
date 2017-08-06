@@ -3,17 +3,15 @@
 namespace App\Models\AdminApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 use App\User;
 
 class UserActivationModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql3';
 	protected $table = 'user_activations';
-
-	public static function call()
-	{
-		return new UserActivationModel;
-	}
 
 
 	public function scopeByToken($query, $token)

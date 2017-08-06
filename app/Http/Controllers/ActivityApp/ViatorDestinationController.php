@@ -4,22 +4,18 @@ namespace App\Http\Controllers\ActivityApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ==============================Models==============================
 use App\Models\ActivityApp\ViatorDestinationModel;
-
+use App\Traits\CallTrait;
 
 
 class ViatorDestinationController extends Controller
 {
-	public static function call()
+	use CallTrait;
+
+	public function model()
 	{
-		return new ViatorDestinationController;
+		return new ViatorDestinationModel;
 	}
 
-	public function searchDestination($serach='')
-	{
-		$result = ViatorDestinationModel::call()->searchDestiantion($serach);
-		return $result;
-	}
+
 }

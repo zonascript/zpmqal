@@ -8,12 +8,11 @@ use App\Http\Controllers\HotelApp\HotelsController;
 
 class PackageHotelModel extends Model
 {
+	use CallTrait;
+
 	protected $table = 'package_hotels';
 	protected $appends = ['detail'];
 
-	public static function call(){
-		return new PackageHotelModel;
-	}
 
 	public function roomModel()
 	{

@@ -12,14 +12,11 @@ use App\Http\Controllers\B2bApp\SelectedActivitiesController;
 use App\Http\Controllers\ActivityApp\ActivityController;
 use App\Http\Controllers\ActivityApp\AgentActivitiesController;
 use App\Models\B2bApp\PackageActivityModel;
-
+use App\Traits\CallTrait;
 
 class ActivitiesController extends Controller
 {
-
-	public static function call(){
-		return new ActivitiesController;
-	}
+	use CallTrait;
 
 	/*
 	| this function is to return the model 

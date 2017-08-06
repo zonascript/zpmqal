@@ -4,19 +4,15 @@ namespace App\Http\Controllers\FlightApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-// ==============================Models==============================
 use App\Models\FlightApp\SkyscannerFlightsModel;
+use App\Traits\CallTrait;
 
 class SkyscannerFlightsController extends Controller
 {
+	use CallTrait;
 
 	protected $key = '';
 
-
-	public static function call()
-	{
-		return new SkyscannerFlightsController;	
-	}
 
 	/*
 	| this function for getting flight result form SkyscannerApi 

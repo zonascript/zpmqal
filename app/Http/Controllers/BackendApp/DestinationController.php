@@ -4,18 +4,14 @@ namespace App\Http\Controllers\BackendApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ===================================Models===================================
 use App\Models\CommonApp\DestinationModel;
+use App\Traits\CallTrait;
 
 class DestinationController extends Controller
 {
+	use CallTrait;
 
 	protected $viewPath = 'backend.protected.dashboard.pages.destinations';
-
-	public static function call(){
-		return new DestinationController;
-	}
 
 	public function model(){
 		return new DestinationModel;

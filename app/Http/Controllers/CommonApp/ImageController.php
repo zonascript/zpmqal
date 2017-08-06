@@ -5,16 +5,14 @@ namespace App\Http\Controllers\CommonApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\CommonApp\ImageModel;
+use App\Traits\CallTrait;
 ini_set('max_execution_time', 3600);
 
 
 
 class ImageController extends Controller
 {
-	public static function call()
-	{
-		return new ImageController;
-	}
+	use CallTrait;
 
 	public function model()
 	{

@@ -3,18 +3,15 @@
 namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 use DB;
 
 class PackageFlightModel extends Model
 {
+	use CallTrait;
+
 	protected $table = 'package_flights';
 	protected $appends = ['flight_details'];
-
-	public static function call(){
-		return new PackageFlightModel;
-	}
-
-
 
 
 	public function setStatusAttribute($value)

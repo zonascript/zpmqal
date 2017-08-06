@@ -9,17 +9,12 @@ use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\CruiseApp\CruiseOnlyDatesController;
 use App\Models\CruiseApp\CruiseOnlyDateModel;
 use App\Models\B2bApp\PackageCruiseModel;
-
+use App\Traits\CallTrait;
 
 
 class CruisesController extends Controller
 {
-
-	public static function call()
-	{
-		return new CruisesController;
-	}
-
+	use CallTrait;
 
 	public function model()
 	{

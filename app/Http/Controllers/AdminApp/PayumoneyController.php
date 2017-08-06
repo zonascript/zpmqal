@@ -5,12 +5,13 @@ namespace App\Http\Controllers\AdminApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\AdminApp\TransectionController;
-
 use App\Models\CommonApp\PayuPaymentModel;
-use Auth;
+use App\Traits\CallTrait;
 
 class PayumoneyController extends Controller
-{
+{	
+	use CallTrait;
+	
 	private $data = [
 			"auth" => null,
 			"txnid" => null,
@@ -20,11 +21,6 @@ class PayumoneyController extends Controller
 			"surl" => '',
 			"furl" => '',
 		];
-
-	public static function call()
-	{
-		return new PayumoneyController;
-	}
 
 	public function model()
 	{
@@ -175,7 +171,7 @@ class PayumoneyController extends Controller
 
 		if ($name == 'auth') {
 			if (is_null($this->data['auth'])) {
-				$this->data['auth'] = Auth::guard('admin')->user();
+				$this->data['auth'] = auth()->guard('admin')->user();
 			}
 			$value = $this->data['auth'];
 		}

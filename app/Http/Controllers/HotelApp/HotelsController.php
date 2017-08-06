@@ -9,14 +9,12 @@ use App\Http\Controllers\HotelApp\BookingHotelsController;
 use App\Http\Controllers\HotelApp\AgodaHotelsRoomsController;
 use App\Http\Controllers\HotelApp\BookingHotelRoomsController;
 use App\Models\HotelApp\HotelModel;
+use App\Traits\CallTrait;
 
 
 class HotelsController extends Controller
 {
-	public static function call()
-	{
-		return new HotelsController;
-	}
+	use CallTrait;
 
 	public function model()
 	{

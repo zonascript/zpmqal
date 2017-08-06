@@ -5,17 +5,16 @@ namespace App\Models\ActivityApp;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\CommonApp\DestinationModel;
 use App\Models\CommonApp\ImageModel;
+use App\Traits\CallTrait;
 use DB;
 
 class ActivityModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql6';
 	protected $table = 'activities';
 	protected $appends = ['vendor'];
-
-	public static function call(){
-		return new ActivityModel;
-	}
 
 
 	public function getVendorAttribute()

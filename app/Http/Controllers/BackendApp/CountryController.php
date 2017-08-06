@@ -4,17 +4,14 @@ namespace App\Http\Controllers\BackendApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-/*===================================Models===================================*/
 use App\Models\CommonApp\CountryModel;
+use App\Traits\CallTrait;
 
 class CountryController extends Controller
 {
+	use CallTrait;
+	
 	protected $viewPath = 'backend.protected.dashboard.pages.countries';
-
-	public static function call(){
-		return new CountryController;
-	}
 
 	public function model(){
 		return new CountryModel;

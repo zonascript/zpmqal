@@ -6,15 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class BookingHotelRoomModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql4';
 	protected $table = 'booking_hotel_rooms';
 	protected $hidden = ['created_at', 'updated_at'];
 
-	public static function call()
-	{
-		return new BookingHotelRoomModel;
-	}
-
+	
 	public function findByHotelId($bookingHotelId)
 	{
 		return $this->select(['id', 'roomtype'])

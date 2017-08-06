@@ -7,18 +7,16 @@ use App\Models\CommonApp\IndicationModel;
 use App\Models\CommonApp\ImageModel;
 use App\Models\B2bApp\ClientAliasModel;
 use App\Models\B2bApp\ClientModel;
+use App\Traits\CallTrait;
 
 class LeadVendorModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql3';
 	protected $table = 'lead_vendors';
 	protected $appends = ['status', 'image'];
 	protected $adminData;
-
-	public static function call()
-	{
-		return new LeadVendorModel;
-	}
 
 	public function getImageAttribute()
 	{

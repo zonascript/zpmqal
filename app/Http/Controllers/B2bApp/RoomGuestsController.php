@@ -6,15 +6,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\B2bApp\RoomGuestModel;
 use App\Http\Controllers\B2bApp\ChildAgeController;
+use App\Traits\CallTrait;
 
 
 class RoomGuestsController extends Controller
 {
-	public static function call()
-	{
-		return new RoomGuestsController;
-	}
-
+	use CallTrait;
 
 	public function model()
 	{

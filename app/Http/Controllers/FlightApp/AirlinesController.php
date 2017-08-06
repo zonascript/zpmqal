@@ -8,12 +8,8 @@ use App\Models\FlightApp\AirlineModel;
 
 class AirlinesController extends Controller
 {
-
-	public function call()
-	{
-		return new AirlinesController;
-	}
-
+	use CallTrait;
+	
 	public function model()
 	{
 		return new AirlineModel;

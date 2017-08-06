@@ -3,16 +3,15 @@
 namespace App\Models\FlightApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 
 class QpxLimitModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql7';
 	protected $table = 'qpx_limits';
 
-	public static function call()
-	{
-		return new QpxLimitModel;
-	}
 
 	public function todayCalled($key)
 	{

@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\CruiseApp\CruiseOnlyDateModel;
 use App\Models\B2bApp\PackageCruiseCabinModel;
 use App\MyLibrary\MyData;
+use App\Traits\CallTrait;
 
 class PackageCruiseModel extends Model
 {
+	use CallTrait;
+
 	protected $table = 'package_cruises';
 	protected $appends = ['detail'];
 
-	public static function call(){
-		return new PackageCruiseModel;
-	}
 
 	public function cabinModel()
 	{

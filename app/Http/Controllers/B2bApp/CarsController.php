@@ -6,16 +6,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\CarApp\SkyscannerCarsApiController;
 use App\Models\B2bApp\PackageCarModel;
+use App\Traits\CallTrait;
 
 class CarsController extends Controller
 {
+	use CallTrait;
 	public $viewPath = 'b2b.protected.dashboard.pages.car';
-
-
-	public static function call(){
-		return new CarsController;      
-	}
-
 
 	public function model()
 	{

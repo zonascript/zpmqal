@@ -37,7 +37,7 @@ class PagesController extends Controller
 	}
 
 	public function getLogout(){
-		Auth::logout();
+		auth()->logout();
 		return redirect('');
 	}
 

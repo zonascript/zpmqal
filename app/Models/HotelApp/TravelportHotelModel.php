@@ -3,17 +3,16 @@
 namespace App\Models\HotelApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 use DB;
 
 class TravelportHotelModel extends Model
 {
+	use CallTrait;
+
 	protected $connection  = 'mysql4';
 	protected $table = 'travelport_hotels';
 
-	public static function call()
-	{
-		return new TravelportHotelModel;
-	}
 
 	public function insertIgnore(Array $array)
 	{

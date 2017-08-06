@@ -5,14 +5,11 @@ namespace App\Http\Controllers\CommonApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\CommonApp\DestinationModel;
+use App\Traits\CallTrait;
 
 class DestinationController extends Controller
 {
-
-	public static function call(){
-		return new DestinationController;
-	}
-
+	use CallTrait;
 
 	public function model(){
 		return new DestinationModel;

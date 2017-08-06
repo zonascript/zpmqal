@@ -3,16 +3,14 @@
 namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 
 
 class UserTodoModel extends Model
 {
-	protected $table = 'user_todo';
+	use CallTrait;
 
-	public static function call()
-	{
-		return new UserTodoModel;
-	}
+	protected $table = 'user_todo';
 
 	public function todo()
 	{

@@ -3,18 +3,16 @@
 namespace App\Models\CommonApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 
 
 class RedirectUrlModel extends Model
 {
+  use CallTrait;
+
   protected $connection = 'mysql2';
   protected $table = 'redirect_urls';
-
   protected $fillable = ['status', 'user_id'];
-
-  public static function call(){
-  	return new RedirectUrlModel;
-  }
 
 
   public function setStatusAttribute($value)

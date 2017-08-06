@@ -5,12 +5,13 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\CommonApp\IndicationModel;
+use App\Traits\CallTrait;
 use App\Admin;
 
 class User extends Authenticatable
 {
+	use Notifiable, CallTrait;
 
-	use Notifiable;
 	protected $connection = 'mysql';
 	protected $table = 'users';
 	protected $appends = [
@@ -35,10 +36,6 @@ class User extends Authenticatable
 	 */
 	protected $hidden = ['password', 'remember_token',];
 
-	public static function call()
-	{
-		return new User;
-	}
 
 	
 	public function getFullnameAttribute()
@@ -67,9 +64,24 @@ class User extends Authenticatable
 	}
 
 
+	public function scopeByEmail($query, $email)
+	{
+		return $query->where('email', $email);
+	}
+
+
 	public function status()
 	{
 		return $this->belongsTo(IndicationModel::class, 'is_active');
+	}
+
+
+	public function clients()
+	{
+		return $this->hasMany(
+										'App\Models\B2bApp\ClientModel', 
+										'user_id'
+									);
 	}
 
 
@@ -78,16 +90,6 @@ class User extends Authenticatable
 		return $this->belongsTo(Admin::class, 'admin_id');
 	}
 
-
-	public function findByIdOrFail($id)
-	{
-		$auth = auth()->guard('admin')->user();
-		return $this->where([
-												'id' => $id, 
-												'admin_id' => $auth->id
-											])
-										->firstOrFail();
-	}
 
 
 	public function findByEmailOrFail($email)

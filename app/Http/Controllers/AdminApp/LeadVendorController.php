@@ -6,17 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\CommonApp\ImageController;
 use App\Models\AdminApp\LeadVendorModel;
+use App\Traits\CallTrait;
 
 class LeadVendorController extends Controller
 {
+	use CallTrait;
 
 	public $viewPath = 'admin.protected.dashboard.pages.lead_vendor';
-
-	public static function call()
-	{
-		return new LeadVendorController;
-	}
-
 
 	public function model()
 	{

@@ -4,22 +4,14 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ============================Api Controller===========================
 use App\Http\Controllers\Api\UberApiController;
-
-
-// ================================Model================================
 use App\Models\B2bApp\PacakgeCabModel;
-
+use App\Traits\CallTrait;
 
 class CabsController extends Controller
 {
-
-	public static function call(){
-		return new CabsController;      
-	}
-
+	use CallTrait;
+	
   public function getAllCabs($packageDbId){
   	return (object)[];
   }

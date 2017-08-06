@@ -4,17 +4,13 @@ namespace App\Http\Controllers\ActivityApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ==========================Models==========================
 use App\Models\ActivityApp\ViatorActivityModel;
+use App\Traits\CallTrait;
 
 class ViatorActivitiesController extends Controller
 {
-
-	public static function call()
-	{
-		return new ViatorActivitiesController;
-	}
+	use CallTrait;
+	
 
 	public function model()
 	{

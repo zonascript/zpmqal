@@ -5,16 +5,16 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\UberTokenController;
-
 use Stevenmaguire\Uber\Client;
-
-// ===================================Models===================================
 use App\Models\B2bApp\UberCabModel;
+use App\Traits\CallTrait;
 
 
 
 class UberApiController extends Controller
 {
+	use CallTrait;
+
 	private $header = [];
 	private $client = '';
 	private $version = 'v1';
@@ -23,10 +23,6 @@ class UberApiController extends Controller
 	private $useSandbox = false;
 	private $uberTokenController = '';
 
-	public static function call()
-	{
-		return new UberApiController;
-	}
 
 	public function getAccessToken()
 	{

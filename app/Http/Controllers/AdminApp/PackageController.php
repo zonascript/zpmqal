@@ -4,24 +4,16 @@ namespace App\Http\Controllers\AdminApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
 use App\Http\Controllers\BackendApp\PlansController;
 use App\Http\Controllers\AdminApp\TransectionController;
-
 use App\Models\AdminApp\PackageModel;
+use App\Traits\CallTrait;
 use Carbon\Carbon;
-use Auth;
 
 class PackageController extends Controller
 {
+	use CallTrait;
 	protected $viewPath = 'admin.protected.dashboard.pages.package';
-
-
-	public static function call()
-	{
-		return new PackageController;
-	}
-
 
 	public function model()
 	{
@@ -43,7 +35,7 @@ class PackageController extends Controller
 
 	public function getCheckout(Request $request)
 	{
-		$auth = Auth::guard('admin')->user();
+		$auth = auth()->guard('admin')->user();
 		$plan = PlansController::call()->model()->find($request->plan);
 		$viewPath = 'admin.protected.dashboard.pages.checkout';
 		
@@ -96,7 +88,7 @@ class PackageController extends Controller
 
 	public function activatePlan($planId)
 	{
-		$auth = Auth::guard('admin')->user();
+		$auth = auth()->guard('admin')->user();
 		if ($auth->isPackageActive()) {
 			return $this->alreadyPackageActive();
 		}

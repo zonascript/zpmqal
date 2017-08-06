@@ -5,16 +5,14 @@ namespace App\Http\Controllers\B2bApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\B2bApp\ContactModel;
+use App\Traits\CallTrait;
 
 
 class ContactsController extends Controller
 {
+	use CallTrait;
+	
 	public $viewPath = 'b2b.protected.dashboard.pages.contact';
-
-	public function call()
-	{
-		return new ContactsController;
-	}
 
 
 	public function model()

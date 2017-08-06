@@ -3,18 +3,16 @@
 namespace App\Models\CruiseApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 use DB;
 
 class CruisePriceModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql5';
 	protected $table = 'cruise_prices';
 	
-	public static function call()
-	{
-		return new CruisePriceModel;
-	}
-
 	public function pullCruise(Array $params)
 	{
 		$params = rejson_decode($params);

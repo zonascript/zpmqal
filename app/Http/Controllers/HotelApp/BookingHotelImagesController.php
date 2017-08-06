@@ -5,15 +5,13 @@ namespace App\Http\Controllers\HotelApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\HotelApp\BookingHotelImageModel;
+use App\Traits\CallTrait;
 
 class BookingHotelImagesController extends Controller
 {
-	public $bookingHotelId;
+	use CallTrait;
 
-	public static function call()
-	{
-		return new BookingHotelImagesController;
-	}
+	public $bookingHotelId;
 
 	public function model()
 	{

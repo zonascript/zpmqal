@@ -7,20 +7,18 @@ use App\Http\Controllers\CommonApp\GoogleMapController;
 use App\Models\ActivityApp\ViatorDestinationModel;
 use App\Models\CommonApp\IndicationModel;
 use App\Models\CommonApp\ImagesModel;
+use App\Traits\CallTrait;
 use DB;
 
 class DestinationModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql2';
 	protected $table = 'destinations';
 	protected $casts = ['geocode' => 'object'];
 	protected $appends = ['location', 'echo_location', 'viatorDestination'];
 	protected $hidden = ['created_at', 'updated_at'];
-
-	public static function call(){
-		return new DestinationModel;
-	}
-
 
 	public function status()
 	{   

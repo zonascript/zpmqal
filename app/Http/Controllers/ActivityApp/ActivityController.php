@@ -8,17 +8,16 @@ use App\Models\ActivityApp\ActivityModel;
 use App\Http\Controllers\CommonApp\DestinationController;
 use App\Http\Controllers\ActivityApp\AgentActivitiesController;
 use App\Http\Controllers\ActivityApp\ViatorActivitiesController;
+use App\Traits\CallTrait;
 
 class ActivityController extends Controller
 {
+	use CallTrait;
+	
 	public $cityId = '';
 	public $activities = [];
 	public $activityNames = [];
 	public $count = 0;
-
-	public static function call(){
-		return new ActivityController;
-	}
 
 	public function model()
 	{

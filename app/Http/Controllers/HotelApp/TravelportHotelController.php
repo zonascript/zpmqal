@@ -4,23 +4,21 @@ namespace App\Http\Controllers\HotelApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\MyLibrary\Verdant\XML2Array;
 use App\Models\HotelApp\TravelportHotelModel;
+use App\MyLibrary\Verdant\XML2Array;
+use App\Traits\CallTrait;
 
 
 class TravelportHotelController extends Controller
 {
+	use CallTrait;
+
 	public $provider = '1G';
 	public $credentials = '';
 	public $requestPath = '';
 	public $responsePath = '';
 	public $targetBranch = 'P7004112';
 	public $hotels = [];
-
-	public static function call()
-	{
-		return new TravelportHotelController;
-	}
 
 	public function hotels(Array $params = [])
 	{

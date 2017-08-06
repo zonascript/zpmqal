@@ -6,13 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class AgodaDestinationModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql4';
 	protected $table = 'agoda_destinations';
-
-	public static function call()
-	{
-		return new AgodaDestinationModel;
-	}
 
 	public function searchFirst($search){
 

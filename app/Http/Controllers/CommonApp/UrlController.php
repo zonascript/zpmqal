@@ -4,15 +4,14 @@ namespace App\Http\Controllers\CommonApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Traits\CallTrait;
 
 class UrlController extends Controller
 {
+	use CallTrait;
+
 	public $url = '';
 	public $search = '{}';
-
-	public static function call(){
-		return new UrlController;
-	}
 
 	public function url($slug = '')
 	{

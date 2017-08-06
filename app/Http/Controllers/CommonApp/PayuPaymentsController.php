@@ -5,18 +5,16 @@ namespace App\Http\Controllers\CommonApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\CommonApp\PayuPaymentModel;
+use App\Traits\CallTrait;
 
 class PayuPaymentsController extends Controller
 {
+	use CallTrait;
+
 	public $mode = 'secure';
 	public $testUrl = 'https://test.payu.in/_payment';
 	public $secureUrl = 'https://secure.payu.in/_payment';
 
-
-	public static function call()
-	{
-		return new PayuPaymentsController;
-	}
 
 	public function model()
 	{

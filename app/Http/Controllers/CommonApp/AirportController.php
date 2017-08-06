@@ -4,17 +4,13 @@ namespace App\Http\Controllers\CommonApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
 use App\Models\CommonApp\AirportModel;
+use App\Traits\CallTrait;
 
 
 class AirportController extends Controller
 {
-
-	public static function call(){
-		return new AirportController;
-	}
-
+	use CallTrait;
 
 	public function model()
 	{

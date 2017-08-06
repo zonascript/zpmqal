@@ -6,16 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\HotelApp\BookingHotelFacilityModel;
 use App\Http\Controllers\HotelApp\BookingScrapeController;
+use App\Traits\CallTrait;
 
 class BookingHotelFacilitiesController extends Controller
 {
+	use CallTrait;
 
 	public $bookingHotelId;
 
-	public static function call()
-	{
-		return new BookingHotelFacilitiesController;
-	}
 
 	public function model()
 	{

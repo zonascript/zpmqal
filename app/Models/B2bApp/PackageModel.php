@@ -8,12 +8,15 @@ use App\Models\B2bApp\PackageActivityModel;
 use App\Models\B2bApp\PackageCostModel;
 use App\Models\B2bApp\RoomGuestModel;
 use App\Models\B2bApp\PackageModel;
+use App\Traits\CallTrait;
 use Carbon\Carbon;
 use DB;
 
 
 class PackageModel extends Model
 {
+	use CallTrait;
+
 	protected $table = 'packages';
 	protected $hidden = ['created_at', 'updated_at'];
 	protected $append = [
@@ -24,9 +27,6 @@ class PackageModel extends Model
 
 	public $costToken = null;
 
-	public static function call(){
-		return new PackageModel;
-	}
 
 	public function setStatusAttribute($value)
 	{

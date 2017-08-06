@@ -5,16 +5,14 @@ namespace App\Models\B2bApp;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\B2bApp\ClientAliasModel;
 use App\Models\B2bApp\PackageModel;
+use App\Traits\CallTrait;
 
 class ClientModel extends Model
 {
+	use CallTrait;
 
 	protected $table = 'clients';
 	protected $appends = ['uid', 'assign_to'];
-
-	public static function call(){
-		return new ClientModel;
-	}
 
 	public function getUidAttribute()
 	{
@@ -223,6 +221,43 @@ class ClientModel extends Model
 	public function statusCss()
 	{
 		return statusCss($this->status);
+	}
+
+
+	
+	public function findByAdminId($where = [])
+	{
+		$auth = auth()->guard('admin')->user();
+		$where = array_merge(["admin_id" => $auth->id, ["status", "<>", "deleted"]], $where);
+
+		$clients = DB::table('trawish_b2b.clients')
+							->join('trawish_b2b.users', 'trawish_b2b.clients.user_id', '=', 'trawish_b2b.users.id')
+							->join('trawish_admin.admins', 'trawish_b2b.users.id', '=', 'trawish_admin.admins.id')
+							->select([
+										'trawish_b2b.clients.*', 
+										'trawish_b2b.users.admin_id', 
+										'trawish_b2b.users.firstname AS user_firstname', 
+										'trawish_b2b.users.lastname AS user_lastname', 
+										'trawish_b2b.users.mobile As user_mobile', 
+										'trawish_b2b.users.email As user_email', 
+										'trawish_b2b.users.type As user_type', 
+										'trawish_b2b.users.about As user_about', 
+										'trawish_b2b.users.address As user_address', 
+										'trawish_b2b.users.facebook As user_facebook', 
+										'trawish_b2b.users.googleplus As user_googleplus', 
+										'trawish_b2b.users.linkedin As user_linkedin', 
+										'trawish_b2b.users.twitter As user_twitter', 
+										'trawish_b2b.users.youtube As user_youtube', 
+										'trawish_b2b.users.instagram As user_instagram', 
+										'trawish_b2b.users.image_path As user_image_path'
+									])
+							->where($where)
+							->skip(0)
+							->take(20)
+							->get();
+
+		return $clients;
+
 	}
 
 }

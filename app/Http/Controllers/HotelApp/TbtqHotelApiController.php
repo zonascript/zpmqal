@@ -4,19 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ===================================Models===================================
-use App\Models\Api\TbtqHotelModel;
-use App\Models\Api\TbtqHotelRoomModel;
 use App\Models\Api\TbtqHotelDetailModel;
+use App\Models\Api\TbtqHotelRoomModel;
+use App\Models\Api\TbtqHotelModel;
+use App\Traits\CallTrait;
 
 
 class TbtqHotelApiController extends Controller
 {
-	public static function call()
-	{
-		return new TbtqHotelApiController;
-	}
+	use CallTrait;
 
 
 	/*

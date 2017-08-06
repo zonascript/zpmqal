@@ -9,21 +9,19 @@ use App\Http\Controllers\HotelApp\BookingHotelController;
 use App\Http\Controllers\HotelApp\BookingScrapeController;
 use App\Http\Controllers\HotelApp\BookingHotelImagesController;
 use App\Http\Controllers\HotelApp\BookingHotelFacilitiesController;
+use App\Traits\CallTrait;
 
 
 class BookingHotelRoomsController extends Controller
 {
+	use CallTrait;
+
 	public $url;
 	public $path;
 	public $rooms = [];
 	public $images = [];
 	public $facilities = [];
 	public $bookingHotelId;
-
-	public static function call()
-	{
-		return new BookingHotelRoomsController;
-	}
 
 	public function model()
 	{

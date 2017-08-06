@@ -3,18 +3,17 @@
 namespace App\Models\CruiseApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 use DB;
 
 class VendorDetailModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql5';
 	protected $table = 'vendor_details';
 	protected $appends = ['uid'];
 
-	public static function call()
-	{
-		return new VendorDetailModel;
-	}
 
 	public function getUidAttribute()
 	{

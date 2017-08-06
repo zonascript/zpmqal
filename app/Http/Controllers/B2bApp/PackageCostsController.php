@@ -4,18 +4,14 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ==========================Models==========================
 use App\Models\B2bApp\PackageCostModel;
+use App\Traits\CallTrait;
 
 class PackageCostsController extends Controller
 {
+	use CallTrait;
+	
 	protected $packageId = '';
-
-	public static function call()
-	{
-		return new PackageCostsController;
-	}
 
 	public function model()
 	{

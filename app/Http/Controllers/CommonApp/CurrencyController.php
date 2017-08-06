@@ -5,14 +5,9 @@ namespace App\Http\Controllers\CommonApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-	// include_once('Class/Curl_Post.php');
-
 class CurrencyController extends Controller
 {
-  
-  public static function call(){
-  	return new CurrencyController;
-  }
+	use App\Traits\CallTrait;
 
 	public function Exchange($From, $To){
 

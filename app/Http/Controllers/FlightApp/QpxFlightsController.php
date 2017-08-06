@@ -4,25 +4,22 @@ namespace App\Http\Controllers\FlightApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ===========================Model===========================
 use App\Models\FlightApp\QpxLimitModel;
 use App\Models\FlightApp\QpxFlightModel;
 use App\Models\B2bApp\RouteModel;
+use App\Traits\CallTrait;
 use Carbon\Carbon;
 
 ini_set('max_execution_time', 90);
 
 class QpxFlightsController extends Controller
 {
+	use CallTrait;
+
 	public $solutions = 500;
 	protected $key = '';
 	protected $qpxUrl = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=";
 
-	public static function call()
-	{
-		return new QpxFlightsController;
-	}
 
 	public function model()
 	{

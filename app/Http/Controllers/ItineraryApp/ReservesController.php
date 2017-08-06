@@ -6,15 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ItineraryApp\ReserveModel;
 use App\Http\Controllers\B2bApp\PackageController;
+use App\Traits\CallTrait;
 use Carbon\Carbon;
 
 class ReservesController extends Controller
 {
-	public function call()
-	{
-		return new ReservesController;
-	}
-
+	use CallTrait;
+	
 	public function model()
 	{
 		return new ReserveModel;

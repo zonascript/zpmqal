@@ -3,18 +3,17 @@
 namespace App\Models\HotelApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 
 class AgodaHotelRoomModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql4';
 	protected $appends = ['vdr'];
 	protected $table = 'agoda_hotel_rooms';
 
-	public static function call()
-	{
-		return new AgodaHotelRoomModel;
-	}
-
+	
 	public function getVdrAttribute()
 	{
 		return 'a';

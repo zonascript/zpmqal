@@ -3,22 +3,46 @@
 namespace App\Models\ActivityApp;
 
 use Illuminate\Database\Eloquent\Model;
-use DB;
+use App\Traits\CallTrait;
 
 class ViatorActivityModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql6';
 	protected $appends = ['vendor'];
 	protected $table = 'viator_activities';
 
-	public static function call(){
-		return new ViatorActivityModel;
-	}
 
 	public function getVendorAttribute()
 	{
 		return 'v';
 	}
+
+
+	public function scopeByCode($query, $code)
+	{
+		return $query->where('code', $code);
+	}
+
+
+	public function scopeByIsActive($query, $bool = 1)
+	{
+		return $query->where('is_active', $bool);
+	}
+
+
+	public function scopeByDestination($query, $cityId)
+	{
+		return $query->where('primaryDestinationId', $cityId);
+	}
+
+
+	public function scopeBySearch($query, $word='')
+	{
+		return $query->where("title", 'like', '%'.$word.'%');
+	}
+
 
 	public function findByCode($code)
 	{
@@ -29,25 +53,14 @@ class ViatorActivityModel extends Model
 				'rank', 'thumbnailURL as image'
 			];
 
-		return $this->select($columns)->where(['code' => $code])->first();
+		return $this->select($columns)->byCode($code)->first();
 	}
 
 
-	public function findByDestination($cityId, $name = null)
+	public function findByDestination($cityId, $name = '')
 	{
-		$where = [
-						"primaryDestinationId" => $cityId,
-						"is_active" => 1
-					];
-
-		if (!is_null($name)) {
-			$where[] = ["title", 'like', '%'.$name.'%'];
-		}
-
-		return $this->where($where)
-									->skip(0)
-										->take(20)
-											->get();
+		return $this->byIsActive()->byDestination($cityId)
+									->bySearch($name)->take(20)->get();
 	}
 
 }

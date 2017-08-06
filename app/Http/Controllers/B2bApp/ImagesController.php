@@ -4,14 +4,12 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Traits\CallTrait;
 
 class ImagesController extends Controller
 {
-	public static function call()
-	{
-		return new ImagesController;
-	}
-
+	use CallTrait;
+	
 	public function upload(Request $request)
 	{
 		$imagePath = imageUpload($request->file);

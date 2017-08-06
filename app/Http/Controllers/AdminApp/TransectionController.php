@@ -5,14 +5,11 @@ namespace App\Http\Controllers\AdminApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\AdminApp\TransectionModel;
+use App\Traits\CallTrait;
 
 class TransectionController extends Controller
 {
-
-	public static function call()
-	{
-		return new TransectionController;
-	}
+	use CallTrait;
 
 
 	public function model()

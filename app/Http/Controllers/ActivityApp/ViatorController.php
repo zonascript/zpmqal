@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ActivityApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Traits\CallTrait;
 
 ini_set('max_execution_time', 7200);
 
@@ -19,16 +20,14 @@ ini_set('max_execution_time', 7200);
 
 class ViatorController extends Controller
 {
+	use CallTrait;
+	
 	public $key = '2134351327133057';
 	public $currencyCode = 'USD';
 	public $liveUrl = 'http://viatorapi.viator.com/';
 	public $preLiveUrl = 'http://prelive.viatorapi.viator.com/';
 	public $isPreLive = true; 
 
-	public static function call()
-	{
-		return new ViatorController;
-	}
 
 	public function productUrl()
 	{

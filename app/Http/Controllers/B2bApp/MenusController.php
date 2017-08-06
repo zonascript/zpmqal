@@ -4,19 +4,16 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// =================================B2b Contrller=================================
 use App\Http\Controllers\B2bApp\CabsController;
 use App\Http\Controllers\B2bApp\HotelsController;
 use App\Http\Controllers\B2bApp\FlightsController;
 use App\Http\Controllers\B2bApp\FollowUpController;
 use App\Http\Controllers\B2bApp\ActivitiesController;
+use App\Traits\CallTrait;
 
 class MenusController extends Controller
 {
-	public static function call(){
-		return new MenusController;
-	}
+	use CallTrait;
 
 	public function getPackageMenus($packageDbId){
 		$followUps = $this->getFollowUps();

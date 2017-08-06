@@ -5,12 +5,15 @@ namespace App\Http\Controllers\AdminApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\AdminApp\UserActivationModel;
+use App\Traits\AdminApp\AdminTrait;
+use App\Traits\CallTrait;
 use App\Mail\VerifyMail;
-use App\User;
 use Mail;
 
 class UserController extends Controller
 {
+	use CallTrait, AdminTrait;
+
 	protected $viewPath = 'admin.protected.dashboard.pages.users';
 
 	public function index()
@@ -20,7 +23,8 @@ class UserController extends Controller
 
 	public function show($email)
 	{
-		$user = User::call()->findByEmailOrFail($email);
+		$user = $this->admin()->users()
+						->byEmail($email)->firstOrFail()	;
 		return view($this->viewPath.'.show', ['user' => $user]);
 	}
 
@@ -41,7 +45,7 @@ class UserController extends Controller
           'password' => 'required|min:6|confirmed',
         ]);
 
-		$auth = auth()->guard('admin')->user();
+		$auth = $this->admin();
 
 		User::create([
         'firstname' => $request['firstname'],
@@ -60,7 +64,8 @@ class UserController extends Controller
 
 	public function edit($email)
 	{
-		$user = User::call()->findByEmailOrFail($email);
+		$user = $this->admin()->users()
+						->byEmail($email)->firstOrFail();
 		return view($this->viewPath.'.edit', ['user' => $user]);
 	}
 
@@ -74,7 +79,8 @@ class UserController extends Controller
 				'email' => 'required|email|max:255',
 			]);
 
-		$user = User::call()->findByEmailOrFail($email);
+		$user = $this->admin()->users()
+						->byEmail($email)->firstOrFail();
 		$user->firstname = $request->firstname;
 		$user->lastname = $request->lastname;
 		$user->mobile = $request->mobile;
@@ -87,7 +93,8 @@ class UserController extends Controller
 
 	public function getResetPassword($email)
 	{
-		$user = User::call()->findByEmailOrFail($email);
+		$user = $this->admin()->users()
+						->byEmail($email)->firstOrFail();
 		return view($this->viewPath.'.reset_password', ['user' => $user]);
 	}
 
@@ -99,7 +106,8 @@ class UserController extends Controller
         'password' => 'required|min:6|confirmed',
 			]);
 
-		$user = User::call()->findByEmailOrFail($email);
+		$user = $this->admin()->users()
+						->byEmail($email)->firstOrFail();
     $user->password = bcrypt($request->password);
     $user->save();
 		session()->flash('success', 'User('.$email.') password has been reset.');
@@ -110,7 +118,8 @@ class UserController extends Controller
 
 	public function activateUser($email)
 	{
-		$user = User::call()->findByEmailOrFail($email);
+		$user = $this->admin()->users()
+						->byEmail($email)->firstOrFail();
 		$user->activate();
 		return redirect()->back();
 	}
@@ -118,7 +127,8 @@ class UserController extends Controller
 
 	public function suspendUser($email)
 	{
-		$user = User::call()->findByEmailOrFail($email);
+		$user = $this->admin()->users()
+						->byEmail($email)->firstOrFail();
 		$user->suspend();
 		return redirect()->back();
 	}
@@ -126,7 +136,8 @@ class UserController extends Controller
 
 	public function destroy($email)
 	{
-		$user = User::call()->findByEmailOrFail($email);
+		$user = $this->admin()->users()
+						->byEmail($email)->firstOrFail();
 		$user->delete();
 		session()->flash('danger', 'User has been deleted.');
 		return redirect()->back();
@@ -135,7 +146,8 @@ class UserController extends Controller
 
 	public function sendVerifyEmail($email)
 	{
-		$user = User::call()->findByEmailOrFail($email);
+		$user = $this->admin()->users()
+						->byEmail($email)->firstOrFail();
 		$token = $this->createToken($user->id);
 		$data = (object)[
 				"name" => $user->fullname,

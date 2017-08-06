@@ -3,18 +3,16 @@
 namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 use Carbon\Carbon;
 use DB;
 
 class PackageActivityModel extends Model
 {
+	use CallTrait;
 
 	protected $table  = 'package_activities';
 	protected $hidden = ['created_at', 'updated_at'];
-
-	public static function call(){
-		return new PackageActivityModel;
-	}
 
 	public function scopeByIsActive($query, $bool = 1)
 	{

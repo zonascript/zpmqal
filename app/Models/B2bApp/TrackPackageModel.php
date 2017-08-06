@@ -3,17 +3,15 @@
 namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 
 class TrackPackageModel extends Model
 {
+	use CallTrait;
+
 	protected $table = 'track_packages';
 	protected $appends = ['stay_time'];
 	
-	public static function call()
-	{
-		return new TrackPackageModel;
-	}
-
 	public function package()
 	{
 		return $this->belongsTo('App\Models\B2bApp\PackageModel', 'package_id');

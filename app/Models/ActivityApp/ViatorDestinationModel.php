@@ -3,16 +3,21 @@
 namespace App\Models\ActivityApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 use DB;
 
 class ViatorDestinationModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql6';
 	protected $table = 'viator_destinations';
 
-	public static function call()
+
+	public function scopeByName($query, $name)
 	{
-		return new ViatorDestinationModel;
+		return $query->where('destinationName', $search)
+									->orWhere('destinationName', 'LIKE' , $search);
 	}
 
 
@@ -21,21 +26,6 @@ class ViatorDestinationModel extends Model
 		return $this->hasMany('App\Models\BackendApp\ViatorActivityModel', 'primaryDestinationId', 'destinationId');
 	}
 
-	
-	public function searchDestiantion($search='')
-	{
-		$result = $this::select()
-				 					 ->where(['destinationName' => $search])
-				 					 ->get();
-
-		if ($result->count() == 0) {
-			$result = $this::select()
-									->where('destinationName', 'LIKE' , $search)
-									->get();
-		}
-		
-		return $result;
-	}
 
 
 	public function findByLatLong($lat, $long)

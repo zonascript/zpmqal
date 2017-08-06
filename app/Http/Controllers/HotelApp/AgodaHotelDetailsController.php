@@ -4,17 +4,12 @@ namespace App\Http\Controllers\HotelApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ===============================Models===============================
 use App\Models\HotelApp\AgodaHotelDetailModel;
+use App\Traits\CallTrait;
 
 class AgodaHotelDetailsController extends Controller
 {
-	public static function call()
-	{
-		return new AgodaHotelDetailsController;
-	}
-
+	use CallTrait;
 
 	public function hotelDetail($hotelId)
 	{

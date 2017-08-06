@@ -4,23 +4,18 @@ namespace App\Http\Controllers\CommonApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
 use App\Models\CommonApp\RedirectUrlModel;
-use Auth;
+use App\Traits\CallTrait;
 
 class RedirectController extends Controller
 {
-
-
-	public static function call(){
-		return new RedirectController;
-	}
+	use CallTrait;
 
 	/*
 	| this function is to making new redirect url
 	*/
 	public function newUrl($url){
-		$auth = Auth::user();
+		$auth = auth()->user();
 
 		$redirectUrl = RedirectUrlModel::create(["status" => "active", "user_id" => $auth->id]);
 		$redirectUrl->token = csrf_token();

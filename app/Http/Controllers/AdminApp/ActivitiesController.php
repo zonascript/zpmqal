@@ -7,17 +7,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\CommonApp\ImageController;
 use App\Http\Controllers\CommonApp\DestinationController;
 use App\Http\Controllers\ActivityApp\AgentActivitiesController;
+use App\Traits\CallTrait;
 
 
 class ActivitiesController extends Controller
 {
+	use CallTrait;
 
 	public $viewPath = 'admin.protected.dashboard.pages.activity';
-
-	public function call()
-	{
-		return new ActivitiesController;
-	}
 
 	public function model()
 	{

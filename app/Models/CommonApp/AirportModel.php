@@ -3,18 +3,17 @@
 namespace App\Models\CommonApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 use DB;
 
 class AirportModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql2';
 	protected $table = 'airports';
 
-	public static function call()
-	{
-		return new AirportModel;
-	}
-
+	
 	public function getAirport($search){
 
 		return DB::connection('mysql2')->select(

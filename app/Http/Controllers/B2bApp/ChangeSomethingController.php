@@ -5,14 +5,11 @@ namespace App\Http\Controllers\B2bApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\B2bApp\ChangeSomethingModel;
+use App\Traits\CallTrait;
 
 class ChangeSomethingController extends Controller
 {
-
-	public static function call()
-	{
-		return new ChangeSomethingController; 
-	}
+	use CallTrait;
 
 	public function index()
 	{

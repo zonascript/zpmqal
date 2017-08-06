@@ -4,19 +4,13 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
 use App\Http\Controllers\B2bApp\TrackPackageController;
-
-// =================================Models=================================
 use App\Models\B2bApp\PdfHtmlModel;
+use App\Traits\CallTrait;
 
 class PdfHtmlController extends Controller
 {
-
-	public static function call()
-	{
-		return new PdfHtmlController;
-	}
+	use CallTrait;
 
 	public function model()
 	{

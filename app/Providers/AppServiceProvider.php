@@ -7,7 +7,6 @@ use App\Http\Controllers\B2bApp\ToDoController;
 use App\Http\Controllers\B2bApp\ClientController;
 use App\Http\Controllers\B2bApp\FollowUpController;
 use View;
-use Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,15 +19,15 @@ class AppServiceProvider extends ServiceProvider
 	{
 
 		View::composer('b2b.*', function($view){
-			$view->with('auth', Auth::user());
+			$view->with('auth', auth()->user());
 		});
 
 		View::composer('admin.*', function($view){
-			$view->with('auth', Auth::guard('admin')->user());
+			$view->with('auth', auth()->guard('admin')->user());
 		});
 		
 		View::composer('backend.*', function($view){
-			$view->with('auth', Auth::guard('backend')->user());
+			$view->with('auth', auth()->guard('backend')->user());
 		});
 
 		$domain = isset($_SERVER['HTTP_HOST']) 

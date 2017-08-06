@@ -3,17 +3,16 @@
 namespace App\Models\HotelApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 
 class BookingHotelImageModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql4';
 	protected $table = 'booking_hotel_images';
 	protected $hidden = ['created_at', 'updated_at'];
 
-	public static function call()
-	{
-		return new BookingHotelImageModel;
-	}
 
 	public function findByHotelId($hotelId)
 	{

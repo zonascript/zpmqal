@@ -4,26 +4,18 @@ namespace App\Http\Controllers\B2bApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ========================Api Controller========================
 use App\Http\Controllers\FlightApp\QpxFlightsController;
 use App\Http\Controllers\FlightApp\AddedFlightsController;
 use App\Http\Controllers\FlightApp\TravelportAirController;
 use App\Http\Controllers\FlightApp\SkyscannerFlightsController;
 use App\Http\Controllers\FlightApp\AddedFlightSegmentsController;
-
-
-// ========================B2b Controller========================
 use App\Http\Controllers\B2bApp\RouteController;
 use App\Http\Controllers\B2bApp\PackageController;
+use App\Traits\CallTrait;
 
 class FlightsController extends Controller
 {
-
-	public static function call()
-	{
-		return new FlightsController;
-	}
+	use CallTrait;
 
 	public function findRoute($routeId)
 	{

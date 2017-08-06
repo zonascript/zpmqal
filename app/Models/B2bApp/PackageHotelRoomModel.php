@@ -3,16 +3,15 @@
 namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 
 class PackageHotelRoomModel extends Model
 {
+	use CallTrait;
+
 	protected $table = 'package_hotel_rooms';
 	protected $appends = ['room_id', 'room_type']; 
 
-	public function call()
-	{
-		return new PackageHotelRoomModel;
-	}
 
 	public function getRoomIdAttribute()
 	{

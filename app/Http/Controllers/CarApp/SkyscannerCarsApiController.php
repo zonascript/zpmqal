@@ -4,27 +4,19 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// =========================Api Controller=========================
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\SkyscannerCarsApiController;
-
-// =============================Models=============================
 use App\Models\Api\SkyscannerCarModel;
+use App\Traits\CallTrait;
 
 ini_set('max_execution_time', 120);
 
 
 class SkyscannerCarsApiController extends Controller
 {
+	use CallTrait;
 
 	private $apiKey = '';
-
-	public static function call()
-	{
-		return new SkyscannerCarsApiController;
-	}
-
 
 
 	public function cars($request = [])

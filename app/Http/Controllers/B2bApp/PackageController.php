@@ -15,16 +15,13 @@ use App\Http\Controllers\B2bApp\PackageNotesController;
 use App\Http\Controllers\CommonApp\UrlController;
 use App\Models\B2bApp\PackageModel;
 use App\Mail\PackageMail;
+use App\Traits\CallTrait;
 
 
 class PackageController extends Controller
 {
+	use CallTrait;
 	protected $viewPath = 'b2b.protected.dashboard.pages.package';
-
-	public static function call(){
-		return new PackageController;
-	}
-
 
 	/*
 	| this function is to call model which is connected to this model 

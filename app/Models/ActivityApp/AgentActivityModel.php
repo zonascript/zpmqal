@@ -3,18 +3,17 @@
 namespace App\Models\ActivityApp;
 
 use Illuminate\Database\Eloquent\Model;
-use DB;
+use App\Traits\CallTrait;
+
 
 class AgentActivityModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql6';
 	protected $table = 'agent_activities';
 	protected $appends = ['vendor', 'image_url'];
 
-	public static function call()
-	{
-		return new AgentActivityModel;
-	}
 
 	public function setAdminIdAttribute($value = '')
 	{
@@ -79,44 +78,13 @@ class AgentActivityModel extends Model
 
 
 
-	public function findByCode($id)
-	{
-		
-		$columns = [
-				'id', 'id as code', 
-				'destination_code as destinationCode', 
-				DB::raw('\'INR\' as currency'), 
-				'title as name', 'description', 
-				'status', DB::raw('\'0\' as rank'),
-				DB::raw('CONCAT(\''.urlImage().'\', image_path) as image')
-			];
-
-		return $this->select($columns)->where(['id' => $id])->first();
-	}
-
-
 	public function findByDestination($cityId, $title = '')
 	{
 		return $this->byAdmin()->bySearch($title)
 									->byDestinationCode($cityId)
 										->byIsActive()->skip(0)->take(20)->get();
 	}
-	
 
-	public function activitiesPaginate(Array $params)
-	{
-		$params = (object) $params;
-		$where = [
-							['title', 'like', '%'.$params->title.'%'],
-							'admin_id' => $this->checkUser()
-						];
-
-		if (isset($params->destCode)) {
-			$where['destination_code'] = $params->destCode;
-		}
-
-		return $this->where($where)->simplePaginate(20);
-	}
 
 
 	public function checkUser()

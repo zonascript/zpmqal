@@ -3,21 +3,22 @@
 namespace App\Models\HotelApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 use DB;
+
 class AgodaHotelModel extends Model
 {
+	use CallTrait;
+
 	protected $connection = 'mysql4';
 	protected $table = 'agoda_hotels';
 	protected $appends = ['vendor'];
 	protected $hidden = [
-								'addressline1', 'addressline2', 'zipcode', 'distance',
-								'photo1', 'photo2', 'photo3', 'photo4', 'photo5'
+								'addressline1', 'addressline2', 'zipcode', 
+								'distance','photo1', 'photo2', 'photo3', 
+								'photo4', 'photo5'
 							];
 
-	public static function call()
-	{
-		return new AgodaHotelModel;
-	}
 
 	public function getVendorAttribute()
 	{

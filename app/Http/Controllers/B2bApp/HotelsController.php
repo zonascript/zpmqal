@@ -11,14 +11,11 @@ use App\Http\Controllers\HotelApp\HotelsController as DbHotelsController;
 use App\Http\Controllers\Api\TbtqHotelApiController;
 use App\Http\Controllers\Api\SkyscannerHotelApiController;
 use App\Models\B2bApp\PackageHotelModel;
+use App\Traits\CallTrait;
 
 class HotelsController extends Controller
 {
-
-	public static function call(){
-		return new HotelsController;
-	}
-
+	use CallTrait;
 
 	public function model(){
 		return new PackageHotelModel;		

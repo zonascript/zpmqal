@@ -5,15 +5,11 @@ namespace App\Http\Controllers\B2bApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\B2bApp\PackageNoteModel;
+use App\Traits\CallTrait;
 
 class PackageNotesController extends Controller
 {
-
-	public static function call()
-	{
-		return new PackageNotesController;
-	}
-
+	use CallTrait;
 
 	public function model()
 	{

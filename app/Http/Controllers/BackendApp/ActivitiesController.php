@@ -4,30 +4,21 @@ namespace App\Http\Controllers\BackendApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ====================================Controller====================================
 use App\Http\Controllers\BackendApp\ImagesController;
 use App\Http\Controllers\BackendApp\CountryController;
 use App\Http\Controllers\BackendApp\DestinationController;
 use App\Http\Controllers\BackendApp\ActivityCarsController;
 use App\Http\Controllers\BackendApp\ActivityTimingsController;
 use App\Http\Controllers\BackendApp\ActivityChildChargesController;
-
-
-// ======================================Models======================================
 use App\Models\BackendApp\ActivityModel;
-
-use Auth;
+use App\Traits\CallTrait;
 use DB;
 
 
 
 class ActivitiesController extends Controller
 {
-
-	public function call(){
-		return new ActivitiesController;
-	}
+	use CallTrait;
 
 
 	/**
@@ -293,7 +284,7 @@ class ActivitiesController extends Controller
 
 	public function inactiveActiviyWithAll($id)
 	{
-		$auth = Auth::guard('backend')->user();
+		$auth = auth()->guard('backend')->user();
 		$activity = ActivityModel::find($id);
 		$activity->status = "inactive";
 		$activity->statusby = $auth->email;
@@ -333,7 +324,7 @@ class ActivitiesController extends Controller
 	*/
 	public function storeActivity($request){
 		
-		$auth = Auth::guard('backend')->user();
+		$auth = auth()->guard('backend')->user();
 		$activity = new ActivityModel;
 		$activity->backend_id = $auth->id;
 		$activity->countryCode = $request->countryCode;
@@ -471,7 +462,7 @@ class ActivitiesController extends Controller
 
 	public function storeImage($uid, $images)
 	{
-		$auth = Auth::guard('backend')->user();
+		$auth = auth()->guard('backend')->user();
 
 		if (is_array($images)) {
 			foreach ($images as $image) {
@@ -495,7 +486,7 @@ class ActivitiesController extends Controller
 	*/
 	public function storeImageOld(Request $request)
 	{
-		$auth = Auth::guard('backend')->user();
+		$auth = auth()->guard('backend')->user();
 		
 		$countryCode = $request->countryCode;
 

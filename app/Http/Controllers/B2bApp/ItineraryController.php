@@ -11,20 +11,12 @@ use App\Http\Controllers\B2bApp\HotelsController;
 use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\B2bApp\ActivitiesController;
 use App\Models\B2bApp\PackageModel;
+use App\Traits\CallTrait;
 
 
 class ItineraryController extends Controller
 {
-	/*
-	| This is function is made for. 
-	| if you want to call a non static function without 
-	| making object then this function will use 
-	| for example $foo = BarClass::call()->foo();
-	*/
-
-	public static function call(){
-		return new ItineraryController;
-	}
+	use CallTrait;
 
 	public function itineraryByRoute($packageDbId)
 	{

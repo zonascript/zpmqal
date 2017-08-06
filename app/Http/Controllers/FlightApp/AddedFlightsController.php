@@ -5,17 +5,14 @@ namespace App\Http\Controllers\FlightApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\FlightApp\AddedFlightSegmentsController;
-
-use App\Models\B2bApp\RouteModel;
 use App\Models\FlightApp\AddedFlightModel;
+use App\Models\B2bApp\RouteModel;
+use App\Traits\CallTrait;
 use Carbon\Carbon;
 
 class AddedFlightsController extends Controller
 {
-	public static function call()
-	{
-		return new AddedFlightsController;
-	}
+	use CallTrait;
 
 
 	public function model()

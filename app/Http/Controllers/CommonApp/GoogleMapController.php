@@ -4,16 +4,13 @@ namespace App\Http\Controllers\CommonApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Traits\CallTrait;
 
 class GoogleMapController extends Controller
 {
+	use CallTrait;
 
 	public $key = '';
-
-	public static function call()
-	{
-		return new GoogleMapController;
-	}
 
 	// this function is to get geo location
 	public function geoCode($city){

@@ -3,21 +3,18 @@
 namespace App\Models\Api;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 
 class TbtqHotelDetailModel extends Model
 {
+	use CallTrait;
+
 	protected $table = 'tbtq_hotel_details';
 	protected $casts = [
 			'request' => 'object',
 			'result' => 'object'
 		];
 
-
-	public static function call()
-	{
-		return new TbtqHotelDetailModel;
-	}
-	
 
 	public function setRequestAttribute($value)
 	{

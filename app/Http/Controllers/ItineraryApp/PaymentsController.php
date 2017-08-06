@@ -7,15 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Models\ItineraryApp\PaymentModel;
 use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\CommonApp\PayuPaymentsController;
+use App\Traits\CallTrait;
 use Carbon\Carbon;
 
 class PaymentsController extends Controller
 {
-	public static function call()
-	{
-		return new PaymentsController;
-	}
-
+	use CallTrait;
+	
 	public function model()
 	{
 		return new PaymentModel;

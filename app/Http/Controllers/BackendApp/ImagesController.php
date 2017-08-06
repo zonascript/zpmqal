@@ -4,21 +4,18 @@ namespace App\Http\Controllers\BackendApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// =======================Models=======================
 use App\Models\CommonApp\ImageModel;
 use App\Models\CommonApp\CountryModel;
 use App\Models\CommonApp\DestinationModel;
+use App\Traits\CallTrait;
 
 
 
 class ImagesController extends Controller
 {
-	public $viewPath = 'backend.protected.dashboard.pages.images';
+	use CallTrait;
 
-	public static function call(){
-		return new ImagesController;
-	}
+	public $viewPath = 'backend.protected.dashboard.pages.images';
 
 	public function model(){
 		return new ImageModel; 

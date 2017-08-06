@@ -5,15 +5,13 @@ namespace App\Http\Controllers\B2bApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\B2bApp\FollowUpModel;
+use App\Traits\CallTrait;
 
 class FollowUpController extends Controller
 {
+	use CallTrait;
 
 	public $viewPath = 'b2b.protected.dashboard.pages.follow_up';
-
-	public static function call(){
-		return new FollowUpController;
-	}
 
 
 	public function model()

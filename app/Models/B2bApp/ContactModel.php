@@ -3,14 +3,13 @@
 namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 
 class ContactModel extends Model
 {
-	protected $table = 'contacts'; 
+	use CallTrait;
 
-	public static function call(){
-		return new ContactModel;
-	}
+	protected $table = 'contacts'; 
 
 	public function setUserIdAttribute($value = null)
 	{

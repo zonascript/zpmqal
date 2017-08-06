@@ -6,14 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\CommonApp\ImageModel;
 use App\Models\ActivityApp\AgentActivityModel;
+use App\Traits\CallTrait;
 
 class AgentActivitiesController extends Controller
 {
-	public static function call()
-	{
-		return new AgentActivitiesController;
-	}
-
+	use CallTrait;
 
 	public function model()
 	{

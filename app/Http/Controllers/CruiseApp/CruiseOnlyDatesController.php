@@ -4,17 +4,12 @@ namespace App\Http\Controllers\CruiseApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// =============================Models=============================
 use App\Models\CruiseApp\CruiseOnlyDateModel;
+use App\Traits\CallTrait;
 
 class CruiseOnlyDatesController extends Controller
 {
-
-	public static function call()
-	{
-		return new CruiseOnlyDatesController;
-	}
+	use CallTrait;
 
 	public function model()
 	{

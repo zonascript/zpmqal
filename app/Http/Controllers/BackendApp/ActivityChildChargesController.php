@@ -4,16 +4,13 @@ namespace App\Http\Controllers\BackendApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-// ======================================Models======================================
 use App\Models\BackendApp\ActivityChildChargeModel;
+use App\Traits\CallTrait;
 
 
 class ActivityChildChargesController extends Controller
 {
-  public static function call(){
-		return new ActivityChildChargesController;
-	}
+	use CallTrait;
 
 	public function model(){
 		return new ActivityChildChargeModel; 

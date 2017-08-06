@@ -15,9 +15,12 @@ use App\Models\ItineraryApp\PaymentModel;
 use Carbon\CarbonInterval;
 use App\Models\CommonApp\DestinationModel;
 use App\Models\ActivityApp\ViatorDestinationModel;
+use App\Models\ActivityApp\ViatorActivityModel;
 use App\Models\B2bApp\RouteModel;
 use App\Http\Controllers\ActivityApp\AgentActivitiesController;
-
+use App\Console\Commands\MakeTrait;
+use App\Http\Controllers\AdminApp\UserController;
+use App\Http\Controllers\TestApp\AbcController;
 
 class TestController extends Controller
 {
@@ -29,8 +32,19 @@ class TestController extends Controller
 	}
 
 
+
 	public function testCode($value='')
 	{
+		dd(AbcController::call()->test());
+		dd(UserController::call()->test());
+		$stack = array("orange", "banana", "apple", "raspberry");
+		$fruit = array_pop($stack);
+		dd($fruit, $stack);
+
+		dd(ViatorActivityModel::call()->findByDestination(4467, 'pitzkoppe Guided Tour f'));
+
+		dd(AgentActivitiesController::call()->model()->findByCode(39));
+
 		$date = Carbon::parse('2017-09-01');
 		$now = Carbon::now();
 		dd($date->gt($now), $date, $now);
