@@ -3,6 +3,7 @@
 namespace App\Models\CruiseApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 use DB;
 
 class CruiseOnlyDateModel extends Model

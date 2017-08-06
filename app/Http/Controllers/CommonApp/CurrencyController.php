@@ -4,11 +4,12 @@ namespace App\Http\Controllers\CommonApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Traits\CallTrait;
 
 class CurrencyController extends Controller
 {
-	use App\Traits\CallTrait;
-
+	use CallTrait;
+	
 	public function Exchange($From, $To){
 
 		$url = 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22'.$From.$To.'%22)&env=store://datatables.org/alltableswithkeys';

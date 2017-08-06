@@ -12,6 +12,7 @@ class AirportModel extends Model
 
 	protected $connection = 'mysql2';
 	protected $table = 'airports';
+	
 
 	
 	public function getAirport($search){

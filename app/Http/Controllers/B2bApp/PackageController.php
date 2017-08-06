@@ -70,39 +70,10 @@ class PackageController extends Controller
 		return view($this->viewPath.'.open',$bladeData);
 	}
 
-	// this if function is for storing and creating new row in db
-
-	public function createNew($id, $request)
+	
+	public function notModifiable()
 	{
-		$auth = auth()->user();
-		$package = new PackageModel;
-		$package->user_id= $auth->id;
-		$package->client_id = $id;
-		$package->start_date = $request->start_date;
-		$package->end_date = $request->start_date;
-		$package->req = $request->req;
-		$package->status = 'active';
-		$package->save();
-
-		// ==============this function is to save multiple room data=============
-		$guestsDetail = [
-				"packageDbId" => $package->id, 
-				"roomGuest" => json_decodeMulti($request->guests_detail),
-			];
-
-		$costParams = (object)[
-											"currency" => "INR", 
-											"isVisa" => 0,
-											"visaCost" => 0, 
-											"netCost" => 0,
-											"margin" => 0
-										];
-
-		PackageCostsController::call()->createNew($package->id, $costParams);
-
-		RoomGuestsController::call()->createNewMulti($guestsDetail);
-
-		return $package;
+		return view($this->viewPath.'.not_modifiable');
 	}
 
 	/*$pid is "package id"*/
@@ -152,7 +123,8 @@ class PackageController extends Controller
 	public function createTemp($id, $request = [])
 	{
 
-		$newCode = isset($request->package_code) && !is_null($request->package_code)  
+		$newCode = isset($request->package_code) 
+						 && !is_null($request->package_code)  
 						 ? $request->package_code
 						 : PackageCodesController::call()->model()->newCode();
 
@@ -176,16 +148,6 @@ class PackageController extends Controller
 		$package->save();
 		$package = $package->find($package->id);
 		return $package;
-	}
-
-
-	public function storeGuestsDetail($id, $guestsDetail)
-	{
-		$package = PackageModel::find($id);
-		$package->guests_detail = json_encode(json_decodemulti($guestsDetail));
-		$package->save();
-
-		return true;
 	}
 
 
@@ -375,9 +337,5 @@ class PackageController extends Controller
 	}
 
 
-	public function notModifiable()
-	{
-		return view($this->viewPath.'.not_modifiable');
-	}
 
 }

@@ -8,7 +8,7 @@ use App\Http\Controllers\HotelApp\AgodaHotelRoomsController;
 use App\Http\Controllers\HotelApp\AgodaHotelImagesController;
 use App\Http\Controllers\HotelApp\AgodaHotelDetailsController;
 use App\Models\HotelApp\AgodaHotelModel;
-
+use App\Traits\CallTrait;
 
 class AgodaHotelsController extends Controller
 {

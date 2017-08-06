@@ -5,6 +5,7 @@ namespace App\Models\B2bApp;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\B2bApp\PackageHotelRoomModel;
 use App\Http\Controllers\HotelApp\HotelsController;
+use App\Traits\CallTrait;
 
 class PackageHotelModel extends Model
 {

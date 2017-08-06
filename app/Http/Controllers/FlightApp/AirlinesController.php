@@ -5,7 +5,7 @@ namespace App\Http\Controllers\FlightApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\FlightApp\AirlineModel;
-
+use App\Traits\CallTrait;
 class AirlinesController extends Controller
 {
 	use CallTrait;

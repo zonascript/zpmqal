@@ -3,6 +3,7 @@
 namespace App\Models\HotelApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\CallTrait;
 
 class BookingHotelRoomModel extends Model
 {

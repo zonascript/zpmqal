@@ -4,9 +4,8 @@ namespace App\Http\Controllers\AdminApp;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use View;
-
 use App\Http\Controllers\AdminApp\EnquiryController;
+use View;
 
 class DashboardController extends Controller
 {

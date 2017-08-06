@@ -11,6 +11,7 @@ use App\Traits\CallTrait;
 
 class ActivityCarsController extends Controller
 {
+	use CallTrait;
 
 	public function model(){
 		return new ActivityCarModel; 
