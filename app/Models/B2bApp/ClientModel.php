@@ -128,7 +128,7 @@ class ClientModel extends Model
 
 	public function simplePaginateData($name, $guard = false)
 	{
-		return $this->byAdmin($guard)->byNotStatus()
+		return $this->byAdmin($guard)->byUser()->byNotStatus()
 									->searchName($name)->simplePaginate(20);
 	}
 
