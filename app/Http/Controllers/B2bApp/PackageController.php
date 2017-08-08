@@ -47,12 +47,18 @@ class PackageController extends Controller
 
 
 	public function show($token, Request $request){
-		$client  = ClientController::call()->model()
+		$client = ClientController::call()->model()
 							->byToken($token)->firstOrFail();
+		
+		$code = extractInt($request->search);
+		
+		$package = $client->packages();
+
+		if($code) $package->byPackageCode($code);
 
 		$bladeData = [
 				"client" => $client,
-				"packages" => $client->packagesPaginate($request->search)
+				"packages" => $package->simplePaginate(20)
 			];
 
 		return view($this->viewPath.'.show', $bladeData);

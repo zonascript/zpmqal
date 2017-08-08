@@ -162,6 +162,7 @@ class PackageModel extends Model
 		return $query->where(['token' => $token]);
 	}
 
+
 	public function scopeByClientUser($query)
 	{
 		return $query->whereHas('client', function ($q){
@@ -174,6 +175,12 @@ class PackageModel extends Model
 		$auth = auth()->user();
 		return $query->where(['user_id' => $auth->id]);
 	}	
+
+
+	public function scopeByPackageCode($query, $code)
+	{
+		return $query->where('package_code', $code);
+	}
 
 
 

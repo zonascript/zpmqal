@@ -112,26 +112,11 @@ class ClientModel extends Model
 	}
 
 
-	public function packagesPaginate($pid){
-		$id = filter_var($pid, FILTER_SANITIZE_NUMBER_INT);
-		$where = $id > 0 ? [['id', 'like', $id]] : [];
-		return $this->packages()->where($where)->simplePaginate(10);
-	}
-
-
 	public function findByMobileEmail($mobile, $email)
 	{
 		return $this->mobileOrEmail($mobile, $email)
 									->byUser()->byNotStatus()->first();
 	}
-
-
-	public function simplePaginateData($name, $guard = false)
-	{
-		return $this->byAdmin($guard)->byUser()->byNotStatus()
-									->searchName($name)->simplePaginate(20);
-	}
-
 
 
 	public function duplicateOrNew($mobile, $email)

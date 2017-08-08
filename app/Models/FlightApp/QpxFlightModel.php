@@ -25,18 +25,22 @@ class QpxFlightModel extends Model
 
 	public function getAirlinesAttribute(){
 		$airlineCode = [];
-		foreach ($this->result->trips->data->carrier as $airline) {
-			$airlineCode[$airline->code] = $airline->name;
+		if (isset($this->result->trips->data->carrier)) {
+			foreach ($this->result->trips->data->carrier as $airline) {
+				$airlineCode[$airline->code] = $airline->name;
+			}
 		}
 		return (object) $airlineCode;
 	}
 
 
-	/*===========this function for making index by city code===========*/
+	/*======this function for making index by city code======*/
 	public function getCitiesAttribute(){
 		$cityCode = [];
-		foreach ($this->result->trips->data->city as $city) {
-			$cityCode[$city->code] = $city->name;
+		if (isset($this->result->trips->data->city)) {
+			foreach ($this->result->trips->data->city as $city) {
+				$cityCode[$city->code] = $city->name;
+			}
 		}
 		return (object) $cityCode;
 	}
@@ -87,8 +91,11 @@ class QpxFlightModel extends Model
 
 	public function getSlicesAttribute()
 	{
-		$result = $this->result;
-		return $result->trips->tripOption[$this->selected_index]->slice;
+		$result = [];
+		if ($this->result->trips->tripOption) {
+			$this->result->trips->tripOption[$this->selected_index]->slice;
+		}
+		return $result;
 	}
 
 
@@ -200,47 +207,48 @@ class QpxFlightModel extends Model
 	*/
 	public function toGlobalArray()
 	{
-		$cities = $this->cities;
-		$airlines = $this->airlines;
-		$tripOptions = $this->result->trips->tripOption;
 		$trips = [];
-		
-		foreach ($tripOptions as $index => $tripOption) {
-			$segments = [];
-			$slices = $tripOption->slice;
-			foreach ($slices as $slice) {
-				foreach ($slice->segment as  $segment) {
-					$carrier = $segment->flight->carrier;
-					foreach ($segment->leg as $leg) {
-						$tempLeg = (object) [];
-						$tempLeg->airline_name = $airlines->$carrier;
-						$tempLeg->airline_code = $segment->flight->carrier;
-						$tempLeg->airline_number = $segment->flight->number;
+		if (isset($this->result->trips->tripOption)) {
+			$cities = $this->cities;
+			$airlines = $this->airlines;
+			$tripOptions = $this->result->trips->tripOption;
+			foreach ($tripOptions as $index => $tripOption) {
+				$segments = [];
+				$slices = $tripOption->slice;
+				foreach ($slices as $slice) {
+					foreach ($slice->segment as  $segment) {
+						$carrier = $segment->flight->carrier;
+						foreach ($segment->leg as $leg) {
+							$tempLeg = (object) [];
+							$tempLeg->airline_name = $airlines->$carrier;
+							$tempLeg->airline_code = $segment->flight->carrier;
+							$tempLeg->airline_number = $segment->flight->number;
 
-						$tempLeg->departure_date_time = Carbon::parse($leg->departureTime)
-																					->format('Y-m-d H:i');
+							$tempLeg->departure_date_time = Carbon::parse($leg->departureTime)
+																						->format('Y-m-d H:i');
 
-						$tempLeg->arrival_date_time = Carbon::parse($leg->arrivalTime)
-																					->format('Y-m-d H:i');
+							$tempLeg->arrival_date_time = Carbon::parse($leg->arrivalTime)
+																						->format('Y-m-d H:i');
 
-						$originCode = $leg->origin;
-						$tempLeg->origin = isset($cities->$originCode) 
-																 ? $cities->$originCode
-																 : $originCode;
-						$tempLeg->origin_code = $originCode;
+							$originCode = $leg->origin;
+							$tempLeg->origin = isset($cities->$originCode) 
+																	 ? $cities->$originCode
+																	 : $originCode;
+							$tempLeg->origin_code = $originCode;
 
 
-						$destinationCode = $leg->destination;
-						$tempLeg->destination_code = $destinationCode;
-						$tempLeg->destination = isset($cities->$destinationCode)
-																	? $cities->$destinationCode
-																	: $destinationCode;
+							$destinationCode = $leg->destination;
+							$tempLeg->destination_code = $destinationCode;
+							$tempLeg->destination = isset($cities->$destinationCode)
+																		? $cities->$destinationCode
+																		: $destinationCode;
 
-						$segments[] = $tempLeg;
+							$segments[] = $tempLeg;
+						}
 					}
 				}
+				$trips[] = $segments;
 			}
-			$trips[] = $segments;
 		}
 
 		return $trips;

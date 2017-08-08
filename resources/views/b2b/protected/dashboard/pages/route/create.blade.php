@@ -80,7 +80,7 @@
 									<button type="button" id="formSubmit" class="btn btn-success btn-block">Next</button>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 m-top-30">
-									<a href="{{ $package->package_url }}" class="btn btn-default btn-block">Next</a>
+									<a href="{{ $package->package_url }}" class="btn btn-default btn-block">Cancel</a>
 								</div>
 							</div>
 

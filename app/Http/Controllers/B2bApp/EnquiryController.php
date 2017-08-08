@@ -18,6 +18,7 @@ class EnquiryController extends ClientController
 	{
 		$clients = $this->model()->byUser()->byNotStatus()
 							->searchName($request->search)->simplePaginate(20);
+
 		return view($this->viewPath.'.index', compact('clients'));
 	}
 

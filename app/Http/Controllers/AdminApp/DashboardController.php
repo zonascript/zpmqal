@@ -9,19 +9,22 @@ use View;
 
 class DashboardController extends Controller
 {
+	public $viewPath = 'admin.protected.dashboard.pages';
 
-	public function getIndex(){
-		$clients = EnquiryController::call()
-							->model()->simplePaginateData('', true);
+	public function getIndex(Request $request){
+		$clients = EnquiryController::call()->model()
+							->byAdmin(1)->byNotStatus()
+								->searchName($request->search)
+									->simplePaginate(20);
 		$blade = [
 				"clients" => $clients
 			];
-		return view('admin.protected.dashboard.pages.index.index', $blade);
+		return view($this->viewPath.'.index.index', $blade);
 	}
 
 	public function getSlug($page = 'index')
 	{
-		if (View::exists('admin.protected.dashboard.pages.'.$page)) {
+		if (View::exists($this->viewPath.'.'.$page)) {
 			// $client = ClientController::call()->all();
 			
 
@@ -42,7 +45,7 @@ class DashboardController extends Controller
 			// 	];
 
 
-			return view('admin.protected.dashboard.pages.'.$page, []);
+			return view($this->viewPath.'.'.$page, []);
 		}
 		else{
 			return view('errors.404');

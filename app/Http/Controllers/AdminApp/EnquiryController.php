@@ -28,7 +28,9 @@ class EnquiryController extends Controller
 	public function index(Request $request)
 	{
 		$clients = $this->model()
-							->simplePaginateData($request->search, true);
+							->byAdmin(1)->byNotStatus()
+								->searchName($request->search)
+									->simplePaginate(20);
 
 		return view($this->viewPath.'.index', compact('clients'));
 	}

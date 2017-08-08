@@ -60,6 +60,12 @@ function filePath($path)
 
 
 
+function extractInt($string)
+{
+	return (int) filter_var($string, FILTER_SANITIZE_NUMBER_INT);
+}
+
+
 function addDateColumns(Array $data)
 {
 	$data["created_at"] = date('Y-m-d H:i:s');
