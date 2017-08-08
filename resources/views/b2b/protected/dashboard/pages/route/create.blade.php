@@ -76,8 +76,11 @@
 								<div class="col-md-12 col-sm-12 col-xs-12">
 									@include($viewPath.'.create_partials.rooms')
 								</div>
-								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m-top-30">
+								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 m-top-30">
 									<button type="button" id="formSubmit" class="btn btn-success btn-block">Next</button>
+								</div>
+								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 m-top-30">
+									<a href="{{ $package->package_url }}" class="btn btn-default btn-block">Next</a>
 								</div>
 							</div>
 

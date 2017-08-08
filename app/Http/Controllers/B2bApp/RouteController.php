@@ -191,12 +191,6 @@ class RouteController extends Controller
 	{
 		return $this->model()->byPackageId($pid)->get();
 	}
-
-
-	public function findByPackageid($pid)
-	{
-		return $this->model()->byPackageId($pid)->get();
-	}
 	*/
 
 
@@ -243,7 +237,7 @@ class RouteController extends Controller
 
 	public function copyRoutes($oldPid, $newPid)
 	{
-		$routes = $this->findByPackageid($oldPid);
+		$routes = $this->model()->byPackageId($oldPid)->get();
 		foreach ($routes as $route) {
 			$newRoute = $this->model();
 			$newRoute->package_id = $newPid;
