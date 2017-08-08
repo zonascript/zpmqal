@@ -12,13 +12,13 @@
 				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback m-top-10-only">
 					<input type="text" class="form-control input-airport origin" 
 						id="modify_origin" placeholder="Origin" name="origin" 
-						value="{{ $package->flightRoutes[0]->origin }}">
+						value="{{ $package->flightRoutes[0]->origin }}" data-code="{{ $package->flightRoutes[0]->origin_code }}">
 					<i class="fa fa-map-marker form-control-feedback right-1 right" aria-hidden="true"></i>
 				</div>
 				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback m-top-10-only">
 					<input type="text" class="form-control input-airport destination" 
 						id="modify_destination" placeholder="Destination" name="destination" 
-						value="{{ $package->flightRoutes[0]->destination }}">
+						value="{{ $package->flightRoutes[0]->destination }}" data-code="{{ $package->flightRoutes[0]->destination_code }}">
 					<i class="fa fa-map-marker form-control-feedback right-1 right" aria-hidden="true"></i>
 				</div>
 

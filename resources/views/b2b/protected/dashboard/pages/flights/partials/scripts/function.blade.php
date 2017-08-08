@@ -88,6 +88,9 @@
 		var rid = $(thisObj).attr('data-rid');
 		var origin = $('input.origin').val();
 		var destination = $('input.destination').val();
+		var origin_code = $('input.origin').attr('data-code');
+		var destination_code = $('input.destination').attr('data-code');
+		
 		changeTabMenu(rid, origin, destination);
 
 		idObject['flight_'+rid].origin = origin; {{--setting attribute here--}}
@@ -101,7 +104,9 @@
 		var data = {
 				"_token" : csrf_token,
 				"origin" : origin,
-				"destination" : destination
+				"destination" : destination,
+				"origin_code" : origin_code,
+				"destination_code" : destination_code
 				{{--"arrival" : arrival,
 				"adult" : adult,
 				"child" : child,
@@ -110,7 +115,7 @@
 
 		$.ajax({
 			type:"post",
-			url: "{{url('dashboard/package/route/update/')}}/"+rid+"?format=json",
+			url: "{{ url('dashboard/package/route/update') }}/"+rid+"?format=json",
 			dataType: "JSON",
 			data: data,
 			success: function(response) {
@@ -386,39 +391,44 @@
 
 	function populateFlights(rid, data) {
 		$('#loging_log').hide();
+		var ridObject = getRidObject(rid);
+		var elem_id = ridObject.elem_id;
 
-		$.each(data.flights, function (flightsKey, flights) {
-			var stacks = [];
-			$.each(flights, function (flightKey, flight) {
-				var arrivalDateTime = objDateTime(flight.arrival_date_time);
-				var departureDateTime = objDateTime(flight.departure_date_time);
-				stacks.push({
-					"name" : flight.airline_name.replace('Limited', ''),
-					"code" : flight.airline_code,
-					"flightNumber" : flight.airline_number, 
-					"departureTime" : departureDateTime.time,
-					"departureDate" : departureDateTime.date,
-					"arrivalTime" : arrivalDateTime.time,
-					"arrivalDate" : arrivalDateTime.date,
-					"origin" : flight.origin,
-					"originCode" : flight.origin_code,
-					"destination" : flight.destination,
-					"destinationCode" : flight.destination_code,
+		if (data.flights.length) {
+			$.each(data.flights, function (flightsKey, flights) {
+				var stacks = [];
+				$.each(flights, function (flightKey, flight) {
+					var arrivalDateTime = objDateTime(flight.arrival_date_time);
+					var departureDateTime = objDateTime(flight.departure_date_time);
+					stacks.push({
+						"name" : flight.airline_name.replace('Limited', ''),
+						"code" : flight.airline_code,
+						"flightNumber" : flight.airline_number, 
+						"departureTime" : departureDateTime.time,
+						"departureDate" : departureDateTime.date,
+						"arrivalTime" : arrivalDateTime.time,
+						"arrivalDate" : arrivalDateTime.date,
+						"origin" : flight.origin,
+						"originCode" : flight.origin_code,
+						"destination" : flight.destination,
+						"destinationCode" : flight.destination_code,
+					});
 				});
+
+				var flightObj = {
+						'vid' : data.db.id,
+						'vdr' : data.db.vdr,
+						'ind' : flightsKey,
+						'stacks' : stacks
+					};
+
+				var html = getFlightStack(flightObj);
+				$('#'+elem_id).append(html);
 			});
-
-			var flightObj = {
-					'vid' : data.db.id,
-					'vdr' : data.db.vdr,
-					'ind' : flightsKey,
-					'stacks' : stacks
-				};
-
-			var html = getFlightStack(flightObj);
-			var ridObject = getRidObject(rid);
-			var elem_id = ridObject.elem_id;
-			$('#'+elem_id).append(html);
-		});
+		}
+		else{
+			$('#'+elem_id).append('No Result Found.');
+		}
 
 		dataIsPulled(rid);					
 		filter.initFilter(rid);

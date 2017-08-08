@@ -194,6 +194,35 @@ class RouteController extends Controller
 	*/
 
 
+	public function updateRoute($id, Request $request)
+	{
+		$route = $this->model()->findOrFail($id);
+
+		if (isset($request->origin)) { 
+			$route->origin = $request->origin; 
+		}
+
+		if (isset($request->destination)) { 
+			$route->destination = $request->destination; 
+		}
+
+		if (isset($request->origin_code)) { 
+			$route->origin_code = $request->origin_code; 
+		}
+		
+		if (isset($request->destination_code)) { 
+			$route->destination_code = $request->destination_code; 
+		}
+
+		$route->save();
+		$return = $route->id;
+		if ($request->format == 'json') {
+			$return = json_encode(["status" => 200, "response" => "route updated"]);
+		}
+
+		return $return;
+	}
+
 
 	public function postRemoveFusion($id)
 	{

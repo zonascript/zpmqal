@@ -188,7 +188,9 @@ class QpxFlightModel extends Model
 
 	public function tripOption()
 	{
-		return $this->result->trips->tripOption[$this->selected_index];
+		return isset($this->result->trips->tripOption)
+		? $this->result->trips->tripOption[$this->selected_index]
+		: [];
 	}
 
 	/*

@@ -5,6 +5,9 @@
 	
 	// this route is gui to get information
 	Route::group(['prefix' => 'route'], function () {
+		Route::post('update/{id}', 'RouteController@updateRoute')
+						->name('route.update');
+
 		Route::get('{ctoken}/{token?}', 'RouteController@create')
 						->name('createRoute');
 		Route::post('{rid}/d', 'RouteController@deleteRow');
@@ -17,5 +20,4 @@
 		// Route::post('{id}/', 'RouteController@store');
 
 		// this will update route in db only origin and destination
-		// Route::post('update/{id}', 'RouteController@updateRoute');
 	});
