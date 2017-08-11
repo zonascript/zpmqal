@@ -427,7 +427,10 @@
 			});
 		}
 		else{
-			$('#'+elem_id).append('No Result Found.');
+			$.alert({
+				title : 'Sorry...No Result Found.',
+				content : 'you can <b class="red">add flight manually</b> or Modify Search.'
+			});
 		}
 
 		dataIsPulled(rid);					

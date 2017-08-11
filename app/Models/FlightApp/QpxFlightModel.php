@@ -92,8 +92,8 @@ class QpxFlightModel extends Model
 	public function getSlicesAttribute()
 	{
 		$result = [];
-		if ($this->result->trips->tripOption) {
-			$this->result->trips->tripOption[$this->selected_index]->slice;
+		if (isset($this->result->trips->tripOption)) {
+			$result = $this->result->trips->tripOption[$this->selected_index]->slice;
 		}
 		return $result;
 	}

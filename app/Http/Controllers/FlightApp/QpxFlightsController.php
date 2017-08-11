@@ -153,7 +153,6 @@ class QpxFlightsController extends Controller
 	public function book($id, $index)
 	{
 		$flight = $this->model()->find($id);
-		
 		$return = false;
 
 		if (!is_null($flight)) {
@@ -161,7 +160,6 @@ class QpxFlightsController extends Controller
 			$flight->selected_index  =  $index;
 			// saving data here
 			$flight->save();
-
 			// this array have to be return,
 			$return = (object)[
 					"startDateTime" => $flight->departureDateTime,
