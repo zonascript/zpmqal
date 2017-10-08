@@ -24,9 +24,13 @@ class AgentActivitiesController extends Controller
 		$agentActivity = new AgentActivityModel;
 		$agentActivity->mode = $data->mode;
 		$agentActivity->title = $data->name;
+		$agentActivity->pick_up = $data->pick_up;
+		$agentActivity->duration = $data->duration;
 		$agentActivity->destination_code = $data->cityId;
 		$agentActivity->timing = $data->timing;
 		$agentActivity->description = $data->description;
+		$agentActivity->inclusion = $data->inclusion;
+		$agentActivity->exclusion = $data->exclusion;
 		$agentActivity->save();
 		$image = new ImageModel([
 										'type' => 'path', 

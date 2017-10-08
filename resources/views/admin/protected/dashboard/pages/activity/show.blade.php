@@ -24,11 +24,38 @@
 						</div>
 						<div class="x_content" >
 							<div class="row">
-								
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									@isset ($activity->duration)
+										Duration : {{ $activity->duration }} |
+									@endisset
+									@isset ($activity->pick_up)
+										Pick Up (timing) : {{ $activity->pick_up }} |
+									@endisset
+									@isset ($activity->mode)
+										Mode : {{ $activity->mode }} |
+									@endisset
+									@isset ($activity->timing)
+										Timing : {{ $activity->timing }}
+									@endisset
+								</div>
+							</div>
+							<div class="m-top-20"></div>
+							<div class="row">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<label for="">Description : </label>
+									{!! $activity->description !!}
+								</div>
 							</div>
 							<div class="row">
 								<div class="col-md-12 col-sm-12 col-xs-12">
-									{!! $activity->description !!}
+									<label for="">Inclusion : </label>
+									{!! $activity->inclusion !!}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<label for="">Exclusion : </label>
+									{!! $activity->exclusion !!}
 								</div>
 							</div>
 							<hr>

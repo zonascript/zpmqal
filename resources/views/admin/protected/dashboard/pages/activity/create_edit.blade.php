@@ -31,23 +31,64 @@
 					</div>
 					<div class="form-group">
 						<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
-							<textarea id="description" placeholder="text">{{ $activity->description }}</textarea>
-						</div>
-						<div class="col-md-4 col-sm-4 col-xs-4 form-group has-feedback">
-							<form id="uploadform" class="uploadform dropzone no-margin nopadding dz-clickable text-left min-max-height-320px bg-color-gray" data-path="" data-host="">	
-								{{ csrf_field() }}
-								<div class="dz-default dz-message">
-									<div class="row">
-										<div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-2">
-											<div class="height-100px vertical-parent">
-												<div class="vertical-child">
-													Drop activity image here
-												</div>
-											</div>
+							<div class="row">
+								<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+									<h2>Description :</h2>
+									<textarea id="description" placeholder="text">{{ $activity->description }}</textarea>
+								</div>
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="x_panel" style="height: auto;">
+										<div class="x_title noborder">
+											<h2>Inclusion (optional)</h2>
+											<ul class="nav navbar-right panel_toolbox panel_toolbox1">
+												<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+											</ul>
+										</div>
+										<div class="x_content" style="display: none;">
+											<textarea id="inclusion" placeholder="text"></textarea>
 										</div>
 									</div>
 								</div>
-							</form>
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="x_panel" style="height: auto;">
+										<div class="x_title noborder">
+											<h2>Exclusion (optional)</h2>
+											<ul class="nav navbar-right panel_toolbox panel_toolbox1">
+												<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+											</ul>
+										</div>
+										<div class="x_content" style="display: none;">
+											<textarea id="exclusion" placeholder="text"></textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-4 col-xs-4">
+							<div class="row">
+								<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+									<input type="text" id="pick_up" class="form-control" placeholder="Pick-Up Time (optaional)" value="{{ $activity->pick_up }}" required />
+								</div>
+								<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+									<input type="text" id="title" class="form-control" placeholder="Duration (optaional)" value="{{ $activity->duration }}" required />
+								</div>
+								<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+									<form id="uploadform" class="uploadform dropzone no-margin nopadding dz-clickable text-left min-max-height-355px bg-color-gray" data-path="" data-host="">	
+										{{ csrf_field() }}
+										<div class="dz-default dz-message">
+											<div class="row">
+												<div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-2">
+													<div class="height-100px vertical-parent">
+														<div class="vertical-child">
+															Drop activity image here
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -82,7 +123,7 @@
 				tools: {title: 'Tools', items: 'spellchecker code'}
 			},
 			menubar: 'file edit insert view format table tools',
-			height : 210
+			height : 172
 		});
 	</script>
 @endsection
@@ -125,6 +166,8 @@
 		$(document).on('click', '.btn-save', function (argument) {
 			var id = $('#act_id').val();
 			var title = $('#title').val();
+			var pick_up = $('#pick_up').val();
+			var duration = $('#duration').val();
 			$('.x_panel').find('.border-red').removeClass('border-red');
 			
 			if (title == '') { 
@@ -144,14 +187,20 @@
 
 			var images = makeImagesObject();
 			var desc = tinymce.get('description').getContent();
+			var inclusion = tinymce.get('inclusion').getContent();
+			var exclusion = tinymce.get('exclusion').getContent();
 			var data = {
 					'id' : id,
 					'title'	: title,
 					'format' : 'json',
 					'images' : images,
+					'pick_up' : pick_up,
 					'description'	: desc,
 					'_token' : csrf_token,
+					'duration' : duration,
 					'dest_code'	: destCode,
+					'inclusion' : inclusion,
+					'exclusion' : exclusion
 				};
 
 			console.log(data);

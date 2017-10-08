@@ -79,8 +79,12 @@ class ActivitiesController extends Controller
 			$activity = $this->model();
 		}
 		$activity->title =  $request->title;
+		$activity->pick_up = $request->pick_up;
+		$activity->duration = $request->duration;
 		$activity->description =  $request->description;
 		$activity->destination_code =  $request->dest_code;
+		$activity->inclusion = $request->inclusion;
+		$activity->exclusion = $request->exclusion;
 		$activity->save();
 		
 		$images = isset($request->images) && is_array($request->images) 

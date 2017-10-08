@@ -576,6 +576,12 @@
 }
 
 
+.min-max-height-355px{ 
+	min-height: 355px ! important;
+	max-height: 355px ! important;
+}
+
+
 .valign-bottom{	vertical-align: bottom ! important; }
 
 .line-through{text-decoration: line-through;}
