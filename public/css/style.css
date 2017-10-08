@@ -895,8 +895,6 @@ body {font-family:Helvetica,Arial,sans-serif;}
 	opacity: 1; 
 }
 
-.noborder{ border-bottom: 0px ! important; }
-
 .tab-content-box{ 
 	min-height: 75vh;
 	background-color: #ffffff ! important; 

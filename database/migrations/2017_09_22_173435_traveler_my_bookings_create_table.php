@@ -15,6 +15,7 @@ class TravelerMyBookingsCreateTable extends Migration
     {
         Schema::connection('mysql9')->create('my_bookings', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('token', 50)->unique();
             $table->unsignedInteger('traveler_id');
             $table->unsignedInteger('booked_to_id');
             $table->string('booked_to_type');

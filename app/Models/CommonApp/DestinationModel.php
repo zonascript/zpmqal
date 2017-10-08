@@ -20,16 +20,6 @@ class DestinationModel extends Model
 	protected $appends = ['location', 'echo_location', 'viatorDestination'];
 	protected $hidden = ['created_at', 'updated_at'];
 
-	public function status()
-	{   
-		return $this->belongsTo(IndicationModel::class, 'is_active');
-	}
-
-	public function images()
-	{
-    return $this->morphMany(ImageModel::class, 'connectable');
-	}
-
 
 	public function getLatitudeAttribute($value)
 	{
@@ -126,6 +116,17 @@ class DestinationModel extends Model
 		if (!is_null($tag)) {
 			return $query->where('tags', 'like', '%'.$tag.'%');
 		}
+	}
+
+
+	public function status()
+	{   
+		return $this->belongsTo(IndicationModel::class, 'is_active');
+	}
+
+	public function images()
+	{
+    return $this->morphMany(ImageModel::class, 'connectable');
 	}
 
 

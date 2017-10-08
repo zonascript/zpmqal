@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\CommonApp\ImageController;
+use App\Http\Controllers\CommonApp\CountryController;
 use App\Http\Controllers\CommonApp\DestinationController;
 use App\Http\Controllers\ActivityApp\AgentActivitiesController;
 use App\Traits\CallTrait;
@@ -43,6 +44,19 @@ class ActivitiesController extends Controller
 			}
 		}
 		return view($this->viewPath.'.index', $blade);
+	}
+
+
+	public function showLocation(Request $request)
+	{
+		$countries = $this->model()->byAdmin()
+									->bySearch($request->search)
+										->groupBy('destination_code')
+											->simplePaginate(50)
+												->groupBy('destination.country_code')
+													->values();
+		// dd($countries[0][0]->destination);
+		return view($this->viewPath.'.location', compact('countries'));
 	}
 
 
@@ -180,5 +194,7 @@ class ActivitiesController extends Controller
 		$activity->save();
 		return $this;
 	}
+
+
 
 }
