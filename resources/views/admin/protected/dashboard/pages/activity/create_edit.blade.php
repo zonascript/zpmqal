@@ -70,7 +70,7 @@
 									<input type="text" id="pick_up" class="form-control" placeholder="Pick-Up Time (optaional)" value="{{ $activity->pick_up }}" required />
 								</div>
 								<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-									<input type="text" id="title" class="form-control" placeholder="Duration (optaional)" value="{{ $activity->duration }}" required />
+									<input type="text" id="duration" class="form-control" placeholder="Duration (optaional)" value="{{ $activity->duration }}" required />
 								</div>
 								<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
 									<form id="uploadform" class="uploadform dropzone no-margin nopadding dz-clickable text-left min-max-height-355px bg-color-gray" data-path="" data-host="">	
