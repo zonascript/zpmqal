@@ -38,7 +38,7 @@ class CruisesController extends Controller
 
 
 	/*
-	| this function is to pull data from tbtq api using TbtqHotelApiController
+	| this function is to pull data from 
 	| and it can be call using http post request
 	*/
 	public function postOnlyCruise($rid, Request $request)

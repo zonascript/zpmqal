@@ -28,6 +28,11 @@
 				'DestinationController@names'
 			)->name('destination.names');
 
+
+		Route::group(['prefix' => 'api'], function(){
+			Route::get('currency/exchange', 'CurrencyController@exchangeInJson');
+		});
+
 	});
 
 	Route::group(['namespace' => 'FlightApp', 'prefix' => 'flights'], function(){

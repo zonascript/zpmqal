@@ -179,6 +179,8 @@ return [
          * Self added Package Service Providers...
          */
         Hesto\MultiAuth\MultiAuthServiceProvider::class,
+        AjayExpert\TraitMaker\TraitMakerServiceProvider::class,
+        AjayExpert\ObserverMaker\ObserverMakerServiceProvider::class,
 
         /*
          * Application Service Providers...

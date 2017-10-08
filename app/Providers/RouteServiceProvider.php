@@ -39,6 +39,8 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
+        $this->mapTravelerRoutes();
+
         $this->mapAdminRoutes();
 
         $this->mapBackendRoutes();
@@ -81,6 +83,26 @@ class RouteServiceProvider extends ServiceProvider
             'namespace' => $this->namespace,
         ], function ($router) {
             require base_path('routes/admin.php');
+        });
+    }
+
+
+    /**
+     * Define the "traveler" routes for the application.
+     *
+     * These routes all receive session state, CSRF protection, etc.
+     *
+     * @return void
+     */
+    protected function mapTravelerRoutes()
+    {
+        Route::group([
+            'middleware' => ['web', 'traveler', 'auth:traveler'],
+            'prefix' => 'traveler',
+            'as' => 'traveler.',
+            'namespace' => $this->namespace,
+        ], function ($router) {
+            require base_path('routes/traveler.php');
         });
     }
 

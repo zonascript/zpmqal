@@ -36,6 +36,11 @@ return [
     */
 
     'guards' => [
+        'traveler' => [
+            'driver' => 'session',
+            'provider' => 'travelers',
+        ],
+
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
@@ -75,6 +80,11 @@ return [
     */
 
     'providers' => [
+        'travelers' => [
+            'driver' => 'eloquent',
+            'model' => App\Traveler::class,
+        ],
+
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Admin::class,
@@ -112,6 +122,12 @@ return [
     */
 
     'passwords' => [
+        'travelers' => [
+            'provider' => 'travelers',
+            'table' => 'traveler_password_resets',
+            'expire' => 60,
+        ],
+
         'admins' => [
             'provider' => 'admins',
             'table' => 'trawish_admin.admin_password_resets',

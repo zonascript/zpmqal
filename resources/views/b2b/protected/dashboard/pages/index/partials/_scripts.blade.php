@@ -1,4 +1,39 @@
+  <script>
+    var currencies = new Vue({
+      
+      el: '#currencies',
+      
+      data: {
+         isGot: false,
+         exchanges: [],
+         rates : [],
+      },
 
+      mounted() {
+      	var thisObj = this;
+      	$.ajax({
+      		url : '{!! url('api/currency/exchange') !!}', 
+      		type : 'get',
+      		dataType : 'json',
+      		success : function (response) {
+						thisObj.exchanges = response;
+						thisObj.rates = _.get(thisObj.exchanges, 'query.results.rate');
+      			thisObj.isGot = true;
+      		}
+      	});
+
+      	{{--axios.get('{!! url('api/currency/exchange') !!}')
+			  .then(function (response) {
+		  		self.hotels = response.data.hotels
+		  		self.id = response.data.id
+			  })
+			  .catch(function (error) {
+			    console.log(error)
+			  });--}}
+      }
+      
+    })
+  </script>
 	{{-- Clock --}}
 	{{-- 	<script>
 		function startTime() {

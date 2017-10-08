@@ -100,6 +100,7 @@
 			moveToTop(isExits);
 		}
 		else{
+			var description = obj.description;
 			var border = '';
 			var date = '';
 			var btnName = 'Add';
@@ -107,7 +108,7 @@
 			var dateStyle = 'style="display: none;"';
 			var modeOption = getModeOption(obj.mode);
 			var timingOption = getTimingOption(obj.timing);
-			var sortDescription = shortString(obj.description);
+			var sortDescription = shortString(description);
 			var pdid = isset(obj, 'pdid') ? obj.pdid : '';
 
 			if (obj.isSelected == 1) {
@@ -116,7 +117,7 @@
 				btnName = 'Remove';
 				dateStyle = '';
 				date = moment(obj.date).format('DD/MM/YYYY');
-				sortDescription = shortString(obj.description, 0, 150);
+				sortDescription = shortString(description, 0, 150);
 			}
 
 			var activity = {
@@ -135,7 +136,7 @@
 				'modeOption' : modeOption,
 				'timingOption' : timingOption,
 				'isSelected' : obj.isSelected,
-				'description' : obj.description,
+				'description' : description,
 				'sortDescription' : sortDescription
 			};
 

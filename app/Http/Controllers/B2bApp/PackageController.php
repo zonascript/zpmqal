@@ -50,7 +50,7 @@ class PackageController extends Controller
 		$client = ClientController::call()->model()
 							->byToken($token)->firstOrFail();
 		
-		$code = extractInt($request->search);
+		$code = extract_int($request->search);
 		
 		$package = $client->packages();
 

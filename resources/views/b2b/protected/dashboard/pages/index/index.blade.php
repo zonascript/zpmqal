@@ -1,4 +1,5 @@
 @extends('b2b.protected.dashboard.main')
+
 @section('content')
 		{{-- top tiles --}}
 		@include($viewPath.'.partials.client_status')
@@ -33,7 +34,11 @@
 @endsection
 
 @section('js')
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.3/vue.js"></script>
+
 	{{-- bootstrap-progressbar --}}
+	<script src="{{ asset('js/lodash/lodash.min.js') }}"></script>
+
 	<script src="{{ commonAsset('dashboard/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
 	{{-- Chart.js --}}
 	<script src="{{ commonAsset('dashboard/vendors/Chart.js/dist/Chart.min.js') }}"></script>

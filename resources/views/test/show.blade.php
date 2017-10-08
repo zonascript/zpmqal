@@ -66,6 +66,18 @@ input[type=number]::-webkit-outer-spin-button {
 </style>
 </head>
 <body>
+
+<form action="/test/code">
+	<label><b>Rank Group</b>
+    <select multiple name="workerRGroup[]">
+      <option value="sAgent">Security Agent</option>
+      <option value="supervisor">Supervisor</option>
+      <option value="human">Human Resources</option>
+      <option value="tech">Technical</option>
+    </select>
+  </label>
+  <button type="submit">submit</button>
+</form>
 <button class="btn-decrease" field="#number">-</button>
 <input type="number" id="number" data-max="4" data-min="1" value="2"/>
 <button class="btn-increase" field="#number">+</button>

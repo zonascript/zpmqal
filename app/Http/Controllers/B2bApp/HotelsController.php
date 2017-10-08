@@ -8,7 +8,7 @@ use App\Http\Controllers\B2bApp\RouteController;
 use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\HotelApp\TravelportHotelController;
 use App\Http\Controllers\HotelApp\HotelsController as DbHotelsController;
-use App\Http\Controllers\Api\TbtqHotelApiController;
+use App\Http\Controllers\Api\TbtqHotelController;
 use App\Http\Controllers\Api\SkyscannerHotelApiController;
 use App\Models\B2bApp\PackageHotelModel;
 use App\Traits\CallTrait;
@@ -226,7 +226,7 @@ class HotelsController extends Controller
 
 
 	/*
-	| this function is to pull data from tbtq api using TbtqHotelApiController
+	| this function is to pull data from tbtq api using TbtqHotelController
 	| and it can be call using http post request
 	*/
 	public function postTbtqHotelResult($id)
@@ -238,7 +238,7 @@ class HotelsController extends Controller
 		$result = null;
 
 		if (!is_null($params)) {
-			$result = TbtqHotelApiController::call()->hotel($params);
+			$result = TbtqHotelController::call()->hotel($params);
 		}
 
 		if (isset($result->db->id)) {

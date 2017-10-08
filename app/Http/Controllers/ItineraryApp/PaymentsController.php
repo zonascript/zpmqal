@@ -43,7 +43,7 @@ class PaymentsController extends Controller
 					: Carbon::createFromFormat('d/m/Y', $request->date);
 
 		$payment = $this->model();
-		$payment->token = newToken();
+		$payment->token = new_token();
 		$payment->package_id = $package->id;
 		$payment->name =  $request->name;
 		$payment->email =  $request->email;
@@ -64,7 +64,7 @@ class PaymentsController extends Controller
 			"name" 				=> $request->name,
 			"phone" 			=> $request->mobile,
 			"email" 			=> $request->email,
-			"amount" 			=> addPercent($request->amount, 2.9),
+			"amount" 			=> add_percent($request->amount, 2.9),
 			"net_amount" 	=> $request->amount,
 			"productinfo" => 'Brought package',
 		];

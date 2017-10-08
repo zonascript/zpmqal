@@ -129,7 +129,7 @@ class ActivityController extends Controller
 						'vendor' => $activity->vendor,
 						'image' => $image,
 						'name' => $name,
-						'description' => $description,
+						'description' => strip_tags($description),
 						'date' => '',
 						'timing' => '',
 						'mode' => '',

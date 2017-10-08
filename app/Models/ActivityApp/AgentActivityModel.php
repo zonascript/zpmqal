@@ -92,9 +92,10 @@ class AgentActivityModel extends Model
 		$adminId = null;
 
 		$domain = $_SERVER['HTTP_HOST'];
+
 		if ($domain == env('B2B_DOMAIN')) {
 			$auth = auth()->user();
-			$adminId = $auth->id;
+			$adminId = $auth->admin->id;
 		}
 		elseif ($domain == env('ADMIN_DOMAIN')) {
 			$auth = auth()->guard('admin')->user();

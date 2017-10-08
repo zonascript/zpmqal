@@ -29,6 +29,11 @@ Route::group(['domain' => env('ITINERARY_DOMAIN')], function () {
 	include('itinerary.php');
 });
 
+Route::group(['domain' => env('HOTELS_DOMAIN')], function () {
+	include('traveler.php');
+});
+
+
 if (env('IS_LOCALHOST')) {
 	include('mylocal/web.php');
 }

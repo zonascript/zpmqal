@@ -22,7 +22,7 @@ class ClientModel extends Model
 	public function getTokenAttribute($token)
 	{
 		if (is_null($token) && strlen($token) < 5) {
-			$token = newToken();
+			$token = new_token();
 			$this->token = $token;
 			$this->save();
 		}

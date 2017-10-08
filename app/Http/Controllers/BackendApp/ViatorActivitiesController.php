@@ -95,7 +95,7 @@ class ViatorActivitiesController extends Controller
 
 	public function insertActivities()
 	{
-		$files = $this->listFolderFiles(public_path('viator/product'));
+		$files = $this->list_folder_files(public_path('viator/product'));
 		$result = [];
 		$query = '';
 		$found = false;
@@ -138,13 +138,13 @@ class ViatorActivitiesController extends Controller
 	}
 
 
-	public function listFolderFiles($dir){
+	public function list_folder_files($dir){
 		$ffs = scandir($dir);
 		$result = [];
 		foreach($ffs as $ff){
 			if($ff != '.' && $ff != '..'){
 				if(is_dir($dir.'/'.$ff)){
-					$resultTemp = $this->listFolderFiles($dir.'/'.$ff);
+					$resultTemp = $this->list_folder_files($dir.'/'.$ff);
 					$result = array_merge($resultTemp, $result);
 
 				}else{

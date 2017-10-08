@@ -30,6 +30,10 @@ class AppServiceProvider extends ServiceProvider
 			$view->with('auth', auth()->guard('backend')->user());
 		});
 
+		View::composer('traveler.*', function($view){
+			$view->with('auth', auth()->guard('traveler')->user());
+		});
+
 		$domain = isset($_SERVER['HTTP_HOST']) 
 						? $_SERVER['HTTP_HOST']
 						: env('B2B_DOMAIN');

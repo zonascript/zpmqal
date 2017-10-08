@@ -112,6 +112,23 @@ class DestinationModel extends Model
 
 
 
+	public function scopeBySearch($query, $name)
+	{
+		return $this->where('destination', 'like', $name.'%')
+									->orWhere('country', 'like', $name.'%')
+										->orWhere('destination', 'like', '%'.$name.'%')
+											->orWhere('country', 'like', '%'.$name.'%');
+	}
+
+
+	public function scopeByTag($query, $tag)
+	{
+		if (!is_null($tag)) {
+			return $query->where('tags', 'like', '%'.$tag.'%');
+		}
+	}
+
+
 	public function pullGeocode()
 	{
 		$value = GoogleMapController::call()->geoCode($this->location);
@@ -142,6 +159,7 @@ class DestinationModel extends Model
 		$result = $this->select()->whereRaw($where)->get();
 		return  $result;
 	}
+
 
 
 	public function visaDetail()

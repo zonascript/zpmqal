@@ -41,6 +41,7 @@ function isset(obj, key) {
 }
 
 
+
 function findInArray(element, array) {
   var result = false;
   if(jQuery.inArray(element,array) != -1){

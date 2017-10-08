@@ -375,19 +375,29 @@ class ViatorController extends Controller
 	*/
 	public function do_get_request($url)
 	{
-		$url = removeAndSym($url);
+		$url = $this->removeAndSym($url);
 
 		$url = htmlspecialchars_decode($url);
 
 		$headers = @get_headers($url);
 		
 		if (isset($headers[0]) && $headers[0] == 'HTTP/1.1 200 OK') {
-			$url = htmlspecialchars_decode(removeAndSym($url));
+			$url = htmlspecialchars_decode($this->removeAndSym($url));
 			return file_get_contents( $url );
 		}else{
 			return null;
 		}
 	}
+
+	public function removeAndSym($string){
+		if (findWord('&amp;', $string)) {
+			$string = str_replace( "&amp;", "&", $string);
+			return removeAndSym($string);
+		}else{
+			return $string;
+		}
+	}
+
 
 	public function httpGet($url)
 	{

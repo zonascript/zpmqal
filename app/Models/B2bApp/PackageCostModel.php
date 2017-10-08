@@ -11,7 +11,7 @@ class PackageCostModel extends Model
 
 	public function setTokenAttribute()
 	{
-		$this->attributes['token'] = newToken();
+		$this->attributes['token'] = new_token();
 	}
 
 	public function getTotalCostAttribute()

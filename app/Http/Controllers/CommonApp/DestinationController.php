@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CommonApp;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\CommonApp\DestinationModel;
+use App\Models\HotelApp\TbtqDestinationModel;
 use App\Traits\CallTrait;
 
 class DestinationController extends Controller
@@ -15,53 +16,55 @@ class DestinationController extends Controller
 		return new DestinationModel;
 	}
 
+	public function tbtqModel()
+	{
+		return new TbtqDestinationModel;
+	}
+
 
 	public function getDestination(Request $request){
 		$tag = $request->tags;
+		
 		$locations = $this->model()->getLocationRight($request->term, $tag);
+		
 		if (!$locations->count()) {
 			$locations = $this->model()->getLocation($request->term, $tag);
 		}
 
-		$result = [];
-		foreach ($locations as $location) {
-			$result[] = $location->location;
-		}
-
-		return json_encode($result);
+		return $locations->pluck('location')->toJson();
 	}
 
 
 	public function names(Request $request){
-		$tag = $request->tags;
-		$locations = $this->model()->getLocationRight($request->term, $tag);
-		if (!$locations->count()) {
-			$locations = $this->model()->getLocation($request->term, $tag);
+
+		if ($request->v == 'tbtq') {
+			$locations = $this->tbtqModel()
+									->bySearch($request->term)
+										->orderBy('destination', 'asc')
+											->take(5)->get();
+		}
+		else{
+			$locations = $this->model()
+									->bySearch($request->term)
+										->byTag($request->tags)
+											->orderBy('destination', 'asc')
+												->take(5)->get();
 		}
 
-		$result = [];
-		foreach ($locations as $location) {
-			$result[] = [
-											'name' => $location->location,
-											'code' => $location->id
-										];
-		}
+		$result = $locations->map(function($item) {
+				return [
+									'name' => $item->location,
+									'code' => $item->id
+								];	
+			});
 
-		return json_encode($result);
+		return $result->toJson();
 	}
 
 
 	public function getCountry(){
 		$locations = CountryController::call()->getCountry();
-		$country_array = [];
-
-		if(bool_array($locations)){
-			foreach ($locations as $location) {
-				$country_array[] = $location->CountryCode;
-			}
-		}
-
-		return json_encode($country_array);
+		return $locations->pluck('CountryCode')->toJson();
 	}
 
 

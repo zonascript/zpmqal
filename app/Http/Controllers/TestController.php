@@ -21,20 +21,174 @@ use App\Http\Controllers\ActivityApp\AgentActivitiesController;
 use App\Console\Commands\MakeTrait;
 use App\Http\Controllers\AdminApp\UserController;
 use App\Http\Controllers\TestApp\AbcController;
+use App\Http\Controllers\HotelApp\TbtqHotelController;
+use App\Http\Controllers\HotelApp\TbtqTokenController;
 
 class TestController extends Controller
 {
 
-	public function itineraryByRoute()
+	public function storequestion(Request $request)
 	{
-		$package = PackageController::call()->model()->find(362);
-		return ItineraryController::call()->itinerary($package);
+    $tanswer = new tanswer;
+    $tanswer->q1 = $request->q1;
+    $tanswer->q2 = $request->q2;
+    $tanswer->q3 = $request->q3;
+    $tanswer->q4 = $request->q4;
+    $tanswer->save();
+
+    // redirect to new page with answar
+    return redirect()->url('result/'.$tanswer->id);
+ 	}
+
+
+
+
+ 	public function result($id)
+ 	{
+ 		$tanswer = tanswer::find($id);
+
+    // do some calulation here the return data like 
+    $result = yourCalculation($tanswer);
+
+    return view('result', ['result' => $result]);
+ 	}
+
+
+	public function buildFixedComb(Array $array, $count)
+	{
+		$data = [];
+		$lastRoom = false;
+		foreach ($array as $value) {
+			# code...
+		}
+	}
+
+	public function elel($value='')
+	{
+		$query->with(['hives' => function($q) use ($start_date, $end_date) {
+		  $q->whereIn('hive_type_id',[3,4]);
+			$q->where(function ($qr) use ($start_date, $end_date){
+		    $qr->whereBetween('logged_at',[$start_date, $end_date]);
+			});
+			$q->orWhere(function ($qr) use ($end_date){
+		  	$qr->where('active',true)->where('logged_at','<=',$end_date);
+			});
+		}]); 
 	}
 
 
-
-	public function testCode($value='')
+	public function testCode(Request $request, $value='')
 	{
+
+		$favcolor = "red";
+		$msg = '';
+		switch ($favcolor) {
+		    case "red":
+		        $msg = "Your favorite color is red!";
+		        break;
+		    case "blue":
+		        $msg = "Your favorite color is blue!";
+		        break;
+		    case "green":
+		        $msg = "Your favorite color is green!";
+		        break;
+		    default:
+		        $msg = "Your favorite color is neither red, blue, nor green!";
+		}
+
+		dd($msg);
+
+		$tmp = ['Sunday', 'Wednesday'];
+		dd('['.implode('], [', $tmp).']');
+
+		for ($i=5; $i == 0; --$i) { 
+			echo str_repeat('*', $i).'<br>';
+		}
+		dd();
+		$data = DestinationModel::take(10)->get();
+		dd($data);
+		$validator = \Validator::make($request->all(), [
+		     'date'  => [
+		         'required',
+		         // 'date',
+		         'regex:/[0-9]{2}\/[0-9]{2}\/[0-9]{4}/',
+		         // 'after:01/01/1396'
+		     ]
+		]);
+
+		dd($validator->fails(), $request->all());
+
+
+		$this->validate($request, [
+			'date'=>'required|regex:/[0-9]{2}\/[0-9]{2}\/[0-9]{4}/'
+		]);
+
+		dd($re);
+
+		$comb1 = [1, 2, 3, 4, 5];
+		$comb2 = [6, 7, 8, 9, 10];
+
+		$fixComb = $this->buildFixedComb($comb1);
+
+
+		
+		dd();	
+		$arr = [["Key" => "1) ","Value" => "2 kms to city centre"],["Key" => "2) ","Value" => "22 kms to the nearest airport (singapore changi airport)"],["Key" => "3) ","Value" => "8 km to the nearest station (tanjong pagar)"],["Key" => "4) ","Value" => "2 minute walk to the nearest bus stop"],["Key" => "5) ","Value" => "6 km to the nearest fair site (suntec convention centre)"]];
+		$data = array_map(function($v){return $v['Value']; }, $arr);
+		$data1 = array_walk($arr, function($v){ return $v['Value']; });
+		$data2 = array_filter($arr, function($v) { return $v['Value']; });
+
+		dd($data, $data1, $data2);
+
+		$arr = ['asdklda', 'asdiofas'];
+		$arr2 = ['asdklas', 'jasdkljf'];
+		array_merge($arr, $arr2);
+		dd($arr, $arr2);
+		dd(list_folder_files(mylocal_path('JSON')));
+		dd(add_percent(80, 10));
+		dd(clean('foo^&&^%**bar'));
+		dd(mydecrypt('k/JUkkgBuLDwAFcd/YxKXg==', 'bar'));
+		dd(myencrypt('foo', 'bar'));
+		dd(mycrypt('ajay kumar'));
+		dd(new_token());
+		$ss = time().rand(1000,99999);
+		dd(intval(time().rand(1000,99999)));
+		dd(extractInt('$string 9865433'));
+		dd(filePath('var/tr/img/hotel_the_cliff_bay_spa_suite_2048x1310.jpg'));
+		dd(md5(uniqid(rand(), true).bin2hex(mcrypt_create_iv(22, MCRYPT_DEV_URANDOM))));
+		dd(split_name('fdaslkfdas jjknk wewf'));
+		dd(json_decode('{}'));
+		dd(is_null(json_decode('dksaf')));
+
+		$file = file_get_contents(storage_path('mylocal/test/file.json'));
+		$data = json_decode($file, true);
+		$data = $data['HotelSearchResult']['HotelResults'];
+		$key = array_search('VIP Hotel', array_column($data, 'HotelName'));
+
+		$keys = array_keys(array_column($data, 'HotelName'), 'VIP Hotel');
+
+		dd($key, $keys, is_int(0), $data);
+
+		$s = Carbon::createFromFormat('d/m/Y', '01/09/2017');
+		$e = Carbon::createFromFormat('d/m/Y', '05/09/2018');
+		dd($e->diffInDays($s));
+
+		dd(TbtqHotelController::call()->hotel());
+		echo Carbon::now()->addMinutes(30);
+		dd(Carbon::now()->addMinutes(30));
+		$tk = TbtqTokenController::call()->authenticate();
+		pre_echo(json_encode($tk));
+		dd($tk);
+		$data = array(
+	    'foo' => ['a' => 'bar', 'b' => 'bb'],
+	    'baz' => 'boom',
+	    'cow' => 'milk',
+	    'php' => 'hypertext processor',
+		);
+
+		echo http_build_query( $data ) . "\n";
+		echo http_build_query( $data, '', '&amp;' );
+		dd();
 		dd(AbcController::call()->test());
 		dd(UserController::call()->test());
 		$stack = array("orange", "banana", "apple", "raspberry");
@@ -79,6 +233,12 @@ class TestController extends Controller
 		// dd(str_plural('Adult', 2));
 		// dd(rand(0, 10));
 		dd($this->sendEmail());
+	}
+
+	public function itineraryByRoute()
+	{
+		$package = PackageController::call()->model()->find(362);
+		return ItineraryController::call()->itinerary($package);
 	}
 
 
@@ -145,7 +305,7 @@ class TestController extends Controller
 		// return view('b2b.emails.template.1');
 		// return view('b2b.emails.package.2', compact('package'));
 		// return view('b2b.emails.temp');
-		return view('example.plus_minus_button');
+		return view('test.show');
 	}
 	// https://www.booking.com/hotel/za/house-of-house-guest-house.html
 
@@ -263,7 +423,7 @@ class TestController extends Controller
 
 	public function saveHelloTravel($id, Request $request)
 	{
-		$files = listFolderFiles(public_path('HT'));
+		$files = list_folder_files(public_path('HT'));
 
 
 		$html = file_get_contents(public_path('ht_a/index.html'));
@@ -292,17 +452,17 @@ class TestController extends Controller
 
 	public function decode()
 	{
-		$file = file_get_contents(storage_path('mylocal/data/ht.json'));
+		$file = file_get_contents(storage_path('mylocal/test/file.json'));
 		$data = json_decode($file);
-		// dd($data);
-		echo '<table>';
-		foreach ($data as $key => $value) {
-			echo '<tr><td>' //<td>'.$key.'</td>
-						.$value->name.'</td><td>'
-							.$value->number.'</td><td>'
-								.$value->country.'</td></tr>';
-		}
-		echo "</table>";
+		dd($data);
+		// echo '<table>';
+		// foreach ($data as $key => $value) {
+		// 	echo '<tr><td>' //<td>'.$key.'</td>
+		// 				.$value->name.'</td><td>'
+		// 					.$value->number.'</td><td>'
+		// 						.$value->country.'</td></tr>';
+		// }
+		// echo "</table>";
 	}
 
 	public function getAgodaHtml()
@@ -393,7 +553,7 @@ public function testCodeOld()
 		return '<img data-src= "'.asset('storage/mylocal/1-0199bc34be.jpg').'">';
 
 		dd(strlen('11886a9304b0fa04fbc9907fe58ba98c'));
-		dd(newToken());
+		dd(new_token());
 		$url = 'www.google.co.in/search?q=how+to+sparate+domain+from+a+url+in+php&oq=how+to+sparate+domain+from+a+url+in+php&aqs=chrome..69i57j0l5.16659j0j7&sourceid=chrome&ie=UTF-8';
 		$parse = parse_url($url);
 		dd($parse);
@@ -450,9 +610,9 @@ public function testCodeOld()
 		return \Redirect::to('http://b2b.flygoldfinch.dev/test/showhtml', ['a' => 'ds']);
 		return redirect('http://b2b.flygoldfinch.dev/test/showhtml')
 	 					 ->with(compact('data'));
-		dd(route('payStatusUrl', ['success', newToken()]));
-		dd(newToken());
-		dd(addPercent(100,29));
+		dd(route('payStatusUrl', ['success', new_token()]));
+		dd(new_token());
+		dd(add_percent(100,29));
 
 		dd(route('payuRes', ['success', '$txnid']));
 

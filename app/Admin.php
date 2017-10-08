@@ -9,11 +9,12 @@ use App\Models\AdminApp\LeadVendorModel;
 use App\Models\AdminApp\PackageModel;
 use App\Models\CommonApp\ImageModel;
 use App\Models\AdminApp\TextModel;
+use App\Traits\GuardTrait;
 use App\User;
 
 class Admin extends Authenticatable
 {
-	use Notifiable;
+	use Notifiable, GuardTrait;
 	
 	protected $connection = 'mysql3';
 	protected $appends = ['fullname', 'profile_pic', 'logo', 'about'];
@@ -50,19 +51,6 @@ class Admin extends Authenticatable
 	}
 
 	
-	public function getFullnameAttribute()
-	{
-		return $this->attributes['firstname'] .' '.$this->attributes['lastname'];
-	}
-
-
-
-	public function getProfilePicAttribute()
-	{
-		return is_null($this->imageProfile)
-				 ? urlDefaultImageProfile()
-				 : $this->imageProfile->url;
-	}
 
 
 	public function getLogoAttribute()
@@ -72,6 +60,12 @@ class Admin extends Authenticatable
 				 : $this->imageLogo->url;
 	}
 
+	public function getProfilePicAttribute()
+	{
+		return is_null($this->imageProfile)
+				 ? urlDefaultImageProfile()
+				 : $this->imageProfile->url;
+	}
 
 	public function getAboutAttribute($value)
 	{

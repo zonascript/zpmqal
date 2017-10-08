@@ -83,7 +83,7 @@ class EnquiryController extends Controller
 	 */
 	public function show($id)
 	{
-		$enquiry = $this->model()->adminId(1)->findOrFail($id);
+		$enquiry = $this->model()->byAdmin(true)->findOrFail($id);
 		return view($this->viewPath.'.show', compact('enquiry'));
 	}
 
@@ -95,7 +95,7 @@ class EnquiryController extends Controller
 	 */
 	public function edit($id)
 	{
-		$enquiry = $this->model()->adminId(1)->findOrFail($id);
+		$enquiry = $this->model()->byAdmin(true)->findOrFail($id);
 		return view($this->viewPath.'.create_edit', compact('enquiry'));
 	}
 

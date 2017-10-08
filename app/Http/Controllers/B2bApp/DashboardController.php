@@ -32,7 +32,7 @@ class DashboardController extends Controller
 				$onload = 'onload=startTime()';
 			}*/
 
-			$currenciesArray = ["USD", "SGD", "EUR", "AED", "IDR"];
+			/*$currenciesArray = ["USD", "SGD", "EUR", "AED", "IDR"];
 			$currencies = [];
 			
 			foreach ($currenciesArray as $currenciesValue) {
@@ -43,7 +43,7 @@ class DashboardController extends Controller
 			}
 
 			$maxCurrency = max($currencies);
-			$currencies = rejson_decode($currencies);
+			$currencies = rejson_decode($currencies);*/
 
 			// =================Blade Object=================
 			// $travelFeeds = travelFeed();
@@ -51,10 +51,10 @@ class DashboardController extends Controller
 			$blade = [
 					"other" => (object)["onload" => $onload],
 					// "travelFeeds" => $travelFeeds,
-					"currencyData" =>(object)[
+					/*"currencyData" =>(object)[
 								"currencies" => $currencies, 
 								"maxCurrency" => $maxCurrency
-							],
+							],*/
 					"viewPath" => $this->viewPath,
 					"clientStatus" => $clientStatus,
 					"vendorReport" => $vendorReport,

@@ -9,7 +9,7 @@ class ShowDuplicate extends Controller
 
 	public function show($dir = ''){
 
-		$result = $this->listFolderFiles('D:/OneDrive/FgfDrive');
+		$result = $this->list_folder_files('D:/OneDrive/FgfDrive');
 
 		echo 'All File';
 		pre_echo(json_encode($result));
@@ -21,13 +21,13 @@ class ShowDuplicate extends Controller
 
 	}
 
-	public function listFolderFiles($dir){
+	public function list_folder_files($dir){
 		$ffs = scandir($dir);
 		$result = [];
 		foreach($ffs as $ff){
 			if($ff != '.' && $ff != '..'){
 				if(is_dir($dir.'/'.$ff)){
-					$resultTemp = $this->listFolderFiles($dir.'/'.$ff);
+					$resultTemp = $this->list_folder_files($dir.'/'.$ff);
 					$result = array_merge($resultTemp, $result);
 
 				}else{
