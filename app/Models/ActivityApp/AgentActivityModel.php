@@ -33,6 +33,12 @@ class AgentActivityModel extends Model
 	}
 
 
+	public function getDescriptionAttribute($value)
+	{
+		return strip_tags($value);
+	}
+
+
 	public function images()
 	{
 		return $this->morphMany('App\Models\CommonApp\ImageModel', 'connectable');
