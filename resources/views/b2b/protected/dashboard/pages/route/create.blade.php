@@ -57,7 +57,7 @@
 								<div class="form-group">
 									<div class="destinationClass">
 										@if ($routes->count())
-											@include($viewPath.'.create_partials.non_empty')
+											@include($viewPath.'.create_partials.filled')
 										@else
 											@include($viewPath.'.create_partials.empty')
 										@endif

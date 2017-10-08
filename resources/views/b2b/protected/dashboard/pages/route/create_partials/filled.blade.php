@@ -25,16 +25,16 @@
 			<div class="row location-input-div">
 				@if ($route->mode == 'flight')
 					<div class="col-md-6 col-sm-6 col-xs-12">
-						<input type="text" class="form-control has-feedback location origin p-right-40" placeholder="Origin" value="{{$route->origin}}" name="origin" data-match="" required="">
+						<input type="text" class="form-control has-feedback location origin p-right-40" placeholder="Origin" value="{{$route->origin}}" name="origin" data-match="" data-code="{{ $route->origin_code }}" required="">
 						<i class="fa fa-map-marker form-control-feedback right m-top-5" aria-hidden="true"></i>
 					</div>
 					<div class="col-md-6 col-sm-6 col-xs-12">
-						<input type="text" class="form-control has-feedback location destination p-right-40" placeholder="Destination" value="{{$route->destination}}" name="destination" data-match="" required="">
+						<input type="text" class="form-control has-feedback location destination p-right-40" placeholder="Destination" value="{{ $route->destination }}" name="destination" data-code="{{ $route->destination_code }}" data-match="" required="">
 						<i class="fa fa-map-marker form-control-feedback right m-top-5" aria-hidden="true"></i>
 					</div>
 				@elseif(in_array($route->mode, ['hotel', 'cruise']))
 					<div class="col-md-6 col-sm-6 col-xs-12">
-						<input type="text" class="form-control has-feedback location destination p-right-40" placeholder="Destination" value="{{$route->destination}}" name="destination" data-match="" required="">
+						<input type="text" class="form-control has-feedback location destination p-right-40" placeholder="Destination" name="destination" value="{{$route->destination}}" data-code="{{ $route->destination_code }}" data-match="" required="">
 						<i class="fa fa-map-marker form-control-feedback right m-top-5" aria-hidden="true"></i>
 					</div>
 
