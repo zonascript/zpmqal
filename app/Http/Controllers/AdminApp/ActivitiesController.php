@@ -75,9 +75,9 @@ class ActivitiesController extends Controller
 	public function storeOrUpdate(Request $request)
 	{
 		$activity = $this->model()->byAdmin()->find($request->id);
-		if (is_null($activity)) {
-			$activity = $this->model();
-		}
+
+		if (is_null($activity)) $activity = $this->model();
+
 		$activity->title =  $request->title;
 		$activity->pick_up = $request->pick_up;
 		$activity->duration = $request->duration;
@@ -102,7 +102,7 @@ class ActivitiesController extends Controller
 					"response" => "saved successfully."
 				]);
 		}
-		return redirect('dashboard/inventories/activity');
+		return redirect('dashboard/inventories/activity', ['city' => $request->dest_code]);
 	}
 
 
