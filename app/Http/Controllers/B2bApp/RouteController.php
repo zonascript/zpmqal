@@ -105,7 +105,8 @@ class RouteController extends Controller
 		if (isset($request->destination_time)) {
 			$route->end_time = timeFull($request->destination_time);
 		}
-
+		$route->fusion_id = '';
+		$route->fusion_type = '';
 		$route->status = 'active';
 
 		if (in_array($request->mode, ['bus','ferry','train'])) {
