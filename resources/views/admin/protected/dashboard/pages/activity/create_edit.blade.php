@@ -67,7 +67,7 @@
 						<div class="col-md-4 col-sm-4 col-xs-4">
 							<div class="row">
 								<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-									<input type="text" id="pick_up" class="form-control" placeholder="Pick-Up Time (optaional)" value="{{ $activity->pick_up }}" required />
+									<input type="text" id="pick_up" class="form-control" data-inputmask="'mask': '99:99'" placeholder="Pick-Up Time in HH:MM (optaional)" value="{{-- $activity->pick_up --}}" required />
 								</div>
 								<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
 									<input type="text" id="duration" class="form-control" placeholder="Duration (optaional)" value="{{ $activity->duration }}" required />
@@ -131,6 +131,8 @@
 @section('js')
 	<script type="text/javascript" src="{{ commonAsset('js/jquery-ui-2.js') }}"></script>
 	<script src="{{ commonAsset('dashboard/vendors/dropzone/dist/min/dropzone.min.js') }}"></script>
+	<script src="{{ commonAsset('dashboard/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js') }}"></script>
+	
 	<script src="{{ asset('js/mydropzone.js') }}"></script>
 @endsection
 
@@ -139,6 +141,7 @@
 	<script>
 		$(document).ready(function(argument) {
 			addDropzone('#uploadform', '{{ url('api/image/upload') }}');
+        $(":input").inputmask();
 		});
 
 		$(document).on('keyup paste', '.destination', function(){
