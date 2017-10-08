@@ -75,7 +75,7 @@
 @section('scripts')
 	<script>
 		$(document).ready(function() {
-			datatableWithSearch('#datatable');
+			datatableWithSearch('#datatable', {"order": [[ 5, "desc" ]]});
 		});
 	</script>
 @endsection
