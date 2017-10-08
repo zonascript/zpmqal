@@ -40,8 +40,9 @@ class PackageController extends Controller
 	public function index(Request $request){
 		$packages = $this->model()->byUser()
 								->search($request->search)
-									->orderBy('id', 'desc')
+									->orderBy('updated_at', 'desc')
 										->simplePaginate(25);
+
 		return view($this->viewPath.'.index', compact('packages'));
 	}
 
