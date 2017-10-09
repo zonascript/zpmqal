@@ -36,7 +36,7 @@
 							<span>{{ activityTiming($activity->timing)}} </span>
 						</div>
 					</p>
-					<p>{{ $activity->description }}</p>
+					<p>{!! $activity->description !!}</p>
 			  </div>
 			</div>
 		</article>

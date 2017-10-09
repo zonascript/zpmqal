@@ -48,7 +48,7 @@
 						<br>
 					</p>
 
-					<p>{{ $activity->description }}</p>
+					<p>{!! $activity->description !!}</p>
 					
 			  </div>
 			</div>

@@ -35,7 +35,7 @@
 																<h3>{{ $activity->name }}</h3>
 																<ul>
 																	<li class="noborder">
-																		{{ $activity->description }}
+																		{!! $activity->description !!}
 																	</li>
 																</ul>
 																@if ($activiyKey != (count($itinerary->activities)-1))
