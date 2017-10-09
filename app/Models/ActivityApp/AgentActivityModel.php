@@ -20,6 +20,11 @@ class AgentActivityModel extends Model
 		$this->attributes['admin_id'] = $this->checkUser();
 	}
 
+	public function setDescriptionAttribute($value = '')
+	{
+		$this->attributes['description'] = $value;
+	}
+
 	public function getVendorAttribute()
 	{
 		return 'own';
@@ -35,7 +40,7 @@ class AgentActivityModel extends Model
 
 	public function getDescriptionAttribute($value)
 	{
-		return strip_tags($value);
+		return clean_html($value);
 	}
 
 
