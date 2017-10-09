@@ -15,4 +15,3 @@ Homestead.yaml
 **/.temp/
 chlr
 .gitignore_reset
-/app/Http/Controllers/TestController.php
