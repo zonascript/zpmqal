@@ -321,6 +321,7 @@ class RouteModel extends Model
 			$result->location = $this->destination_detail->location;
 			$result->endDate = $this->end_datetime->format('d-M-Y');
 			$result->startDate = $this->start_datetime->format('d-M-Y');
+			$result->summary = $this->summaryString($result->name);
 		}
 		return $result;
 	}
@@ -339,6 +340,7 @@ class RouteModel extends Model
 			$result->location = $this->destination_detail->location;
 			$result->endDate = $this->end_datetime->format('d-M-Y');
 			$result->startDate = $this->start_datetime->format('d-M-Y');
+			$result->summary = $result->name;
 		}
 		return $result;
 	}
@@ -364,6 +366,29 @@ class RouteModel extends Model
 			$result = $this->destination_detail->visaDetail;
 		}
 		return $result;
+	}
+
+
+	public function summaryString($name)
+	{
+		$meals = [];
+		$string = '';
+		$last = '';
+
+		// if ($this->is_breakfast) $meals[] = 'breakfast';
+		// if ($this->is_lunch) $meals[] = 'lunch';
+		// if ($this->is_dinner) $meals[] = 'dinner';
+		if (count($meals) > 1) $last = array_pop($meals);
+		$string = implode(', ', $meals);
+		if (strlen($last)) $string .= ' and '.$last; 
+		if (strlen($string)){
+			$string = $name.' with '.$string;
+		}
+		else{
+			$string = $name.' - room only';
+		}
+
+		return $string.'.';
 	}
 
 }

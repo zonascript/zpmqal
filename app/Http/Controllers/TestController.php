@@ -79,6 +79,8 @@ class TestController extends Controller
 
 	public function testCode(Request $request, $value='')
 	{
+		$colle = collect(['1' =>1,2,2]);
+		dd($colle->sum());
 
 		$favcolor = "red";
 		$msg = '';

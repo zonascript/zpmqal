@@ -202,7 +202,7 @@ class PackageModel extends Model
 
 	public function roomGuest()
 	{
-		return $this->hasMany('App\Models\B2bApp\RoomGuestModel', 'package_id')->with('childAge');
+		return $this->hasOne('App\Models\B2bApp\RoomGuestModel', 'package_id')->with('childAge');
 	}
 
 	public function roomGuests()
@@ -407,6 +407,67 @@ class PackageModel extends Model
 		}
 		return implode(' | ', $dests);
 	}
+
+
+
+
+	public function transferStringArray()
+	{
+		$routes = $this->accomoRoutes;
+		$data = [];
+		$previous = null;
+		$next = null;
+
+		foreach ($routes as $key => $route) {
+			
+			if (isset($routes[$key+1])) $next = $routes[$key+1];
+
+			$string = '';
+			$from = '';
+			$to = '';
+
+			if ($route->is_pick_up) {
+				$string = $route->pick_up_mode.' transfer';
+				$from = $route->pick_up;
+				$to = $route->accomo()->name;
+
+				if ($route->pick_up_mode == 'selfdrive') {
+					$string = 'Self drive';
+				}
+				$string = ucfirst(strtolower($string));
+
+				if ($route->pick_up == 'hotel' && !is_null($previous)) {
+					$from = $previous->accomo()->name;
+				}
+
+				$data[] = $string.' from '.$from.' to '.$to.'.'; 
+			}
+
+
+			if ($route->is_drop_off) {
+				$string = $route->drop_off_mode.' transfer';
+				$from = $route->drop_off;
+				$to = $route->accomo()->name;
+				
+				if ($route->drop_off_mode == 'selfdrive') {
+					$string = 'Self drive';
+				}
+
+				$string = ucfirst(strtolower($string));
+
+				if ($route->drop_off == 'hotel' && !is_null($next)) {
+					$from = $next->accomo()->name;
+				}
+
+				$data[] = $string.' from '.$from.' to '.$to.'.'; 
+			}
+
+			$priRoute = $route; // init previous route
+		}
+		
+		return collect($data);
+	}
+
 
 	public function __construct(array $attributes = [])
 	{

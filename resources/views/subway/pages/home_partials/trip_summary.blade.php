@@ -37,15 +37,42 @@
 							@foreach ($package->accomoRoutes as $key => $value)
 								@if ($key < 2)
 									<li>
-										{{ $value->accomo()->name }}
+										{{ $value->accomo()->summary }}
 										@if ($key == 1 && $key < ($package->accomoRoutes->count()-1))
 											<a href="#" class="btn-more-less" >... more</a>
 										@endif
 									</li>
 								@else
 									<li class="more" style="display: none;">
-										{{ $value->accomo()->name }}
+										{{ $value->accomo()->summary }}
 										@if ($key == ($package->accomoRoutes->count()-1))
+											<a href="#" class="btn-more-less" style="display: none;">... less</a>
+										@endif
+									</li>
+								@endif
+							@endforeach
+						</ul>
+					@endif
+					@if ($package->transferStringArray()->count())
+						<strong>Transfers</strong>
+						{{-- <ul class="nomargin">
+							@foreach ($package->transferStringArray() as $transfer)
+								<li>{{ $transfer }}</li>
+							@endforeach
+						</ul> --}}
+						<ul class="nomargin">
+							@foreach ($package->transferStringArray() as $key => $value)
+								@if ($key < 2)
+									<li>
+										{{ $value }}
+										@if ($key == 1 && $key < ($package->transferStringArray()->count()-1))
+											<a href="#" class="btn-more-less" >... more</a>
+										@endif
+									</li>
+								@else
+									<li class="more" style="display: none;">
+										{{ $value }}
+										@if ($key == ($package->transferStringArray()->count()-1))
 											<a href="#" class="btn-more-less" style="display: none;">... less</a>
 										@endif
 									</li>
@@ -57,7 +84,6 @@
 					@if ($package->cost->is_visa)
 						<strong>Visa Included</strong>
 					@endif
-
 				</td>
 				<td>
 					@if ($package->activities->count())
@@ -83,7 +109,9 @@
 						</ul>
 					@endif
 				</td>
+				
 			</tr>
 		</table>
+		<hr>
 	</div>
 </article>
