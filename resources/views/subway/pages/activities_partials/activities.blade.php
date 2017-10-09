@@ -33,7 +33,7 @@
 						<div>
 							<span>{{ $activity->date }} | </span>
 							<span>{{ activityMode($activity->mode) }} | </span>
-							<span>{{activityTiming($activity->timing)}}</span>
+							<span>{{ activityTiming($activity->timing)}} </span>
 						</div>
 					</p>
 					<p>{{ $activity->description }}</p>

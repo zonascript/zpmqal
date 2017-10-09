@@ -74,9 +74,12 @@ class PackageActivityModel extends Model
 					'date' => $this->date,
 					'timing' => $this->timing,
 					'mode' => $this->mode,
-					'isSelected' => 1
+					'isSelected' => 1,
+					'pick_up' => $activity->pick_up,
+					'duration' => $activity->duration_to_human
 				];
-			
+
+
 			if (in_array('images', $attribute)) {
 				$result['images'] = $this->images();
 				$result['images'][] = $result['image'];

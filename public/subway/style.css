@@ -25,3 +25,13 @@ img.emoji {
 	padding: 0 !important;
 }
 
+
+.pipe li {
+  float: left;
+  list-style-type: none;
+}
+.pipe li:not(:last-child) {
+    border-right:1px solid grey;
+    margin-right:20px;
+    padding-right:20px;
+}

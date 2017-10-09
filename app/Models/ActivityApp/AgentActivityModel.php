@@ -12,7 +12,7 @@ class AgentActivityModel extends Model
 
 	protected $connection = 'mysql6';
 	protected $table = 'agent_activities';
-	protected $appends = ['vendor', 'image_url'];
+	protected $appends = ['vendor', 'image_url', 'duration_to_human'];
 
 
 	public function setAdminIdAttribute($value = '')
@@ -38,6 +38,11 @@ class AgentActivityModel extends Model
 		return strip_tags($value);
 	}
 
+
+	public function getDurationToHumanAttribute()
+	{
+		return convertInHourMin($this->duration);
+	}
 
 	public function images()
 	{

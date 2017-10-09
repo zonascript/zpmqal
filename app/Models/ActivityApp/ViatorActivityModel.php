@@ -10,13 +10,18 @@ class ViatorActivityModel extends Model
 	use CallTrait;
 
 	protected $connection = 'mysql6';
-	protected $appends = ['vendor'];
+	protected $appends = ['vendor', 'duration_to_human'];
 	protected $table = 'viator_activities';
 
 
 	public function getVendorAttribute()
 	{
 		return 'v';
+	}
+
+	public function getDurationToHumanAttribute()
+	{
+		return convertInHourMin($this->duration);
 	}
 
 

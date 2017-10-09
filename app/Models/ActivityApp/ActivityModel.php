@@ -14,7 +14,7 @@ class ActivityModel extends Model
 
 	protected $connection = 'mysql6';
 	protected $table = 'activities';
-	protected $appends = ['vendor'];
+	protected $appends = ['vendor', 'duration_to_human'];
 
 
 	public function getVendorAttribute()
@@ -34,6 +34,10 @@ class ActivityModel extends Model
 					 : urlDefaultImageActivity();
 	}
 
+	public function getDurationToHumanAttribute()
+	{
+		return convertInHourMin($this->duration);
+	}
 	
 	public function images()
 	{

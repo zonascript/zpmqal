@@ -6,6 +6,7 @@
 			</h1>
 		</header>
 	  @foreach ($package->activities as $key => $activityData)
+
 			<?php
 				$images = [];
 				$activity = $activityData->activityObject(['images']);
@@ -30,12 +31,25 @@
 					<h2 class="m-top-5">{{ $activity->name }}</h2>
 					<p>
 						<div>
-							<span>{{ $activity->date }} | </span>
-							<span>{{ activityMode($activity->mode) }} | </span>
-							<span>{{activityTiming($activity->timing)}}</span>
+							<ul class="pipe">
+								<li>{{ $activity->date }}</li>
+								<li>{{ activityMode($activity->mode) }}</li>
+								<li>{{ activityTiming($activity->timing) }}</li>
+
+								@if (!is_null($activity->pick_up))
+									<li>Pick Up : {{ $activity->pick_up }}</li>
+								@endif
+
+								@if (!is_null($activity->duration))
+									<li>Duration : {{ $activity->duration }}</li>
+								@endif
+							</ul>
 						</div>
+						<br>
 					</p>
+
 					<p>{{ $activity->description }}</p>
+					
 			  </div>
 			</div>
 			<script type="text/javascript">
