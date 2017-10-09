@@ -40,7 +40,15 @@ class AgentActivityModel extends Model
 
 	public function getDescriptionAttribute($value)
 	{
-		return clean_html($value);
+		$change = strlen($value);
+		$value = clean_html($value);
+		
+		if ($change != strlen($value)) {
+			$this->description = $value;
+			$this->save();
+		}
+
+		return $value;
 	}
 
 
