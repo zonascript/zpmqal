@@ -14,3 +14,4 @@ Homestead.yaml
 **/.trash/
 **/.temp/
 chlr
+.gitignore_reset

@@ -6,15 +6,16 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
+        "ajayexpert/artisan-observer-maker": "^1.0",
+        "ajayexpert/artisan-trait-maker": "^1.0",
+        "ajayexpert/php-helper-method": "^1.0",
+        "doctrine/dbal": "^2.5",
         "fideloper/proxy": "~3.3",
+        "hesto/multi-auth": "^2.0",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
-        "mpdf/mpdf": "^6.1",
-        "hesto/multi-auth": "^2.0",
         "markwilson/xml-to-json": "^0.1.4",
-        "ajayexpert/php-helper-method": "^1.0",
-        "ajayexpert/artisan-observer-maker": "^1.0",
-        "ajayexpert/artisan-trait-maker": "^1.0"
+        "mpdf/mpdf": "^6.1"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

@@ -24,6 +24,7 @@
 								<th>Title</th>
 								<th>Destination</th>
 								<th>Status</th>
+								<th>Rank</th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -35,6 +36,7 @@
 									<td>{{ $activity->title }}</td>
 									<td>{{ $activity->destination->location }}</td>
 									<td class="{{ statusCss($activity->is_active) }}">{{ $activity->status->name }}</td>
+									<td>{{ $activity->rank }}</td>
 									<td>
 										<div class="row">
 											<div class="btn-group pull-right m-right-10">
@@ -110,6 +112,8 @@
 
 			};
 			datatableWithSearch('#datatable', {}, params);
+			$('#datatable tbody').sortable();
+
 		});
 
 

@@ -38,6 +38,7 @@
 				params = {
 						'is_pick_up' : 0,
 						'pick_up' : '',
+						'pick_up_mode' : ''
 					};
 				addAttributes(params);
 				$(parent).find('.select-pick-drop').hide();
@@ -55,6 +56,7 @@
 				params = {
 						'is_drop_off' : 0,
 						'drop_off' : '',
+						'drop_off_mode' : ''
 					};
 				addAttributes(params);
 				$(parent).find('.select-pick-drop').hide();

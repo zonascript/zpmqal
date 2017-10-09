@@ -75,6 +75,17 @@
 			addAttributes(params);
 		}
 	});
+
+	$(document).on('change', '.transfer-mode', function () {
+		if ($(this).hasClass('h-pick-up')) {
+			params = { 'pick_up_mode' : $(this).val() };
+			addAttributes(params);
+		}
+		else if ($(this).hasClass('h-drop-off')) {
+			params = { 'drop_off_mode' : $(this).val() };
+			addAttributes(params);
+		}
+	});
 </script>
 
 @include($viewPath.'.partials.scripts.autocomplete')

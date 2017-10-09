@@ -14,9 +14,17 @@ class IndicationModel extends Model
 		return proper($name);
 	}
 
+
+	public function scopeByCategory($query, $category)
+	{
+		return $this->where('category', '=',$category);
+	}
+
+
 	public function htmlOptions($cat, $isSelected = '', $isKey = true)
 	{
-		$data = $this->where(['category' => $cat])->get();
+		$data = $this->byCategory($cat)->get();
+	
 		$options = '';
 		foreach ($data as $value) {
 			$key = $isKey ? $value->key : $value->id;

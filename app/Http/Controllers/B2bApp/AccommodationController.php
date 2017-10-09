@@ -21,11 +21,29 @@ class AccommodationController extends Controller
 	{
 		$package = PackageController::call()->model()
 							->byUser()->byToken($token)->firstOrFail();
+		$indication = indication();
+
+		// $spots = $indication->byCategory('transfer_spot')->get();
+		// $modes = $indication->byCategory('transfer_mode')->get();
+
+		// $spotModes = [];
+		// foreach ($spots as $spot) {
+		// 	foreach ($modes as $mode) {
+		// 		$spotModes[$spot->name][$spot->key.'|'.$mode->key] 
+		// 										= $spot->name.' ('.$mode->name.')';
+		// 	}
+		// }
+
+		// dd($spot, $mode, $spotModes);
+
 		$blade = [
 				'package'  => $package,
 				'viewPath' => $this->viewPath,
 				'client' 	 => $package->client,
-				'indication' => indication(),
+				'indication' => $indication,
+				// 'spots' => $spots,
+				// 'modes' => $modes,
+
 			];
 		return myView($this->viewPath.'.index', $blade);
 	}
@@ -177,11 +195,22 @@ class AccommodationController extends Controller
 			$route->is_pick_up = $request->is_pick_up;
 			$route->pick_up = $request->pick_up;
 		}
-		
+
+		if (isset($request->pick_up_mode)) {
+			$route->pick_up_mode = $request->pick_up_mode;
+		}
+
+
 		if (isset($request->drop_off) && isset($request->is_drop_off)) {
 			$route->is_drop_off = $request->is_drop_off;
 			$route->drop_off = $request->drop_off;
 		}
+
+
+		if (isset($request->drop_off_mode)) {
+			$route->drop_off_mode = $request->drop_off_mode;
+		}
+		
 
 		if (isset($request->breakfast)) {
 			$route->is_breakfast = $request->breakfast;
