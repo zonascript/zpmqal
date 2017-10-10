@@ -22,7 +22,7 @@
 						      <ul class="GI_IC_items" style="{{ count($images) == 1 ? "display: block;" : ''}}">
 										@foreach ($images as $image)
 											<li>
-												<img height="195" width="100%" class="align-left" alt="Hotel Image" src="{{ $image }}" />
+												<img height="195" width="100%" class="align-left" alt="Activity Image" src="{{ $image }}" onerror="defaultImage(this, '{{ urlDefaultImageActivity() }}')" />
 											</li>
 										@endforeach
 						      </ul>

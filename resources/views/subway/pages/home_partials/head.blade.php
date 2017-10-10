@@ -48,6 +48,7 @@
 
 
 <script type="text/javascript" src="{{ url('/') }}/subway/scripts.js"></script>
+<script type="text/javascript" src="{{ url('/') }}/js/scripts.js"></script>
 <script type='text/javascript' src='{{ url('/') }}/subway/wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
 
 {{-- <script src="{{ url('/') }}/common/carousal/simple_slideshow.js" ></script> --}}

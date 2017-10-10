@@ -85,3 +85,9 @@ function shortString(string, start = 0, word = 350) {
   }
   return string;
 }
+
+
+function defaultImage(thisObj, url) {
+  thisObj.src = url;
+  return false;
+}
