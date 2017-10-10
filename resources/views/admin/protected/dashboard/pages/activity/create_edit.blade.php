@@ -45,7 +45,7 @@
 											</ul>
 										</div>
 										<div class="x_content" style="display: none;">
-											<textarea id="inclusion" class="tinymce" placeholder="text"></textarea>
+											<textarea id="inclusion" class="tinymce" placeholder="text">{{ $activity->inclusion }}</textarea>
 										</div>
 									</div>
 								</div>
@@ -58,7 +58,7 @@
 											</ul>
 										</div>
 										<div class="x_content" style="display: none;">
-											<textarea id="exclusion" class="tinymce" placeholder="text"></textarea>
+											<textarea id="exclusion" class="tinymce" placeholder="text">{{ $activity->exclusion }}</textarea>
 										</div>
 									</div>
 								</div>
