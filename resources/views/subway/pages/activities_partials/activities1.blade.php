@@ -49,8 +49,14 @@
 					</p>
 
 					<p>{!! $activity->description !!}</p>
-					
 			  </div>
+			  @if (strlen($activity->inclusion))
+				  <div><p><b>Inclusion : </b>{!! $activity->inclusion !!}</p></div>
+			  @endif
+			  @if (strlen($activity->exclusion))
+				  <div><p><b>Exclusion : </b>{!! $activity->exclusion !!}</p></div>
+			  @endif
+	
 			</div>
 			<script type="text/javascript">
 				$('.carousel-box{{$key}}').GICarousel({arrows:true});

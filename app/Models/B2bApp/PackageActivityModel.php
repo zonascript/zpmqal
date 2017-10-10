@@ -76,7 +76,9 @@ class PackageActivityModel extends Model
 					'mode' => $this->mode,
 					'isSelected' => 1,
 					'pick_up' => $activity->pick_up,
-					'duration' => $activity->duration_to_human
+					'duration' => $activity->duration_to_human,
+					'inclusion' => $activity->inclusion,
+					'exclusion' => $activity->exclusion,
 				];
 
 

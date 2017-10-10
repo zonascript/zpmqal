@@ -22,7 +22,17 @@ class AgentActivityModel extends Model
 
 	public function setDescriptionAttribute($value = '')
 	{
-		$this->attributes['description'] = $value;
+		$this->attributes['description'] = clean_html($value);
+	}
+
+	public function setInclusionAttribute($value = '')
+	{
+		$this->attributes['inclusion'] = clean_html($value);
+	}
+
+	public function setExclusionAttribute($value = '')
+	{
+		$this->attributes['exclusion'] = clean_html($value);
 	}
 
 	public function getVendorAttribute()
