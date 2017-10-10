@@ -67,7 +67,7 @@
 						<div class="col-md-4 col-sm-4 col-xs-4">
 							<div class="row">
 								<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-									<input type="text" id="pick_up" class="form-control" data-inputmask="'mask': '99:99'" placeholder="Pick-Up Time in HH:MM (optaional)" value="{{-- $activity->pick_up --}}" required />
+									<input type="text" id="pick_up" class="form-control" data-inputmask="'mask': '99:99'" placeholder="Pick-Up Time in HH:MM (optaional)" value="{{ $activity->pick_up }}" required />
 								</div>
 								<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
 									<input type="text" id="duration" class="form-control" data-inputmask="'mask': '99:99'" placeholder="Duration in HH:MM (optaional)" value="{{ $activity->duration }}" required />
