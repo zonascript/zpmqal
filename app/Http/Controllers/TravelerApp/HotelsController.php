@@ -125,9 +125,10 @@ class HotelsController extends Controller
 
 		$user = auth()->guard('traveler')->user();
 		$guestDetails = [];
-		$lead = 1;
 
 		foreach ($request->guests as $key => $guests) {
+			$lead = 1;
+			
 			foreach ($guests as $guest) {
 				$guest = (object) $guest;
 				$name = (object) split_name($guest->name);
