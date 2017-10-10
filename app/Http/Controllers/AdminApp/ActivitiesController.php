@@ -33,7 +33,8 @@ class ActivitiesController extends Controller
 		$activities = $this->model()->byAdmin()
 									->bySearch($request->search)
 										->byDestinationCode($request->city)
-											->simplePaginate(20);
+											->orderBy('rank')
+												->simplePaginate(20);
 
 		$blade = ['activities' => $activities];
 
@@ -57,20 +58,35 @@ class ActivitiesController extends Controller
 											->simplePaginate(50)
 												->groupBy('destination.country_code')
 													->values();
-		// dd($countries[0][0]->destination);
+
 		return view($this->viewPath.'.location', compact('countries'));
 	}
 
 
-	public function createOrEdit($id = null)
+	public function createOrEdit(Request $request, $id = null)
 	{
 		$activity = $this->model()->byAdmin()->find($id);
 
 		if (is_null($activity)) {
 			$activity = $this->model();
+			$destination = DestinationController::call()
+											->model()->find($request->city);
+		}
+		else{
+			$destination = $activity->destination;
 		}
 
-		return view($this->viewPath.'.create_edit', compact('activity'));
+		$query = isset($destination->id) 
+					 ? http_build_query(['city' => $destination->id])
+					 : '';
+
+		$blade = [
+				'destination' => $destination, 
+				'activity' => $activity, 
+				'query' => $query
+			];
+
+		return view($this->viewPath.'.create_edit', $blade);
 	}
 
 
@@ -104,7 +120,8 @@ class ActivitiesController extends Controller
 					"response" => "saved successfully."
 				]);
 		}
-		return redirect('dashboard/inventories/activity', ['city' => $request->dest_code]);
+
+		return $this->redirectIndex(['city' => $request->dest_code]);
 	}
 
 
@@ -116,7 +133,7 @@ class ActivitiesController extends Controller
 	 */
 	public function create()
 	{
-		return redirect('dashboard/inventories/activity/store');
+		return redirect('dashboard/inventories/activity/store?city='.request()->city);
 	}
 
 
@@ -166,6 +183,23 @@ class ActivitiesController extends Controller
 		//
 	}
 
+
+	public function storeOrUpdateRanks(Request $request)
+	{
+		if (is_array($request->ranks)) {
+			foreach ($request->ranks as $key => $value) {
+				if (isset($value['id']) && isset($value['rank'])) {
+					$activity = $this->model()->find($value['id']);
+					if (!is_null($activity)) {
+						$activity->rank = $value['rank'];
+						$activity->save();
+					}
+				}
+			}
+		}
+		return json_encode(['status' => 200, 'response' => 'successfully']);
+	}
+
 	/**
 	 * Remove the specified resource from storage.
 	 *
@@ -175,23 +209,34 @@ class ActivitiesController extends Controller
 	public function destroy($id)
 	{
 		$activity = $this->model()->findOrFail($id);
+		$city = $activity->destination_code;
 		$activity->delete();
-		return redirect('dashboard/inventories/activity');
+	
+		return $this->redirectIndex(['city' => $city]);
 	}
 
 
 	public function deactivate($id)
 	{
-		$this->changeStatus($id, 0);
-		return redirect('dashboard/inventories/activity');
+		$activity = $this->model()->findOrFail($id);
+		$city = $activity->destination_code;
+		$activity->is_active = 0;
+		$activity->save();
+
+		return $this->redirectIndex(['city' => $city]);
 	}
 
 
 	public function activate($id)
 	{
-		$this->changeStatus($id, 1);
-		return redirect('dashboard/inventories/activity');
+		$activity = $this->model()->findOrFail($id);
+		$city = $activity->destination_code;
+		$activity->is_active = 1;
+		$activity->save();
+
+		return $this->redirectIndex(['city' => $city]);
 	}
+
 
 	public function changeStatus($id, $status)
 	{
@@ -200,6 +245,13 @@ class ActivitiesController extends Controller
 		$activity->save();
 		return $this;
 	}
+
+	public function redirectIndex(Array $params = [])
+	{
+		return redirect(url('dashboard/inventories/activity').'?'.http_build_query($params));
+	}
+
+
 
 
 

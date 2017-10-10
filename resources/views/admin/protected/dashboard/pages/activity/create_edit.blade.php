@@ -26,7 +26,7 @@
 							<input type="text" id="title" class="form-control" placeholder="Title" value="{{ $activity->title }}" required />
 						</div>
 						<div class="col-md-4 col-sm-4 col-xs-4 form-group has-feedback">
-							<input type="text" id="destination" data-code="{{ $activity->destination_code }}" class="form-control destination" placeholder="Destination" value="{{ isset($activity->destination->location) ? $activity->destination->location : '' }}" required />
+							<input type="text" id="destination" data-code="{{ isset($destination->id) ? $destination->id : '' }}" class="form-control destination" placeholder="Destination" value="{{ isset($destination->location) ? $destination->location : '' }}" required />
 						</div>
 					</div>
 					<div class="form-group">
@@ -98,7 +98,7 @@
 							<button class="btn btn-success btn-block btn-save">Save</button>
 						</div>
 						<div class="col-md-3 col-sm-3 col-xs-12">
-							<a href="{{ url('dashboard/inventories/activity') }}?city={{ $activity->destination_code }}" class="btn btn-primary btn-block">Cancel</a>
+							<a href="{{ url('dashboard/inventories/activity') }}?{{ $query }}" class="btn btn-primary btn-block">Cancel</a>
 						</div>
 					</div>
 				</div>

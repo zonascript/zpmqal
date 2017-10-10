@@ -156,7 +156,7 @@ class AgentActivityModel extends Model
 
 	public function openUrl()
 	{
-		return url('dashboard/inventories/activity/'.$this->id);
+		return url('dashboard/inventories/activity/'.$this->id).'?city='.$this->destination_code;
 	}
 
 

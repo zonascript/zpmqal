@@ -10,10 +10,23 @@
 @section('content')
 	<div class="row">
 		<div class="col-md-12 col-sm-12 col-xs-12">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Activities</h2>
-					<a href="{{ url('dashboard/inventories/activity/create') }}" class="btn btn-success pull-right">Add Activity</a>
+					<div class="row">
+						<div class="col-md-4 col-sm-4 col-xs-4">
+							<a href="{{ url('dashboard/inventories/activity/location') }}" class="btn btn-success"><i class="fa fa-arrow-left"></i> Back</a>
+						</div>
+						<div class="col-md-4 col-sm-4 col-xs-4">
+							<div class="text-center font-size-25">Activities</div>
+						</div>
+						<div class="col-md-4 col-sm-4 col-xs-4">
+							<a href="{{ url('dashboard/inventories/activity/create') }}?city={{ request()->city }}" class="btn btn-primary pull-right">Add Activity</a>
+						</div>
+					</div>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
@@ -36,7 +49,7 @@
 									<td>{{ $activity->title }}</td>
 									<td>{{ $activity->destination->location }}</td>
 									<td class="{{ statusCss($activity->is_active) }}">{{ $activity->status->name }}</td>
-									<td>{{ $activity->rank }}</td>
+									<td><input type="text" class="width-50 activity-rank" value="{{ $activity->rank }}" data-id="{{ $activity->id }}" data-value="{{ $activity->rank }}"></td>
 									<td>
 										<div class="row">
 											<div class="btn-group pull-right m-right-10">
@@ -85,6 +98,7 @@
 						</span>
 					</div>
 				</div>
+				<button class="btn btn-success m-top-10 save-rank">Save</button>
 			</div>
 		</div>
 	</div>
@@ -105,17 +119,57 @@
 
 @section('scripts')
 	<script>
+	 	var windata = { is_rank_changed : false };
+
 		$(document).ready(function() {
 			var params = {
 				'prepend' : 'Destination: <input type="text" data-code="{{ isset($destination->id) ? $destination->id : '' }}" class="form-control location input-sm m-right-10" value="{{ isset($destination->location) ? $destination->location : '' }}">',
 				'inputs' : '<input type="hidden" name="city" value="{{ request()->city }}">'
 
 			};
-			datatableWithSearch('#datatable', {}, params);
+			datatableWithSearch('#datatable', {"order": [[ 4, "asc" ]]}, params);
 			$('#datatable tbody').sortable();
-
 		});
 
+
+		$(document).on('keyup keypress keydown', '.activity-rank', function () {
+			var last_val = $(this).attr('data-value');
+			var val = $(this).val();
+			if (last_val != val) { 
+				windata.is_rank_changed = true; 
+				$(this).addClass('is-changed');
+			}
+		});
+
+		$(document).on('click', "a:not('.save-rank'), button:not('.save-rank')", function(e) {
+			if (windata.is_rank_changed) {
+				var rsp = confirm('You have made some changes, don\'t you want to save it?');
+				if (rsp) {
+					e.preventDefault();
+				} 
+			}
+		});
+
+		$(document).on('click', '.save-rank', function () {
+			var ranks = [];
+			$('.activity-rank.is-changed').each(function (i, v) {
+				ranks.push({
+					"id" : $(this).attr('data-id'),
+					"rank" : $(this).val()
+				});
+			});
+
+			$.ajax({
+				url : '{{ url('dashboard/inventories/activity/store_ranks') }}',
+				type : 'post',
+				data : {'_token' : csrf_token, 'ranks' : ranks },
+				dataType : 'json',
+				success : function (response) {
+					$('.is-changed').removeClass('is-changed');
+					windata.is_rank_changed = false;
+				}
+			});
+		});
 
 		{{-- for more button --}}
 		$(document).on('click', '.user-delete', function () {
