@@ -190,7 +190,6 @@
 
 			var images = makeImagesObject();
 			var desc = $('#description').val();
-			alert(desc);
 			var inclusion = tinymce.get('inclusion').getContent();
 			var exclusion = tinymce.get('exclusion').getContent();
 			var data = {
