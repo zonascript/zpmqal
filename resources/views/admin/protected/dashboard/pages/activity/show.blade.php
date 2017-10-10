@@ -6,7 +6,7 @@
 		<div class="page-title">
 			<div class="row">
 				<div class="col-md-3 col-sm-3 col-xs-12">
-					<a href="{{ url('dashboard/inventories/activity') }}?city={{ request()->city }}" class="btn btn-success btn-block"><i class="fa fa-arrow-left"></i> Back to Activity</a>
+					<a href="{{ url('dashboard/inventories/activity') }}?city={{ isset($activity->destination_code) ? $activity->destination_code : request()->city  }}" class="btn btn-success btn-block"><i class="fa fa-arrow-left"></i> Back to Activity</a>
 				</div>
 			</div>
 		</div>
