@@ -8,6 +8,12 @@
 @endsection
 
 @section('content')
+	<div class="row">
+		<div class="col-md-4">
+			<a href="{{ url('dashboard/inventories/activity/create') }}" class="btn btn-success btn-block">Add Activity</a>
+			<div class="m-top-10"></div>
+		</div>
+	</div>
 	@foreach ($countries as $activities)
 		<?php $destination = $activities[0]->destination; ?>
 		<div class="row">

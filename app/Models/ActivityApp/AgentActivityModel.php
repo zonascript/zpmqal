@@ -83,7 +83,7 @@ class AgentActivityModel extends Model
 
 	public function scopeByDestinationCode($query, $code)
 	{
-		if (!is_null($code)) {
+		if (strlen($code)) {
 			return $query->where('destination_code', $code);
 		}
 	}

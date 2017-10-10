@@ -33,8 +33,8 @@
 						<div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback">
 							<div class="row">
 								<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-									<h2>Description :</h2>
-									<textarea id="description" placeholder="text">{{ $activity->description }}</textarea>
+									<h2 class="m-top-15">Description :</h2>
+									<textarea id="description" class="form-control" placeholder="Description" style="height: 268px;">{{ $activity->description }}</textarea>
 								</div>
 								<div class="col-md-12 col-sm-12 col-xs-12">
 									<div class="x_panel" style="height: auto;">
@@ -45,7 +45,7 @@
 											</ul>
 										</div>
 										<div class="x_content" style="display: none;">
-											<textarea id="inclusion" placeholder="text"></textarea>
+											<textarea id="inclusion" class="tinymce" placeholder="text"></textarea>
 										</div>
 									</div>
 								</div>
@@ -58,7 +58,7 @@
 											</ul>
 										</div>
 										<div class="x_content" style="display: none;">
-											<textarea id="exclusion" placeholder="text"></textarea>
+											<textarea id="exclusion" class="tinymce" placeholder="text"></textarea>
 										</div>
 									</div>
 								</div>
@@ -111,7 +111,7 @@
 	<script src="{{ asset('js/tinymce.min.js') }}"></script>
 	<script>
 		tinymce.init({ 
-			selector:'textarea',
+			selector:'textarea.tinymce',
 			plugins : 'autolink link image lists preview table',
 			menu: {
 				file: {title: 'File', items: 'newdocument'},
@@ -189,7 +189,8 @@
 			}
 
 			var images = makeImagesObject();
-			var desc = tinymce.get('description').getContent();
+			var desc = $('#description').val();
+			alert(desc);
 			var inclusion = tinymce.get('inclusion').getContent();
 			var exclusion = tinymce.get('exclusion').getContent();
 			var data = {

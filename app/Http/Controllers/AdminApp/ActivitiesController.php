@@ -36,6 +36,7 @@ class ActivitiesController extends Controller
 											->simplePaginate(20);
 
 		$blade = ['activities' => $activities];
+
 		if (isset($request->city)) {
 			$destination = DestinationController::call()
 										->model()->find($request->city);
@@ -43,6 +44,7 @@ class ActivitiesController extends Controller
 				$blade['destination'] = $destination;
 			}
 		}
+		
 		return view($this->viewPath.'.index', $blade);
 	}
 
