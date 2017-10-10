@@ -165,8 +165,14 @@
 				data : {'_token' : csrf_token, 'ranks' : ranks },
 				dataType : 'json',
 				success : function (response) {
-					$('.is-changed').removeClass('is-changed');
-					windata.is_rank_changed = false;
+					if (response.status == 200) {
+						$('.is-changed').removeClass('is-changed');
+						windata.is_rank_changed = false;
+						$.alert({
+							'title' : 'Success',
+							'content' : 'Saved successfully.'
+						});
+					}
 				}
 			});
 		});
