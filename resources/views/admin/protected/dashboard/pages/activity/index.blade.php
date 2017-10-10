@@ -63,7 +63,7 @@
 														@if ($activity->is_active == 1)
 															<li>
 																<a class="trigger-form">Deactivate</a>
-																<form method="POST" action="{{ $activity->openUrl().'/deactivate' }}">
+																<form method="POST" action="{{ $activity->openUrl('deactivate') }}">
 																	{{ csrf_field() }}
 																	{{ method_field('put') }}
 																	<button type="submit" class="input-submit" hidden></button>
@@ -73,7 +73,7 @@
 														@if (in_array($activity->is_active,[0, 2]))
 															<li>
 																<a class="trigger-form">Activate</a>
-																<form method="POST" action="{{ $activity->openUrl().'/activate' }}">
+																<form method="POST" action="{{ $activity->openUrl('activate') }}">
 																	{{ csrf_field() }}
 																	{{ method_field('put') }}
 																	<button type="submit" class="input-submit" hidden></button>

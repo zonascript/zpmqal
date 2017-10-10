@@ -154,9 +154,9 @@ class AgentActivityModel extends Model
 	}
 
 
-	public function openUrl()
+	public function openUrl($seg = '')
 	{
-		return url('dashboard/inventories/activity/'.$this->id).'?city='.$this->destination_code;
+		return url('dashboard/inventories/activity/'.$this->id.'/'.$seg).'?city='.$this->destination_code;
 	}
 
 
