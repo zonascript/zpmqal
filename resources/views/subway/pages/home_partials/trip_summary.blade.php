@@ -113,5 +113,9 @@
 			</tr>
 		</table>
 		<hr>
+		@if (strlen($package->extra_word))
+			<label for="">More Details : </label>
+			<div>{!! $package->extra_word !!}</div>
+		@endif
 	</div>
 </article>
