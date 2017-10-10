@@ -14,47 +14,59 @@
 			?>
 			
 			<div class="content clearfix">
-			  <div class="width-30-p height-200px pull-left m-right-10">
-					<div class="gi-carousel-main">
-				    <div class="GICarousel carousel-box{{$key}} GI_C_wrapper">
-				      <ul class="GI_IC_items" style="{{ count($images) == 1 ? "display: block;" : ''}}">
-								@foreach ($images as $image)
-									<li>
-										<img height="195" width="100%" class="align-left" alt="Hotel Image" src="{{ $image }}" />
-									</li>
-								@endforeach
-				      </ul>
-				    </div>
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12">
+					  <div class="width-30-p height-200px pull-left m-right-10">
+							<div class="gi-carousel-main">
+						    <div class="GICarousel carousel-box{{$key}} GI_C_wrapper">
+						      <ul class="GI_IC_items" style="{{ count($images) == 1 ? "display: block;" : ''}}">
+										@foreach ($images as $image)
+											<li>
+												<img height="195" width="100%" class="align-left" alt="Hotel Image" src="{{ $image }}" />
+											</li>
+										@endforeach
+						      </ul>
+						    </div>
+						  </div>
+					  </div>
+					  <div>
+							<h2 class="m-top-5">{{ $activity->name }}</h2>
+							<p>
+								<div>
+									<ul class="pipe">
+										<li>{{ $activity->date }}</li>
+										<li>{{ activityMode($activity->mode) }}</li>
+										<li>{{ activityTiming($activity->timing) }}</li>
+
+										@if (!is_null($activity->pick_up))
+											<li>Pick Up : {{ $activity->pick_up }}</li>
+										@endif
+
+										@if (!is_null($activity->duration))
+											<li>Duration : {{ $activity->duration }}</li>
+										@endif
+									</ul>
+								</div>
+								<br>
+							</p>
+
+							<p>{!! $activity->description !!}</p>
+					  </div>
 				  </div>
-			  </div>
-			  <div>
-					<h2 class="m-top-5">{{ $activity->name }}</h2>
-					<p>
-						<div>
-							<ul class="pipe">
-								<li>{{ $activity->date }}</li>
-								<li>{{ activityMode($activity->mode) }}</li>
-								<li>{{ activityTiming($activity->timing) }}</li>
-
-								@if (!is_null($activity->pick_up))
-									<li>Pick Up : {{ $activity->pick_up }}</li>
-								@endif
-
-								@if (!is_null($activity->duration))
-									<li>Duration : {{ $activity->duration }}</li>
-								@endif
-							</ul>
-						</div>
-						<br>
-					</p>
-
-					<p>{!! $activity->description !!}</p>
-			  </div>
+				</div>
 			  @if (strlen($activity->inclusion))
-				  <div><p><b>Inclusion : </b>{!! $activity->inclusion !!}</p></div>
+				  <div class="row">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+						  <p><label>Inclusion : </label>{!! $activity->inclusion !!}</p>
+						</div>
+					</div>
 			  @endif
 			  @if (strlen($activity->exclusion))
-				  <div><p><b>Exclusion : </b>{!! $activity->exclusion !!}</p></div>
+				  <div class="row">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+				  		<p><label>Exclusion : </label>{!! $activity->exclusion !!}</p>
+				  	</div>
+				  </div>
 			  @endif
 	
 			</div>
