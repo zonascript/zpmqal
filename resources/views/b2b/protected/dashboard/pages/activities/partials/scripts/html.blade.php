@@ -60,7 +60,30 @@
 				</div>
 			</div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
-				<div class="height-150px vertical-parent">
+				<div class="row">
+					<div class="pick-up-duration-box">
+						<button class="btn-link pull-right toggle-group">edit</button>
+						<button class="btn-link pull-right toggle-group" hidden>cancel</button>
+						<label>Pick up</label>
+						<div class="toggle-group">02:00 AM</div>
+						<input type="text" class="width-100-p pick-up toggle-group" data-inputmask="\'mask\': \'99:99\'" data-og-value="02:00" value="02:00" hidden>
+						<div class="m-top-10"></div>
+						<label>Duration : </label>
+						<div class="toggle-group">4 hr</div>
+						<input type="text" class="width-100-p duration toggle-group" data-inputmask="\'mask\': \'99:99\'" data-og-value="03:00" value="03:00" hidden>
+					</div>
+				</div>
+				<div class="row">
+					<div class="m-top-10"></div>
+					<button 
+						class="btn '+activity.btnClass+' btn-block btn-activitySelect"
+						data-pdid="'+activity.pdid+'"
+						data-code="'+activity.code+'" 
+						data-vendor="'+activity.vendor+'"
+						>'+activity.btnName+'
+					</button>
+				</div>
+				{{-- <div class="height-150px vertical-parent">
 					<div class="vertical-child">
 						<div class="m-top-30">
 							<button 
@@ -72,7 +95,7 @@
 							</button>
 						</div>
 					</div>
-				</div>
+				</div> --}}
 			</div>
 		</div>
 	</div>

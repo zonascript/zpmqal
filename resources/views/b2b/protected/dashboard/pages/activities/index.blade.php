@@ -85,6 +85,7 @@
 	<script src="{{ commonAsset('dashboard/js/datepicker/daterangepicker.js') }}"></script>
 	<script src="{{ commonAsset('dashboard/vendors/dropzone/dist/min/dropzone.min.js') }}"></script>
 
+	<script src="{{ commonAsset('dashboard/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js') }}"></script>
 
 @endsection
 

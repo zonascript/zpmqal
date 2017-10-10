@@ -68,6 +68,7 @@
 							$('#'+elem_id).append(makeActivityObject(i, v));
 						});
 						initDatePicker(rid);
+    				$('#'+elem_id+" :input").inputmask();
 					}
 					else{
 						$('#'+elem_id).append('<p>Activities Not Found</p>');
@@ -222,9 +223,11 @@
 			var btnObj = this;
 
 			if (data == false) {
+				windata.is_fine = false;
 				return false;
 			}
 			else{
+				windata.is_fine = true;
 				data['_token'] = csrf_token;
 				$.ajax({
 					type:"post",
@@ -257,7 +260,7 @@
 			data: data,
 			dataType : "JSON",
 			success : function (response) {
-				$(btnObj).attr('data-pdid', '')
+				$(thisObj).attr('data-pdid', '')
 										.removeClass('unsaved');
 			}
 		});
@@ -329,6 +332,27 @@
 		}
 	}
 
+	function getPickUp(thisObj) {
+		var parent = $(thisObj).closest('.activity-container');
+		var elementBox = $(parent).find('.pick-up-duration-box');
+		var element = $(elementBox).find('.pick-up.toggle-group');
+		var value = $(elementBox).hasClass('changed')
+							? $(element).val()
+							: $(element).attr('data-og-value');
+
+		return value;
+	}
+
+	function getDuration(thisObj) {
+		var parent = $(thisObj).closest('.activity-container');
+		var elementBox = $(parent).find('.pick-up-duration-box');
+		var element = $(elementBox).find('.duration.toggle-group');
+		var value = $(elementBox).hasClass('changed')
+							? $(element).val()
+							: $(element).attr('data-og-value');
+		return value;
+	}
+
 
 	function getMode(thisObj) {
 		var parent = $(thisObj).closest('.activity-container');
@@ -351,6 +375,8 @@
 		var date = getDate(thisObj);
 		var mode = getMode(thisObj);
 		var timing = getTiming(thisObj);
+		var pickUp = getPickUp(thisObj);
+		var duration = getDuration(thisObj);
 
 		if (date && mode && timing) {
 			var code = $(thisObj).attr('data-code');
@@ -363,7 +389,8 @@
 					'mode' : mode,
 					'vendor' : vendor,
 					'timing' : timing,
-
+					'pick_up' : pickUp,
+					'duration' : duration
 				};
 
 			var parentLi = $(thisObj).closest('.activity-container');
@@ -395,14 +422,18 @@
 
 
 	function nextHotelEvent() {
-		var ridObj = getRidObj(idObject.crid);
-		if (ridObj.nrid == "NaN") {
-			setTimeout(function () {    
-				document.location.href = "{{url('dashboard/package/builder/event/'.$package->token.'/activities')}}";
-			}, 1000);
-		}
-		else{
-			clickNextTab();
+		if (windata.is_fine) {
+			var ridObj = getRidObj(idObject.crid);
+			if (ridObj.nrid == "NaN") {
+				setTimeout(function () {    
+					document.location.href = "{{url('dashboard/package/builder/event/'.$package->token.'/activities')}}";
+				}, 1000);
+			}
+			else{
+				clickNextTab();
+			}
+		}else{
+			$.alert({title:"Error!", content : "Something went wrong."});	
 		}
 	}
 
@@ -485,4 +516,10 @@
 	};
 	{{-- /initDatePicker --}}
 
+	function toggleGroup(thisObj) {
+		$(thisObj).closest('.pick-up-duration-box')
+								.toggleClass('changed')
+									.find('.toggle-group').toggle();
+		
+	}
 </script>

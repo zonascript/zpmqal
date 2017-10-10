@@ -1,5 +1,6 @@
 @include($viewPath.'.partials.scripts.objects')
 <script>
+	var windata = { is_fine : true };
 	{{-- bootstrap-daterangepicker --}}
 	$(document).ready(function() {
 		@foreach ($package->hotelRoutes as $hotelRouteKey => $hotelRoute)
@@ -80,6 +81,10 @@
 		showDescription(this); 
 	});
 	{{-- /description pop up--}}
+
+	$(document).on('click', '.btn-link.toggle-group', function () {
+		toggleGroup(this);
+	});
 </script>
 @include($viewPath.'.partials.scripts.function')
 
