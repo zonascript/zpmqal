@@ -62,6 +62,20 @@ class AgentActivityModel extends Model
 	}
 
 
+	public function getPickUpAttribute($value)
+	{
+		if ($value == '00:00:00') return null;
+		return $value;
+	}
+
+
+	public function getDurationAttribute($value)
+	{
+		if ($value == '00:00:00') return null;
+		return $value;
+	}
+
+
 	public function getDurationToHumanAttribute()
 	{
 		return convertInHourMin($this->duration);
