@@ -97,5 +97,25 @@ class HotelsController extends Controller
 		return $result;
 	}
 
-	
+	public function saveUserInputRooms($vendor, $vendorId, $roomType)
+	{
+		$result = null;
+
+		if ($vendor == 'b') {
+			$result = BookingHotelRoomsController::call()->model();
+			$result->booking_hotel_id = $vendorId;
+			$result->roomtype = $roomType;
+			$result->save();
+		}
+		elseif ($vendor == 'a') {
+			$result = AgodaHotelRoomsController::call()->model();
+			$result->hotel_id = $vendorId;
+			$result->roomtype = $roomType;
+			$result->save();
+		}
+
+		return $result;
+	}
+
+
 }

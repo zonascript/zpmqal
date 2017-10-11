@@ -6,10 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\B2bApp\RouteController;
 use App\Http\Controllers\B2bApp\PackageController;
+use App\Http\Controllers\HotelApp\OwnHotelRoomController;
 use App\Http\Controllers\HotelApp\TravelportHotelController;
 use App\Http\Controllers\HotelApp\HotelsController as DbHotelsController;
-use App\Http\Controllers\Api\TbtqHotelController;
-use App\Http\Controllers\Api\SkyscannerHotelApiController;
+use App\Http\Controllers\HotelApp\SkyscannerHotelApiController;
+use App\Http\Controllers\HotelApp\TbtqHotelController;
 use App\Models\B2bApp\PackageHotelModel;
 use App\Traits\CallTrait;
 
@@ -20,7 +21,6 @@ class HotelsController extends Controller
 	public function model(){
 		return new PackageHotelModel;		
 	}
-
 
 	/*
 	| this function is to get view on the browser using get request
@@ -54,8 +54,11 @@ class HotelsController extends Controller
 	public function postAddHotelRoom($routeId, Request $request)
 	{
 		$route = RouteController::call()->model()->find($routeId);
-		$packageHotelId = $request->fdid;
+		$packageHotelId = $request->fdid; // PackageHotelModel->id
 		$packageHotel = $route->fusion;
+		$roomVendor = $request->rmvdr;
+		$roomId = $request->rmid;
+
 		if (is_null($packageHotel)) {
 			$packageHotel = $this->model();
 			$packageHotel->hotel_code = $request->fid;
@@ -69,15 +72,31 @@ class HotelsController extends Controller
 			$route->save();
 		}
 
+		// save if own
+		if ($roomVendor == 'own' && (is_null($roomId) || $roomId == '')) {
+			$enteredRoom = DbHotelsController::call()
+											->saveUserInputRooms(
+													$request->fvdr,
+													$request->fid,
+													$request->rty
+												);
+
+			$roomId = isset($enteredRoom->id) ? $enteredRoom->id : null;
+			$roomVendor = $request->fvdr;
+		}
+
+
 		$packageRooms = $packageHotel->roomModel();
 		$packageRooms->package_hotel_id = $packageHotel->id;
-		$packageRooms->roomtype_code = $request->rmid;
-		$packageRooms->vendor = $request->rmvdr;
+		$packageRooms->roomtype_code = $roomId;
+		$packageRooms->vendor = $roomVendor;
 		$packageRooms->save();
 
 		return json_encode([
 				"fdid" => $packageHotelId,
-				"rmdid" => $packageRooms->id
+				"rmdid" => $packageRooms->id,
+				"rmid" => $roomId,
+				"rmvdr" => $roomVendor
 			]);
 	}
 

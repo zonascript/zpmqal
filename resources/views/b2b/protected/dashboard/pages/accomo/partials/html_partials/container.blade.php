@@ -73,6 +73,13 @@
 									</div> --}}
 									<div class="row inner-tab-container scroll-bar m-top-5">
 										<div class="col-md-12 col-sm-12 col-xs-12 tab-room">
+
+										</div>
+									</div>
+									<div class="row">
+										<div class="m-top-10"></div>
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											<button class="btn btn-primary pull-right add-room-manually">Add Room Manually</button>
 										</div>
 									</div>
 								</div>

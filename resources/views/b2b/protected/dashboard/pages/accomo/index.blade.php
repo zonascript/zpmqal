@@ -52,8 +52,7 @@
 						</ul>
 						<div class="tab-content tab-content-box clearfix">
 							@foreach ($package->accomoRoutes as $accomoRouteKey => $accomoRoute)
-								<div id="target_{{ $accomoRoute->id }}" 
-										class="tab-pane {{ $accomoRouteKey == 0 ? 'active' : ''}}">
+								<div id="target_{{ $accomoRoute->id }}" class="tab-pane {{ $accomoRouteKey == 0 ? 'active' : ''}}">
 									@include($viewPath.'.partials.html_partials.meal_transfer')
 									<ul id="rid_{{ $accomoRoute->id }}" class="list list-unstyled" data-rid="{{ $accomoRoute->id }}">
 									</ul>
@@ -77,6 +76,7 @@
 
 	<script src="{{ commonAsset('dashboard/js/moment/moment.min.js') }}"></script>
 	<script src="{{ commonAsset('dashboard/js/datepicker/daterangepicker.js') }}"></script>
+	{{-- <script src="{{ commonAsset('dashboard/vendors/jquery.scrollTo/jquery.scrollTo.min.js') }}"></script> --}}
 	{{-- /bootstrap-daterangepicker --}}
 
 @endsection

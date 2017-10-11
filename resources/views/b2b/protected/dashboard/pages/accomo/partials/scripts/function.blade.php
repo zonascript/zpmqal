@@ -461,6 +461,11 @@
 		var rmid = $(thisObj).attr('data-rmid');
 		var rmvdr = $(thisObj).attr('data-vdr');
 		var propContainer = $(thisObj).closest('.prop-container');
+		var roomtype = ''; 
+		if (rmvdr == 'own') {
+			roomtype = $(propContainer).find('.own-room-type').val();
+		}
+
 		var pickUpVal = $(propContainer).find('.h-pick-up').val();
 		var dropOffVal = $(propContainer).find('.h-drop-off').val();
 		var pickUpSelect = $(propContainer).find('.h-pick-up').data('selected');
@@ -474,6 +479,7 @@
 					"fdid" : fdid,
 					"fvdr" : fvdr,
 					"rmid" : rmid,
+					"rty" : roomtype,
 					"rmvdr" : rmvdr,
 					"pu" : pickUpVal, {{-- pick_up --}}
 					"pus" : pickUpSelect, {{-- pick_up_selected --}}
@@ -488,9 +494,11 @@
 			type:"post",
 			url: "{{ urlAccomoBuilder('prop/add') }}/"+rid,
 			data: data,
+			dataType : 'json',
 			success: function(response, textStatus, xhr) {
-				response = JSON.parse(response);
 				$(chooseProp).attr('data-fdid', response.fdid);
+				$(thisObj).attr('data-rmid', response.rmid);
+				$(thisObj).attr('data-vdr', response.rmvdr);
 				$(thisObj).attr('data-rmdid', response.rmdid);
 			},
 			error: function(xhr, textStatus) {
@@ -671,4 +679,15 @@
 		});
 	}
 	{{-- add to cart --}}
+
+	function addRoomManually(thisObj) {
+		var html = '@include($viewPath.'.partials.html_partials.props_add')';
+		var tabRoom = $(thisObj).closest('.tab-content.tab-container')
+															.find('.tab-room');
+		$(tabRoom).append(html);
+		$(tabRoom).find('.padding-10.border-gray')
+								.last().get(0).scrollIntoView();
+
+	}
+
 </script>

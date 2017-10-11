@@ -86,6 +86,11 @@
 			addAttributes(params);
 		}
 	});
+
+
+	$(document).on('click', '.add-room-manually', function(){
+		addRoomManually(this);
+	});
 </script>
 
 @include($viewPath.'.partials.scripts.autocomplete')
