@@ -111,6 +111,14 @@
 			var timingOption = getTimingOption(obj.timing);
 			var sortDescription = shortString(description);
 			var pdid = isset(obj, 'pdid') ? obj.pdid : '';
+			var pickUp = obj.pick_up != null 
+								 ? obj.pick_up.substring(0, 5)
+								 : '00:00';
+			var duration = obj.duration != null 
+									 ? obj.duration.substring(0, 5) 
+									 : '00:00';
+			var pickUpWord = convertTime24to12(obj.pick_up);
+			var durationWord = convertTimeHrMin(obj.duration);
 
 			if (obj.isSelected == 1) {
 				border = 'border-green-3px';
@@ -138,7 +146,11 @@
 				'timingOption' : timingOption,
 				'isSelected' : obj.isSelected,
 				'description' : description,
-				'sortDescription' : sortDescription
+				'sortDescription' : sortDescription,
+				'pickUp' : obj.pick_up,
+				'duration' : obj.duration,
+				'pickUpWord' : pickUpWord,
+				'durationWord' : durationWord,
 			};
 
 			return getActivityStack(activity);
@@ -218,16 +230,16 @@
 		var ulParent = $(thisObj).closest('.list.list-unstyled');
 		var rid =  $(ulParent).attr('data-rid');
 		$(ulParent).find('.btn-danger.unsaved').each(function () {
+
 			var data = getActInputs(this);
 			console.log(data);
 			var btnObj = this;
 
 			if (data == false) {
-				windata.is_fine = false;
 				return false;
 			}
 			else{
-				windata.is_fine = true;
+				windata.is_fine = false;
 				data['_token'] = csrf_token;
 				$.ajax({
 					type:"post",
@@ -235,9 +247,11 @@
 					data: data,
 					dataType : "JSON",
 					success : function (response) {
-						$(btnObj).attr('data-pdid', response.pdid)
-												.removeClass('unsaved');
-
+						if (response.status == 200) {
+							windata.is_fine = true;
+							$(btnObj).attr('data-pdid', response.pdid)
+													.removeClass('unsaved');
+						}
 					}
 				});
 			}
@@ -335,22 +349,15 @@
 	function getPickUp(thisObj) {
 		var parent = $(thisObj).closest('.activity-container');
 		var elementBox = $(parent).find('.pick-up-duration-box');
-		var element = $(elementBox).find('.pick-up.toggle-group');
-		var value = $(elementBox).hasClass('changed')
-							? $(element).val()
-							: $(element).attr('data-og-value');
-
-		return value;
+		return $(elementBox).find('.pick-up.toggle-group')
+													.attr('data-final-value');
 	}
 
 	function getDuration(thisObj) {
 		var parent = $(thisObj).closest('.activity-container');
 		var elementBox = $(parent).find('.pick-up-duration-box');
-		var element = $(elementBox).find('.duration.toggle-group');
-		var value = $(elementBox).hasClass('changed')
-							? $(element).val()
-							: $(element).attr('data-og-value');
-		return value;
+		return $(elementBox).find('.duration.toggle-group')
+													.attr('data-final-value');
 	}
 
 
@@ -370,6 +377,21 @@
 	}
 
 
+	function checkPickUpDurationBox(thisObj) {
+		var parent = $(thisObj).closest('.activity-container')
+														.find('.pick-up-duration-box');
+		if ($(parent).hasClass('changed')) {
+			$(parent).find('.btn-link-save').addClass('border-red');
+			$.alert({title:"Error!", content : "Don't you want to save it?"});	
+			$(parent).get(0).scrollIntoView();
+			return false;
+		}
+		else{
+			$(parent).find('.btn-link-save').removeClass('border-red');
+		}
+		return true;
+	}
+
 
 	function getActInputs(thisObj) {
 		var date = getDate(thisObj);
@@ -377,8 +399,8 @@
 		var timing = getTiming(thisObj);
 		var pickUp = getPickUp(thisObj);
 		var duration = getDuration(thisObj);
-
-		if (date && mode && timing) {
+		var checkpd  = checkPickUpDurationBox(thisObj);
+		if (date && mode && timing && checkpd) {
 			var code = $(thisObj).attr('data-code');
 			var pdid = $(thisObj).attr('data-pdid');
 			var vendor = $(thisObj).attr('data-vendor');
@@ -517,9 +539,17 @@
 	{{-- /initDatePicker --}}
 
 	function toggleGroup(thisObj) {
-		$(thisObj).closest('.pick-up-duration-box')
-								.toggleClass('changed')
-									.find('.toggle-group').toggle();
-		
+		var isSave = $(thisObj).hasClass('btn-link-save');
+		var parent = $(thisObj).closest('.pick-up-duration-box');
+		$(parent).toggleClass('changed').find('.toggle-group').toggle();
+		if (isSave) {
+			var pickUp = $(parent).find('input.pick-up').val();
+			var duration = $(parent).find('input.duration').val();
+			console.log(thisObj, isSave, pickUp, duration);
+			$(parent).find('input.pick-up').attr('data-final-value', pickUp);
+			$(parent).find('input.duration').attr('data-final-value', duration);
+			$(parent).find('.pick-up-word').text(convertTime24to12(pickUp));
+			$(parent).find('.duration-word').text(convertTimeHrMin(duration));
+		}
 	}
 </script>

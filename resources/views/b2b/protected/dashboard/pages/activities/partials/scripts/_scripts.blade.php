@@ -54,7 +54,9 @@
 			var firstLi = $('#rid_'+v).find('.activity-container');
 			addActivity(firstLi[0]);
 		});
-		nextHotelEvent();
+		setTimeout(function () {
+			nextHotelEvent();
+		}, 2000);
 	});
 	{{-- /Save Activities --}}
 

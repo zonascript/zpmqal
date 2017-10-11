@@ -96,9 +96,12 @@ class ActivitiesController extends Controller
 
 	public function postFatchActivities($rid){
 		$selectedActivities = $this->selectedActivities($rid);
-		$route = RouteController::call()->model()->find($rid);
+		$route = RouteController::call()->model()
+						->byPackageUser()->find($rid);
+
 		$dbActivities = ActivityController::call()
-									->activities($route->destination_detail->id);
+										->activities($route->destination_detail->id);
+
 		$activities = $this->mergeActivities($selectedActivities, $dbActivities);
 		return json_encode(['activities' => array_values($activities)]);
 	}
@@ -106,6 +109,7 @@ class ActivitiesController extends Controller
 
 	public function postAddActivity($rid, Request $request)
 	{
+		// dd($request->input(), $request->pick_up, $request->duration);
 		$packageActivity = $this->model()->find($request->pdid);
 		
 		if (is_null($packageActivity)) {
@@ -122,16 +126,16 @@ class ActivitiesController extends Controller
 		}
 
 		$date = date_formatter($request->date, 'd/m/Y');
-		$activityType = '';
-		if ($request->vendor == 'f') {
-			$activityType = 'App\\Models\\ActivityApp\\ActivityModel';
-		}
-		elseif ($request->vendor == 'v') {
-			$activityType = 'App\\Models\\ActivityApp\\ViatorActivityModel';
-		}
-		elseif ($request->vendor == 'own') {
-			$activityType = 'App\\Models\\ActivityApp\\AgentActivityModel';
-		}
+
+		$relModels = [
+				'f' => 'ActivityModel',
+				'v' => 'ViatorActivityModel',
+				'own' => 'AgentActivityModel',
+			];
+		
+		$activityType = isset($relModels[$request->vendor])
+									? 'App\\Models\\ActivityApp\\'.$relModels[$request->vendor]
+									: '';
 
 		$packageActivity->route_id = $rid;
 		$packageActivity->mode = $request->mode;
@@ -139,8 +143,11 @@ class ActivitiesController extends Controller
 		$packageActivity->activity_id = $request->code;
 		$packageActivity->activity_type = $activityType;
 		$packageActivity->timing = $request->timing;
+		$packageActivity->pick_up = $request->pick_up;
+		$packageActivity->duration = $request->duration;
 		$packageActivity->save();
-		return json_encode(['pdid' => $packageActivity->id]);
+
+		return json_encode(['status' => 200, 'pdid' => $packageActivity->id]);
 	}
 
 

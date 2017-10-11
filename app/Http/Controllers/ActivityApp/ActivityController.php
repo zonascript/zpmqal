@@ -30,9 +30,11 @@ class ActivityController extends Controller
 		$this->cityId = $cityId;
 		$this->agentActivities(); // pulling agent's activities
 		
+		/*
+		No more fatching activities from Flygoldfinch abon
 		if ($this->count < 20) {
 			$this->fgfActivities(); // pulling fgf's activities
-		}
+		}*/
 
 		if ($this->count < 20) {
 			$this->viatorActivities();  // pulling viator's activities
@@ -109,6 +111,7 @@ class ActivityController extends Controller
 		$this->count += $activitiesData->count();
 		foreach ($activitiesData as $activity) {
 			$ukey = $activity->vendor.'_'.$activity->id;
+
 			if (!isset($this->activities[$ukey])) {
 
 				$name = $activity->title;
@@ -129,10 +132,14 @@ class ActivityController extends Controller
 						'vendor' => $activity->vendor,
 						'image' => $image,
 						'name' => $name,
-						'description' => strip_tags($description),
+						'description' => clean_html($description),
 						'date' => '',
 						'timing' => '',
 						'mode' => '',
+						'inclusion' => $activity->inclusion,
+						'exclusion' => $activity->exclusion,
+						'pick_up' => $activity->pick_up,
+						'duration' => $activity->duration,
 						'isSelected' => 0
 					];
 

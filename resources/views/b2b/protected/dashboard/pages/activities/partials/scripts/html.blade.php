@@ -63,14 +63,15 @@
 				<div class="row">
 					<div class="pick-up-duration-box">
 						<button class="btn-link pull-right toggle-group">edit</button>
+						<button class="btn-link btn-link-save toggle-group" hidden>save</button>
 						<button class="btn-link pull-right toggle-group" hidden>cancel</button>
 						<label>Pick up</label>
-						<div class="toggle-group">02:00 AM</div>
-						<input type="text" class="width-100-p pick-up toggle-group" data-inputmask="\'mask\': \'99:99\'" data-og-value="02:00" value="02:00" hidden>
+						<div class="toggle-group pick-up-word">'+activity.pickUpWord+'</div>
+						<input type="text" class="width-100-p pick-up toggle-group" data-inputmask="\'mask\': \'99:99\'" data-og-value="'+activity.pickUp+'" data-final-value="'+activity.pickUp+'" value="'+activity.pickUp+'" hidden>
 						<div class="m-top-10"></div>
 						<label>Duration : </label>
-						<div class="toggle-group">4 hr</div>
-						<input type="text" class="width-100-p duration toggle-group" data-inputmask="\'mask\': \'99:99\'" data-og-value="03:00" value="03:00" hidden>
+						<div class="toggle-group duration-word">'+activity.durationWord+'</div>
+						<input type="text" class="width-100-p duration toggle-group" data-inputmask="\'mask\': \'99:99\'" data-og-value="'+activity.duration+'" data-final-value="'+activity.duration+'" value="'+activity.duration+'" hidden>
 					</div>
 				</div>
 				<div class="row">

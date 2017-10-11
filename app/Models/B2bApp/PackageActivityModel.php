@@ -44,8 +44,6 @@ class PackageActivityModel extends Model
 	}
 
 
-
-
 	public function activityObject($attribute = [])
 	{
 		$activity = $this->activity;
@@ -65,6 +63,7 @@ class PackageActivityModel extends Model
 			}
 
 			$result = [
+					'pdid' => $this->id,
 					'ukey' => $ukey,
 					'code' => $activity->id,
 					'vendor' => $activity->vendor,
@@ -75,8 +74,8 @@ class PackageActivityModel extends Model
 					'timing' => $this->timing,
 					'mode' => $this->mode,
 					'isSelected' => 1,
-					'pick_up' => $activity->pick_up,
-					'duration' => $activity->duration_to_human,
+					'pick_up' => $this->pick_up,
+					'duration' => $this->duration,
 					'inclusion' => $activity->inclusion,
 					'exclusion' => $activity->exclusion,
 				];

@@ -100,7 +100,7 @@ class PackageModel extends Model
 	{
 		$url = null;
 		if (isset($this->cost->token) && $this->cost->total_cost) {
-			$url = route('yourPackage', $this->attributes['token']).'?ctk='.$this->cost->token;
+			$url = route('yourPackage', $this->token).'?ctk='.$this->cost->token;
 		}
 		return $url;
 	}
@@ -378,11 +378,12 @@ class PackageModel extends Model
 	public function activities()
 	{
 		$result = $this->hasManyThrough(
-								'App\Models\B2bApp\PackageActivityModel', 
-								'App\Models\B2bApp\RouteModel', 
-								'package_id', 'route_id', 'id'
-							);
-		return $result->orderBy('date', 'asc');
+									'App\Models\B2bApp\PackageActivityModel', 
+									'App\Models\B2bApp\RouteModel', 
+									'package_id', 'route_id', 'id'
+								);
+
+		return $result->byIsActive()->orderBy('date', 'asc');
 	}
 
 

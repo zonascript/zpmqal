@@ -71,32 +71,6 @@ class RouteModel extends Model
 	}
 
 
-	public function originMorphTo()
-	{
-		$class = DestinationModel::class;
-		$col = 'id';
-
-		if ($this->mode == 'flight') {
-			$class = AirportModel::class;
-			$col = 'airport_code';
-		}
-
-		return  $this->belongsTo($class, 'origin_code', $col);
-	}
-
-	public function destinationMorphTo()
-	{
-		$class = DestinationModel::class;
-		$col = 'id';
-
-		if ($this->mode == 'flight') {
-			$class = AirportModel::class;
-			$col = 'airport_code';
-		}
-
-		return  $this->belongsTo($class, 'destination_code', $col);
-	}
-
 
 	public function getOriginCodeAttribute($code)
 	{
@@ -173,6 +147,7 @@ class RouteModel extends Model
 		return $query->where(['package_id' => $pid]);
 	}
 
+
 	public function searchDbLocation($word)
 	{
 		$result = DestinationController::call()->model();
@@ -182,6 +157,34 @@ class RouteModel extends Model
 		return $result;
 	}
 	
+
+
+	public function originMorphTo()
+	{
+		$class = DestinationModel::class;
+		$col = 'id';
+
+		if ($this->mode == 'flight') {
+			$class = AirportModel::class;
+			$col = 'airport_code';
+		}
+
+		return  $this->belongsTo($class, 'origin_code', $col);
+	}
+
+	public function destinationMorphTo()
+	{
+		$class = DestinationModel::class;
+		$col = 'id';
+
+		if ($this->mode == 'flight') {
+			$class = AirportModel::class;
+			$col = 'airport_code';
+		}
+
+		return  $this->belongsTo($class, 'destination_code', $col);
+	}
+
 
 	public function fusion()
 	{
@@ -215,7 +218,7 @@ class RouteModel extends Model
 											'App\Models\B2bApp\PackageActivityModel', 
 											'route_id'
 										);
-		return $activities->orderBy('date' ,'asc');
+		return $activities->byIsActive()->orderBy('date' ,'asc');
 	}
 
 
