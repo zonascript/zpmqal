@@ -125,7 +125,6 @@ class AgentActivityModel extends Model
 	}
 
 
-
 	public function findByDestination($cityId, $title = '')
 	{
 		return $this->byAdmin()->bySearch($title)

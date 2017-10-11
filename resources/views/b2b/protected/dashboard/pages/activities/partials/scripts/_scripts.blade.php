@@ -9,29 +9,6 @@
 	});
 	{{-- /bootstrap-daterangepicker --}}
 
-	{{-- autocomplete --}}
-	$(document).on('keypress paste	{{--keyup  keydown --}}', '#filter_search', function(e) {
-		var key = e.which;
-		if(key == 13){ /*the enter key code*/
-			searchActivities();
-		}
-		else{
-			var name = $(this).val();
-			if (name.length > 2) {
-				showSpinIcon();
-				var rid = idObject.crid;
-				url = '{{ url("api/package/activities/names") }}/'+rid+'?format=json&_token='+csrf_token;
-				$(this).autocomplete({ source: url });
-			}
-		}
-	});
-
-
-
-	$(document).on('autocompleteselect', '#filter_search', function (e, ui) {
-		searchActivities();
-	});
-	{{-- /autocomplete --}}
 
 
 	$(document).on('click', '#btn_filter_search', function() {
@@ -88,5 +65,6 @@
 		toggleGroup(this);
 	});
 </script>
+@include($viewPath.'.partials.scripts.autocomplete')
 @include($viewPath.'.partials.scripts.function')
 

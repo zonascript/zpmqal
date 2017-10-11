@@ -14,10 +14,11 @@ class ActivityController extends Controller
 {
 	use CallTrait;
 	
+	public $name = '';
+	public $count = 0;
 	public $cityId = '';
 	public $activities = [];
 	public $activityNames = [];
-	public $count = 0;
 
 	public function model()
 	{
@@ -25,8 +26,9 @@ class ActivityController extends Controller
 	}
 
 
-	public function activities($cityId)
+	public function activities($cityId, $name = '')
 	{
+		$this->name = $name;
 		$this->cityId = $cityId;
 		$this->agentActivities(); // pulling agent's activities
 		
@@ -39,8 +41,7 @@ class ActivityController extends Controller
 		if ($this->count < 20) {
 			$this->viatorActivities();  // pulling viator's activities
 		}
-
-		return $this->activities;
+		return collect($this->activities);
 	}
 
 
@@ -86,7 +87,7 @@ class ActivityController extends Controller
 	public function agentActivities()
 	{
 		$activitiesData = AgentActivitiesController::call()
-											->model()->findByDestination($this->cityId);
+											->model()->findByDestination($this->cityId, $this->name);
 
 		$this->activityObject($activitiesData);
 		return $this;
@@ -99,7 +100,7 @@ class ActivityController extends Controller
 		if (!is_null($destination->viatorDestination)) {
 			$cityId = $destination->viatorDestination->destinationId;
 			$activitiesData = ViatorActivitiesController::call()
-												->model()->findByDestination($cityId);
+												->model()->findByDestination($cityId, $this->name);
 			$this->activityObject($activitiesData);
 		}
 		return $this;

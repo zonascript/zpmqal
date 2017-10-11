@@ -95,15 +95,47 @@ class ActivitiesController extends Controller
 
 
 	public function postFatchActivities($rid){
-		$selectedActivities = $this->selectedActivities($rid);
+		$selectedActivities = $this->selectedActivities($rid)
+													->sortBy('date');
+
 		$route = RouteController::call()->model()
 						->byPackageUser()->find($rid);
 
 		$dbActivities = ActivityController::call()
 										->activities($route->destination_detail->id);
 
-		$activities = $this->mergeActivities($selectedActivities, $dbActivities);
-		return json_encode(['activities' => array_values($activities)]);
+		$activities = $dbActivities->merge($selectedActivities)
+										->sortByDesc('isSelected')
+											->values();
+
+		return json_encode(['activities' => $activities]);
+	}
+
+
+	public function getActivityNames($rid, Request $request)
+	{
+		$name = $request->term;
+		$route = RouteController::call()->model()->find($rid);
+		$names = ActivityController::call()
+									->activityNames($route->destination_detail->id, $name);
+
+		if ($request->format == 'json') {
+			$names = json_encode($names);
+		}
+		return $names;
+	}
+
+	public function postActivitiesSearch(Request $request, $rid)
+	{
+		$name = $request->term;
+		$route = RouteController::call()->model()
+						->byPackageUser()->find($rid);
+
+		$activities = ActivityController::call()
+									->activities($route->destination_detail->id, $name)
+										->values();
+
+		return json_encode($activities);
 	}
 
 
@@ -195,7 +227,7 @@ class ActivitiesController extends Controller
 				$activities[$activity->ukey] = $activity;
 			}
 		}
-		return $activities;
+		return collect($activities);
 	}
 
 
@@ -207,29 +239,7 @@ class ActivitiesController extends Controller
 				$selectedActivities[$key] = $activity;
 			}
 		}
-		return $selectedActivities;
-	}
-
-	public function getActivityNames($rid, Request $request)
-	{
-		$name = $request->term;
-		$route = RouteController::call()->model()->find($rid);
-		$names = ActivityController::call()
-									->activityNames($route->destination_detail->id, $name);
-
-		if ($request->format == 'json') {
-			$names = json_encode($names);
-		}
-		return $names;
-	}
-
-	public function postActivitiesSearch($rid, Request $request)
-	{
-		$name = $request->term;
-		$route = RouteController::call()->model()->find($rid);
-		$activities = ActivityController::call()
-									->searchActivities($route->destination_detail->id, $name);
-		return json_encode(['activities' => array_values($activities)]);
+		return collect($selectedActivities);
 	}
 
 

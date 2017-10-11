@@ -460,6 +460,14 @@
 	}
 
 
+	function populateHtml(obj, rid) {
+		obj['rid'] = rid;
+		elem_id = '#rid_'+rid;
+		$(elem_id).prepend(makeActivityObject(0, obj));
+		initDatePicker(rid);
+		$(elem_id+" :input").inputmask();
+	}
+
 	function addOwnActivity(thisObj) {
 		var rid = idObject.crid;
 		var firstLi = $('#rid_'+rid).find('.activity-container');
