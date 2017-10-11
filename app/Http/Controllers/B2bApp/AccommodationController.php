@@ -57,6 +57,8 @@ class AccommodationController extends Controller
 	*/
 	public function postAccomo($rid, Request $request)
 	{
+		$request->merge(['name' => $request->term]);
+
 		$route =  RouteController::call()->model()->find($rid);
 		$result = '[]';
 		if ($route->mode == 'hotel') {
@@ -153,7 +155,12 @@ class AccommodationController extends Controller
 
 	public function searchProp($rid, Request $request)
 	{
-		$result = [];
+		$result  = json_decode($this->postAccomo($rid, $request));
+		return isset($result->hotels) 
+				 ? json_encode($result->hotels)
+				 : '[]';
+
+		/*$result = [];
 		$route =  RouteController::call()->model()->find($rid);
 		if ($route->mode == 'hotel') {
 			$location = $route->destination_detail;
@@ -181,7 +188,7 @@ class AccommodationController extends Controller
 			$result = json_encode($result);
 		}
 
-		return $result;
+		return $result;*/
 	}
 
 

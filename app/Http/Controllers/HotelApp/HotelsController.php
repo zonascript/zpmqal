@@ -40,9 +40,11 @@ class HotelsController extends Controller
 
 	public function hotels($params = [])
 	{
- 		$hotels = BookingHotelsController::call()->model()->hotelsByLatLong($params);
+ 		$hotels = BookingHotelsController::call()->model()
+ 							->hotelsByLatLong($params);
  		if (!$hotels->count()) {
- 			$hotels = AgodaHotelsController::call()->model()->hotelsByLatLong($params);
+ 			$hotels = AgodaHotelsController::call()->model()
+ 								->hotelsByLatLong($params);
  		}
 
  		return $hotels;

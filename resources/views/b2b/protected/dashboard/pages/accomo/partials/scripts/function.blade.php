@@ -135,7 +135,7 @@
 	function populateHtml(response, rid, showTop) {
 		$('#loging_log').hide();
 		var ridObj 	= getRidObject(rid);
-		console.log(response, ridObj);
+		/*console.log(response, ridObj);*/
 		var accomos = [];
 
 		if (isset(response, 'hotels') && ridObj.mode == 'hotel') {
