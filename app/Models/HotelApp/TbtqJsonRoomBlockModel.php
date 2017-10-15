@@ -97,9 +97,7 @@ class TbtqJsonRoomBlockModel extends Model
 
 		$req = (array) $this->request;
 		$req['HotelRoomsDetails'] = [];
-
 		foreach ($this->response->BlockRoomResult->HotelRoomsDetails as $key => $room) {
-
 			/*$bedTypeCode = isset($room->BedTypes->BedTypeCode)
 									 ? $room->BedTypes->BedTypeCode
 									 : null;*/

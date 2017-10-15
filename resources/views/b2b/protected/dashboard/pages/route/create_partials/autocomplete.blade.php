@@ -1,5 +1,5 @@
 <script>
-	$(document).on('keyup paste', '.location', function(e) {
+	$(document).on('keypress', '.location', function(e) {
 		var parent = $(this).closest('.destinationList');
 		var mode = $(parent).find('.mode').val();
 		var name = $(this).attr('name');
@@ -51,6 +51,24 @@
 
 				$(this).removeClass('inctv')
 								.removeClass('border-red');
+
+				return false;
+			},
+			change: function( event, ui ) {
+				if (mode == 'flight') {
+					$(this).val( ui.item.fullname )
+									.attr('data-match', ui.item.fullname)
+										.attr('data-code', ui.item.airport_code);
+				}
+				else{
+					$(this).val( ui.item.name )
+									.attr('data-code', ui.item.code)
+										.attr('data-match', ui.item.name);
+				}
+
+				$(this).removeClass('inctv')
+								.removeClass('border-red');
+
 				return false;
 			}
 		})

@@ -56,10 +56,17 @@
 		else{
 			$('#startDate').addClass('border-red');
 			$('#startDate').removeClass('border-blue-2px');
-			alert('Please select start date...');
-			/*setTimeout(function () {  */  
-				$('#startDate').click();
-		  /*}, 500);*/
+
+			$.alert({
+				title: '<i class="fa fa-exclamation-triangle"></i> Warning.', 
+				content : 'Please select <b class="red">start date</b> ...',
+				buttons: {
+					Okay: function () {
+						$('#startDate').click();
+					},
+				}
+			});
+
 			return false;
 		}
 	}
@@ -301,6 +308,24 @@
 				}
 			}
 		});
+	}
+
+	function saveDate(thisObj) {
+		if (windata.is_date_saved == 0) {
+			var startDate = $('#startDate').val();
+			var data = { "_token" : csrf_token, "startDate" : startDate }
+			$.ajax({
+				type:"post",
+				url: "{{ url('dashboard/package/route/'.$package->token.'/sd') }}",
+				data: data,
+				dataType : 'JSON',
+				success: function(response) {
+					if (response.status == 200) {
+						windata.is_date_saved = 1;
+					}
+				}
+			});
+		}
 	}
 
 

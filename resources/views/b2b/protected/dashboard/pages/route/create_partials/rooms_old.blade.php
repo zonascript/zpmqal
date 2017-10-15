@@ -4,11 +4,11 @@
 			{{-- Rooms --}}
 			<div class="col-md-2 col-sm-2 col-xs-12">
 				<div class="row">
-					<div class="col-md-7 col-sm-7 col-xs-12 text-right font-size-16 m-top-5">
-						Room X
+					<div class="col-md-7 col-sm-7 col-xs-12 font-size-16 m-top-5">
+						Room {{-- X --}}
 					</div>
-					<div class="col-md-5 col-sm-5 col-xs-12">
-						<select class="form-control nopadding room-count">
+					<div class="col-md-5 col-sm-5 col-xs-12" hidden>
+						<select class="form-control nopadding room-count" >
 							@for ($i = 1; $i <= 12; $i++)
 								<option value="{{ $i }}" {{ $roomGuest->rooms == $i ? 'selected' : '' }}>{{ $i }}</option>
 							@endfor

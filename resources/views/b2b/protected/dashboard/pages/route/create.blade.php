@@ -35,7 +35,8 @@
 									</div>
 									<div class="col-md-4 col-sm-4 col-xs-12 m-top-5">
 										<input type="text" class="form-control has-feedback-left datepicker p-left-10 arrival border-blue-2px" placeholder="Start Date" id="startDate" aria-describedby="inputSuccess2Status3" data-pid="{{$package->id}}" 
-										@if ($package->start_date->format('Y') != '-0001')
+
+										@if ($package->is_start_date_set)
 											value="{{ $package->start_date->format('d/m/Y') }}"
 										@endif
 										>
@@ -76,10 +77,10 @@
 								<div class="col-md-12 col-sm-12 col-xs-12">
 									@include($viewPath.'.create_partials.rooms')
 								</div>
-								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 m-top-30">
+								<div class="col-md-3 col-sm-3 col-xs-12 m-top-30">
 									<button type="button" id="formSubmit" class="btn btn-success btn-block">Next</button>
 								</div>
-								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 m-top-30">
+								<div class="col-md-3 col-sm-3 col-xs-12 m-top-30">
 									<a href="{{ $package->package_url }}" class="btn btn-default btn-block">Cancel</a>
 								</div>
 							</div>

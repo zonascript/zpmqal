@@ -76,6 +76,17 @@ class RouteController extends Controller
 		return $nextEvent;
 	}
 
+	public function storePackageStartDate($pToken, Request $request)
+	{
+		$newPkg = new PackageController;
+		$package = $newPkg->model()->byUser()
+							->byToken($pToken)->first();
+		$package->start_date = date_formatter($request->startDate,'d/m/Y');
+		$package->save();
+
+		return json_encode(['status' => 200, 'saved successfully.']);
+	}
+
 
 	public function storeRow($pToken, Request $request)
 	{
@@ -248,8 +259,9 @@ class RouteController extends Controller
 
 	public function deleteRow($rid)
 	{
-		$this->makeStatusDelete($rid);
-		return json_encode(['status' => 200, 'deleted']);
+		$this->model()->destroy($rid); // this is delete the row
+		// $this->makeStatusDelete($rid); // this only for making status delete
+		return json_encode(['status' => 200, 'response' => 'deleted']);
 	}
 
 

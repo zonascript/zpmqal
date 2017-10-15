@@ -23,7 +23,7 @@ class IndicationModel extends Model
 
 	public function htmlOptions($cat, $isSelected = '', $isKey = true)
 	{
-		$data = $this->byCategory($cat)->get();
+		$data = $this->byCategory($cat)->orderBy('order')->get();
 	
 		$options = '';
 		foreach ($data as $value) {

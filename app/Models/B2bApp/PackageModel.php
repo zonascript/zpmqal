@@ -22,7 +22,7 @@ class PackageModel extends Model
 	protected $append = [
 								'uid', 'cost', 'nights', 'pax_detail',
 								'pax_string', 'itinerary', 'package_url',
-								'extra_word', 'duration'
+								'extra_word', 'duration', 'is_start_date_set'
 							];
 
 	public $costToken = null;
@@ -79,6 +79,13 @@ class PackageModel extends Model
 		$startDate->addDays($this->nights);
 		return $startDate;
 	}
+
+
+	public function getIsStartDateSetAttribute()
+	{
+		return $this->start_date->format('Y') > 2000 ? 1 : 0;
+	}
+
 
 	public function getItineraryAttribute()
 	{
@@ -187,9 +194,9 @@ class PackageModel extends Model
 	public function scopeSearch($query, $word)
 	{
 		return $query->whereHas('client', function ($q) use ($word){
-										$q->where('fullname', 'like', '%'.$word.'%');
-										$q->orWhere('mobile', 'like', '%'.$word.'%');
-										$q->orWhere('email', 'like', '%'.$word.'%');
+										$q->where('fullname', 'like', '%'.$word.'%')
+												->orWhere('mobile', 'like', '%'.$word.'%')
+													->orWhere('email', 'like', '%'.$word.'%');
 									});
 	}
 
@@ -353,7 +360,8 @@ class PackageModel extends Model
 		return $result->where([['status', '=', 'active']])
 										->where(function ($query) {
 												$query->orWhere('mode', '=', 'hotel')
-															->orWhere('mode', '=', 'cruise');
+																->orWhere('mode', '=', 'hotel_only')
+																	->orWhere('mode', '=', 'cruise');
 											});
 	}
 
@@ -363,7 +371,8 @@ class PackageModel extends Model
 		return $result->where([['status', '<>', 'deleted']])
 										->where(function ($query) {
 												$query->orWhere('mode', '=', 'hotel')
-															->orWhere('mode', '=', 'cruise');
+																->orWhere('mode', '=', 'hotel_only')
+																	->orWhere('mode', '=', 'cruise');
 											});
 	}
 

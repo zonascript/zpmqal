@@ -1,4 +1,6 @@
 <script>
+	var windata = { is_date_saved : {{ $package->is_start_date_set }} }
+
 	{{-- bootstrap-daterangepicker --}}
 
 	$(document).ready(function() {
@@ -66,8 +68,10 @@
 		}*/
 		
 		$('#container_req').addClass('hide');
-		$('#startDate').click();
-
+		var date = $('#startDate').val();
+		if (date.length < 5) {
+			$('#startDate').click();
+		}
 	});
 
 	$(document).on('click', '#save_req', function() {
@@ -81,8 +85,8 @@
 			var date = $('#startDate').val();
 			if (date.length < 5) {
 				$('#startDate').click();
+			}
 		/*}*/
-		}
 	});
 
 	$(document).on('click', '#edit_req', function() {
@@ -111,6 +115,7 @@
 
 	$('#btn-addDestination').click(function(){
 		if (postRoute()) {
+			saveDate();
 			/*var totalDestination = $('.destinationClass').children().length;*/
 			var destinationListHtml = $('#destinationListHtml').html();
 			var data_destination_count = addDestCount();
@@ -175,7 +180,7 @@
 				$(parent).find('.location-input-div').append(originHtml);
 				$(parent).find('.location-input-div').append(destinationTemp);
 			}
-			else if (thisVal == 'hotel' || thisVal == 'cruise') {
+			else if (thisVal == 'hotel' || thisVal == 'hotel_only' || thisVal == 'activity_only' || thisVal == 'cruise') {
 				var destinationTemp = $('#destinationTemp').html();
 				var nightTemp = $('#nightTemp').html();
 

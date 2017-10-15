@@ -301,14 +301,18 @@ class PackageController extends Controller
 
 		$token = $package->token;
 		$nextUrl = url();
+		$activeModes = $package->routes
+									->where('status', 'active')
+										->pluck('mode')->unique()->toArray();
+		
 
-		if ($package->activeFlightRoutes->count()) {
+		if (count(array_intersect(['flight'],$activeModes))) {
 			$nextUrl = url('dashboard/package/builder/flights/'.$token);
 		}
-		elseif ($package->activeAccomoRoutes->count()) {
+		elseif (count(array_intersect(['hotel', 'hotel_only', 'cruise'],$activeModes))) {
 			$nextUrl = url('dashboard/package/builder/accommodation/'.$token);
 		}
-		elseif($package->hotelRoutes->count() && $current != 'activities'){
+		elseif(count(array_intersect(['hotel', 'activity_only'],$activeModes)) && $current != 'activities'){
 			$nextUrl = url('dashboard/package/builder/activities/'.$token);
 		}
 		else{
