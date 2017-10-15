@@ -402,6 +402,23 @@ class PackageModel extends Model
 	}
 
 	
+	public function flightUrl()
+	{
+		return url('dashboard/package/builder/flights/'.$this->token);
+	}
+
+
+	public function accommodationUrl()
+	{
+		return url('dashboard/package/builder/accommodation/'.$this->token);
+	}
+
+
+	public function activitiesUrl()
+	{
+		return url('dashboard/package/builder/activities/'.$this->token);
+	}
+
 
 	public function clientEmailSubject()
 	{
@@ -419,6 +436,62 @@ class PackageModel extends Model
 	}
 
 
+	public function backCurrentNextUrl($currKey = '')
+	{
+		$routes = $this->routes->pluck('mode')->unique()->all();
+		$way = ['route'];
+		$urls = [
+				'route' => $this->createRouteUrl(),
+				'flight' => $this->flightUrl(),
+				'accommodation' => $this->accommodationUrl(),
+				'activities' => $this->activitiesUrl(),
+				'open' => route('openPackage',$this->token)
+			];
+
+		if (count(array_intersect(['flight'], $routes))) {
+			$way[] = 'flight';
+		}
+		
+		if (count(array_intersect(['hotel', 'hotel_only', 'cruise'], $routes))) {
+			$way[] = 'accommodation';
+		}
+		
+		if(count(array_intersect(['hotel', 'activity_only'], $routes))){
+			$way[] = 'activities';
+		}
+
+		$way[] = 'open';
+
+		// dd($way);
+
+		$currIndex = array_search($currKey, $way);
+
+		$prevKey = isset($way[$currIndex-1])
+						 ? $way[$currIndex-1]
+						 : 'route';
+
+		$nextKey = isset($way[$currIndex+1])
+						 ? $way[$currIndex+1]
+						 : 'open';
+
+		$previous = isset($urls[$prevKey])
+							? $urls[$prevKey]
+							: $this->createRouteUrl();
+		
+		$current = isset($urls[$currKey])
+						 ? $urls[$currKey]
+						 : $this->createRouteUrl();
+
+		$next = isset($urls[$nextKey])
+					? $urls[$nextKey]
+					: route('openPackage',$this->token);
+
+		return collect([
+							'previous' => $previous,
+							'current' => $current,
+							'next' => $next,
+						]);
+	}	
 
 
 	public function transferStringArray()

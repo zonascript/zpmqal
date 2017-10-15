@@ -45,6 +45,7 @@ class RouteController extends Controller
 									->byUser()->byToken($token)->first();
 		}
 
+
 		$blade = [
 				"client" 		=> $client, 
 				"package" 	=> $package,

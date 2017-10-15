@@ -18,6 +18,9 @@
 	</div>
 	<div id="accomos_result" class="row">
 		<div class="col-md-3 col-md-3 col-xs-12">
+			<div class="row">
+				<a href="{{ $package->backCurrentNextUrl('accommodation')->get('previous', '#') }}" class="btn btn-success"><i class="fa fa-arrow-left"></i> Back</a>
+			</div>
 			<div class="row">	
 				<div class="x_panel nopadding" style="background: aliceblue;">
 					<h3><div class="text-center">Accommodation</div></h3>

@@ -20,6 +20,9 @@
 	</div>
 	<div id="flights_result" class="row">
 		<div class="col-md-3 col-md-3 col-xs-12">
+			<div class="row">
+				<a href="{{ $package->backCurrentNextUrl('flight')->get('previous', '#') }}" class="btn btn-success"><i class="fa fa-arrow-left"></i> Back</a>
+			</div>
 			<div class="row">	
 				<div class="x_panel nopadding" style="background: aliceblue;">
 					<h3><div class="text-center">Flights</div></h3>
