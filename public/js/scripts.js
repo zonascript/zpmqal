@@ -64,9 +64,11 @@ function star_Rating(count){
 }
 
 function proper(str) {
-  str = str.toLowerCase().replace(/\b[a-z]/g, function(letter) {
-      return letter.toUpperCase();
-  });
+  if (str != 'undefined' && str != null) {
+    str = str.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+        return letter.toUpperCase();
+    });
+  }
   return str;
 }
 
