@@ -121,6 +121,7 @@ class AgentActivityModel extends Model
 
 	public function scopeBySearch($query, $title)
 	{
+		$title = implode('%', explode(' ', $title));
 		return $query->where("title", 'like', '%'.$title.'%');
 	}
 
