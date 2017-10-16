@@ -175,7 +175,7 @@
 
 	{{-- make hotel object --}}
 	function makeAccomoObject(i, object, rid) {
-		/*console.log(object);*/
+		console.log(object);
 		var code = object.id;
 		var ukey = code+'_'+object.vendor;   {{-- uniqueKye = rid_id_vendor --}}
 		var name = proper(object.name);

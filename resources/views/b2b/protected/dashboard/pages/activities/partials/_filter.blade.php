@@ -7,7 +7,7 @@
 		<div class="x_content nopadding">
 			<div class="form-group">
 				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback m-top-10-only">
-					<input type="text" v-model="search" id="filter_search" class="search form-control" placeholder="Search hotel name..">
+					<input type="text" v-model="search" id="filter_search" class="search form-control" placeholder="Search activity...">
 					<i id="fa_def_filter_icon" class="fa fa-futbol-o form-control-feedback right-1 right" aria-hidden="true"></i>
 					<i id="fa_spin_filter_icon" class="fa fa-spinner fa-pulse fa-3x fa-fw font-size-20 errspan hide"></i>
 				</div>

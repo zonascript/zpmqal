@@ -109,7 +109,7 @@
 			var dateStyle = 'style="display: none;"';
 			var modeOption = getModeOption(obj.mode);
 			var timingOption = getTimingOption(obj.timing);
-			var sortDescription = shortString(description);
+			var sortDescription = shortString(obj.sort_description);
 			var pdid = isset(obj, 'pdid') ? obj.pdid : '';
 			var pickUp = obj.pick_up != null 
 								 ? obj.pick_up.substring(0, 5)
@@ -126,7 +126,7 @@
 				btnName = 'Remove';
 				dateStyle = '';
 				date = moment(obj.date).format('DD/MM/YYYY');
-				sortDescription = shortString(description, 0, 150);
+				sortDescription = shortString(sortDescription, 0, 150);
 			}
 
 			var activity = {
