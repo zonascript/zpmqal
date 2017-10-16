@@ -180,7 +180,7 @@ class HotelsController extends Controller
 			// this is global request array
 			$request = [
 					"Destination" => $data->route->location_hotel,
-					"RoomGuests" => $data->route->package->roomGuest,
+					"RoomGuests" => $data->route->package->roomGuests,
 					"Nights" => $data->route->nights,
 					"PreferredCurrency" => "INR",
 					"Dates" => [

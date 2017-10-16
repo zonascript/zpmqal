@@ -37,7 +37,7 @@ class SkyscannerHotelApiController extends Controller
 			$startDate = date_formatter($packageHotel->route->start_date, 'Y-m-d H:i:s');
 			$endDate =  addDaysinDate($startDate, $packageHotel->route->nights);
 				
-			$guests = $this->guests($packageHotel->route->package->roomGuest);
+			$guests = $this->guests($packageHotel->route->package->roomGuests);
 			$params = (object)[
 					"market" => "US",
 					"currency" => "INR",
@@ -46,7 +46,7 @@ class SkyscannerHotelApiController extends Controller
 					"check_in_date" => $startDate,
 					"check_out_date" => $endDate,
 					"guests" => $guests,
-					"rooms" => $packageHotel->route->package->roomGuest->count()
+					"rooms" => $packageHotel->route->package->roomGuests->count()
 				];
 			
 			$result = $this->getHotels($params);

@@ -4,10 +4,6 @@ namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\B2bApp\ItineraryController;
-use App\Models\B2bApp\PackageActivityModel;
-use App\Models\B2bApp\PackageCostModel;
-use App\Models\B2bApp\RoomGuestModel;
-use App\Models\B2bApp\PackageModel;
 use App\Traits\CallTrait;
 use Carbon\Carbon;
 use DB;
@@ -114,10 +110,9 @@ class PackageModel extends Model
 
 	public function getPaxDetailAttribute()
 	{
-		$roomGuest = $this->roomGuest;
 		$result = ["adult" => 0, "child" => 0, "infant" => 0];
 		
-		foreach ($roomGuest as $key => $value) {
+		foreach ($this->roomGuests as $key => $value) {
 			$result['adult'] += $value->no_of_adult;
 			foreach ($value->childAge as $childAge) {
 				if ($childAge->age <= 2) {
@@ -252,7 +247,7 @@ class PackageModel extends Model
 
 	public function copyRoomGuests($pid)
 	{
-		foreach ($this->roomGuest as $roomGuest) {
+		foreach ($this->roomGuests as $roomGuest) {
 			$roomGuest->copyGuests($pid);
 		}
 		return $this;
