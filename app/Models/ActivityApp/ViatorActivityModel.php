@@ -46,9 +46,9 @@ class ViatorActivityModel extends Model
 	public function scopeBySearch($query, $title='')
 	{
 		// $title = implode('%', explode(' ', $title));
-		
-		$title = implode('%', str_split(str_replace(' ', '', $title)));
+		// $title = implode('%', str_split(str_replace(' ', '', $title)));
 
+		$title = wordwrap($title, 1, "%", true);
 		return $query->where("title", 'like', '%'.$title.'%');
 	}
 
