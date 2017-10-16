@@ -134,6 +134,7 @@ class ActivityController extends Controller
 						'image' => $image,
 						'name' => $name,
 						'description' => clean_html($description),
+						'sort_description' => strip_tags($description),
 						'date' => '',
 						'timing' => '',
 						'mode' => '',

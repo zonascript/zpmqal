@@ -70,6 +70,7 @@ class PackageActivityModel extends Model
 					'image' => $image,
 					'name' => $name,
 					'description' => $description,
+					'sort_description' => strip_tags($description),
 					'date' => $this->date,
 					'timing' => $this->timing,
 					'mode' => $this->mode,
