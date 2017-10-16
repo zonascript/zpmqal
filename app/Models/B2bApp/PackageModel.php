@@ -338,6 +338,17 @@ class PackageModel extends Model
 	}
 
 
+	public function activityRoutes()
+	{
+		$result = $this->hasMany('App\Models\B2bApp\RouteModel', 'package_id');
+		return $result->where('status', '<>', 'deleted')
+										->where(function($q){
+												$q->where('mode', '=', 'hotel')
+														->orWhere('mode', '=', 'activity_only');
+											});
+	}
+
+
 	/*
 	| this function is to get all route which is belongs to package table id
 	*/

@@ -522,15 +522,15 @@
 			console.log(start.toISOString(), end.toISOString(), label);
 		};
 
-		@foreach ($package->hotelRoutes as $hotelRouteKey => $hotelRoute)
+		@foreach ($package->activityRoutes as $activityRouteKey => $activityRoute)
 			
 			<?php 
-				$startDate = $hotelRoute->start_datetime->format('Y-m-d');
-				$endDate = $hotelRoute->end_datetime->format('Y-m-d');
+				$startDate = $activityRoute->start_datetime->format('Y-m-d');
+				$endDate = $activityRoute->end_datetime->format('Y-m-d');
 			?>
 
-			if (rid == {{$hotelRoute->id}}) {
-				var optionSet{{ $hotelRoute->id }} = {
+			if (rid == {{$activityRoute->id}}) {
+				var optionSet{{ $activityRoute->id }} = {
 					singleDatePicker: true,
 					calender_style: "picker_1",
 					format : "DD/MM/YYYY",
@@ -540,7 +540,7 @@
 					endDate: new Date('{{ $endDate }}')
 				};
 
-				$('.datepicker-{{ $hotelRoute->id }}').daterangepicker(optionSet{{ $hotelRoute->id}}, cb);
+				$('.datepicker-{{ $activityRoute->id }}').daterangepicker(optionSet{{ $activityRoute->id}}, cb);
 			}
 		@endforeach
 	};

@@ -40,25 +40,25 @@
 				<div class="col-md-12 col-sm-12 col-xs-12">
 					<div id="exTab1" class="container">
 						<ul id="tab_menu" class="nav nav-pills">
-							@foreach ($package->hotelRoutes as $hotelRouteKey => $hotelRoute)
+							@foreach ($package->activityRoutes as $activityRouteKey => $activityRoute)
 								<li class="col-md-2 col-sm-2 col-xs-12 text-center li-menu-dest 
-									{{ $hotelRouteKey == 0 ? 'active' : ''}}" 
-									data-list="rid_{{ $hotelRoute->id }}_div">
-									<a id="a_rid_{{ $hotelRoute->id }}" 
-										href="#rid_{{ $hotelRoute->id }}_div" 
-										data-rid="{{ $hotelRoute->id }}"
+									{{ $activityRouteKey == 0 ? 'active' : ''}}" 
+									data-list="rid_{{ $activityRoute->id }}_div">
+									<a id="a_rid_{{ $activityRoute->id }}" 
+										href="#rid_{{ $activityRoute->id }}_div" 
+										data-rid="{{ $activityRoute->id }}"
 										class="a_tab_menu"
 										data-toggle="tab">
-										{{ $hotelRoute->destination_detail->destination.', '.$hotelRoute->destination_detail->country }}
+										{{ $activityRoute->destination_detail->destination.', '.$activityRoute->destination_detail->country }}
 									</a>
 								</li>
 							@endforeach
 						</ul>
 						<div class="tab-content tab-content-box clearfix">
-							@foreach ($package->hotelRoutes as $hotelRouteKey => $hotelRoute)
-								<div id="rid_{{ $hotelRoute->id }}_div" 
-										class="tab-pane {{ $hotelRouteKey == 0 ? 'active' : ''}}">
-									<ul id="rid_{{ $hotelRoute->id }}" class="list list-unstyled" data-rid="{{ $hotelRoute->id }}"></ul>
+							@foreach ($package->activityRoutes as $key => $activityRoute)
+								<div id="rid_{{ $activityRoute->id }}_div" 
+										class="tab-pane {{ $activityRouteKey == 0 ? 'active' : ''}}">
+									<ul id="rid_{{ $activityRoute->id }}" class="list list-unstyled" data-rid="{{ $activityRoute->id }}"></ul>
 									<button class="btn btn-success add-own-activity" data-count="0"
 										>Add your own Activity
 									</button>

@@ -12,7 +12,7 @@
 			console.log(start.toISOString(), end.toISOString(), label);
 		});
 		/*$('#loging_log').hide();*/
-		// fatchFlights({{$package->flightRoutes[0]->id}});
+		fatchFlights({{$package->flightRoutes[0]->id}});
 	});
 
 	{{-- /bootstrap-daterangepicker --}}

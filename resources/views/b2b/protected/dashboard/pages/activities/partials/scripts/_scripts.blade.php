@@ -3,8 +3,8 @@
 	var windata = { is_fine : true };
 	{{-- bootstrap-daterangepicker --}}
 	$(document).ready(function() {
-		@foreach ($package->hotelRoutes as $hotelRouteKey => $hotelRoute)
-			postActivities({{$hotelRoute->id}});
+		@foreach ($package->activityRoutes as $activityRouteKey => $activityRoute)
+			postActivities({{$activityRoute->id}});
 		@endforeach
 	});
 	{{-- /bootstrap-daterangepicker --}}

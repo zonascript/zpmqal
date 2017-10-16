@@ -3,37 +3,37 @@
 	$rid =  [];
 	$idObject = [];
 	$crid = '';
-	foreach ($package->hotelRoutes as $hotelRouteKey  => $hotelRoute) {
+	foreach ($package->activityRoutes as $activityRouteKey  => $activityRoute) {
 
-		if ($hotelRouteKey == 0) $crid = $hotelRoute->id;
+		if ($activityRouteKey == 0) $crid = $activityRoute->id;
 
 		// date object here
-		$minDate = date_differences($hotelRoute->start_date, date("Y-m-d"));
-		$maxDate = date_differences($hotelRoute->end_date, date("Y-m-d"));
+		$minDate = date_differences($activityRoute->start_date, date("Y-m-d"));
+		$maxDate = date_differences($activityRoute->end_date, date("Y-m-d"));
 
 	
 		// id's object here
-		$objectKey = 'rid_'.$hotelRoute->id;
+		$objectKey = 'rid_'.$activityRoute->id;
 
 		$idObject[$objectKey] = [
-				'rid' => $hotelRoute->id,
+				'rid' => $activityRoute->id,
 				'nrid' => 'NaN',
-				'origin' => $hotelRoute->origin,
-				'destination' => $hotelRoute->destination,
-				'startDate' => $hotelRoute->start_datetime->format('d-m-Y'),
-				'endDate' => $hotelRoute->end_datetime->format('d-m-Y'),
+				'origin' => $activityRoute->origin,
+				'destination' => $activityRoute->destination,
+				'startDate' => $activityRoute->start_datetime->format('d-m-Y'),
+				'endDate' => $activityRoute->end_datetime->format('d-m-Y'),
 				'minDate' => $minDate,
 				'maxDate' => $maxDate
 			];
 
-		$nexthotelRouteKey = $hotelRouteKey+1;
+		$nextactivityRouteKey = $activityRouteKey+1;
 		
-		if ($nexthotelRouteKey < $package->hotelRoutes->count()) {
+		if ($nextactivityRouteKey < $package->activityRoutes->count()) {
 			$idObject[$objectKey]['nrid'] = $package
-																					->hotelRoutes[$nexthotelRouteKey]->id;
+																					->activityRoutes[$nextactivityRouteKey]->id;
 		}
 
-		$rid[] = $hotelRoute->id;
+		$rid[] = $activityRoute->id;
 	}
 
 	$idObject['rid'] = $rid;
