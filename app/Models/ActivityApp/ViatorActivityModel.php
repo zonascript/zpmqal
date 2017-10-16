@@ -25,6 +25,12 @@ class ViatorActivityModel extends Model
 	}
 
 
+	public function getShortDescriptionAttibute($value)
+	{
+		return strip_tags($value);
+	}
+
+
 	public function scopeByCode($query, $code)
 	{
 		return $query->where('code', $code);
