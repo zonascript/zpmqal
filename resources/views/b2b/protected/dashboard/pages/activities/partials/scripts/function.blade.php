@@ -91,7 +91,7 @@
 	function searchActivities() {
 		var term = $('#filter_search').val();
 		postActivities(idObject.crid, 'search', term);
-		hideSpinIcon();
+		/*hideSpinIcon();*/
 	}
 
 

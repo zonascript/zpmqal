@@ -494,7 +494,7 @@
 
 
 	function postSearchHotel() {
-		hideSpinIcon();
+		/*hideSpinIcon();*/
 		$('#loging_log').show();
 		var name = $('#filter_search').val();
 		var rid = $('#tab_menu').find('.active').attr('data-rid');

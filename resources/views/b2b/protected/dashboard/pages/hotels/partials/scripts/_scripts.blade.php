@@ -23,12 +23,12 @@
 		var key = e.which;
 		if(key == 13){ /*the enter key code*/
 			postSearchHotel();
-			hideSpinIcon();
+			/*hideSpinIcon();*/
 		}
 		else{
 			var name = $(this).val();
 			if (name.length > 2) {
-				showSpinIcon();
+				/*showSpinIcon();*/
 				var did = $('#tab_menu').find('.active').attr('data-did');
 				url = '{{ url("dashboard/hotels/search/name") }}/'+did+'?format=json&_token='+csrf_token;
 				$(this).autocomplete({ source: url });
@@ -39,7 +39,7 @@
 
 	$(document).on('autocompleteselect', '#filter_search', function (e, ui) {
 		postSearchHotel();
-		hideSpinIcon();
+		/*hideSpinIcon();*/
 	});
 	{{-- /autocomplete --}}
 

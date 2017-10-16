@@ -114,7 +114,7 @@
 	{{-- post hotel --}}
 
 	function postSearchProp() {
-		hideSpinIcon();
+		/*hideSpinIcon();*/
 		$('#loging_log').show();
 		var name = $('#filter_search').val();
 		var rid = idObject.crid;

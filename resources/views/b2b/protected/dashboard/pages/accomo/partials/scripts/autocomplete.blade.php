@@ -2,7 +2,7 @@
 	$(document).on('keyup paste', '#filter_search', function(e) {
 		var name = $(this).val();
 		if (name.length > 2) {
-			showSpinIcon();
+			/*showSpinIcon();*/
 			var rid = idObject.crid;
 			var url = '{{ urlAccomoApi("search/name") }}/'+rid+'?format=json&_token='+csrf_token;
 
@@ -17,12 +17,12 @@
 					$(this).val( ui.item.name )
 									.attr('data-code', ui.item.code);
 					populateHtml({'hotels' : [ui.item]}, rid, true);
-					hideSpinIcon();
+					/*hideSpinIcon();*/
 					return false;
 				}
 			})
 			.autocomplete().data("ui-autocomplete")._renderItem =  function( ul, item ) {
-				hideSpinIcon();
+				/*hideSpinIcon();*/
 				return $( "<li>" )
 				.append( "<a>" + item.name + "</a>" )
 				.appendTo( ul );
