@@ -1,5 +1,5 @@
 <li class="m-top-10 main-list-item li_'+accomo.ukey+'">
-	<div class="x_panel glowing-border">
+	<div class="x_panel glowing-border '+accomo.search_class+'">
 		<div class="row">
 			<div class="col-md-3 col-sm-3 col-xs-12">
 				<div class="row height-150px">

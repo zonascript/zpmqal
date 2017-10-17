@@ -59,14 +59,31 @@ class AccommodationController extends Controller
 	{
 		$request->merge(['name' => $request->term]);
 
-		$route =  RouteController::call()->model()->find($rid);
+		$route =  RouteController::call()->model()->findOrFail($rid);
+		
 		$result = '[]';
-		if ($route->mode == 'hotel') {
-			$result = HotelsController::call()->postHotelFromDb($rid, $request);
+
+		if (in_array($route->mode, ['hotel', 'hotel_only'])) {
+			$result = DbHotelsController::call()
+								->hotels($route->makeHotelParams($request));
+
+			if (isset($route->fusion->selectedHotel->built_data)) {
+				$result = array_merge(
+							[$route->fusion->selectedHotel->built_data], $result
+						);
+			}
+
+			$result =  ['hotels' => $result];
+
+			if ($request->format == 'json') {
+				$result = json_encode($result);
+			}
+
 		}
 		elseif ($route->mode == 'cruise') {
 			$result = CruisesController::call()->postOnlyCruise($rid, $request);
 		}
+
 		return $result;
 	}
 
@@ -81,7 +98,7 @@ class AccommodationController extends Controller
 	{
 		$route =  RouteController::call()->model()->find($rid);
 		$result = [];
-		if ($route->mode == 'hotel') {
+		if (in_array($route->mode, ['hotel', 'hotel_only'])) {
 			$result = HotelsController::call()->postHotelRoom($request);
 		}
 		elseif ($route->mode == 'cruise') {
@@ -95,7 +112,7 @@ class AccommodationController extends Controller
 	{
 		$route =  RouteController::call()->model()->find($rid);
 		$result = [];
-		if ($route->mode == 'hotel') {
+		if (in_array($route->mode, ['hotel', 'hotel_only'])) {
 			$result = HotelsController::call()->postHotelFacilities($request);
 		}
 		elseif ($route->mode == 'cruise') {
@@ -109,7 +126,7 @@ class AccommodationController extends Controller
 	{
 		$route =  RouteController::call()->model()->find($rid);
 		$result = [];
-		if ($route->mode == 'hotel') {
+		if (in_array($route->mode, ['hotel', 'hotel_only'])) {
 			$result = HotelsController::call()->postHotelImages($request);
 		}
 		elseif ($route->mode == 'cruise') {
@@ -123,7 +140,7 @@ class AccommodationController extends Controller
 		$route =  RouteController::call()->model()->find($rid);
 		$result = [];
 		
-		if ($route->mode == 'hotel') {
+		if (in_array($route->mode, ['hotel', 'hotel_only'])) {
 			$result = HotelsController::call()->postAddHotelRoom($rid, $request);
 		}
 		elseif ($route->mode == 'cruise') {
@@ -142,7 +159,7 @@ class AccommodationController extends Controller
 		$route =  RouteController::call()->model()->find($rid);
 		$result = [];
 		
-		if ($route->mode == 'hotel') {
+		if (in_array($route->mode, ['hotel', 'hotel_only'])) {
 			$result = HotelsController::call()->postRemoveHotelRoom($rid, $request);
 		}
 		elseif ($route->mode == 'cruise') {
@@ -162,7 +179,7 @@ class AccommodationController extends Controller
 
 		/*$result = [];
 		$route =  RouteController::call()->model()->find($rid);
-		if ($route->mode == 'hotel') {
+		if (in_array($route->mode, ['hotel', 'hotel_only'])) {
 			$location = $route->destination_detail;
 			$params = [
 						'name' => $request->term,

@@ -302,25 +302,13 @@ class HotelsController extends Controller
 		$route = RouteController::call()->model()->find($routeId);
 
 		$selected = [];
-		
 		if (!is_null($route->fusion) && is_null($request->name)) {
 			$selected = $route->fusion->hotelForView()->toArray();
 		}
 
-		$location = $route->destination_detail;
-		$params = [
-				'latitude' => $location->latitude, 
-				'longitude' => $location->longitude, 
-				'max_rating' => 5,
-				'min_rating' => 0,
-				"adults" => 2,
-				"location" => '',
-				"name" => $request->name,
-				"checkInDate" => $route->start_date,
-				"checkOutDate" => $route->end_date,
-			];
-
+		$params = $route->makeHotelParams($request);
 		$hotels = DbHotelsController::call()->hotels($params);
+		// dd($hotels);
 		$hotels = array_merge($selected, $hotels->toArray());
 		$result = rejson_decode(['hotels' => $hotels]);
 

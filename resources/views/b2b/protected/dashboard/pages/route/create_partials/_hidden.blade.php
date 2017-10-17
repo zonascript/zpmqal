@@ -1,7 +1,7 @@
 <div hidden>
 	{{-- age html --}}
 	<div id="age_temp">
-		<div class="col-md-6 col-sm-6 col-xs-12 p-bottom-1 form-group has-feedback nopadding">
+		<div class="col-md-3 col-sm-3 col-xs-12 p-bottom-1 form-group has-feedback nopadding">
 			<select class="form-control nopadding age-elem" data-id="">
 				<option selected>Age</option>
 				@for ($i = 1; $i <= 12; $i++)

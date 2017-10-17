@@ -28,7 +28,7 @@
 						</button>
 					</span>
 					<span class="form-control text-center nopadding-right">
-						<input type="text" id="count_adult_'+count+'" class="width-10 nostyle adults" value="2" data-min="1" data-max="4" data-singular="Adult" data-plural="Adults">
+						<input type="text" id="count_adult_'+count+'" class="width-20 nostyle adults" value="2" data-min="1" data-max="12" data-singular="Adult" data-plural="Adults">
 						<span>Adults</span>
 					</span>
 					<span class="input-group-btn">
@@ -51,7 +51,7 @@
 						</button>
 					</span>
 					<span class="form-control text-center nopadding-right">
-						<input type="text" id="count_child_'+count+'" class="width-10 nostyle children" value="0" data-min="0" data-max="2" data-singular="Child" data-plural="Children">
+						<input type="text" id="count_child_'+count+'" class="width-20 nostyle children" value="0" data-min="0" data-max="4" data-singular="Child" data-plural="Children">
 						<span>Child</span>
 					</span>
 					<span class="input-group-btn">

@@ -28,7 +28,7 @@
 							</button>
 						</span>
 						<span class="form-control text-center nopadding-right">
-							<input type="text" id="count_adult_{{ $key }}" class="width-10 nostyle adults" value="{{ $roomGuest->no_of_adult }}" data-min="1" data-max="4" data-singular="Adult" data-plural="Adults">
+							<input type="text" id="count_adult_{{ $key }}" class="width-20 nostyle adults" value="{{ $roomGuest->no_of_adult }}" data-min="1" data-max="12" data-singular="Adult" data-plural="Adults">
 							<span>{{ str_plural('Adult', $roomGuest->no_of_adult) }}</span>
 						</span>
 						<span class="input-group-btn">
@@ -51,7 +51,7 @@
 							</button>
 						</span>
 						<span class="form-control text-center nopadding-right">
-							<input type="text" id="count_child_{{ $key }}" class="width-10 nostyle children" value="{{ $roomGuest->childAge->count() ? $roomGuest->childAge->count() : '' }}" data-min="0" data-max="2" data-singular="Child" data-plural="Children">
+							<input type="text" id="count_child_{{ $key }}" class="width-20 nostyle children" value="{{ $roomGuest->childAge->count() ? $roomGuest->childAge->count() : '' }}" data-min="0" data-max="4" data-singular="Child" data-plural="Children">
 							<span>{{ str_plural('Child', $roomGuest->childAge->count()) }}</span>
 						</span>
 						<span class="input-group-btn">
@@ -67,7 +67,7 @@
 			{{-- Age html --}}
 			<div class="col-md-3 col-sm-3 col-xs-12 age">
 				@foreach ($roomGuest->childAge as $childAge)
-					<div class="col-md-6 col-sm-6 col-xs-12 p-bottom-1 form-group has-feedback nopadding">
+					<div class="col-md-3 col-sm-3 col-xs-12 p-bottom-1 form-group has-feedback nopadding">
 						<select class="form-control nopadding age-elem" data-id="">
 							<option>Age ?</option>
 							@for ($i = 1; $i <= 12; $i++)

@@ -3,137 +3,50 @@
 namespace App\Models\HotelApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Models\HotelApp\CoordinateTrait;
+use App\Traits\Models\HotelApp\ScopeSearchTrait;
 use DB;
 
 class HotelModel extends Model
 {
+	use CoordinateTrait, ScopeSearchTrait;
+
 	protected $connection  = 'mysql4';
 	protected $table = 'hotels';
 	protected $appends = ['vendor_code'];
 	protected $hidden = ['created_at', 'updated_at'];
+	protected $searchColumnName = 'name';
 
 	public function getVendorCodeAttribute()
 	{
-		$vendor = '';
-		if ($this->vendor_type == 'App\Models\HotelApp\BookingHotelModel') {
-			$vendor = 'b';
-		}elseif ($this->vendor_type == 'App\Models\HotelApp\AgodaHotelModel') {
-			$vendor = 'a';
-		}
-		return $vendor;
-	}
+		$vendors = [
+				'App\Models\HotelApp\AgodaHotelModel' => 'a',
+				'App\Models\HotelApp\BookingHotelModel' => 'b',
+				'App\Models\HotelApp\TbtqHotelModel' => 't'
+			];
 
-	public function fatchHotelName($params)
-	{
-		$result = $this->hotels($params);
-
-		$names = [];
-		
-
-		$names = array_values($names);
-		return $names;
+		return isset($vendors[$this->vendor_type])
+				 ? $vendors[$this->vendor_type]
+				 : '';
 	}
 
 
-	public function fatchHotels(Array $params)
+
+	public function scopeByVendor($query, $vendor = 'b')
 	{
-		$params = (object) $params;
-		$result = $this->hotels($params);
-		$hotels = [];
-
-		if (isset($params->nameOnly) && $params->nameOnly) {
-			foreach ($result as $value) {
-				$hotels[$value->name] = $value->name;
-			}
-		}
-		else{
-			foreach ($result as $resultValue) {
-
-				$vendorHotel = $resultValue->vendor;
-
-				$hotelId = $vendorHotel->id;
-				if ($resultValue->vendor_code == 'a') {
-					$hotelId = $vendorHotel->hotel_id;
-				}
-
-				$name = '';
-				if (isset($vendorHotel->name)) {
-					$name = $vendorHotel->name;
-				}elseif (isset($vendorHotel->hotel_name)) {
-					$name = $vendorHotel->hotel_name;
-				}
-
-				$name = proper($name);
-
-				$starRating = '';
-				if (isset($vendorHotel->star_rating)) {
-					$starRating = $vendorHotel->star_rating;
-				}elseif (isset($vendorHotel->class)) {
-					$starRating = $vendorHotel->class;
-				}
-
-
-				$description = '';
-				if (isset($vendorHotel->overview)) {
-					$description = $vendorHotel->overview;
-				}elseif (isset($vendorHotel->desc_en)) {
-					$description = $vendorHotel->desc_en;
-				}
-
-				$image = '';
-				if (isset($vendorHotel->photo1)) {
-					$image = $vendorHotel->photo1;
-				}elseif (isset($vendorHotel->photo_url)) {
-					$image = $vendorHotel->photo_url;
-				}
-
-				$hotels[$name] = [
-					'id' => $hotelId,
-					'name' => $name,
-					'longitude' => $vendorHotel->longitude,
-					'latitude' => $vendorHotel->latitude,
-					'vendor' => $resultValue->vendor_code,
-					'address' => $vendorHotel->address,
-					'star_rating' => $starRating,
-					'description' => $description, 
-					'image' => $image
+		$vendors = [
+					'a' => '%AgodaHotelModel',
+					'b' => '%BookingHotelModel',
+					't' => '%TbtqHotelModel'
 				];
-			}
-		}
+		
+		$vendor = isset($vendors[$vendor]) 
+						? $vendors[$vendor] 
+						: $vendors['b'];
 
-		$hotels = array_values($hotels);
-		return $hotels;
+		return $query->where('vendor_type', 'like', $vendor);
 	}
 
-
-
-	public function hotels($params=[])
-	{
-		$name = $params->name;
-		$lat = $params->latitude;
-		$long = $params->longitude;
-		$skip = isset($params->skip) ? $params->skip : 0;
-		$take = isset($params->take) ? $params->take : 10;
-
-		$sqlQuery = DB::raw('3956 * 2 * ASIN(SQRT( POWER(SIN(('.$lat.' - latitude)*pi()/180/2),2) + COS('.$lat.'*pi()/180 )*
-			COS(latitude*pi()/180)*POWER(SIN(('.$long.' - longitude)
-			*pi()/180/2),2))) as distance, CONCAT(TRUNCATE(latitude,3), \'_\', TRUNCATE(longitude,3)) as lat_long');
-
-		$whereRaw = 'longitude between ('.$long.'-25/cos(radians('.$lat.'))*69) 
-			and ('.$long.'+25/cos(radians('.$lat.'))*69) 
-			and latitude between ('.$lat.'-(25/69)) 
-			and ('.$lat.'+(25/69)) 
-			and name like \'%'.$name.'%\'';
-
-		return $this->select('*', $sqlQuery)
-										->whereRaw($whereRaw)
-											->having('distance', '<', 20)
-												->groupBy('lat_long')
-													->orderBy('distance', 'asc')
-														->offset($skip)
-															->limit($take)
-																->get();
-	}
 
 
 	public function vendor()

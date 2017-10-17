@@ -224,7 +224,7 @@
 	$(document).on('click', '.btn-child', function () {
 		var id = $(this).attr('field');
 		var val = $(id).val();
-		childAgeElem(this, val, 2);
+		childAgeElem(this, val, 4);
 	});
 
 	$(document).on('click change', '.btn-number, .age-elem', function () {

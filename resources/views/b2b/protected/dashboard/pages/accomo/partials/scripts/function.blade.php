@@ -103,6 +103,7 @@
 			dataType: 'JSON',
 			data: {'_token' : csrf_token, 'name' : name},
 			success: function(response, textStatus, xhr) {
+				console.log(response);
 				var showTop = name == '' ? false : true;
 				populateHtml(response, rid, showTop);
 			},
@@ -124,7 +125,10 @@
 			dataType: 'JSON',
 			data: {'format': 'json', '_token' : csrf_token, 'term' : name},
 			success: function(response) {
-				populateHtml({'hotels':[response]}, rid, true);
+				$.each(response, function (i, v) {
+					v['is_search'] = 1;
+				});
+				populateHtml({'hotels':response}, rid, true);
 			},
 			error: function(xhr, textStatus) {
 				handleError(xhr);
@@ -138,7 +142,7 @@
 		/*console.log(response, ridObj);*/
 		var accomos = [];
 
-		if (isset(response, 'hotels') && ridObj.mode == 'hotel') {
+		if (isset(response, 'hotels') && (ridObj.mode == 'hotel' || ridObj.mode == 'hotel_only')) {
 			var accomos = response.hotels;
 		}
 		else if (isset(response, 'cruises') && ridObj.mode == 'cruise') {
@@ -151,7 +155,6 @@
 			if (showTop) {
 				$('#'+ridObj.elem_id).find('.glowing-border.border-orange')
 															.removeClass('border-orange');
-				html = html.replace('x_panel glowing-border', 'x_panel glowing-border border-orange');
 				$('#'+ridObj.elem_id).prepend(html);
 			}
 			else{
@@ -176,7 +179,7 @@
 	{{-- make hotel object --}}
 	function makeAccomoObject(i, object, rid) {
 		console.log(object);
-		var code = object.id;
+		var code = object.code;
 		var ukey = code+'_'+object.vendor;   {{-- uniqueKye = rid_id_vendor --}}
 		var name = proper(object.name);
 		var address = object.address.replace(/, , /g, ', '); 
@@ -187,7 +190,7 @@
 		var fid = ridObj.fid;
 		var fdid = ridObj.fdid;
 		var btnClass = 'btn-primary';
-		var btnName = ridObj.mode  == 'hotel' ? 'Rooms' : 'Cabins';
+		var btnName = (ridObj.mode  == 'hotel' || ridObj.mode  == 'hotel_only') ? 'Rooms' : 'Cabins';
 		var isDisabled = '';
 		var isTop = 0;
 
@@ -203,6 +206,8 @@
 				isDisabled = 'disabled';
 			}
 		}
+
+		var search_class = (object.is_search != 'undefined' &&  object.is_search == 1) ? 'border-orange' : '';
 
 		var hotel = {
 				"is_top" : isTop,
@@ -231,7 +236,8 @@
 				"breakfast" : ridObj.breakfast,
 				"dinner" : ridObj.dinner,
 				"lunch" : ridObj.lunch,
-				"isDisabled" : isDisabled
+				"isDisabled" : isDisabled,
+				"search_class" : search_class
 			};
 
 		/*console.log(hotel);*/
@@ -302,8 +308,8 @@
 				type:"post",
 				url: "{{ urlAccomoApi('fatch/prop') }}/"+rid,
 				data: data,
+				dataType : 'JSON',
 				success: function(response, textStatus, xhr) {
-					response = JSON.parse(response);
 					response = $.extend({}, response, data);
 					populateInTab(response);
 					$('#loging_log').hide();
@@ -329,7 +335,7 @@
 		var ukey = obj.fid+'_'+obj.vdr+'_'+obj.rid;
 		var ridObj = getRidObject(obj.rid);
 		var props = [];
-		if (ridObj.mode == 'hotel') {
+		if (ridObj.mode == 'hotel' || ridObj.mode == 'hotel_only') {
 			invokeMap(ukey);
 			props = obj.rooms;
 		}
@@ -343,7 +349,7 @@
 			prop['svdr'] = obj.vdr;
 			prop['proptype'] = '';
 
-			if (ridObj.mode == 'hotel') {
+			if (ridObj.mode == 'hotel' || ridObj.mode == 'hotel_only') {
 				prop['proptype'] = prop.roomtype;
 			}
 			else if(ridObj.mode == 'cruise'){
@@ -534,7 +540,7 @@
 				response = JSON.parse(response);
 				if (response.is_copied == 1) {
 					$(chooseProp).attr('data-fdid', response.fdid);
-					if (ridObj.mode == 'hotel') {
+					if (ridObj.mode == 'hotel' || ridObj.mode == 'hotel_only') {
 						$.each(response.rooms, function(i,v) {
 							$(parentLi).find("[data-rmdid='" + i + "']").attr('data-rmdid', v);
 						});

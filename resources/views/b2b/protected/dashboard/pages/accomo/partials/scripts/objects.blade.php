@@ -12,7 +12,7 @@
 		if (!is_null($accomoRoute->fusion)) {
 			$isAccomo = 1;
 			$fdid = $accomoRoute->fusion->id;
-			if($accomoRoute->mode == 'hotel'){
+			if(in_array($accomoRoute->mode, ['hotel', 'hotel_only'])){
 				$fid = $accomoRoute->fusion->hotel_code;
 				foreach ($accomoRoute->fusion->packageRooms as $packageRoom) {
 					$selRooms = ['id' => $packageRoom->id, 'vdr' => $packageRoom->vendor];

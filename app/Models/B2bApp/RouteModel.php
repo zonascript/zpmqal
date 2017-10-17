@@ -32,10 +32,30 @@ class RouteModel extends Model
 		'created_at', 'updated_at',
 	];
 
+
 	public function setStatusAttribute($value)
 	{
 		$this->attributes['status'] = strtolower($value);
 	}
+
+
+	/*public function setTokenAttribute()
+	{
+		if (!strlen($this->token)) {
+			$this->attributes['token'] = new_token();
+		}
+	}*/
+
+
+	public function getTokenAttribute($value)
+	{
+		if (!strlen($value)) {
+			$this->token = new_token();
+			$this->save();
+		}
+		return $value;
+	}
+
 
 	public function getOriginDetailAttribute()
 	{
@@ -96,6 +116,12 @@ class RouteModel extends Model
 	}
 
 
+	public function getEndDateAttribute($value)
+	{
+		return $this->start_datetime
+									->addDays($this->attributes['nights'])
+										->format('Y-m-d');
+	}	
 
 
 	public function getStartDatetimeAttribute()
@@ -110,7 +136,7 @@ class RouteModel extends Model
 	public function getEndDatetimeAttribute()
 	{
 		// $startDate = $this->start_datetime;
-		$endDateTime = $this->attributes['end_date'].' '.
+		$endDateTime = $this->end_date.' '.
 									 $this->attributes['end_time'];
 
 		return $endDate = Carbon::parse($endDateTime);
@@ -393,5 +419,36 @@ class RouteModel extends Model
 
 		return $string.'.';
 	}
+
+	public function makeHotelParams($request)
+	{
+		$maxRating = isset($request->max_rating) 
+							 ? $request->max_rating
+							 : 5;
+		$minRating = isset($request->min_rating) 
+							 ? $request->min_rating
+							 : 0;
+
+		return [
+				"adults" => 2,
+				"location" => '',
+				"skip" => $request->skip,
+				"name" => $request->name,
+				"take" => $request->take,
+				'max_rating' => $maxRating,
+				'min_rating' => $minRating,
+				'latitude' => $this->destination_detail->latitude, 
+				'longitude' => $this->destination_detail->longitude, 
+				"checkOutDate" => $this->end_datetime->format('Y-m-d'),
+				"checkInDate" => $this->start_datetime->format('Y-m-d'),
+			];
+	}
+
+
+	/*public function __construct(array $attributes = [])
+	{
+		$this->setTokenAttribute();
+		parent::__construct($attributes);
+	}*/
 
 }

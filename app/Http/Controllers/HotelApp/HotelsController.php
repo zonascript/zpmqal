@@ -38,10 +38,45 @@ class HotelsController extends Controller
 	}
 
 
-	public function hotels($params = [])
+	public function hotels(Array $params = [])
 	{
+		$params = (object) $params;
+		$name = $params->name;
+		$lat = $params->latitude;
+		$long = $params->longitude;
+		$skip = isset($params->skip) ? $params->skip : 0;
+		$take = isset($params->take) ? $params->take : 10;
+
+		$hotels = collect([]);
+		
+		$searchFunctions = [
+				'bySearch',
+				'bySearchSemiBroad',
+				'bySearchBroad',
+				'bySearchCases',
+			];
+
+		foreach ($searchFunctions as $searchFunction) {
+			$hotels = $this->model()->select()->with('vendor')
+								->$searchFunction($name)->byLatLongOld($lat, $long);
+
+			if ($searchFunction != 'bySearchCases') $hotels->byVendor();
+
+			$hotels = $hotels->skip($skip)->take($take)->get();
+
+			if ($hotels->count()) break;
+		}
+
+ 		return $hotels->pluck('vendor.built_data')->toArray();
+	}
+
+
+	public function hotelsOld($params = [])
+	{
+
  		$hotels = BookingHotelsController::call()->model()
  							->hotelsByLatLong($params);
+
  		if (!$hotels->count()) {
  			$hotels = AgodaHotelsController::call()->model()
  								->hotelsByLatLong($params);

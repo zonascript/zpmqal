@@ -19,6 +19,7 @@ class AgodaHotelModel extends Model
 								'photo4', 'photo5'
 							];
 
+	protected $searchColumnName = 'hotel_name';
 
 	public function getVendorAttribute()
 	{

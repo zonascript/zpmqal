@@ -32,6 +32,8 @@ class PackageHotelModel extends Model
 
 	public function hotelRooms()
 	{
+		return $this->packageRooms->pluck('room.roomtype')->toArray(); //added new line
+		
 		$rooms = [];
 		foreach ($this->packageRooms as $room) {
 			if (isset($room->room->roomtype)) {
@@ -40,6 +42,29 @@ class PackageHotelModel extends Model
 		}
 		return $rooms;
 	}
+
+
+	public function selectedHotel()
+	{
+		if ($this->vendor == 'b') {
+			return $this->belongsTo(
+							'App\Models\HotelApp\BookingHotelModel', 
+							'hotel_code'
+						);
+		}
+		elseif ($this->vendor == 'a') {
+			return $this->belongsTo(
+									'App\Models\HotelApp\AgodaHotelModel', 
+									'hotel_code', 'hotel_id'
+								);
+		}
+		else{
+			return null;
+		}
+
+	}
+
+
 
 	public function hotelForView()
 	{
