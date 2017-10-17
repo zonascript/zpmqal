@@ -63,14 +63,14 @@
 					</li>
 				@endif
 				
-				<li class="level1 active current">
+				{{-- <li class="level1 active current">
 					<a href="{{ $urlObj->url('terms_and_condition') }}" class="level1">
 						<span>
 							<span class="icon text-center">
 							</span>terms & condition
 						</span>
 					</a>
-				</li>
+				</li> --}}
 
 			</ul>
 		</nav>

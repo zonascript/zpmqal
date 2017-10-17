@@ -12,14 +12,14 @@
 		if (!is_null($accomoRoute->fusion)) {
 			$isAccomo = 1;
 			$fdid = $accomoRoute->fusion->id;
-			if(in_array($accomoRoute->mode, ['hotel', 'hotel_only'])){
+			if($accomoRoute->checkMode('hotel')){
 				$fid = $accomoRoute->fusion->hotel_code;
 				foreach ($accomoRoute->fusion->packageRooms as $packageRoom) {
 					$selRooms = ['id' => $packageRoom->id, 'vdr' => $packageRoom->vendor];
 					$accomoProps[$packageRoom->roomtype_code] = $selRooms;
 				}
 			}
-			elseif ($accomoRoute->mode == 'cruise') {
+			elseif ($accomoRoute->checkMode('cruise')) {
 				$fid = $accomoRoute->fusion->cruise_code;
 				foreach ($accomoRoute->fusion->packageCabins as $packageCabins) {
 					$selCabins = ['id' => $packageCabins->id, 'vdr' => $packageCabins->vendor];

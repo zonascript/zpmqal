@@ -1,4 +1,4 @@
-@if ($package->accomoRoutes->count())
+@if ($package->activities->count())
 	<article class="item">
 		<header>
 			<h1 class="title">
@@ -8,7 +8,7 @@
 		
 		<div class="gi-carousel-main height-250px">
 	    <div class="GICarousel carousel-box1 GI_C_wrapper">
-	      <ul class="GI_IC_items height-250px" style="{{ $package->accomoRoutes->count() == 1 ? "display: block;" : ''}}">
+	      <ul class="GI_IC_items height-250px" style="{{ $package->activities->count() == 1 ? "display: block;" : ''}}">
 		      @foreach ($package->activities as $key => $activity)
 						@if (($key+1)%3 == 1)
 							<li class="height-250px">
@@ -27,7 +27,7 @@
 	    </div>
 	  </div>
 		<script type="text/javascript">
-			$('.carousel-box1').GICarousel({arrows:true});
+			$('.carousel-box1').GICarousel({arrows:true,carousel:true});
   	</script>
 	</article>
 	<div class="links">

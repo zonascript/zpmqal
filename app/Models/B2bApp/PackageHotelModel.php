@@ -75,29 +75,28 @@ class PackageHotelModel extends Model
 
 	public function hotelDetail()
 	{
-		$hotelDetail = $this->hotelForView();
-		$hotelDetail = isset($hotelDetail[0]) ? $hotelDetail[0] : $this;
+		$hotelDetail = collect($this->selectedHotel->built_data);
 		$result = (object)[
 				"id" => $this->id,
-				"code" => $hotelDetail->id,
-				"vendor" => $hotelDetail->vendor,
-				"name" => $hotelDetail->name,
-				"latitude" => $hotelDetail->latitude,
-				"longitude" => $hotelDetail->longitude,
+				"code" => $hotelDetail->get('code'),
+				"vendor" => $hotelDetail->get('vendor'),
+				"name" => $hotelDetail->get('name'),
+				"latitude" => $hotelDetail->get('latitude'),
+				"longitude" => $hotelDetail->get('longitude'),
 				"nights" => '',
 				"location" => '',
 				"endDate" => '',
 				"startDate" => '',
-				"address" => $hotelDetail->address,
-				"city" => $hotelDetail->city,
-				"country" => $hotelDetail->country,
+				"address" => $hotelDetail->get('address'),
+				"city" => $hotelDetail->get('city'),
+				"country" => $hotelDetail->get('country'),
 				"roomType" => $this->hotelRooms(),
-				"image" => $hotelDetail->image,
-				"starRating" => $hotelDetail->star_rating,
+				"image" => $hotelDetail->get('image'),
+				"starRating" => $hotelDetail->get('star_rating'),
 				"starRatingHtml" => '',
-				"description" => $hotelDetail->description,
-				"shortDescription" => $hotelDetail->description,
-				"htmlDescription" => $hotelDetail->description,
+				"description" => $hotelDetail->get('description'),
+				"shortDescription" => $hotelDetail->get('description'),
+				"htmlDescription" => $hotelDetail->get('description'),
 			];
 
 		$result->starRatingHtml = getStarImage($result->starRating, 15, 15);

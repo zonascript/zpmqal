@@ -85,8 +85,8 @@
 						<strong>Visa Included</strong>
 					@endif
 				</td>
-				<td>
-					@if ($package->activities->count())
+				@if ($package->activities->count())
+					<td>
 						<strong>Activities : {{-- ({{$package->flightRoutes->count()}} X Hotel) --}}</strong>
 						<ul class="nomargin">
 							@foreach ($package->activities as $key => $value)
@@ -107,13 +107,13 @@
 								@endif
 							@endforeach
 						</ul>
-					@endif
-				</td>
+					</td>
+				@endif
 				
 			</tr>
 		</table>
-		<hr>
 		@if (strlen($package->extra_word))
+			<hr>
 			<label for="">More Details : </label>
 			<div>{!! $package->extra_word !!}</div>
 		@endif

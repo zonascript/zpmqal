@@ -28,6 +28,6 @@
 		</div>
 	</div>
 	<script type="text/javascript">
-		$('.visa.carousel-box').GICarousel({arrows:true});
+		$('.visa.carousel-box').GICarousel({arrows:true,carousel:true});
 	</script>
 </article>

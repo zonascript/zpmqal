@@ -35,7 +35,7 @@ class ItineraryController extends Controller
 			$origin = $route->origin_detail->destination;
 			$destination = $route->destination_detail->destination;
 
-			if ($route->mode == 'flight') {
+			if ($route->checkMode('flight')) {
 				$flights = $route->flightDetail();
 				foreach ($flights as $key => $flight) {
 					$origin = $flight->origin;
@@ -67,7 +67,7 @@ class ItineraryController extends Controller
 					$itinerary[$arrivalDate]['body'][] = ['flight' => $flightLine];
 				}
 			}
-			elseif (in_array($route->mode,['hotel', 'land', 'road'])) {
+			elseif ($route->checkMode('hotel')) {
 				$hotel = $route->hotelDetail();
 				$nights = $route->nights;
 				$hotelName = $hotel->name;
@@ -168,7 +168,7 @@ class ItineraryController extends Controller
 					}
 				}
 			}
-			elseif ($route->mode == 'cruise') {
+			elseif ($route->checkMode('cruise')) {
 				$cruise = $route->cruiseDetail();
 				$nights = $route->nights;
 				$days = $nights+1;
@@ -240,7 +240,7 @@ class ItineraryController extends Controller
 					$cruiseImages[] = array_shift($cruiseImages);
 				}
 			}
-			elseif ($route->mode == 'ferry') {
+			elseif ($route->checkMode('ferry')) {
 				$itinerary[$routeStartDate]['location'][] = $origin;
 				$itinerary[$routeStartDate]['body'][] = [
 						'ferry' => 'Board ferry at '.$routeStartTime.' from '.$origin.'.'
@@ -251,7 +251,7 @@ class ItineraryController extends Controller
 						'ferry' => 'Arrived ferry on '.$destination.' at '.$routeEndTime.'.'
 					];
 			}
-			elseif ($route->mode == 'train') {
+			elseif ($route->checkMode('train')) {
 				$itinerary[$routeStartDate]['location'][] = $origin;
 				$itinerary[$routeStartDate]['body'][] = [
 						'train' => 'Board train at '.$routeStartTime.' from '.$origin.'.'
@@ -262,7 +262,7 @@ class ItineraryController extends Controller
 						'train' => 'Arrived train on '.$destination.' at '.$routeEndTime.'.'
 					];
 			}
-			elseif ($route->mode == 'bus') {
+			elseif ($route->checkMode('bus')) {
 				$itinerary[$routeStartDate]['location'][] = $origin;
 				$itinerary[$routeStartDate]['body'][] = [
 						'bus' => 'Board bus at '.$routeStartTime.' from '.$origin.'.'

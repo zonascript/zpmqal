@@ -273,7 +273,11 @@ class PackageModel extends Model
 		$where = is_null($this->costToken) 
 					 ? ["is_current" => 1]
 					 : ["token" => $this->costToken];
-		$costs = $this->hasMany('App\Models\B2bApp\PackageCostModel', 'package_id');
+
+		$costs = $this->hasMany(
+								'App\Models\B2bApp\PackageCostModel', 
+								'package_id'
+							);
 		return $costs->where($where);
 	}
 
@@ -282,7 +286,10 @@ class PackageModel extends Model
 	*/
 	public function costs()
 	{
-		$result = $this->hasMany('App\Models\B2bApp\PackageCostModel', 'package_id');
+		$result = $this->hasMany(
+								'App\Models\B2bApp\PackageCostModel', 
+								'package_id'
+							);
 		return $result->where([['net_cost', '>', 0]]);
 	}
 
@@ -293,7 +300,10 @@ class PackageModel extends Model
 	*/
 	public function cars()
 	{
-		$cars = $this->hasMany('App\Models\B2bApp\PackageCarModel', 'package_id');
+		$cars = $this->hasMany(
+								'App\Models\B2bApp\PackageCarModel', 
+								'package_id'
+							);
 		return $cars->where(["status" => "complete"]);
 	}
 
@@ -310,8 +320,8 @@ class PackageModel extends Model
 
 	public function flightRoutes()
 	{
-		$result = $this->hasMany('App\Models\B2bApp\RouteModel', 'package_id')
-						->select('*', DB::raw("'".$this->package_lock_id.'\' as package_lock_id'));
+		$result = $this->hasMany('App\Models\B2bApp\RouteModel', 'package_id');
+						// ->addSelect(DB::raw("'".$this->package_lock_id.'\' as package_lock_id'));
 		return $result->where(['mode' => 'flight', ['status', '<>', 'deleted']]);
 	}
 
@@ -329,7 +339,11 @@ class PackageModel extends Model
 	public function hotelRoutes()
 	{
 		$result = $this->hasMany('App\Models\B2bApp\RouteModel', 'package_id');
-		return $result->where(['mode' => 'hotel',  ['status', '<>', 'deleted']]);
+		return $result->where('status', '<>', 'deleted')
+										->where(function($q){
+												$q->where('mode', '=', 'hotel')
+														->orWhere('mode', '=', 'hotel_only');
+											});
 	}
 
 

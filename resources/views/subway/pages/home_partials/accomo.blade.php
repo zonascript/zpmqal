@@ -35,7 +35,7 @@
 			</div>
 		</div>
 		<script type="text/javascript">
-			$('.carousel-box').GICarousel({arrows:true});
+			$('.carousel-box').GICarousel({arrows:true,carousel:true});
 		</script>
 	</article>
 	<div class="links">

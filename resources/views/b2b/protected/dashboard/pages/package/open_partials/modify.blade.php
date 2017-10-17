@@ -16,7 +16,7 @@
 		</div>
 		<div class="clearfix"></div>
 	</div>
-	<div class="x_content">
+	<div class="x_content scroll-auto scroll-bar height-68vh">
 
 		<table class="table table-striped">
 			<thead>
@@ -43,7 +43,7 @@
 							<td>{{ $country }}</td>
 							<td>{{ $mPackage->created_at->format('d-M-Y H:i') }}</td>
 							<td>
-								<a href="{{ route('openPackage', $mPackage->token) }}" class="btn btn-success btn-xs">Open</a>
+								<a href="{{ route('openPackage', $mPackage->token) }}" class="btn {{ ($mPackage->id == $package->id) ? 'btn-primary' : 'btn-success'}} btn-xs">Open</a>
 							</td>
 						</tr>
 					@endforeach

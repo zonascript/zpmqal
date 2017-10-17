@@ -71,7 +71,7 @@
 	
 			</div>
 			<script type="text/javascript">
-				$('.carousel-box{{$key}}').GICarousel({arrows:true});
+				$('.carousel-box{{$key}}').GICarousel({arrows:true,carousel:true});
 			</script>
 			@if ($package->activities->count() != ($key+1))
 				<hr>

@@ -61,10 +61,10 @@ class RouteModel extends Model
 	{
 		$result = $this->originMorphTo;
 
-		if (is_null($result) || $this->mode == 'flight') {
+		if (is_null($result) || $this->checkMode('flight')) {
 			$location = $this->location($this->explode_origin);
 			$result = $this->searchDbLocation($location);
-			if (!is_null($result) && $this->mode != 'flight') {
+			if (!is_null($result) && !$this->checkMode('flight')) {
 				$this->origin_code = $result->id;
 				$this->save();
 			}
@@ -78,10 +78,10 @@ class RouteModel extends Model
 	{
 		$result = $this->destinationMorphTo;
 
-		if (is_null($result) || $this->mode == 'flight') {
+		if (is_null($result) || $this->checkMode('flight')) {
 			$location = $this->location($this->explode_destination);
 			$result = $this->searchDbLocation($location);
-			if (!is_null($result) && $this->mode != 'flight') {
+			if (!is_null($result) && !$this->checkMode('flight')) {
 				$this->destination_code = $result->id;
 				$this->save();
 			}
@@ -94,7 +94,7 @@ class RouteModel extends Model
 
 	public function getOriginCodeAttribute($code)
 	{
-		if ($this->mode == 'flight' && !strlen($code)) {
+		if ($this->checkMode('flight') && !strlen($code)) {
 			$code = substr($this->attributes['origin'], 0, 3);
 			$this->origin_code = $code;
 			$this->save();
@@ -106,7 +106,7 @@ class RouteModel extends Model
 
 	public function getDestinationCodeAttribute($code)
 	{
-		if ($this->mode == 'flight' && !strlen($code)) {
+		if ($this->checkMode('flight') && !strlen($code)) {
 			$code = substr($this->attributes['destination'], 0, 3);
 			$this->destination_code = $code;
 			$this->save();
@@ -190,7 +190,7 @@ class RouteModel extends Model
 		$class = DestinationModel::class;
 		$col = 'id';
 
-		if ($this->mode == 'flight') {
+		if ($this->checkMode('flight')) {
 			$class = AirportModel::class;
 			$col = 'airport_code';
 		}
@@ -203,7 +203,7 @@ class RouteModel extends Model
 		$class = DestinationModel::class;
 		$col = 'id';
 
-		if ($this->mode == 'flight') {
+		if ($this->checkMode('flight')) {
 			$class = AirportModel::class;
 			$col = 'airport_code';
 		}
@@ -259,8 +259,7 @@ class RouteModel extends Model
 	{
 		return $this->where(['id' => $id])
 									->whereHas('package', function ($q){
-												$auth = auth()->user();
-												$q->where(['user_id' => $auth->id]);
+												$q->byUser();
 											})
 										->count();
 	}
@@ -319,10 +318,10 @@ class RouteModel extends Model
 	{
 		$images = [];
 
-		if ($this->mode == 'hotel') {
+		if ($this->checkMode('hotel')) {
 			//$images = $this->hotel->images();
 		}
-		elseif ($this->mode = 'cruise') {
+		elseif ($this->checkMode('cruise')) {
 			//$images = $this->cruise->images();
 		}
 		return $images;
@@ -333,7 +332,7 @@ class RouteModel extends Model
 	{
 		$result = null;
 
-		if ($this->mode == 'flight' && !is_null($this->fusion)) {
+		if ($this->checkMode('flight') && !is_null($this->fusion)) {
 			$result = $this->fusion->flightDetail();
 		}
 
@@ -344,7 +343,7 @@ class RouteModel extends Model
 	public function hotelDetail()
 	{
 		$result = null;
-		if ($this->mode == 'hotel' && !is_null($this->fusion)) {
+		if ($this->checkMode('hotel')  && !is_null($this->fusion)) {
 			$result = $this->fusion->hotelDetail();
 			$result->nights = $this->nights;
 			$result->location = $this->destination_detail->location;
@@ -359,7 +358,7 @@ class RouteModel extends Model
 	public function cruiseDetail()
 	{
 		$result = null;
-		if ($this->mode == 'cruise' && !is_null($this->fusion)) {
+		if ($this->checkMode('cruise') && !is_null($this->fusion)) {
 			$params = [
 							'cityId' => $this->destination_detail->id,
 							'nights' => $this->nights
@@ -378,10 +377,10 @@ class RouteModel extends Model
 	public function accomo()
 	{
 		$result = null;
-		if ($this->mode == 'hotel') {
+		if ($this->checkMode('hotel')) {
 			$result = $this->hotelDetail();
 		}
-		elseif ($this->mode == 'cruise') {
+		elseif ($this->checkMode('cruise')) {
 			$result = $this->cruiseDetail();
 		}
 		return $result;
@@ -391,7 +390,7 @@ class RouteModel extends Model
 	public function visaDetail()
 	{
 		$result = null;
-		if (in_array($this->mode, ['hotel', 'cruise'])) {
+		if ($this->checkMode('hotel') || $this->checkMode('hotel')) {
 			$result = $this->destination_detail->visaDetail;
 		}
 		return $result;
@@ -407,6 +406,7 @@ class RouteModel extends Model
 		// if ($this->is_breakfast) $meals[] = 'breakfast';
 		// if ($this->is_lunch) $meals[] = 'lunch';
 		// if ($this->is_dinner) $meals[] = 'dinner';
+		
 		if (count($meals) > 1) $last = array_pop($meals);
 		$string = implode(', ', $meals);
 		if (strlen($last)) $string .= ' and '.$last; 
@@ -442,6 +442,24 @@ class RouteModel extends Model
 				"checkOutDate" => $this->end_datetime->format('Y-m-d'),
 				"checkInDate" => $this->start_datetime->format('Y-m-d'),
 			];
+	}
+
+	public function checkMode($mode)
+	{
+		if ($mode == $this->mode) return true;
+
+		$modes = [
+				'flight' 	 => ['flight'],
+				'hotel' 	 => ['hotel', 'hotel_only'],
+				'cruise' 	 => ['cruise'],
+				'activity' => ['hotel', 'activity_only']
+			];
+
+		if (isset($modes[$mode])) {
+			return in_array($this->mode, $modes[$mode]);
+		}
+
+		return false;
 	}
 
 
