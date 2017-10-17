@@ -103,7 +103,7 @@
 			dataType: 'JSON',
 			data: {'_token' : csrf_token, 'name' : name},
 			success: function(response, textStatus, xhr) {
-				console.log(response);
+				/*console.log(response);*/
 				var showTop = name == '' ? false : true;
 				populateHtml(response, rid, showTop);
 			},
@@ -178,9 +178,9 @@
 
 	{{-- make hotel object --}}
 	function makeAccomoObject(i, object, rid) {
-		console.log(object);
+		/*console.log(object);*/
 		var code = object.code;
-		var ukey = code+'_'+object.vendor;   {{-- uniqueKye = rid_id_vendor --}}
+		var ukey = code+'_'+object.vendor; {{-- uniqueKye = rid_id_vendor --}}
 		var name = proper(object.name);
 		var address = object.address.replace(/, , /g, ', '); 
 		var sortAddress = address.substring(0, 50);
