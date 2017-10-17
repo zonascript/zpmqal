@@ -43,7 +43,7 @@
 							<td>{{ $country }}</td>
 							<td>{{ $mPackage->created_at->format('d-M-Y H:i') }}</td>
 							<td>
-								<a href="{{ route('openPackage', $mPackage->token) }}" class="btn {{ ($mPackage->id == $package->id) ? 'btn-primary' : 'btn-success'}} btn-xs">Open</a>
+								<a href="{{ route('openPackage', $mPackage->token) }}" class="btn {{ ($mPackage->id == $package->id) ? 'btn-primary' : 'btn-success'}} btn-xs">{{ ($mPackage->id == $package->id) ? 'Opened' : 'Open'}}</a>
 							</td>
 						</tr>
 					@endforeach
