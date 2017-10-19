@@ -158,12 +158,15 @@
 	{{-- changing mode --}}
 
 	$(document).on('change', '.mode', function(){
+		var parent = $(this).closest('.destinationList');
+		var workingElem = $(parent).find('.location-input-div');
+		$(workingElem).addClass('inctv').html('');
+		$(this).addClass('inctv');
+
 		if(checkStartDate()){
 			var thisVal = $(this).val();
-			var parent = $(this).closest('.destinationList');
 			changeInRoute(parent);
 
-			$(parent).find('.location-input-div').html('');
 			
 			if (thisVal == '') {
 				$(this).addClass('inctv border-red');
@@ -177,25 +180,28 @@
 				var originHtml = $('#originFlightTemp').html();
 				var destinationTemp = $('#destinationTemp').html();
 
-				$(parent).find('.location-input-div').append(originHtml);
-				$(parent).find('.location-input-div').append(destinationTemp);
+				$(workingElem).append(originHtml);
+				$(workingElem).append(destinationTemp);
 			}
 			else if (thisVal == 'hotel' || thisVal == 'hotel_only' || thisVal == 'activity_only' || thisVal == 'cruise') {
 				var destinationTemp = $('#destinationTemp').html();
 				var nightTemp = $('#nightTemp').html();
 
-				$(parent).find('.location-input-div').append(destinationTemp);
-				$(parent).find('.location-input-div').append(nightTemp);
+				$(workingElem).append(destinationTemp);
+				$(workingElem).append(nightTemp);
 			}
 			else if (thisVal == 'ferry' || thisVal == 'train' || thisVal == 'bus') {
 				var destinationTemp = $('#destinationWithDatetimeTemp').html();
 				var appendHtml = destinationTemp.replace(/temp-class/g, 'origin').replace(/"Location"/g, '"Origin"');
 				appendHtml += destinationTemp.replace(/temp-class/g, 'destination').replace(/"Location"/g, '"Destination"');;
-				$(parent).find('.location-input-div').append(appendHtml);
+				$(workingElem).append(appendHtml);
 				initTimePicker($(parent).find('.datetimepicker'), {now: "12:30"});
 			}
 			// $(parent).find('.location').val('');
+		}else{
+			$(this).prop('selectedIndex',0);
 		}
+
 	});
 
 	{{-- /changing mode --}}

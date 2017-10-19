@@ -76,7 +76,7 @@
 	function checkMode() {
 		var mode = $('.destinationList').find('.mode.inctv');
 		if (mode.length) {
-			$(mode).addClass('border-red');
+			$(mode).addClass('border-red').prop('selectedIndex',0);;
 			$.alert('I think you forgot to select mode. it\'s vary easy just click on mode and select.');
 			return false;
 		}
@@ -139,7 +139,8 @@
 		$('.destinationList').each(function(){
 			var mode = $(this).find('.mode').val();
 			if (mode == '') {
-				$(this).find('.mode').addClass('border-red');
+				$(this).find('.mode').addClass('border-red')
+															.prop('selectedIndex',0);
 				$.alert('I think you forgot to select mode. it\'s vary easy just click on mode and select.');
 				return false;
 			}else{
