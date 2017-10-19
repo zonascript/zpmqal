@@ -28,6 +28,7 @@
 								<th>Email</th>
 								<th>Opening Date</th>
 								<th>Updated Date</th>
+								<th>Package Link</th>
 								<th>Status</th>
 								<th>Action</th>
 							</tr>
@@ -42,6 +43,13 @@
 									<td>{{ $package->client->email }}</td>
 									<td>{{ $package->created_at }}</td>
 									<td>{{ $package->updated_at }}</td>
+									<td>
+										@if (!is_null($package->package_url))
+											<a href="{{ $package->package_url }}" class="btn-link" target="_blank">Open</a>
+										@else
+											--
+										@endif
+									</td>
 									<td>{{ $package->status }}</td>
 									<td>
 										<a href="{{ route('openPackage', $package->token) }}" class="btn btn-success btn-xs btn-block">Open</a>
