@@ -6,9 +6,40 @@
 		</div>
 		<div class="x_content nopadding">
 			<div class="form-group">
-				<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback m-top-10-only">
-					<input type="text" v-model="search" id="filter_search" class="search form-control" placeholder="Search flight name, no...">
-					<i class="fa fa-plane form-control-feedback right-1 right" aria-hidden="true"></i>
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<div class="row">
+						<input type="text" v-model="search" id="filter_search" class="search form-control" placeholder="Search flight name, no...">
+						<i class="fa fa-plane form-control-feedback right-1 right" aria-hidden="true"></i>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12 m-top-10">
+						<h4>Stops</h4>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3 col-sm-3 col-xs-3">
+						<label>
+							<input type="checkbox" class="search-stop nomargin" data-value="stop_1"> 1
+						</label>
+					</div>
+					<div class="col-md-3 col-sm-3 col-xs-3">
+						<label>
+							<input type="checkbox" class="search-stop nomargin" data-value="stop_2"> 2
+						</label>
+					</div>
+					<div class="col-md-3 col-sm-3 col-xs-3">
+						<label>
+							<input type="checkbox" class="search-stop nomargin" data-value="stop_3"> 3
+						</label>
+					</div>
+					<div class="col-md-3 col-sm-3 col-xs-3">
+						<label>
+							<input type="checkbox" class="search-stop nomargin" data-value="stop_4"> 4
+						</label>
+					</div>
 				</div>
 			</div>
 		</div>

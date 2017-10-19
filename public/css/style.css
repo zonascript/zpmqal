@@ -10,6 +10,11 @@
 	display:block;
 }
 
+[type="checkbox"]
+{
+  vertical-align:middle;
+}
+
 .popup-model{
 	background-color : rgba(0,0,0,0.6); 
 	z-index: 100;
@@ -232,7 +237,7 @@
 
 .add-flight-manually{
 	position: fixed;
-  bottom: 55px;
+  bottom: 15px;
   left: 346px;
   z-index: 100;
 }

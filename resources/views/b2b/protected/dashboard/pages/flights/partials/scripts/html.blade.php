@@ -1,4 +1,5 @@
 appendHtml += '<li class="min-height-110px main-list-item">
+	<span class="stops" hidden>stop_'+flight.stops+'</span>
 	<div class="x_panel glowing-border">
 		<div class="col-md-10 col-sm-10 col-xs-12">';
 		$.each(flight.stacks, function (stackId, stackVal) {

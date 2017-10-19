@@ -419,7 +419,8 @@
 						'vid' : data.db.id,
 						'vdr' : data.db.vdr,
 						'ind' : flightsKey,
-						'stacks' : stacks
+						'stacks' : stacks,
+						'stops' : stacks.length
 					};
 
 				var html = getFlightStack(flightObj);

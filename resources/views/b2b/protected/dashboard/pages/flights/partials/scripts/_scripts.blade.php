@@ -25,7 +25,7 @@
 		@endforeach
 		initFilter : function (targetList) {
 			var options = {
-				valueNames: ['search-word']
+				valueNames: ['search-word', 'stops']
 			};
 			@foreach ($package->flightRoutes as $flightRouteKey => $flightRoute)
 				if (targetList == {{ $flightRoute->id }}) {
@@ -35,6 +35,7 @@
 		}
 	};
 
+	var activeFilters = [];
 
 
 	$(document).on('keypress keyup keydown', "#filter_search", function(){
@@ -45,6 +46,34 @@
 				filter.flight_{{ $flightRoute->id }}.search(search);
 			}
 		@endforeach
+	});
+
+	$(document).on('change', '.search-stop', function() {
+		var targetList = $('#tab_menu').find('.active').attr('data-list');
+		var isChecked = this.checked;
+		var value = $(this).data("value");
+		if(isChecked){
+			/*add to list of active filters*/
+			activeFilters.push(value);
+		}
+		else
+		{
+			/*remove from active filters*/
+			activeFilters.splice(activeFilters.indexOf(value), 1);
+		}
+		
+		@foreach ($package->flightRoutes as $flightRouteKey => $flightRoute)
+			if (targetList == "flight_{{ $flightRoute->id }}_div") {
+				filter.flight_{{ $flightRoute->id }}.filter(function (item) {
+					if(activeFilters.length > 0)
+					{
+						return(activeFilters.indexOf(item.values().stops)) > -1;
+					}
+					return true;
+				});
+			}
+		@endforeach
+
 	});
 
 	{{-- /filter List.js --}}
