@@ -31,16 +31,10 @@
 			<tbody>
 				@if($package->routes->count())
 					@foreach($package->packages as $mPackageKey => $mPackage)
-						<?php 
-							$country = isset($mPackage->routes[0]->explode_destination)  
-											 ? $mPackage->routes[0]->explode_destination
-											 : [];
-							$country = end($country);
-						?>
 						<tr>
 							<th scope="row">{{ $mPackageKey+1 }}</th>
 							<td>{{ $mPackage->uid }}</td>
-							<td>{{ $country }}</td>
+							<td>{{ $mPackage->places_to_go->implode(', ') }}</td>
 							<td>{{ $mPackage->created_at->format('d-M-Y H:i') }}</td>
 							<td>
 								<a href="{{ route('openPackage', $mPackage->token) }}" class="btn {{ ($mPackage->id == $package->id) ? 'btn-primary' : 'btn-success'}} btn-xs">{{ ($mPackage->id == $package->id) ? 'Opened' : 'Open'}}</a>

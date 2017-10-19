@@ -79,7 +79,7 @@ class FlightsController extends Controller
 				$route->fusion_type = $vendorModelName;
 				$route->status = 'complete';
 				$route->save();
-				$route->fixDates($route->id);
+				$route->fixNextDates();
 				$returnArray = [ 
 					"status" => 200,
 					"response" => 'data saved successfully'

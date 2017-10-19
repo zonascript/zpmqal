@@ -116,37 +116,31 @@ class RouteModel extends Model
 	}
 
 
+	public function getIsDateStaticAttribute()
+	{
+		return $this->checkMode('flight') ? false : true;
+	}
+
+
 	public function getEndDateAttribute($value)
 	{
-		return $this->start_datetime
-									->addDays($this->attributes['nights'])
-										->format('Y-m-d');
+		return $this->is_date_static 
+				 ? $this->start_datetime
+									->addDays($this->nights)
+										->format('Y-m-d')
+				 : $value;
 	}	
 
 
 	public function getStartDatetimeAttribute()
 	{
-		$startDateTime = $this->attributes['start_date'].' '.
-										 $this->attributes['start_time'];
-
-		return Carbon::parse($startDateTime);
+		return Carbon::parse($this->start_date.' '.$this->start_time);
 	}
 
 
 	public function getEndDatetimeAttribute()
 	{
-		// $startDate = $this->start_datetime;
-		$endDateTime = $this->end_date.' '.
-									 $this->attributes['end_time'];
-
-		return $endDate = Carbon::parse($endDateTime);
-		/*$endDate = Carbon::parse($endDateTime);
-		$startDate->addDays($this->attributes['nights']);
-		$startDate->hour = $endDate->hour;
-		$startDate->minute = $endDate->minute;
-		$startDate->second = $endDate->second;
-		
-		return $startDate;*/
+		return Carbon::parse($this->end_date.' '.$this->end_time);
 	}
 
 	public function getExplodeOriginAttribute()
@@ -171,6 +165,13 @@ class RouteModel extends Model
 	public function scopeByPackageId($query, $pid)
 	{
 		return $query->where(['package_id' => $pid]);
+	}
+
+
+	// this will default find active statused
+	public function scopeByStatus($query, $status = 'active', $match = '=')
+	{
+		return $query->where('status', $match, $status);
 	}
 
 
@@ -254,6 +255,11 @@ class RouteModel extends Model
 	}
 
 
+	public function routes()
+	{
+		return $this->hasMany(RouteModel::class, 'package_id', 'package_id');
+	}
+
 
 	public function isCorrectUser($id)
 	{
@@ -263,6 +269,35 @@ class RouteModel extends Model
 											})
 										->count();
 	}
+
+	// this function must call on current route
+	public function fixNextDates()
+	{
+		if (!$this->id) return false;
+
+		$routes = $this->routes()
+							->byStatus('deleted', '<>')
+								->where('id', '>', $this->id)
+									->get();
+		
+		$previousRoute = $this;
+
+		foreach ($routes as $key => $route) {
+			// if next is also flight the set start date and time
+			$route->start_date = $previousRoute->end_date;
+			$route->start_time = $previousRoute->end_time;
+			if (!$route->checkMode('flight')) {
+				$route->end_date = $route->end_date;
+				$route->end_time = $route->end_time;
+			}
+			$route->save();
+
+			if ($route->checkMode('flight')) return true;
+			$previousRoute = $route;
+		}
+	}
+
+
 
 	/*
 	| this function is to fix date 

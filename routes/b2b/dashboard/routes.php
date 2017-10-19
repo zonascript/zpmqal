@@ -9,7 +9,7 @@
 						->name('route.update');
 
 		Route::get('{ctoken}/{token?}', 'RouteController@create')
-						->name('createRoute');
+						->middleware('packageIsLock')->name('createRoute');
 		Route::post('{rid}/d', 'RouteController@deleteRow');
 		Route::post('{pToken}/r', 'RouteController@storeRow');
 		Route::post('{pToken}/u', 'RouteController@packageUpdate');

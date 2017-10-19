@@ -18,7 +18,8 @@ class PackageModel extends Model
 	protected $append = [
 								'uid', 'cost', 'nights', 'pax_detail',
 								'pax_string', 'itinerary', 'package_url',
-								'extra_word', 'duration', 'is_start_date_set'
+								'extra_word', 'duration', 'is_start_date_set',
+								'places_to_go'
 							];
 
 	public $costToken = null;
@@ -144,6 +145,13 @@ class PackageModel extends Model
 		}
 
 		return implode(', ', $result);
+	}
+
+	public function getPlacesToGoAttribute()
+	{
+		return $this->accomoRoutes
+									->pluck('destination_detail.country')
+										->unique();
 	}
 
 
@@ -399,7 +407,17 @@ class PackageModel extends Model
 
 	public function fixRouteDates()
 	{
-		$routes = $this->routes[0]->fixDates();
+		$firstRoute = $this->routes->first();
+		if (!is_null($firstRoute)) {
+			$firstRoute->start_date = $this->start_date;
+
+			if (!$firstRoute->checkMode('flight')) {
+				$firstRoute->end_date = $firstRoute->end_date;
+			}
+
+			$firstRoute->save();
+			$firstRoute->fixNextDates();
+		}
 		return true;
 	}
 

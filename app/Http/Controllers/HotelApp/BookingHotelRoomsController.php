@@ -42,6 +42,7 @@ class BookingHotelRoomsController extends Controller
 	public function roomsWithImage()
 	{
 		$count = 0;
+		$rooms = [];
 		if (count($this->rooms)) {
 			foreach ($this->rooms as $key => $room) {
 				$rooms[] = [

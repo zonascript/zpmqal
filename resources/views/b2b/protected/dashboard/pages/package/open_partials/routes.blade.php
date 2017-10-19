@@ -40,7 +40,7 @@
 				@if($package->routes->count())
 					@foreach($package->routes as $routeKey => $route)
 						<?php 
-							$dateFormat = $route->mode == 'hotel' ? 'd-M-Y' : 'd-M-Y H:i';
+							$dateFormat = $route->checkMode('flight') ? 'd-M-Y H:i' : 'd-M-Y';
 						?>
 						<tr class="{{$route->status == 'active' ? 'font-dark-red' : ''}}">
 							<th scope="row">{{ $routeKey+1 }}</th>
