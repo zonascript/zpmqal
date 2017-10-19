@@ -105,7 +105,7 @@ class FlightsController extends Controller
 
 	public function postFlightResult($vendor, $rid, Request $request)
 	{
-		return file_get_contents(storage_path('mylocal/faker/global_flights.json'));
+		// return file_get_contents(storage_path('mylocal/faker/global_flights.json'));
 
 		$result = [];
 		$route = $this->findRoute($rid);

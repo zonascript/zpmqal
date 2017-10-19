@@ -12,7 +12,10 @@ class AgodaHotelModel extends Model
 
 	protected $connection = 'mysql4';
 	protected $table = 'agoda_hotels';
-	protected $appends = ['vendor'];
+	protected $appends = [
+								'vendor', 'code', 'name', 'built_data', 
+								'image', 'description'
+							];
 	protected $hidden = [
 								'addressline1', 'addressline2', 'zipcode', 
 								'distance','photo1', 'photo2', 'photo3', 
@@ -27,6 +30,22 @@ class AgodaHotelModel extends Model
 	}
 
 
+	public function getCodeAttribute()
+	{
+		return $this->hotel_id;
+	}
+
+	public function getNameAttribute()
+	{
+		return $this->hotel_name;
+	}
+
+
+	public function getImageAttribute()
+	{
+		return $this->photo1;
+	}
+
 	public function getAddressAttribute($value)
 	{
 		$value = $value.', '.$this->city.' - '.
@@ -36,6 +55,29 @@ class AgodaHotelModel extends Model
 		return $value;
 	}
 
+
+	public function getDescriptionAttribute()
+	{
+		return $this->overview;
+	}
+
+
+	public function getBuiltDataAttribute()
+	{
+		return [
+			'code' => $this->code,
+			'name' => $this->name,
+			'city' => $this->city,
+			'image' => $this->image,
+			'vendor' => $this->vendor,
+			'address' => $this->address,
+			'country' => $this->country,
+			'latitude' => $this->latitude,
+			'longitude' => $this->longitude,
+			'description' => $this->description,
+			'star_rating' => $this->star_rating
+		];
+	}	
 
 	public function hotelsByLatLong(Array $params)
 	{
