@@ -7,7 +7,9 @@ function addDateColumns(Array $data)
 	return $data;
 }
 
-
+function longenough($word){
+    return strlen( $word ) > 3;
+}
 
 function mylocal_path($path)
 {
