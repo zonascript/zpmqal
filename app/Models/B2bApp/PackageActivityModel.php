@@ -62,6 +62,15 @@ class PackageActivityModel extends Model
 				$description = $activity->shortDescription;
 			}
 
+			$pickUp = is_null($this->pick_up) 
+							 ? $activity->pick_up 
+							 : $this->pick_up;
+			
+			$duration = is_null($this->duration)
+								? $activity->duration
+								: $this->duration;
+
+
 			$result = [
 					'pdid' => $this->id,
 					'ukey' => $ukey,
@@ -75,8 +84,8 @@ class PackageActivityModel extends Model
 					'timing' => $this->timing,
 					'mode' => $this->mode,
 					'isSelected' => 1,
-					'pick_up' => $this->pick_up,
-					'duration' => $this->duration,
+					'pick_up' => $pickUp,
+					'duration' => $duration,
 					'inclusion' => $activity->inclusion,
 					'exclusion' => $activity->exclusion,
 				];

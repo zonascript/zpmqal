@@ -129,5 +129,6 @@ function convertTimeHrMin(time24){
 }
 
 function removeJunkZero(string) {
-  return string.replace(/^0+|0+$/g, "");
+  return string.replace(/^0+/, '');
+  // string.replace(/^0+|0+$/g, "");
 }
