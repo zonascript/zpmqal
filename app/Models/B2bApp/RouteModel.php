@@ -39,12 +39,10 @@ class RouteModel extends Model
 	}
 
 
-	/*public function setTokenAttribute()
+	public function setTokenAttribute()
 	{
-		if (!strlen($this->token)) {
-			$this->attributes['token'] = new_token();
-		}
-	}*/
+		$this->attributes['token'] = new_token();
+	}
 
 
 	public function getTokenAttribute($value)
@@ -121,6 +119,10 @@ class RouteModel extends Model
 		return $this->checkMode('flight') ? false : true;
 	}
 
+	public function getStartDateAttribute($value)
+	{
+		return is_null($value) ? '0000-00-00' :$value;
+	}
 
 	public function getEndDateAttribute($value)
 	{
@@ -498,10 +500,10 @@ class RouteModel extends Model
 	}
 
 
-	/*public function __construct(array $attributes = [])
+	public function __construct(array $attributes = [])
 	{
 		$this->setTokenAttribute();
 		parent::__construct($attributes);
-	}*/
+	}
 
 }

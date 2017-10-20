@@ -251,7 +251,7 @@
 					}
 					else{
 						setTimeout(function () {    
-							document.location.href = "{{ url('dashboard/package/builder/event/'.$package->token.'/flight') }}";
+							document.location.href = "{{ $package->eventActionUrl('flights') }}";
 					  }, 2000)
 					}
 					clickNext(next_rid);
@@ -321,6 +321,8 @@
 
 	function clickNext(rid) {
 		$('#a_flight_'+rid).click();
+		$('#filter_search').val('');
+		$('.search-stop').attr('checked', false);
 	}
 
 	function addCustomFlight(thisObj) {

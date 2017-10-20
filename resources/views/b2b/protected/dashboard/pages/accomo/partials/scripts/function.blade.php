@@ -615,7 +615,7 @@
 		ridObj = getRidObject(idObject.crid);
 		if (ridObj.nrid == "NaN") {
 			setTimeout(function () {    
-				document.location.href = "{{ url('dashboard/package/builder/event/'.$package->token.'/accommodation') }}";
+				document.location.href = "{{ $package->eventActionUrl('accommodation') }}";
 			}, 5000);
 		}
 		else{
@@ -627,6 +627,7 @@
 
 	function clickAtab(rid) {
 		$('#a_rid_'+rid).click();
+		$('#filter_search').val('');
 	}
 
 	function setCrid(rid) {

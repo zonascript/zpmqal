@@ -71,7 +71,7 @@ class RouteController extends Controller
 			]);
 		// ======updating package here=======
 		$package = $newPkg->packageUpdate($package->id, $data);
-		$nextEvent = $newPkg->findEvent($request->pid);
+		$nextEvent = $newPkg->findEvent($pToken);
 
 		return $nextEvent;
 	}

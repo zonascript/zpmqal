@@ -435,6 +435,7 @@
 	function clickNextTab() {
 		var ridObj = getRidObj(idObject.crid);
 		$('#a_rid_'+ridObj.nrid).click();
+		$('#filter_search').val('');
 	}
 
 
@@ -448,7 +449,7 @@
 			var ridObj = getRidObj(idObject.crid);
 			if (ridObj.nrid == "NaN") {
 				setTimeout(function () {    
-					document.location.href = "{{url('dashboard/package/builder/event/'.$package->token.'/activities')}}";
+					document.location.href = "{{ $package->eventActionUrl('activities') }}";
 				}, 1000);
 			}
 			else{

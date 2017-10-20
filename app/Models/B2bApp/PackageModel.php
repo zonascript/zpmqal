@@ -4,6 +4,7 @@ namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\B2bApp\ItineraryController;
+use App\Models\B2bApp\PackageEventModel;
 use App\Traits\CallTrait;
 use Carbon\Carbon;
 use DB;
@@ -32,7 +33,7 @@ class PackageModel extends Model
 
 	public function setTokenAttribute()
 	{
-		$this->attributes['token'] = mycrypt($this->count());
+		$this->attributes['token'] = new_token();
 	}
 
 	public function getTokenAttribute($value)
@@ -238,9 +239,9 @@ class PackageModel extends Model
 
 	public function packages()
 	{
-		return $this->hasMany('App\Models\B2bApp\PackageModel',
-											'package_code',
-											'package_code'
+		return $this->hasMany(
+											'App\Models\B2bApp\PackageModel',
+											'package_code', 'package_code'
 										);
 	}
 
@@ -248,10 +249,74 @@ class PackageModel extends Model
 	public function packageNote()
 	{
 		return $this->belongsTo(
-											PackageNoteModel::class,
+											'App\Models\B2bApp\PackageNoteModel',
 											'package_note_id'
 										);
 	}
+
+
+	public function packageEvents()
+	{
+		$result = $this->hasMany(PackageEventModel::class, 'package_id');
+		$this->syncEventAndRoute(); // synchronizing event
+		return $result;
+	}
+
+
+	public function syncEventAndRoute()
+	{
+		if (!$this->id) return false;
+
+		$events = $this->routeEvents();
+		$hasEventData = PackageEventModel::byPackageId($this->id)->get();
+
+		$grouped = $hasEventData->groupBy('event');
+
+		foreach ($grouped as $group) {
+			if ($group->count() > 1) {
+				foreach ($group as $key => $value) {
+					if ($key) {
+						$value->delete();
+					}
+				}
+			}
+		}
+
+		$hasEvents = $hasEventData->pluck('event')->unique()->toArray();
+
+		foreach ($events as $event) {
+			if (!in_array($event, $hasEvents)) {
+				$newEvent = new PackageEventModel;
+				$newEvent->package_id = $this->id;
+				$newEvent->event = $event;
+				$newEvent->save();
+			}
+		}
+
+		return true;
+	}
+
+
+	public function routeEvents()
+	{
+		$mode = $this->routes->pluck('mode')->unique()->toArray();
+		$events = [];
+
+		if (count(array_intersect(['flight'],$mode))) {
+			$events[] = 'flights';
+		}
+		
+		if (count(array_intersect(['hotel', 'hotel_only', 'cruise'],$mode))) {
+			$events[] = 'accommodation';
+		}
+		
+		if(count(array_intersect(['hotel', 'activity_only'], $mode))){
+			$events[] = 'activities';
+		}
+
+		return $events;
+	}	
+
 
 	public function copyRoomGuests($pid)
 	{
@@ -462,6 +527,23 @@ class PackageModel extends Model
 	public function clientEmailSubject()
 	{
 		return 'Your package is ready!!! | '.$this->uid;
+	}
+
+
+	public function eventActionUrl($current = null)
+	{
+		$url = route('openPackage', $this->token);
+		
+		if (!is_null($current)) {
+			$event = $this->packageEvents->where('event', $current)->first();
+		}
+		else{
+			$event = $this->packageEvents->where('is_active', 1)->first();
+		}
+		
+		if (!is_null($event)) $url = $event->eventActionUrl();
+		
+		return $url;
 	}
 
 

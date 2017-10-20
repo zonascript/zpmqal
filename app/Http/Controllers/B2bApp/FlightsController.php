@@ -16,6 +16,8 @@ use App\Traits\CallTrait;
 class FlightsController extends Controller
 {
 	use CallTrait;
+	public $viewPath = 'b2b.protected.dashboard.pages.flights';
+
 
 	public function findRoute($routeId)
 	{
@@ -29,14 +31,14 @@ class FlightsController extends Controller
 	{
 		$package = PackageController::call()->model()
 									->byUser()->byToken($token)->firstOrFail();
-		$viewPath = 'b2b.protected.dashboard.pages.flights';
+
 		$blade = [
 				'package'  => $package,
 				'client' 	 => $package->client,
-				'viewPath' => $viewPath
+				'viewPath' => $this->viewPath
 			];
 
-		return trimHtml(view($viewPath.'.index', $blade)->render());
+		return trimHtml(view($this->viewPath.'.index', $blade)->render());
 	}
 
 

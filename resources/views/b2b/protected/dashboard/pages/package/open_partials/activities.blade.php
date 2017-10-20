@@ -1,4 +1,4 @@
-@if ($package->hotelRoutes->count())
+@if ($package->activityRoutes->count())
 <div class="col-md-12 col-sm-12 col-xs-12">
 	<div class="x_panel">
 		<div class="x_title">
@@ -13,13 +13,13 @@
 			<div class="clearfix"></div>
 		</div>
 		<div class="x_content">
-			@foreach ($package->hotelRoutes as $hotelRoute)
+			@foreach ($package->activityRoutes as $activityRoutes)
 				<?php
-					// dd($hotelRoute->packageActivities[0]->activityObject());
-					$location = $hotelRoute->destination_detail;
-					$selectedActivities = $hotelRoute->packageActivities;
+					// dd($activityRoutes->packageActivities[0]->activityObject());
+					$location = $activityRoutes->destination_detail;
+					$selectedActivities = $activityRoutes->packageActivities;
 				?>
-				@if ($hotelRoute->packageActivities->count())
+				@if ($activityRoutes->packageActivities->count())
 				<div class="row">
 					<div class="x_panel">
 						<div class="x_title">
@@ -28,9 +28,9 @@
 							</div>
 							<div class="col-md-5 col-sm-5 col-xs-12">
 								<h2 class="pull-right">
-									({{ $hotelRoute->start_datetime->format('d-M-Y') }}
+									({{ $activityRoutes->start_datetime->format('d-M-Y') }}
 										To
-									{{ $hotelRoute->end_datetime->format('d-M-Y')}})
+									{{ $activityRoutes->end_datetime->format('d-M-Y')}})
 								</h2>
 							</div>
 							<div class="col-md-1 col-sm-1 col-xs-12">

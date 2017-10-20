@@ -22,22 +22,22 @@
 				<div class="row">
 					<div class="col-md-3 col-sm-3 col-xs-3">
 						<label>
-							<input type="checkbox" class="search-stop nomargin" data-value="stop_1"> 1
+							<input type="checkbox" class="search-stop nomargin" data-value="stop_1"> No
 						</label>
 					</div>
 					<div class="col-md-3 col-sm-3 col-xs-3">
 						<label>
-							<input type="checkbox" class="search-stop nomargin" data-value="stop_2"> 2
+							<input type="checkbox" class="search-stop nomargin" data-value="stop_2"> 1
 						</label>
 					</div>
 					<div class="col-md-3 col-sm-3 col-xs-3">
 						<label>
-							<input type="checkbox" class="search-stop nomargin" data-value="stop_3"> 3
+							<input type="checkbox" class="search-stop nomargin" data-value="stop_3"> 2
 						</label>
 					</div>
 					<div class="col-md-3 col-sm-3 col-xs-3">
 						<label>
-							<input type="checkbox" class="search-stop nomargin" data-value="stop_4"> 4
+							<input type="checkbox" class="search-stop nomargin" data-value="stop_4"> 3
 						</label>
 					</div>
 				</div>

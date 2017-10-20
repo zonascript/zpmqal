@@ -12,6 +12,7 @@ use App\Http\Controllers\B2bApp\PackageCostsController;
 use App\Http\Controllers\B2bApp\TrackPackageController;
 use App\Http\Controllers\B2bApp\PackageCodesController;
 use App\Http\Controllers\B2bApp\PackageNotesController;
+use App\Http\Controllers\B2bApp\PackageEventController;
 use App\Http\Controllers\CommonApp\UrlController;
 use App\Models\B2bApp\PackageModel;
 use App\Mail\PackageMail;
@@ -286,10 +287,45 @@ class PackageController extends Controller
 			]);
 	}
 
+
+
+	public function findEvent($token, $currentEventToken = '')
+	{
+		$package = $this->model()->byUser()
+							->byToken($token)->firstOrFail();
+		
+		$currentEvent = $package->packageEvents
+										->where('token', $currentEventToken)
+											->first();
+
+		if (!is_null($currentEvent)) {
+			$currentEvent->is_active = 0;
+			$currentEvent->save();
+		}
+
+		$nextUrl = route('openPackage',$token);
+
+		$event = $package->packageEvents
+							->where('is_active', 1)->first();
+
+		$eventToken = '';
+		$eventActionUrl = '';
+		if (!is_null($event)) {
+			$nextUrl = $event->event_url;
+			$eventToken = $event->token;
+		}
+
+		return json_encode([
+							"nextUrl" 			 => $nextUrl, 
+							"eventToken" 		 => $eventToken,
+						]);
+	}
+
+
 	/*
 	| this function it to get all event of the package;
 	*/
-	public function findEvent($value, $findType = 'id', $current = '')
+	public function findEventOld($value, $findType = 'id', $current = '')
 	{
 		if ($findType == 'token') {
 			$package = $this->model()->byUser()
@@ -304,7 +340,6 @@ class PackageController extends Controller
 		$activeModes = $package->routes
 									->where('status', 'active')
 										->pluck('mode')->unique()->toArray();
-		
 
 		if (count(array_intersect(['flight'],$activeModes))) {
 			$nextUrl = url('dashboard/package/builder/flights/'.$token);
@@ -312,7 +347,7 @@ class PackageController extends Controller
 		elseif (count(array_intersect(['hotel', 'hotel_only', 'cruise'],$activeModes))) {
 			$nextUrl = url('dashboard/package/builder/accommodation/'.$token);
 		}
-		elseif(count(array_intersect(['hotel', 'activity_only'],$activeModes)) && $current != 'activities'){
+		elseif(count(array_intersect(['hotel', 'activity_only'], $activeModes)) && $current != 'activities'){
 			$nextUrl = url('dashboard/package/builder/activities/'.$token);
 		}
 		else{
@@ -330,9 +365,9 @@ class PackageController extends Controller
 	}
 	
 
-	public function getFindEvent($token, $current)
+	public function getFindEvent($pToken, $currentEventToken = '')
 	{
-		$result = $this->findEvent($token, 'token', $current);
+		$result = $this->findEvent($pToken, $currentEventToken);
 		$result = json_decode($result);
 		return redirect($result->nextUrl);
 	}

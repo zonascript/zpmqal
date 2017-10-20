@@ -21,6 +21,11 @@ class AccommodationController extends Controller
 	{
 		$package = PackageController::call()->model()
 							->byUser()->byToken($token)->firstOrFail();
+
+		/*$eventActionUrl = $package->packageEvent
+											->where('event', 'accommodation')
+												->eventActionUrl();*/
+
 		$indication = indication();
 
 		// $spots = $indication->byCategory('transfer_spot')->get();
@@ -37,12 +42,12 @@ class AccommodationController extends Controller
 		// dd($spot, $mode, $spotModes);
 
 		$blade = [
-				'package'  => $package,
-				'viewPath' => $this->viewPath,
-				'client' 	 => $package->client,
-				'indication' => $indication,
-				// 'spots' => $spots,
-				// 'modes' => $modes,
+				'package'  	 		 => $package,
+				'viewPath' 	 		 => $this->viewPath,
+				'client' 	 	 		 => $package->client,
+				'indication' 		 => $indication,
+				// 'spots' 	 => $spots,
+				// 'modes' 	 => $modes,
 
 			];
 		return myView($this->viewPath.'.index', $blade);
