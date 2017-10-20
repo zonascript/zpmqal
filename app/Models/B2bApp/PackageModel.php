@@ -408,8 +408,9 @@ class PackageModel extends Model
 	public function fixRouteDates()
 	{
 		$firstRoute = $this->routes->first();
+
 		if (!is_null($firstRoute)) {
-			$firstRoute->start_date = $this->start_date;
+			$firstRoute->start_date = $this->start_date->format('Y-m-d');
 
 			if (!$firstRoute->checkMode('flight')) {
 				$firstRoute->end_date = $firstRoute->end_date;
@@ -587,6 +588,41 @@ class PackageModel extends Model
 		}
 		
 		return collect($data);
+	}
+
+
+	public function tripSummary()
+	{
+		$result = [
+				'visa' => $this->cost->is_visa,
+				'hotels' => [],
+				'flights' => [],
+				'transfers' => $this->transferStringArray()->toArray(),
+				'activities' => []
+			];
+
+		if ($this->flightRoutes->count()) {
+			foreach ($this->flightRoutes as $route) {
+				$result['flights'][] = $route->origin_detail->location.' to '
+																.$route->destination_detail->location;
+			}
+		}
+
+		if ($this->accomoRoutes->count()) {
+			foreach ($this->accomoRoutes as $route) {
+				$result['hotels'][] = $route->accomo()->summary;
+			}
+		}
+
+		if ($this->activities->count()) {
+			foreach ($this->activities as $route) {
+				$result['activities'][] = $route->activityObject()->name
+																	.proper($route->activityObject()->mode)
+																		. 'basis';
+			}
+		}
+
+		return $result;
 	}
 
 

@@ -69,7 +69,6 @@ class RouteController extends Controller
 				"start_date" => date_formatter($request->startDate,'d/m/Y'), 
 				// "guests_detail" => $this->makeGuestArray($request->roomGuests),
 			]);
-
 		// ======updating package here=======
 		$package = $newPkg->packageUpdate($package->id, $data);
 		$nextEvent = $newPkg->findEvent($request->pid);
