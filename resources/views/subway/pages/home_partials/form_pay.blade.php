@@ -14,7 +14,7 @@
 		<label class="control-label col-md-4 col-sm-4 col-xs-12" for="mobile">Mobile <span class="required">*</span>
 		</label>
 		<div class="col-md-6 col-sm-6 col-xs-12">
-			<input type="text" name="mobile" required="required" class="form-control col-md-7 col-xs-12">
+			<input type="text" name="mobile" required="required" maxlength="10" class="form-control col-md-7 col-xs-12">
 			<b><span class="red" data-error="mobile"></span></b>
 		</div>
 	</div>

@@ -70,9 +70,12 @@ class PaymentsController extends Controller
 		];
 
 		$newPayu = new PayuPaymentsController;
-		// $data["key"] = env('TEST_PAYUMONEY_KEY');
-		// $data["salt"] = env('TEST_PAYUMONEY_SALT');
-		// $newPayu->mode = 'test';
+		
+		/* // for test
+		$data["key"] = env('TEST_PAYUMONEY_KEY');
+		$data["salt"] = env('TEST_PAYUMONEY_SALT');
+		$newPayu->mode = 'test';*/
+		
 		return $newPayu->index($data);
 	}
 
@@ -81,7 +84,17 @@ class PaymentsController extends Controller
 	{
 		$statusBool = statusBool($status);
 		$payment = $this->model()->byToken($token)->firstOrFail();
-		return redirect($payment->back_url);
+		$blade = [
+							'name' => $payment->name,
+							'email' => $payment->email,
+							'txnid' => $payment->txnid,
+							'is_success' => $statusBool,
+							'redirect_to' => $payment->back_url
+						];
+
+		return view('subway.pages.payment-status', $blade);
+
+		// return redirect($payment->back_url);
 	}
 
 
