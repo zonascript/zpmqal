@@ -31,7 +31,7 @@
 			<div class="row">
 				<div class="col-md-8 col-md-offset-2">
 					<i class="fa fa-{{ $is_success ? 'check' : 'times' }} round box-icon-large box-icon-center box-icon-{{ $is_success ? 'success' : 'un' }} mb30"></i>  
-					<h2 class="text-center">{{ $name }}, your payment was {{ $is_success ? 'successful' : 'unsuccessful' }} !</h2>
+					<h2 class="text-center">{{ $name }}, your payment was {{ $is_success ? 'successful' : 'unsuccessful' }}!</h2>
 					<h5 class="text-center mb30">Details has been send to {{$email}}</h5>
 					<ul class="order-payment-list list mb30">
 						<li>
