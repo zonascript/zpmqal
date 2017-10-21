@@ -8,8 +8,8 @@ use App\Models\CommonApp\IndicationModel;
 class TextModel extends Model
 {
 	protected $connection = 'mysql3';
-	protected $appends = ['status', 'max_order'];
 	protected $table = 'texts';
+	protected $appends = ['status', 'max_order'];
 
 
 	public function setOrderAttribute($value)
@@ -25,6 +25,23 @@ class TextModel extends Model
 		}
 	}
 
+	public function setDescriptionAttribute($value = '')
+	{
+		$this->attributes['description'] = clean_html($value);
+	}
+
+	public function getTextAttribute($value)
+	{
+		$change = strlen($value);
+		$value = clean_html($value);
+		
+		if ($change != strlen($value)) {
+			$this->text = $value;
+			$this->save();
+		}
+
+		return $value;
+	}
 
 	public function getStatusAttribute()
 	{
