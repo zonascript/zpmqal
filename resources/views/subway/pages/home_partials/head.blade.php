@@ -43,6 +43,8 @@
 
 
 <link href="{{ commonAsset('dashboard/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+<link href="{{ commonAsset('dashboard/vendors/jquery-confirm-master/dist/jquery-confirm.min.css') }}" rel="stylesheet">
+
 <link href="{{ url('/') }}/ninja-slider/style.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="{{ url('/') }}/common/carousal/simple_slideshow.css">
 
@@ -57,7 +59,8 @@
 <script src="{{ commonAsset('dashboard/vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
 <script src="{{ commonAsset('dashboard/js/moment/moment.min.js') }}"></script>
-	<script src="{{ commonAsset('dashboard/js/datepicker/daterangepicker.js') }}"></script>
+<script src="{{ commonAsset('dashboard/js/datepicker/daterangepicker.js') }}"></script>
+
 <script src="{{ url('/') }}/common/carousal/gi_carousal/scripts.min.js"></script>
 <script src="{{ url('/') }}/common/js/jquery-ui.min.js"></script>
 {{-- <script src="{{ url('/') }}/js/parsley.min.js"></script> --}}
@@ -96,3 +99,4 @@
 <script src="{{ url('/') }}/subway/wp-content/themes/yoo_subway_wp/warp/js/accordionmenu.js"></script>
 <script src="{{ url('/') }}/subway/wp-content/themes/yoo_subway_wp/warp/js/dropdownmenu.js"></script>
 <script src="{{ url('/') }}/subway/wp-content/themes/yoo_subway_wp/js/template.js"></script>
+<script src="{{ commonAsset('dashboard/vendors/jquery-confirm-master/dist/jquery-confirm.min.js') }}"></script>

@@ -11,8 +11,9 @@ Route::group(['namespace' => 'ItineraryApp'], function(){
 		Route::any('payment/{status}/{token}', 'PaymentsController@response')
 						->name('payStatusUrl');
 
-		Route::get('reserve/{token}', 'ReservesController@reserve')
+		Route::any('reserve/{token}', 'ReservesController@reserve')
 						->name('reservePackage');
+
 		Route::any('pay/{token}', 'PaymentsController@payNow')
 						->name('payPackage');
 	});

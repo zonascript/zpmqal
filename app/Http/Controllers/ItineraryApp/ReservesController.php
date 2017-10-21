@@ -33,7 +33,7 @@ class ReservesController extends Controller
     }
 
 		$package = PackageController::call()->model()
-								->byUser()->byToken($token)->firstOrFail();
+								->byToken($token)->firstOrFail();
 
 		$date = is_null($request->date) 
 					? Carbon::now()

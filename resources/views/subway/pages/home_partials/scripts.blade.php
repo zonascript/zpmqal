@@ -76,7 +76,7 @@
 			}
 		});
 
-		console.log(data);
+		/*console.log(data);*/
 
 		if (isWrong) { return false }
 
@@ -87,11 +87,18 @@
 			dataType : 'JSON',
 			success : function (res) {
 				if (res.status == 200) {
-					alert('we have successfully reserved your package our representative will get in touch with');
+					$.alert({
+									title : 'Thankyou !!!',
+									content : 'we have successfully reserved your package our representative will get in touch with you.'
+								});
+
 					hideBookPopup();
 				}
 				else{
-					alert('something went wrong.');
+					$.alert({
+									title : 'Sorry. something went wrong.',
+									content : 'Kindly contact our representative.'
+								});
 					$.each(res.errors, function (i, v) {
 						$(fromId).find('[name="'+i+'"]')
 																.addClass('border-red')
@@ -101,7 +108,10 @@
 				}
 			},
 			error : function () {
-				alert('something went wrong.');
+				$.alert({
+								title : 'Sorry. something went wrong.',
+								content : 'Kindly contact our representative.'
+							});
 				hideBookPopup();
 			}
 		});
