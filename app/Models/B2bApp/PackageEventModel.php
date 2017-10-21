@@ -49,6 +49,21 @@ class PackageEventModel extends Model
 	}
 
 
+	public function copyEvent($pid)
+	{
+		$newEvent = new PackageEventModel;
+		
+		if ($this->id) {
+			$newEvent->package_id = $pid;
+			$newEvent->event = $this->event;
+			$newEvent->is_active = $this->is_active;
+			$newEvent->save();
+		}
+
+		return $newEvent;
+	}
+
+
 	public function __construct(array $attributes = [])
 	{
 		$this->setTokenAttribute();

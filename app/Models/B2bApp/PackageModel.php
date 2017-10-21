@@ -327,6 +327,14 @@ class PackageModel extends Model
 	}
 
 
+	public function copyPackageEvents($pid)
+	{
+		foreach ($this->packageEvents as $packageEvent) {
+			$packageEvent->copyEvent($pid);
+		}
+		return $this; 
+	}
+
 	/*
 	| this function is to get all hotels which is belongs to this package
 	*/
