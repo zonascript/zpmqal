@@ -32,44 +32,41 @@ class PackageHotelModel extends Model
 
 	public function hotelRooms()
 	{
-		return $this->packageRooms->pluck('room.roomtype')->toArray(); //added new line
-		
-		$rooms = [];
-		foreach ($this->packageRooms as $room) {
-			if (isset($room->room->roomtype)) {
-				$rooms[] = $room->room->roomtype;
-			}
-		}
-		return $rooms;
+		return $this->packageRooms
+									->pluck('room.roomtype')
+										->toArray(); //added new line
 	}
 
 
 	public function selectedHotel()
 	{
-		if ($this->vendor == 'b') {
-			return $this->belongsTo(
-							'App\Models\HotelApp\BookingHotelModel', 
-							'hotel_code'
-						);
-		}
-		elseif ($this->vendor == 'a') {
-			return $this->belongsTo(
-									'App\Models\HotelApp\AgodaHotelModel', 
-									'hotel_code', 'hotel_id'
-								);
-		}
-		else{
-			return null;
-		}
+		$relatedData = collect([
+						'a' => [
+									'column' => 'hotel_id',
+									'model' => 'App\Models\HotelApp\AgodaHotelModel'
+								],
+		
+						'b' => [
+									'column' => 'id',
+									'model' => 'App\Models\HotelApp\BookingHotelModel'
+								],
+					]);
 
+		$model = $relatedData->pull($this->vendor.'.model');
+		$relatedCol = $relatedData->pull($this->vendor.'.column');
+		
+		return $this->belongsTo($model, 'hotel_code', $relatedCol);
 	}
 
 
 
 	public function hotelForView()
 	{
-		$params = ['code' => $this->hotel_code, 'vendor' => $this->vendor];
-		return HotelsController::call()->hotelByCode($params);
+		return HotelsController::call()
+						->hotelByCode([
+									'code' => $this->hotel_code, 
+									'vendor' => $this->vendor
+								]);
 	}
 
 
@@ -99,7 +96,7 @@ class PackageHotelModel extends Model
 				"htmlDescription" => $hotelDetail->get('description'),
 			];
 
-		$result->starRatingHtml = getStarImage($result->starRating, 15, 15);
+		$result->starRatingHtml = starRating($result->starRating, 15, 15);
 		$result->shortDescription = sub_string($result->description, 120);
 
 		return $result;
@@ -108,13 +105,10 @@ class PackageHotelModel extends Model
 
 	public function images()
 	{
-		$hotelDetail = $this->hotelForView();
-		$images = [];
-		if (isset($hotelDetail[0])) {
-			$images = $hotelDetail[0]->images();
-		}
-		return $images;
+		$images = $this->hotelForView()->first();
+		return is_null($images) ? [] : $images->images();
 	}
+
 
 	public function imagesOld()
 	{

@@ -436,28 +436,25 @@ function pdfHotelDesc($html){
 
 function starRating($count){
 	$stars = '';
+	$star = '<i class="fa fa-star font-size-13"></i>';
+	$goldStar = '<i class="fa fa-star font-gold font-size-13"></i>';
 
 	if (is_numeric($count)) {
-		for ($i=1; $i < 5 ; $i++) { 
-			if ($i <= $count ) {
-				$stars .= '<i class="fa fa-star font-gold font-size-13"></i>';
-			}
-			else{
-				$stars .= '<i class="fa fa-star font-size-13"></i>';
-			}
-		}
+		$stars = str_repeat($goldStar, $count)
+						.str_repeat($star, 5-$count);
 	}
 	return $stars;
 }
 
-function getStarImage($Count, $width = 18, $height = 18){
+function getStarImage($count, $width = 18, $height = 18){
 	
 	global $Server_Name;
 	
 	$html = '';
-	for($x = 1; $x <= $Count; $x++) {
+	for($x = 1; $x <= $count; $x++) {
 		$html .= '<img src="'.urlImage('images/icon/star.gif').'" width="'.$width.'" height="'.$height.'">';
 	}
+	
 	return $html;
 }
 

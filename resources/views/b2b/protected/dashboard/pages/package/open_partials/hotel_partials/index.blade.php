@@ -14,21 +14,23 @@
 				<div class="col-md-9 col-sm-9 col-xs-12">
 					<h2>
 						<div class="col-md-12 col-sm-12 col-xs-12">
-							<h3 class="nopadding hotelName">{{ $hotelDetail->name }}</h3>
+							<h3 class="nopadding hotelName">{{ $hotelDetail->name }} {!! $hotelDetail->starRatingHtml !!}</h3>
 						</div>
 						<div class="col-md-12 col-sm-12 col-xs-12 m-top-5 font-size-13">
 							<i class="fa fa-map-marker"></i>
 							<span>{{ $hotelDetail->address }}</span>
 						</div>
 						<div class="col-md-12 col-sm-12 col-xs-12 ">
-							{!! $hotelDetail->starRatingHtml !!}
 							<div hidden>
 								<p class="starRating" >{{ $hotelDetail->starRating }}</p>
 							</div>
-							<span class="font-size-13">
-								 | <b>Check In : </b>{{ $hotelDetail->startDate }}
-								 | <b>Check Out : </b>{{ $hotelDetail->endDate }}
-							</span>
+							<ul class="pipe font-size-13 nopadding m-top-5">
+								<li><b>Check In : </b>{{ $hotelDetail->startDate }}</li>
+								<li><b>Check Out : </b>{{ $hotelDetail->endDate }}</li>
+								<li><b>Breakfast : </b>{{ $hotelRoute->is_breakfast ? 'Yes' : 'No' }}</li>
+								<li><b>Lunch : </b>{{ $hotelRoute->is_lunch ? 'Yes' : 'No' }}</li>
+								<li><b>Dinner : </b>{{ $hotelRoute->is_dinner ? 'Yes' : 'No' }}</li>
+							</ul>
 						</div>
 						<div class="col-md-12 col-sm-12 col-xs-12 font-size-13 m-top-5">
 							<b>RoomType : </b>{{ implode(',', $hotelDetail->roomType) }}

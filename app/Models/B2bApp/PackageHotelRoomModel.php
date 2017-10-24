@@ -31,9 +31,7 @@ class PackageHotelRoomModel extends Model
 				'own' => 'App\Models\HotelApp\OwnHotelRoomModel'
 			];
 
-		return isset($this->models[$vendor])
-				 ? $this->models[$vendor]
-				 : '';
+		return isset($models[$vendor]) ? $models[$vendor] : '';
 	}
 
 	public function room()

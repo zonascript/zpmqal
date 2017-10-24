@@ -63,16 +63,10 @@ class AgodaHotelRoomsController extends Controller
 
 	public function images()
 	{
-		$images = [];
-		if ($this->images->count()) {
-			foreach ($this->images as $image) {
-				$images[] = $image->LocationWithSquareSize2X;
-			}
-		}
-		else{
-			$images[] = urlDefaultImageRoom();
-		}
-		return $images;
+		$images = $this->images->pluck('LocationWithSquareSize2X');
+		return $images->count() 
+				 ? $images->toArray 
+				 : [urlDefaultImageRoom()];
 	}
 
 	/*
