@@ -20,7 +20,7 @@ class PackageModel extends Model
 								'uid', 'cost', 'nights', 'pax_detail',
 								'pax_string', 'itinerary', 'package_url',
 								'extra_word', 'duration', 'is_start_date_set',
-								'places_to_go'
+								'places_to_go', 'is_link_generate'
 							];
 
 	public $costToken = null;
@@ -104,7 +104,7 @@ class PackageModel extends Model
 	public function getPackageUrlAttribute()
 	{
 		$url = null;
-		if (isset($this->cost->token) && $this->cost->total_cost) {
+		if ($this->is_link_generate) {
 			$url = route('yourPackage', $this->token).'?ctk='.$this->cost->token;
 		}
 		return $url;
@@ -153,6 +153,12 @@ class PackageModel extends Model
 		return $this->accomoRoutes
 									->pluck('destination_detail.country')
 										->unique();
+	}
+
+
+	public function getIsLinkGenerateAttribute()
+	{
+		return (isset($this->cost->token) && $this->cost->total_cost);
 	}
 
 
@@ -289,6 +295,7 @@ class PackageModel extends Model
 				$newEvent = new PackageEventModel;
 				$newEvent->package_id = $this->id;
 				$newEvent->event = $event;
+				$newEvent->is_active = $this->is_link_generate ? 0 : 1; 
 				$newEvent->save();
 			}
 		}
@@ -505,6 +512,35 @@ class PackageModel extends Model
 								);
 
 		return $result->byIsActive()->orderBy('date', 'asc');
+	}
+
+
+	public function comparePackage($token)
+	{
+		$default = $this->tripSummary();
+		$package = PackageModel::byToken($token)->firstOrFail();
+		$compareTo = $package->tripSummary();
+		$result = [
+				'visa' => $package->cost->is_visa,
+				'hotels' => [],
+				'flights' => [],
+				'transfers' => $this->transferStringArray()->toArray(),
+				'activities' => []
+			];
+
+		foreach ($result as $key => $value) {
+			if (is_array($value) && isset($default[$key]) && isset($compareTo[$key])) {
+				foreach ($compareTo[$key] as $comp) {
+					$result[$key] = [
+							"changed" => $comp,
+							"is_same" => in_array($comp, $default[$key])
+						];
+				}
+			}
+		}
+
+		return $result;
+
 	}
 
 

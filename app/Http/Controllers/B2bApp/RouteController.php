@@ -280,24 +280,23 @@ class RouteController extends Controller
 	public function copyRoutes($oldPid, $newPid)
 	{
 		$routes = $this->model()->byPackageId($oldPid)->get();
+		$copyColumns = [
+						'mode', 'origin', 'origin_code', 
+						'destination', 'destination_code', 'nights', 
+						'start_date', 'start_time', 'end_date', 'end_time', 
+						'is_pick_up', 'pick_up', 'pick_up_mode', 'is_drop_off', 
+						'drop_off', 'drop_off_mode', 'is_breakfast', 'is_lunch', 
+						'is_dinner', 'fusion_id', 'fusion_type', 'status'
+					];
+
 		foreach ($routes as $route) {
 			$newRoute = $this->model();
 			$newRoute->package_id = $newPid;
-			$newRoute->mode = $route->mode;
-			$newRoute->origin = $route->origin;
-			$newRoute->destination = $route->destination;
-			$newRoute->nights = $route->nights;
-			$newRoute->start_date = $route->start_date;
-			$newRoute->start_time = $route->start_time;
-			$newRoute->end_date = $route->end_date;
-			$newRoute->end_time = $route->end_time;
-			$newRoute->is_pick_up = $route->is_pick_up;
-			$newRoute->pick_up = $route->pick_up;
-			$newRoute->is_drop_off = $route->is_drop_off;
-			$newRoute->drop_off = $route->drop_off;
-			$newRoute->fusion_id = $route->fusion_id;
-			$newRoute->fusion_type = $route->fusion_type;
-			$newRoute->status = $route->status;
+			
+			foreach ($copyColumns as $copyColumn) {
+				$newRoute->$copyColumn = $route->$copyColumn;
+			}
+
 			$newRoute->save();
 
 			if ($route->packageActivities->count()) {
