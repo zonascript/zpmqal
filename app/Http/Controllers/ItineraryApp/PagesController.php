@@ -11,32 +11,36 @@ class PagesController extends Controller
 {
 	public function pages($token, $page=null,  Request $request)
 	{
-		$package = PackageController::call()->model()
-								->byToken($token)->firstOrFail();
+		$packageCont = new PackageController;
+
+		$package = $packageCont->model()->byIsLocked()
+							->byToken($token)->firstOrFail();
+		if ($page == 'compare') {
+			$packageCont->model()->byIsLocked()
+										->byToken($request->compare_token)
+											->firstOrFail();
+		}
 
 		$package->costToken = $request->ctk;
 		
-		// dd($package->routes[1]->fusion->cruise->itinerary);
-
-		if ($package->cost->total_cost < 1) {
-			exitView();
-		}
-
+		if ($package->cost->total_cost < 1) exitView();
 
 		$url = $request->fullUrl();
+		
 		if (is_null($page)) {
 			$page = 'home';
 			$url = str_replace($token, $token.'/'.$page, $url);
 		}
+
 		$tempUrl = str_replace($token.'/'.$page, $token.'/{}', $url);
 
 		$urlObj = new UrlController(['url' => $tempUrl]);
 
 		$blade = [
 				"url" => $url,
-				"package" => $package,
-				"urlObj" => $urlObj,
 				"token" => $token,
+				"urlObj" => $urlObj,
+				"package" => $package,
 			];
 
 		return view('subway.pages.'.$page, $blade);

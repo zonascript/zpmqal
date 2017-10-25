@@ -200,6 +200,12 @@ class PackageModel extends Model
 	}
 
 
+	public function scopeByIsLocked($query, $isLocked = 1)
+	{
+		return $query->where('is_locked', $isLocked);
+	}
+
+
 
 	public function scopeSearch($query, $word)
 	{
@@ -521,26 +527,52 @@ class PackageModel extends Model
 		$package = PackageModel::byToken($token)->firstOrFail();
 		$compareTo = $package->tripSummary();
 		$result = [
+				'uid' => $package->uid,
 				'visa' => $package->cost->is_visa,
 				'hotels' => [],
 				'flights' => [],
-				'transfers' => $this->transferStringArray()->toArray(),
+				'transfers' => [],
 				'activities' => []
 			];
 
 		foreach ($result as $key => $value) {
 			if (is_array($value) && isset($default[$key]) && isset($compareTo[$key])) {
-				foreach ($compareTo[$key] as $comp) {
-					$result[$key] = [
-							"changed" => $comp,
-							"is_same" => in_array($comp, $default[$key])
-						];
+				
+
+				$count = count($default[$key]) > count($compareTo[$key])
+							 ? count($default[$key]) : count($compareTo[$key]);
+
+				for ($i=0; $i < $count; $i++) {
+					if (isset($compareTo[$key][$i])) {
+						$def = isset($default[$key][$i]) 
+								 ? $default[$key][$i]
+								 : null;
+
+						$comp = $compareTo[$key][$i];
+
+						$new = $comp;
+
+						$which = 'changed';
+
+						if (is_null($def)) {
+							$which = 'new';
+						}
+						elseif ($def == $comp) {
+							$which = 'same';
+						}
+
+						$result[$key][] = [
+								"same" 		=> $def,
+								"new" 		=> $new,
+								"changed" => $comp,
+								"which" 	=> $which
+							];
+					}
 				}
 			}
 		}
 
 		return $result;
-
 	}
 
 
