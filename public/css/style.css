@@ -732,6 +732,10 @@
 	border-left: 1px solid #ffffff;
 }
 
+.td-p-10 td{
+	padding: 10px !important;
+}
+
 
 .flex-list { position: relative;
 	margin: 1em;

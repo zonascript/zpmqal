@@ -43,6 +43,7 @@
 
 
 <link href="{{ commonAsset('dashboard/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+
 <link href="{{ commonAsset('dashboard/vendors/jquery-confirm-master/dist/jquery-confirm.min.css') }}" rel="stylesheet">
 
 <link href="{{ url('/') }}/ninja-slider/style.css" rel="stylesheet" type="text/css" />
@@ -50,12 +51,17 @@
 
 
 <script type="text/javascript" src="{{ url('/') }}/subway/scripts.js"></script>
+
+<script src="{{asset('common/dashboard/vendors/jquery/dist/jquery.min.js')}}"></script>
+
 <script type="text/javascript" src="{{ url('/') }}/js/scripts.js"></script>
 <script type='text/javascript' src='{{ url('/') }}/subway/wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
 
 {{-- <script src="{{ url('/') }}/common/carousal/simple_slideshow.js" ></script> --}}
-<script src="{{asset('common/dashboard/vendors/jquery/dist/jquery.min.js')}}"></script>
 {{-- Bootstrap --}}
+
+<script src="{{asset('common/dashboard/vendors/jquery/dist/jquery.min.js')}}"></script>
+
 <script src="{{ commonAsset('dashboard/vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
 <script src="{{ commonAsset('dashboard/js/moment/moment.min.js') }}"></script>
@@ -64,7 +70,6 @@
 <script src="{{ url('/') }}/common/carousal/gi_carousal/scripts.min.js"></script>
 <script src="{{ url('/') }}/common/js/jquery-ui.min.js"></script>
 {{-- <script src="{{ url('/') }}/js/parsley.min.js"></script> --}}
-
 
 <script src="{{ url('/') }}/ninja-slider/scripts.js" type="text/javascript"></script>
 <script>

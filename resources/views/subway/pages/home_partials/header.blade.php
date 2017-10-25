@@ -62,6 +62,18 @@
 						</a>
 					</li>
 				@endif
+
+				@if ($package->packages->where('is_locked', 1)->count() > 1)
+					<li class="level1 active current">
+						<a href="{{ $urlObj->url('packages') }}" class="level1">
+							<span>
+								<span class="icon text-center">
+									{{-- <i class="fa fa-futbol-o font-size-18"></i> --}}
+								</span>all packages
+							</span>
+						</a>
+					</li>
+				@endif
 				
 				{{-- <li class="level1 active current">
 					<a href="{{ $urlObj->url('terms_and_condition') }}" class="level1">

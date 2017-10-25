@@ -15,14 +15,13 @@ class PagesController extends Controller
 
 		$package = $packageCont->model()->byIsLocked()
 							->byToken($token)->firstOrFail();
+		$comparePackage = null;
 		if ($page == 'compare') {
-			$packageCont->model()->byIsLocked()
+			$comparePackage = $packageCont->model()->byIsLocked()
 										->byToken($request->compare_token)
 											->firstOrFail();
 		}
 
-		$package->costToken = $request->ctk;
-		
 		if ($package->cost->total_cost < 1) exitView();
 
 		$url = $request->fullUrl();
@@ -41,6 +40,7 @@ class PagesController extends Controller
 				"token" => $token,
 				"urlObj" => $urlObj,
 				"package" => $package,
+				"comparePackage" => $comparePackage
 			];
 
 		return view('subway.pages.'.$page, $blade);

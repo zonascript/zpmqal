@@ -11,10 +11,26 @@
 	<div class="content clearfix p-10">
 		<div class="x_content sans-serif">
 			<div class="content clearfix">
-				<table width="100%" class="table-lborder table-trip-sum">
+				<table width="100%" class="table-lborder table-trip-sum td-p-10">
 					<tr>
-						<td><h2 class="text-center">{{ $package->uid }}</h2></td>
-						<td><h2 class="text-center">{{ $compareTo['uid'] }}</h2></td>
+						<td >
+							<h2>{{ $package->uid }}
+								<span class="pull-right">
+									<i class="fa fa-rupee"></i>
+									<b>{{ $package->cost->total_cost }} /-</b>
+								</span>
+							</h2>
+							<hr>
+						</td>
+						<td>
+							<h2>{{ $comparePackage->uid }}
+								<span class="pull-right">
+									<i class="fa fa-rupee"></i>
+									<b>{{ $comparePackage->cost->total_cost }} /-</b>
+								</span>
+							</h2>
+							<hr>
+						</td>
 					</tr>
 					@foreach ($checkAttrs as $checkAttr)
 						<?php
@@ -54,13 +70,13 @@
 					<tr>
 						<td>
 							<h4>Visa</h4>
-							<ul>
+							<ul class="list-unstyled">
 								<li>{{ $default['visa'] ? 'Visa included' : 'Visa not included' }}</li>
 							</ul>
 						</td>
 						<td>
 							<h4>Visa</h4>
-							<ul>
+							<ul class="list-unstyled">
 								<li>{{ $compareTo['visa'] ? 'Visa included' : 'Visa not included' }}</li>
 							</ul>
 						</td>
