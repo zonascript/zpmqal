@@ -20,7 +20,12 @@
 				<div class="wrapper grid-block">
 					@include('subway.pages.home_partials.header')
 					<div class="row">
-						<div class="col-md-7 col-sm-7 col-xs-12">
+						<div class="col-md-12 col-sm-12 col-xs-12 subway-theme-font">
+							<div class="m-top-5" style="padding: 5px;">
+								<div id="map_canvas"></div>
+							</div>
+						</div>
+						<div class="col-md-12 col-sm-12 col-xs-12">
 							<section id="content" class="grid-block">
 								<div id="system">
 									<div class="items items-col-1 grid-block">
@@ -30,11 +35,6 @@
 									</div>
 								</div>
 							</section>
-						</div>
-						<div class="col-md-5 col-sm-5 col-xs-12 subway-theme-font">
-							<div class="m-top-5">
-								<div id="map_canvas" style="border: 5px solid rgba(0,0,0,0.6);"></div>
-							</div>
 						</div>
 					</div>
 					{{-- @include('subway.pages.home_partials.footer') --}}
