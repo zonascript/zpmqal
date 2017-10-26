@@ -17,7 +17,7 @@ class DestinationModel extends Model
 	protected $connection = 'mysql2';
 	protected $table = 'destinations';
 	protected $casts = ['geocode' => 'object'];
-	protected $appends = ['location', 'echo_location', 'viatorDestination'];
+	protected $appends = ['location', 'echo_location', 'viator_destination'];
 	protected $hidden = ['created_at', 'updated_at'];
 
 
@@ -120,13 +120,25 @@ class DestinationModel extends Model
 
 
 	public function status()
-	{   
+	{
 		return $this->belongsTo(IndicationModel::class, 'is_active');
 	}
 
+
+	public function countryDetail()
+	{
+		return $this->belongsTo(
+				'App\Models\CommonApp\CountryModel', 
+				'country_code', 'country_code'
+			);
+	}
+
+
+
 	public function images()
 	{
-    return $this->morphMany(ImageModel::class, 'connectable');
+		$result = $this->morphMany(ImageModel::class, 'connectable');
+		return $result->where('is_active', 1);
 	}
 
 

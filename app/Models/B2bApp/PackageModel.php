@@ -20,7 +20,7 @@ class PackageModel extends Model
 								'uid', 'cost', 'nights', 'pax_detail',
 								'pax_string', 'itinerary', 'package_url',
 								'extra_word', 'duration', 'is_start_date_set',
-								'places_to_go', 'is_link_generate'
+								'places_to_go', 'is_link_generate', 'images'
 							];
 
 	public $costToken = null;
@@ -159,6 +159,29 @@ class PackageModel extends Model
 	public function getIsLinkGenerateAttribute()
 	{
 		return (isset($this->cost->token) && $this->cost->total_cost);
+	}
+
+
+	public function getImagesAttribute()
+	{
+		$destinations = $this->routes
+										->pluck('destination_detail')
+											->unique('id');
+
+		$origin = $this->routes->pluck('origin_detail')->unique('id');
+		
+		$images = $destinations->pluck('images.*.url')
+							->flatten()->merge($origin
+								->pluck('images.*.url')->flatten())
+									->merge($destinations
+										->pluck('countryDetail.images.*.url')
+											->flatten())->merge($origin
+												->pluck('countryDetail.images.*.url')
+													->flatten())->unique()
+														->filter(function($item){
+																return !is_null($item);
+															})->values();
+		return $images;
 	}
 
 

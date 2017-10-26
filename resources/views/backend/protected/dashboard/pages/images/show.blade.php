@@ -31,7 +31,7 @@
 												<a href="#"><i class="fa fa-pencil"></i></a> --}}
 												<form method="post" action="{{ Request::url().'/delete/'.$image->id }}">
 													{{ csrf_field() }}
-													<a  href='#' onclick='this.parentNode.submit(); return false;'><i class="fa fa-times"></i></a>
+													<a href='#' onclick='this.parentNode.submit(); return false;'><i class="fa fa-times"></i></a>
 												</form>
 											</div>
 										</div>

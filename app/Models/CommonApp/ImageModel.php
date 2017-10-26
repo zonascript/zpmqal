@@ -8,6 +8,7 @@ class ImageModel extends Model
 {
 	protected $table = 'images';
 	protected $connection = 'mysql2';
+	protected $appends = ['url'];
 	protected $guarded = ['id'];
 	protected $hidden = [
 							'id', 'type', 'status', 'path_or_url', 'image_path', 
@@ -15,7 +16,7 @@ class ImageModel extends Model
 							'created_at', 'updated_at'
 					];
 
-	public function getUrlAttribute($url)
+	public function getUrlAttribute()
 	{
 		if ($this->type == 'path') {
 			$url = urlImage($this->image_path);			

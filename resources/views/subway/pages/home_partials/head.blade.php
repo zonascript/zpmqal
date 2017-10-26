@@ -105,3 +105,10 @@
 <script src="{{ url('/') }}/subway/wp-content/themes/yoo_subway_wp/warp/js/dropdownmenu.js"></script>
 <script src="{{ url('/') }}/subway/wp-content/themes/yoo_subway_wp/js/template.js"></script>
 <script src="{{ commonAsset('dashboard/vendors/jquery-confirm-master/dist/jquery-confirm.min.js') }}"></script>
+
+<style>
+	#page {	
+		background: #9FC3D1 url({{ $package->images->count() ? $package->images->random() : '../../images/background/street/street_img.jpg'}}) 50% 50% no-repeat fixed;
+		background-size: cover;
+	}
+</style>

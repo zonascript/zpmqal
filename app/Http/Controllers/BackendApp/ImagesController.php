@@ -89,13 +89,15 @@ class ImagesController extends Controller
 
 		foreach ($request->images as $image) {
 			$image = (object) $image;
-			$data[] = addDateColumns([
-					"type" => "path",
-					"image_path" => $image->path,
-					"caption" => '',
-					"connectable_id" => $pid,
-					"connectable_type" => $model
-				]);
+			if ($image->path != '') {
+				$data[] = addDateColumns([
+						"type" => "path",
+						"image_path" => $image->path,
+						"caption" => '',
+						"connectable_id" => $pid,
+						"connectable_type" => $model
+					]);
+			}
 		}
 
 		$this->model()->insert($data);
@@ -123,7 +125,7 @@ class ImagesController extends Controller
 
 		$blade = [
 					"type" => $type,
-					"images" => $images,
+					"images" => $images->where('is_active', 1),
 					"viewPath" => $this->viewPath
 				];
 
@@ -165,6 +167,7 @@ class ImagesController extends Controller
 		$this->model()->where('id', $id)->update(['is_active' => 0]);
 		return redirect('dashboard/manage/images/'.$type.'/'.$pid);
 	}
+
 
 	public function getModelName($name)
 	{
