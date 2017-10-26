@@ -82,7 +82,7 @@ class PaymentsController extends Controller
 
 	public function response($status, $token, Request $request)
 	{
-		$statusBool = statusBool($status);
+		$statusBool = status_bool($status);
 		$payment = $this->model()->byToken($token)->firstOrFail();
 		$blade = [
 							'name' => $payment->name,

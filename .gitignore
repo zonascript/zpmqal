@@ -4,6 +4,7 @@ Homestead.yaml
 /.idea
 /node_modules
 /public/storage
+/public/images/tmp
 /public/test
 /vendor
 /stackOverflow
