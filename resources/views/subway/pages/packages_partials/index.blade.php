@@ -6,23 +6,25 @@
 		<div class="x_content sans-serif">
 			<div class="content clearfix">
         @foreach ($package->packages->where('is_locked', 1) as $tempPackage)
-  				<div class="col-md-3 col-sm-3 col-xs-3">
+          <div class="col-md-3 col-sm-3 col-xs-3">
             <div class="square mod-box-color1">
-              <div class="square-content text-center">
-                <div class="tile-line font-size-20 m-top-20">
-                  <b>{{ $tempPackage->uid }}</b>
-                </div>
+              <a href="{{ $tempPackage->package_url }}" class="font-white">
+                <div class="square-content text-center font-white">
+                  <div class="tile-line font-size-20 m-top-20">
+                    <b>{{ $tempPackage->uid }}</b>
+                  </div>
 
-                <div class="tile-line m-top-10">
-                  <i class="fa fa-rupee"></i>
-                  <b> {{ $tempPackage->cost->total_cost }} per person</b>
+                  <div class="tile-line m-top-10">
+                    <i class="fa fa-rupee"></i>
+                    <b> {{ $tempPackage->cost->total_cost }} per person</b>
+                  </div>
+                  <div class="tile-line"><b>for : {{ $tempPackage->nights}} nights/{{ $tempPackage->nights+1 }} days</b></div>
                 </div>
-                <div class="tile-line"><b>for : {{ $tempPackage->nights}} nights/{{ $tempPackage->nights+1 }} days</b></div>
-                <div class="down-title font-size-14"> 
-                  <label>
-                    <input type="checkbox" class="compare nomargin" data-token="{{ $tempPackage->token }}"> Compare
-                  </label>
-                </div>
+              </a>
+              <div class="down-title font-size-14 text-center"> 
+                <label>
+                  <input type="checkbox" class="compare nomargin" data-token="{{ $tempPackage->token }}"> Compare</a>
+                </label>
               </div>
             </div>
           </div>

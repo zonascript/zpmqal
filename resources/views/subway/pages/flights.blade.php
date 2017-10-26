@@ -8,6 +8,7 @@
 			#map_canvas{
 				height: 400px;
 				width: 100%;
+				background: url(../images/module_box_transparency75.png) 0 0 repeat;
 			}
 		</style>
 	</head>
@@ -351,6 +352,7 @@
 					    }
 					  }, 200);
 					}
+					
 					google.maps.event.addDomListener(window, 'load', init_map);
 
 				</script>
