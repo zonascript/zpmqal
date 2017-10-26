@@ -83,16 +83,7 @@ class ImagesController extends Controller
 	 */
 	public function store($type, $pid, Request $request)
 	{
-		$model = '';
-		if ($type == 'country') {
-			// $country = CountryModel::findOrFail($pid);
-			$model = 'App\\Models\\CommonApp\\CountryModel';
-		}
-		elseif ($type == 'destination') {
-			// $destination = DestinationModel::findOrFail($pid);
-			$model = 'App\\Models\\CommonApp\\DestinationModel';
-		}
-
+		$model = $this->getModelName($type);
 
 		$data = [];
 
@@ -101,7 +92,6 @@ class ImagesController extends Controller
 			$data[] = addDateColumns([
 					"type" => "path",
 					"image_path" => $image->path,
-					"url" => '/',
 					"caption" => '',
 					"connectable_id" => $pid,
 					"connectable_type" => $model
@@ -174,6 +164,16 @@ class ImagesController extends Controller
 	{
 		$this->model()->where('id', $id)->update(['is_active' => 0]);
 		return redirect('dashboard/manage/images/'.$type.'/'.$pid);
+	}
+
+	public function getModelName($name)
+	{
+		$models = collect([
+				'country' => 'App\\Models\\CommonApp\\CountryModel',
+				'destination' => 'App\\Models\\CommonApp\\DestinationModel',
+			]);
+
+		return $models->get($name);
 	}
 
 }
