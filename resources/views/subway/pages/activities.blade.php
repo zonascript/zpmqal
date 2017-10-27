@@ -33,6 +33,7 @@
 			$(document).on('click', '.btn-toggle', function () {
 				$(this).closest('.description-box')
 								.find('.toggle-box').toggle();
+				return false;
 			});
 		</script>
 	</body>

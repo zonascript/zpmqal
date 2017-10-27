@@ -79,7 +79,7 @@ class PackageActivityModel extends Model
 					'image' => $image,
 					'name' => $name,
 					'description' => $description,
-					'sort_description' => $description,
+					'sort_description' => substr($description, 0, 750),
 					'date' => $this->date,
 					'timing' => $this->timing,
 					'mode' => $this->mode,
