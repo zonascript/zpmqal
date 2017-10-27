@@ -43,7 +43,7 @@
 							<tr>
 								<td>
 									<h4>{{ proper($checkAttr) }}</h4>
-									<ul class="list-unstyled">
+									<ul >
 										@foreach ($default[$checkAttr] as $value)
 											<li>{{ $value }}</li>
 										@endforeach
@@ -51,13 +51,13 @@
 								</td>
 								<td>
 									<h4>{{ proper($checkAttr) }}</h4>
-									<ul class="list-unstyled">
+									<ul >
 										@foreach ($compareTo[$checkAttr] as $value)
 											@if ($value['which'] == 'same')
 												<li>{{ $value['same'] }}</li>
 											@elseif($value['which'] == 'changed')
 												<li><del>{{ $value['same'] }}</del></li>
-												<li>{{ $value['changed'] }}</li>
+												<li style="color: #aef3ae;">{{ $value['changed'] }}</li>
 											@elseif($value['which'] == 'new')
 												<li style="color: #aef3ae;">{{ $value['new'] }}</li>
 											@endif
@@ -70,13 +70,13 @@
 					<tr>
 						<td>
 							<h4>Visa</h4>
-							<ul class="list-unstyled">
+							<ul >
 								<li>{{ $default['visa'] ? 'Visa included' : 'Visa not included' }}</li>
 							</ul>
 						</td>
 						<td>
 							<h4>Visa</h4>
-							<ul class="list-unstyled">
+							<ul >
 								<li>{{ $compareTo['visa'] ? 'Visa included' : 'Visa not included' }}</li>
 							</ul>
 						</td>
