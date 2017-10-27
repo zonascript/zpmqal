@@ -24,12 +24,6 @@
 									</p>
 									<p>{{ $accomo->shortDescription }}</p>
 								</div>
-								@if ($package->accomoRoutes->count() != ($key+1))
-									@if ($key == 3)
-										@break
-									@endif
-									<hr>
-								@endif
 							@else
 								<div class="content clearfix">
 									<h3>Something is wrong. please contact your agent.</h3>

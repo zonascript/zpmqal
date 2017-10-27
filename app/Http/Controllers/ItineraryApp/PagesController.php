@@ -15,6 +15,7 @@ class PagesController extends Controller
 
 		$package = $packageCont->model()->byIsLocked()
 							->byToken($token)->firstOrFail();
+
 		$comparePackage = null;
 		if ($page == 'compare') {
 			$comparePackage = $packageCont->model()->byIsLocked()

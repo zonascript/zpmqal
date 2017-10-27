@@ -8,7 +8,7 @@
 	</div>
 
 	<div class="x_content" style="height:333px;" >
-		<div v-if="isGot" v-clock>
+		<div v-if="isGot" v-cloak>
 			<div class="widget_summary" v-for="rate in rates">
 				<div class="w_left w_25">
 					<span v-text="rate.Name"></span>
