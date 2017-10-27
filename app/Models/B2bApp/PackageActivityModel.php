@@ -12,7 +12,13 @@ class PackageActivityModel extends Model
 	use CallTrait;
 
 	protected $table  = 'package_activities';
+	protected $appends = ['images'];
 	protected $hidden = ['created_at', 'updated_at'];
+
+	public function getImagesAttribute()
+	{
+		return $this->images();
+	}
 
 	public function scopeByIsActive($query, $bool = 1)
 	{
@@ -133,13 +139,17 @@ class PackageActivityModel extends Model
 
 	public function images()
 	{
-		$images = [];
-		$imageData = $this->activity->images;
-		if (!is_null($imageData) && $imageData->count()) {
-			foreach ($imageData as $image) {
-				$images[] = $image->url;
-			}
+
+		$images = collect([]);
+		if ($this->activity->vendor == 'v') {
+			$images = $images->merge($this->activity->images);
 		}
+		else{
+			$images = $images->merge($this->activity
+													->images->pluck('url')
+														->toArray());
+		}
+		
 		return $images;
 	}
 

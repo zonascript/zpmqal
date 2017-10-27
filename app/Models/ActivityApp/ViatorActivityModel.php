@@ -10,7 +10,7 @@ class ViatorActivityModel extends Model
 	use CallTrait;
 
 	protected $connection = 'mysql6';
-	protected $appends = ['vendor', 'duration_to_human'];
+	protected $appends = ['vendor', 'duration_to_human', 'images'];
 	protected $table = 'viator_activities';
 
 
@@ -28,6 +28,11 @@ class ViatorActivityModel extends Model
 	public function getShortDescriptionAttibute($value)
 	{
 		return strip_tags($value);
+	}
+
+	public function getImagesAttribute()
+	{
+		return [$this->thumbnailHiResURL];
 	}
 
 

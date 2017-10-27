@@ -1,11 +1,11 @@
 <?php 
-	$tempImages = [
+	/*$tempImages = [
 			urlImage("images/country/australia.jpg"),
 			urlImage("images/country/european.jpg"),
 			urlImage("images/country/fiji.jpg"),
 			urlImage("images/country/singapore.jpg"),
 			urlImage("images/country/south-africa.jpg"),
-		];
+		];*/
 ?>
 
 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -13,10 +13,8 @@
 		<div id="ninja-slider">
 			<div class="slider-inner">
 				<ul class="nomargin">
-					@foreach ($tempImages as $tempImage)
-						<li>
-							<a class="ns-img" href="{{ $tempImage }}"></a>
-						</li>
+					@foreach ($package->images->shuffle() as $tempImage)
+						<li><a class="ns-img" href="{{ $tempImage }}"></a></li>
 					@endforeach
 				</ul>
 				<div class="navsWrapper">

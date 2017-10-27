@@ -20,7 +20,8 @@ class PackageModel extends Model
 								'uid', 'cost', 'nights', 'pax_detail',
 								'pax_string', 'itinerary', 'package_url',
 								'extra_word', 'duration', 'is_start_date_set',
-								'places_to_go', 'is_link_generate', 'images'
+								'places_to_go', 'is_link_generate', 'images',
+								'bg_images'
 							];
 
 	public $costToken = null;
@@ -164,6 +165,12 @@ class PackageModel extends Model
 
 	public function getImagesAttribute()
 	{
+		return $this->activities->pluck('images')->flatten()
+									->merge($this->bg_images)->unique();
+	}
+
+	public function getBgImagesAttribute()
+	{
 		$destinations = $this->routes
 										->pluck('destination_detail')
 											->unique('id');
@@ -178,9 +185,9 @@ class PackageModel extends Model
 											->flatten())->merge($origin
 												->pluck('countryDetail.images.*.url')
 													->flatten())->unique()
-														->filter(function($item){
-																return !is_null($item);
-															})->values();
+															->filter(function($item){
+																		return !is_null($item);
+																	})->values();
 		return $images;
 	}
 

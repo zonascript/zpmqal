@@ -108,7 +108,7 @@
 
 <style>
 	#page {	
-		background: #9FC3D1 url({{ $package->images->count() ? $package->images->random() : '../../images/background/street/street_img.jpg'}}) 50% 50% no-repeat fixed;
+		background: #9FC3D1 url({{ $package->bg_images->count() ? $package->bg_images->random() : '../../images/background/street/street_img.jpg'}}) 50% 50% no-repeat fixed;
 		background-size: cover;
 	}
 	#page-body {
