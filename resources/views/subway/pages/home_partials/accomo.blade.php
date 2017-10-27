@@ -14,20 +14,26 @@
 							$accomo = $route->accomo();
 						?>
 						<li>
-							<div class="content clearfix">
-								<img height="195" width="195" class="align-left" alt="{{ $accomo->name }}" src="{{ $accomo->image }}" />
-								<h2 class="m-top-5">{{ $accomo->name }} {!! $accomo->starRatingHtml !!} <small>({{$route->mode}})</small></h2>
-								<p>
-									<div>{{ $accomo->startDate }} - {{ $accomo->endDate }}</div>
-									<div>{{ $accomo->location }}</div>
-								</p>
-								<p>{{ $accomo->shortDescription }}</p>
-							</div>
-							@if ($package->accomoRoutes->count() != ($key+1))
-								@if ($key == 3)
-									@break
+							@if (!is_null($accomo->name))
+								<div class="content clearfix">
+									<img height="195" width="195" class="align-left" alt="{{ $accomo->name }}" src="{{ $accomo->image }}" />
+									<h2 class="m-top-5">{{ $accomo->name }} {!! $accomo->starRatingHtml !!} <small>({{$route->mode}})</small></h2>
+									<p>
+										<div>{{ $accomo->startDate }} - {{ $accomo->endDate }}</div>
+										<div>{{ $accomo->location }}</div>
+									</p>
+									<p>{{ $accomo->shortDescription }}</p>
+								</div>
+								@if ($package->accomoRoutes->count() != ($key+1))
+									@if ($key == 3)
+										@break
+									@endif
+									<hr>
 								@endif
-								<hr>
+							@else
+								<div class="content clearfix">
+									<h3>Something is wrong. please contact your agent.</h3>
+								</div>
 							@endif
 						</li>
 					@endforeach
