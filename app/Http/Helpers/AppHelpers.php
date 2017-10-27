@@ -1,7 +1,7 @@
 <?php
 
 function mydata($data = []){
-	return \App\MyLibrary\MyData($data);
+	return new \App\MyLibrary\MyData($data);
 }
 
 function addDateColumns(Array $data)
