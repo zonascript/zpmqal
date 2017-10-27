@@ -415,10 +415,10 @@ class RouteModel extends Model
 	{
 		$result = mydata();
 
-		if ($this->checkMode('hotel')) {
+		if ($this->checkMode('hotel') && $this->status != 'active') {
 			$result = $this->hotelDetail();
 		}
-		elseif ($this->checkMode('cruise')) {
+		elseif ($this->checkMode('cruise') && $this->status != 'active') {
 			$result = $this->cruiseDetail();
 		}
 		return $result;
