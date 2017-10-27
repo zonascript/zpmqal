@@ -29,5 +29,11 @@
 				</div>
 			</div>
 		</div>
+		<script>
+			$(document).on('click', '.btn-toggle', function () {
+				$(this).closest('.description-box')
+								.find('.toggle-box').toggle();
+			});
+		</script>
 	</body>
 </html>

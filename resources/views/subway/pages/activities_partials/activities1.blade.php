@@ -49,8 +49,16 @@
 								</div>
 								<br>
 							</p>
-
-							<p>{!! $activity->description !!}</p>
+							<div class="description-box">
+								<p class="toggle-box">
+									<span>{!! $activity->sort_description !!}</span>
+									<a href="#" class="btn-toggle">... more</a>
+								</p>
+								<p class="toggle-box" style="display: none;">
+									<span>{!! $activity->description !!} </span>
+									<a href="#" class="btn-toggle">... less</a>
+								</p>
+							</div>
 					  </div>
 				  </div>
 				</div>
