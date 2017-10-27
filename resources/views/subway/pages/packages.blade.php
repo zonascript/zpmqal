@@ -66,7 +66,7 @@
 						index++;
 					});
 
-					var url = 'http://itinerary.flygoldfinch.dev/your/package/detail/'+defToken+'/compare?ctk=974dcf893547f27823222fbbea375156&compare_token='+compToken;
+					var url = '{{url('/')}}/your/package/detail/'+defToken+'/compare?ctk=974dcf893547f27823222fbbea375156&compare_token='+compToken;
 
 					document.location.href = url;
 
