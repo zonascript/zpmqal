@@ -1,5 +1,9 @@
 <?php
 
+function mydata($data = []){
+	return \App\MyLibrary\MyData($data);
+}
+
 function addDateColumns(Array $data)
 {
 	$data["created_at"] = date('Y-m-d H:i:s');

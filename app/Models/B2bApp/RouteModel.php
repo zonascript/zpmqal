@@ -413,7 +413,8 @@ class RouteModel extends Model
 
 	public function accomo()
 	{
-		$result = null;
+		$result = mydata();
+
 		if ($this->checkMode('hotel')) {
 			$result = $this->hotelDetail();
 		}

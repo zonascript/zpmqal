@@ -24,7 +24,7 @@
 			}
 		}
 
-		function __construct(Array $data)
+		function __construct(Array $data = [])
 		{
 			$this->data = $data;
 		}
