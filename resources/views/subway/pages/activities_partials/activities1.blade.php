@@ -39,11 +39,11 @@
 										<li>{{ activityTiming($activity->timing) }}</li>
 
 										@if (!is_null($activity->pick_up))
-											<li>Pick Up : {{ $activity->pick_up }}</li>
+											<li>Pick Up : {{ time_formatter($activity->pick_up) }}</li>
 										@endif
 
 										@if (!is_null($activity->duration))
-											<li>Duration : {{ $activity->duration }}</li>
+											<li>Duration : {{ convertInHourMin($activity->duration) }}</li>
 										@endif
 									</ul>
 								</div>

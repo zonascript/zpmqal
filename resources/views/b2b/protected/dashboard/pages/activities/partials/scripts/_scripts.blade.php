@@ -1,6 +1,6 @@
 @include($viewPath.'.partials.scripts.objects')
 <script>
-	var windata = { is_fine : true };
+	var windata = { is_fine : true, next_event : true };
 	{{-- bootstrap-daterangepicker --}}
 	$(document).ready(function() {
 		@foreach ($package->activityRoutes as $activityRouteKey => $activityRoute)

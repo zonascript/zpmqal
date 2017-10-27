@@ -249,8 +249,12 @@
 					success : function (response) {
 						if (response.status == 200) {
 							windata.is_fine = true;
+							windata.next_event = true;
 							$(btnObj).attr('data-pdid', response.pdid)
 													.removeClass('unsaved');
+						}
+						else{
+							windata.next_event = false;
 						}
 					}
 				});
@@ -447,7 +451,7 @@
 	function nextHotelEvent() {
 		if (windata.is_fine) {
 			var ridObj = getRidObj(idObject.crid);
-			if (ridObj.nrid == "NaN") {
+			if (ridObj.nrid == "NaN" && windata.next_event == true) {
 				setTimeout(function () {    
 					document.location.href = "{{ $package->eventActionUrl('activities') }}";
 				}, 1000);
@@ -551,10 +555,15 @@
 		var isSave = $(thisObj).hasClass('btn-link-save');
 		var parent = $(thisObj).closest('.pick-up-duration-box');
 		$(parent).toggleClass('changed').find('.toggle-group').toggle();
+
 		if (isSave) {
 			var pickUp = $(parent).find('input.pick-up').val();
 			var duration = $(parent).find('input.duration').val();
-			console.log(thisObj, isSave, pickUp, duration);
+			$(thisObj).closest('.activity-container')
+									.find('.btn-activitySelect')
+										.addClass('unsaved');
+			
+			/*console.log(thisObj, isSave, pickUp, duration);*/
 			$(parent).find('input.pick-up').attr('data-final-value', pickUp);
 			$(parent).find('input.duration').attr('data-final-value', duration);
 			$(parent).find('.pick-up-word').text(convertTime24to12(pickUp));

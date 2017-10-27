@@ -108,16 +108,16 @@
         },
         {
             "name": "ajayexpert/php-helper-method",
-            "version": "v1.0.7",
+            "version": "v1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ajayexpert/php-helper-method.git",
-                "reference": "14cf93d430b050ea6dda78421b2e9e72b1b76feb"
+                "reference": "dbc869ef57a5fe5780057f84ffa1d705f5275f7b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ajayexpert/php-helper-method/zipball/14cf93d430b050ea6dda78421b2e9e72b1b76feb",
-                "reference": "14cf93d430b050ea6dda78421b2e9e72b1b76feb",
+                "url": "https://api.github.com/repos/ajayexpert/php-helper-method/zipball/dbc869ef57a5fe5780057f84ffa1d705f5275f7b",
+                "reference": "dbc869ef57a5fe5780057f84ffa1d705f5275f7b",
                 "shasum": ""
             },
             "require": {
@@ -141,7 +141,7 @@
             ],
             "description": "php helper functions",
             "homepage": "https://github.com/ajayexpert/php-helper-method",
-            "time": "2017-10-26 10:39:11"
+            "time": "2017-10-27 18:28:16"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
