@@ -35,20 +35,22 @@
 						<strong>Hotels Included {{-- ({{$package->accomoRoutes->count()}} X Hotel) --}}</strong>
 						<ul class="nomargin">
 							@foreach ($package->accomoRoutes as $key => $value)
-								@if ($key < 2)
-									<li>
-										{{ $value->accomo()->summary }}
-										@if ($key == 1 && $key < ($package->accomoRoutes->count()-1))
-											<a href="#" class="btn-more-less" >... more</a>
-										@endif
-									</li>
-								@else
-									<li class="more" style="display: none;">
-										{{ $value->accomo()->summary }}
-										@if ($key == ($package->accomoRoutes->count()-1))
-											<a href="#" class="btn-more-less" style="display: none;">... less</a>
-										@endif
-									</li>
+								@if (isset($value->accomo()->summary))
+									@if ($key < 2)
+										<li>
+											{{ $value->accomo()->summary }}
+											@if ($key == 1 && $key < ($package->accomoRoutes->count()-1))
+												<a href="#" class="btn-more-less" >... more</a>
+											@endif
+										</li>
+									@else
+										<li class="more" style="display: none;">
+											{{ $value->accomo()->summary }}
+											@if ($key == ($package->accomoRoutes->count()-1))
+												<a href="#" class="btn-more-less" style="display: none;">... less</a>
+											@endif
+										</li>
+									@endif
 								@endif
 							@endforeach
 						</ul>
