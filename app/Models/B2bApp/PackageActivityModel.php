@@ -110,9 +110,8 @@ class PackageActivityModel extends Model
 
 
 			if (in_array('images', $attribute)) {
-				$result['images'] = $this->images();
-				$result['images'][] = $result['image'];
-				$result['images'] = array_unique($result['images']);
+				$result['images'] = $this->images()
+														->push($result['image'])->unique();
 			}
 
 			return (object) $result;
