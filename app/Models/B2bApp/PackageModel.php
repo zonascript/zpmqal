@@ -556,14 +556,34 @@ class PackageModel extends Model
 		$default = $this->tripSummary();
 		$package = PackageModel::byToken($token)->firstOrFail();
 		$compareTo = $package->tripSummary();
+		
+		$etDef = $this->extra_word;
+		$etNew = $package->extra_word;
+		$etComp = $package->extra_word;
+		$etWhich = 'new';
+
+		if ($etDef == $etNew) {
+			$etWhich = 'same';
+		}
+		elseif (strlen($etDef) && $etDef != $etNew) {
+			$etWhich = 'changed';
+		}
+
 		$result = [
 				'uid' => $package->uid,
 				'visa' => $package->cost->is_visa,
 				'hotels' => [],
 				'flights' => [],
 				'transfers' => [],
-				'activities' => []
+				'activities' => [],
+				'extra_word' => [
+								"same" 		=> $etDef,
+								"new" 		=> $etNew,
+								"changed" => $etComp,
+								"which" 	=> $etWhich
+							]
 			];
+
 
 		foreach ($result as $key => $value) {
 			if (is_array($value) && isset($default[$key]) && isset($compareTo[$key])) {
@@ -786,13 +806,23 @@ class PackageModel extends Model
 				'hotels' => [],
 				'flights' => [],
 				'transfers' => $this->transferStringArray()->toArray(),
-				'activities' => []
+				'activities' => [],
+				'extra_word' => $this->extra_word
 			];
 
 		if ($this->flightRoutes->count()) {
 			foreach ($this->flightRoutes as $route) {
+				$flightName = collect($route->flightDetail())
+												->pluck('name')->unique()
+													->implode(', ');
+
+				$flightName = trim(str_replace(
+								['Limited', 'Ltd'],['', ''], $flightName
+							));
+
 				$result['flights'][] = $route->origin_detail->location.' to '
-																.$route->destination_detail->location;
+																.$route->destination_detail->location
+																	.' flight ('.$flightName.')';
 			}
 		}
 
@@ -805,8 +835,7 @@ class PackageModel extends Model
 		if ($this->activities->count()) {
 			foreach ($this->activities as $route) {
 				$result['activities'][] = $route->activityObject()->name
-																	.proper($route->activityObject()->mode)
-																		. 'basis';
+					.' '.proper($route->activityObject()->mode_name). ' basis';
 			}
 		}
 

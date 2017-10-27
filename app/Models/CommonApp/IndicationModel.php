@@ -14,10 +14,14 @@ class IndicationModel extends Model
 		return proper($name);
 	}
 
+	public function scopeByKey($query, $key)
+	{
+		return $this->where('key', $key);
+	}
 
 	public function scopeByCategory($query, $category)
 	{
-		return $this->where('category', '=',$category);
+		return $this->where('category', '=', $category);
 	}
 
 

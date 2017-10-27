@@ -43,7 +43,7 @@
 							<tr>
 								<td>
 									<h4>{{ proper($checkAttr) }}</h4>
-									<ul >
+									<ul>
 										@foreach ($default[$checkAttr] as $value)
 											<li>{{ $value }}</li>
 										@endforeach
@@ -51,8 +51,26 @@
 								</td>
 								<td>
 									<h4>{{ proper($checkAttr) }}</h4>
-									<ul >
+									<ul>
 										@foreach ($compareTo[$checkAttr] as $value)
+											@if (in_array($value['which'], ['same']))
+												<li>{{ $value['same'] }}</li>
+											@endif
+										@endforeach
+
+										@foreach ($compareTo[$checkAttr] as $value)
+											@if (in_array($value['which'], ['changed']))
+												<li><del>{{ $value['same'] }}</del></li>
+											@endif
+										@endforeach
+
+										@foreach ($compareTo[$checkAttr] as $value)
+											@if (in_array($value['which'], ['changed', 'new']))
+												<li style="color: #aef3ae;">{{ $value[$value['which']] }}</li>
+											@endif
+										@endforeach
+
+										{{-- @foreach ($compareTo[$checkAttr] as $value)
 											@if ($value['which'] == 'same')
 												<li>{{ $value['same'] }}</li>
 											@elseif($value['which'] == 'changed')
@@ -61,7 +79,7 @@
 											@elseif($value['which'] == 'new')
 												<li style="color: #aef3ae;">{{ $value['new'] }}</li>
 											@endif
-										@endforeach
+										@endforeach --}}
 									</ul>
 								</td>
 							</tr>
@@ -70,18 +88,58 @@
 					<tr>
 						<td>
 							<h4>Visa</h4>
-							<ul >
+							<ul>
 								<li>{{ $default['visa'] ? 'Visa included' : 'Visa not included' }}</li>
 							</ul>
 						</td>
 						<td>
 							<h4>Visa</h4>
-							<ul >
+							<ul>
 								<li>{{ $compareTo['visa'] ? 'Visa included' : 'Visa not included' }}</li>
 							</ul>
 						</td>
 					</tr>
-				</table>
+					@if (strlen($default['extra_word']) || strlen($compareTo['extra_word']['same']) || strlen($compareTo['extra_word']['changed']) || strlen($compareTo['extra_word']['new']))
+						<tr>
+							<td>
+								<h4>More details</h4>
+								<ul>
+									@if (strlen($default['extra_word']))
+										<li>{{ $default['extra_word'] }}</li>
+									@endif
+								</ul>
+							</td>
+							<td>
+								<h4>More details</h4>
+								<ul>
+									@if ($compareTo['extra_word']['which'] == 'same')
+										
+										@if (strlen($compareTo['extra_word']['same']))
+											<li>{{ $compareTo['extra_word']['same'] }}</li>
+										@endif
+
+									@elseif($compareTo['extra_word']['which'] == 'changed')
+
+										@if (strlen($compareTo['extra_word']['same']))
+											<li><del>{{ $compareTo['extra_word']['same'] }}</del></li>
+										@endif
+
+										@if (strlen($compareTo['extra_word']['changed']))
+											<li style="color: #aef3ae;">{{ $compareTo['extra_word']['changed'] }}</li>
+										@endif
+
+									@elseif($compareTo['extra_word']['which'] == 'new')
+										
+										@if (strlen($compareTo['extra_word']['new']))
+											<li style="color: #aef3ae;">{{ $compareTo['extra_word']['new'] }}</li>
+										@endif
+
+									@endif
+								</ul>
+							</td>
+						</tr>
+					@endif
+
 			</div>
 		</div>
 	</div>

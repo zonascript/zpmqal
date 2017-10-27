@@ -3,6 +3,7 @@
 namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\CommonApp\IndicationModel;
 use App\Traits\CallTrait;
 use Carbon\Carbon;
 use DB;
@@ -12,12 +13,22 @@ class PackageActivityModel extends Model
 	use CallTrait;
 
 	protected $table  = 'package_activities';
-	protected $appends = ['images'];
+	protected $appends = ['images', 'mode_name'];
 	protected $hidden = ['created_at', 'updated_at'];
 
 	public function getImagesAttribute()
 	{
 		return $this->images();
+	}
+
+	public function getModeNameAttribute()
+	{
+		$mode = IndicationModel::byCategory('act_mode')
+						->byKey($this->mode)->first();
+
+		return isset($mode->name) 
+				 ? $mode->name
+				 : str_replace('_', ' ', $this->mode);
 	}
 
 	public function scopeByIsActive($query, $bool = 1)
@@ -89,6 +100,7 @@ class PackageActivityModel extends Model
 					'date' => $this->date,
 					'timing' => $this->timing,
 					'mode' => $this->mode,
+					'mode_name' => $this->mode_name,
 					'isSelected' => 1,
 					'pick_up' => $pickUp,
 					'duration' => $duration,
