@@ -76,6 +76,32 @@ class RouteController extends Controller
 		return $nextEvent;
 	}
 
+
+	public function updatePackageAttibutes($pToken, Request $request)
+	{
+		$package = PackageController::call()->model()->byUser()
+								->byToken($pToken)->firstOrFail();
+		
+		if (!is_null($request->req)) {
+			$package->req = $request->req;
+		}
+
+		if (!is_null($request->title)) {
+			$package->title = $request->title;
+		}
+
+		if (!is_null($request->start_date)) {
+			$date = date_formatter($request->start_date, 'd/m/Y');
+			$package->start_date = $date;
+		}
+
+		$package->save();
+
+		return json_encode([
+							'status' => 200, 'response' => 'saved successfully...'
+						]);
+	}
+
 	public function storePackageStartDate($pToken, Request $request)
 	{
 		$newPkg = new PackageController;

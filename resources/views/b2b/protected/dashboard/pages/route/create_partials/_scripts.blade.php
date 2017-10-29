@@ -4,6 +4,8 @@
 	{{-- bootstrap-daterangepicker --}}
 
 	$(document).ready(function() {
+		$('#edit_req').click(); // showing requirment popup
+
 		$('.datepicker').daterangepicker({
 			singleDatePicker: true,
 			calender_style: "picker_1",
@@ -55,47 +57,55 @@
 
 	{{-- requirement --}}
 
-	$(document).on('click', '#cancel_req', function() {
-		var text = $('#text_req').val();
-		var showText = $('#show_req').text();
-		/*if (text.length < 10) {
-			$.alert('Please enter requirements at least 1 words');
-		}else if (showText.length < 20) {
-			$.alert('I think you forgot to save because you have written something but not saved it yet.');
-		}
-		else{
-			$('#container_req').addClass('hide');
-		}*/
-		
-		$('#container_req').addClass('hide');
-		var date = $('#startDate').val();
-		if (date.length < 5) {
-			$('#startDate').click();
-		}
-	});
-
-	$(document).on('click', '#save_req', function() {
-		var text = $('#text_req').val();
-		/*if (text.length < 20) {
-			$.alert('Please enter requirements at least 20 words');
-		}
-		else{*/
-			$('#show_req').text(text);
-			$('#container_req').addClass('hide');
-			var date = $('#startDate').val();
-			if (date.length < 5) {
-				$('#startDate').click();
-			}
-		/*}*/
-	});
-
 	$(document).on('click', '#edit_req', function() {
-		$('#container_req').removeClass('hide');
+
+		var content = '<textarea id="confirm_package_req" class="width-100-p height-250px form-control has-feedback">'+$('#show_req').text()+'</textarea>'
+		$.confirm({
+			title : "Package requirements",
+			content : content,
+			buttons: {
+				submit: {
+					btnClass: 'btn-primary',
+					action: function(){
+						$('#show_req').text($('#confirm_package_req').val());
+						$('#show_req').attr('data-saved', 0);
+						checkStartDate();
+						clickTitlePopUp();
+					}
+				},
+				cancel: function () {
+					checkStartDate();
+					clickTitlePopUp();
+				}
+			}
+		});
+
 	});
+	{{-- /requirement --}}
 
-	{{-- requirement --}}
 
+	{{-- package title --}}
+	$(document).on('click', '#btn_package_title', function(){
 
+		var content = '<input id="confirm_package_title" type="text" class="form-control has-feedback" value="'+$('#package_title').text()+'" placeholder="Singapore and bali..."/>'
+
+		$.confirm({
+			title : "Package title",
+			content : content,
+			buttons: {
+				submit: {
+					btnClass: 'btn-primary',
+					action: function(){
+						$('#package_title').text($('#confirm_package_title').val());
+						$('#package_title').attr('data-saved', 0);
+					}
+				},
+				cancel: function () {
+				}
+			}
+		});
+	});
+	{{-- /package title --}}
 
 
 	$(document).on('click', '.rmv-destlist', function () {
@@ -116,6 +126,8 @@
 	$('#btn-addDestination').click(function(){
 		if (postRoute()) {
 			saveDate();
+			savePackageTitle();
+			savePackageReq();
 			/*var totalDestination = $('.destinationClass').children().length;*/
 			var destinationListHtml = $('#destinationListHtml').html();
 			var data_destination_count = addDestCount();
@@ -236,6 +248,7 @@
 	$(document).on('click change', '.btn-number, .age-elem', function () {
 		addInactiveClass(this);
 	});
+
 
 </script>
 

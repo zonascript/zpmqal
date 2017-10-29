@@ -13,7 +13,7 @@
 		Route::post('{rid}/d', 'RouteController@deleteRow');
 		Route::post('{pToken}/r', 'RouteController@storeRow');
 		Route::post('{pToken}/u', 'RouteController@packageUpdate');
-		Route::post('{pToken}/sd', 'RouteController@storePackageStartDate');
+		Route::post('{pToken}/ua', 'RouteController@updatePackageAttibutes');
 		Route::post('{pToken}/room', 'RouteController@storeRoom');
 		Route::post('{gid}/removeroom', 'RouteController@removeRoom');
 

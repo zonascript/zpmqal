@@ -16,7 +16,7 @@
 @endsection
 
 @section('content')
-	@include($viewPath.'.create_partials.req')
+	{{-- @include($viewPath.'.create_partials.req') --}}
 	<div class="row">
 		{{-- Hotel Serach --}}
 		<div class="col-md-12 col-sm-12 col-xs-12">
@@ -34,7 +34,7 @@
 										</h3>
 									</div>
 									<div class="col-md-4 col-sm-4 col-xs-12 m-top-5">
-										<input type="text" class="form-control has-feedback-left datepicker p-left-10 arrival border-blue-2px" placeholder="Start Date" id="startDate" aria-describedby="inputSuccess2Status3" data-pid="{{$package->id}}" 
+										<input type="text" class="form-control has-feedback-left datepicker p-left-10 arrival border-blue-2px" placeholder="Start Date" id="startDate" aria-describedby="inputSuccess2Status3" data-saved="0" data-pid="{{$package->id}}" 
 
 										@if ($package->is_start_date_set)
 											value="{{ $package->start_date->format('d/m/Y') }}"
@@ -47,8 +47,15 @@
 								</div>
 								<div class="row">
 									<div class="col-md-12 col-sm-12 col-xs-12">
+										<label for="">Title:</label>
+										<b id="package_title" data-saved="{{ is_null($package->title) ? 0 : 1 }}">{{ $package->title }}</b>
+										<a id="btn_package_title" class="btn btn-link">Edit</a>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12 col-sm-12 col-xs-12">
 										<label for="">Requirements:</label>
-										<span id="show_req">{{ $package->req }}</span>
+										<b id="show_req" data-saved="0">{{ $package->req }}</b>
 										<a id="edit_req" class="btn btn-link">Edit</a>
 									</div>
 								</div>

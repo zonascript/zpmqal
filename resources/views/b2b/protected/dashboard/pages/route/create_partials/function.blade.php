@@ -311,22 +311,51 @@
 		});
 	}
 
-	function saveDate(thisObj) {
+	function saveDate() {
 		if (windata.is_date_saved == 0) {
 			var startDate = $('#startDate').val();
-			var data = { "_token" : csrf_token, "startDate" : startDate }
-			$.ajax({
-				type:"post",
-				url: "{{ url('dashboard/package/route/'.$package->token.'/sd') }}",
-				data: data,
-				dataType : 'JSON',
-				success: function(response) {
-					if (response.status == 200) {
-						windata.is_date_saved = 1;
-					}
-				}
-			});
+			updatePackageAttributes({ "start_date" : startDate });
 		}
+	}
+
+
+
+	function savePackageTitle() {
+		var title = $('#package_title').text();
+		if ($('#package_title').attr('data-saved') == 0) {
+			updatePackageAttributes({ "title" : title });
+			$('#package_title').attr('data-saved', 1);
+		}
+	}
+
+	function savePackageReq() {
+		var title = $('#show_req').text();
+		if ($('#show_req').attr('data-saved') == 0) {
+			updatePackageAttributes({ "req" : title });
+			$('#show_req').attr('data-saved', 1);
+		}
+	}
+
+	function clickTitlePopUp(){
+		if ($('#package_title').attr('data-saved') == 0) {
+			$('#btn_package_title').click();
+		}
+	};
+
+	function updatePackageAttributes(data){
+
+		data['_token'] = csrf_token;
+
+		$.ajax({
+			type:"post",
+			url: "{{ url('dashboard/package/route/'.$package->token.'/ua') }}",
+			data: data,
+			dataType : 'JSON',
+			success: function(response) {
+				if (response.status == 200) {
+				}
+			}
+		});
 	}
 
 
