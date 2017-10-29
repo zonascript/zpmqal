@@ -753,7 +753,7 @@ class PackageModel extends Model
 				'visa' => $this->cost->is_visa,
 				'hotels' => [],
 				'flights' => [],
-				'transfers' => $this->transferStringArray()->toArray(),
+				'transfers' => $this->transferStringArray()->->toArray(),
 				'activities' => [],
 				'extra_word' => $this->extra_word
 			];

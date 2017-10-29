@@ -99,23 +99,23 @@
 									@if ($compareTo['extra_word']['which'] == 'same')
 										
 										@if (strlen($compareTo['extra_word']['same']))
-											<li>{{ $compareTo['extra_word']['same'] }}</li>
+											<li>{!! $compareTo['extra_word']['same'] !!}</li>
 										@endif
 
 									@elseif($compareTo['extra_word']['which'] == 'changed')
 
 										@if (strlen($compareTo['extra_word']['same']))
-											<li><del>{{ $compareTo['extra_word']['same'] }}</del></li>
+											<li><del>{!! $compareTo['extra_word']['same'] !!}</del></li>
 										@endif
 
 										@if (strlen($compareTo['extra_word']['changed']))
-											<li style="color: #aef3ae;">{{ $compareTo['extra_word']['changed'] }}</li>
+											<li style="color: #aef3ae;">{!! $compareTo['extra_word']['changed'] !!}</li>
 										@endif
 
 									@elseif($compareTo['extra_word']['which'] == 'new')
 										
 										@if (strlen($compareTo['extra_word']['new']))
-											<li style="color: #aef3ae;">{{ $compareTo['extra_word']['new'] }}</li>
+											<li style="color: #aef3ae;">{!! $compareTo['extra_word']['new'] !!}</li>
 										@endif
 
 									@endif
