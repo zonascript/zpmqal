@@ -89,7 +89,7 @@
 								<h4>More details</h4>
 								<ul>
 									@if (strlen($default['extra_word']))
-										<li>{{ $default['extra_word'] }}</li>
+										<li>{!! $default['extra_word'] !!}</li>
 									@endif
 								</ul>
 							</td>
