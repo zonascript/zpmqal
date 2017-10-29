@@ -1,6 +1,6 @@
 <?php 
 	$default = $package->tripSummary();
-	$compareTo = $package->comparePackage(request()->compare_token);
+	$compareTo = $package->comparePackage(request()->compare_token, 1);
 	$checkAttrs = ['flights', 'hotels', 'transfers', 'activities'];
 ?>
 
@@ -36,9 +36,6 @@
 						<?php
 							$check = isset($default[$checkAttr]) 
 										&& isset($compareTo[$checkAttr])
-										&& (!empty($compareTo[$checkAttr]['same'])
-										|| !empty($compareTo[$checkAttr]['del'])
-										|| !empty($compareTo[$checkAttr]['new']))
 										&& (!empty($default[$checkAttr]) 
 										|| !empty($compareTo[$checkAttr]));
 						?>
@@ -55,15 +52,34 @@
 								<td>
 									<h4>{{ proper($checkAttr) }}</h4>
 									<ul>
-										@foreach ($compareTo[$checkAttr]['same'] as $value)
-											<li>{{ $value }}</li>
+										@foreach ($compareTo[$checkAttr] as $value)
+											@if (in_array($value['which'], ['same']))
+												<li>{{ $value['same'] }}</li>
+											@endif
 										@endforeach
-										@foreach ($compareTo[$checkAttr]['del'] as $value)
-											<li><del>{{ $value }}</del></li>
+
+										@foreach ($compareTo[$checkAttr] as $value)
+											@if (in_array($value['which'], ['changed']))
+												<li><del>{{ $value['same'] }}</del></li>
+											@endif
 										@endforeach
-										@foreach ($compareTo[$checkAttr]['new'] as $value)
-											<li style="color: #aef3ae;">{{ $value }}</li>
+
+										@foreach ($compareTo[$checkAttr] as $value)
+											@if (in_array($value['which'], ['changed', 'new']))
+												<li style="color: #aef3ae;">{{ $value[$value['which']] }}</li>
+											@endif
 										@endforeach
+
+										{{-- @foreach ($compareTo[$checkAttr] as $value)
+											@if ($value['which'] == 'same')
+												<li>{{ $value['same'] }}</li>
+											@elseif($value['which'] == 'changed')
+												<li><del>{{ $value['same'] }}</del></li>
+												<li style="color: #aef3ae;">{{ $value['changed'] }}</li>
+											@elseif($value['which'] == 'new')
+												<li style="color: #aef3ae;">{{ $value['new'] }}</li>
+											@endif
+										@endforeach --}}
 									</ul>
 								</td>
 							</tr>

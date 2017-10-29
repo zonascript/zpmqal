@@ -30,15 +30,16 @@ class TbtqTokenModel extends Model
 
 	public function getExpireAtAttribute()
 	{
-		return $this->created_at->addMinutes(30);
+		// checking 23hr and 30 min
+		return $this->created_at->addMinutes(1410);
 	}
 
 
 
 	public function scopeByExpireAt($query)
 	{
-		// finding last 30 minutes token
-		$date = Carbon::now()->subMinutes(30);
+		// finding last 23hr and 30 minutes token
+		$date = Carbon::now()->subMinutes(1410);
 		return $query->where('created_at', '>', $date);
 	}
 

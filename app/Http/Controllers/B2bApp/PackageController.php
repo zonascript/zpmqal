@@ -377,8 +377,7 @@ class PackageController extends Controller
 	{
 		$package = $this->model()->find($pid);
 		$newPackage = $this->createTemp($package->client_id, $package);
-		$package->copyRoomGuests($newPackage->id)
-							->copyPackageEvents($newPackage->id);
+		$package->duplicatePackage($newPackage->id);
 
 		RouteController::call()->copyRoutes($package->id, $newPackage->id);
 		return $newPackage;

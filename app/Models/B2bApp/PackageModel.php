@@ -4,7 +4,9 @@ namespace App\Models\B2bApp;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\B2bApp\ItineraryController;
+use App\Traits\Models\B2bApp\PackageModelTrait;
 use App\Models\B2bApp\PackageEventModel;
+use App\Models\B2bApp\PackageNoteModel;
 use App\Traits\CallTrait;
 use Carbon\Carbon;
 use DB;
@@ -12,7 +14,7 @@ use DB;
 
 class PackageModel extends Model
 {
-	use CallTrait;
+	use CallTrait, PackageModelTrait;
 
 	protected $table = 'packages';
 	protected $hidden = ['created_at', 'updated_at'];
@@ -291,7 +293,7 @@ class PackageModel extends Model
 	public function packageNote()
 	{
 		return $this->belongsTo(
-											'App\Models\B2bApp\PackageNoteModel',
+											PackageNoteModel::class,
 											'package_note_id'
 										);
 	}
@@ -361,11 +363,35 @@ class PackageModel extends Model
 	}	
 
 
+	public function duplicatePackage($newPackageId)
+	{
+		$newPackage = PackageModel::findOrFail($newPackageId);
+
+		$this->copyRoomGuests($newPackageId)
+						->copyPackageEvents($newPackageId);
+		
+		$note = isset($this->packageNote->note)
+					? $this->packageNote->note : '';
+
+		$packageNote = new PackageNoteModel;
+		$packageNote->note = isset($this->packageNote->note)
+											 ? $this->packageNote->note : '';
+		$packageNote->save();
+		
+		$newPackage->package_note_id = $packageNote->id;
+		$newPackage->save();
+
+		return $this;
+	}
+
+
+
 	public function copyRoomGuests($pid)
 	{
 		foreach ($this->roomGuests as $roomGuest) {
 			$roomGuest->copyGuests($pid);
 		}
+
 		return $this;
 	}
 
@@ -375,6 +401,7 @@ class PackageModel extends Model
 		foreach ($this->packageEvents as $packageEvent) {
 			$packageEvent->copyEvent($pid);
 		}
+
 		return $this; 
 	}
 
@@ -383,12 +410,7 @@ class PackageModel extends Model
 	*/
 	public function getCostAttribute()
 	{
-		$cost = null;
-	
-		if ($this->tempCost->count()) {
-			$cost = $this->tempCost[0];
-		}
-		return $cost;
+		return $this->tempCost->first();
 	}
 
 
@@ -402,6 +424,7 @@ class PackageModel extends Model
 								'App\Models\B2bApp\PackageCostModel', 
 								'package_id'
 							);
+
 		return $costs->where($where);
 	}
 
@@ -548,81 +571,6 @@ class PackageModel extends Model
 								);
 
 		return $result->byIsActive()->orderBy('date', 'asc');
-	}
-
-
-	public function comparePackage($token)
-	{
-		$default = $this->tripSummary();
-		$package = PackageModel::byToken($token)->firstOrFail();
-		$compareTo = $package->tripSummary();
-		
-		$etDef = $this->extra_word;
-		$etNew = $package->extra_word;
-		$etComp = $package->extra_word;
-		$etWhich = 'new';
-
-		if ($etDef == $etNew) {
-			$etWhich = 'same';
-		}
-		elseif (strlen($etDef) && $etDef != $etNew) {
-			$etWhich = 'changed';
-		}
-
-		$result = [
-				'uid' => $package->uid,
-				'visa' => $package->cost->is_visa,
-				'hotels' => [],
-				'flights' => [],
-				'transfers' => [],
-				'activities' => [],
-				'extra_word' => [
-								"same" 		=> $etDef,
-								"new" 		=> $etNew,
-								"changed" => $etComp,
-								"which" 	=> $etWhich
-							]
-			];
-
-
-		foreach ($result as $key => $value) {
-			if (is_array($value) && isset($default[$key]) && isset($compareTo[$key])) {
-				
-
-				$count = count($default[$key]) > count($compareTo[$key])
-							 ? count($default[$key]) : count($compareTo[$key]);
-
-				for ($i=0; $i < $count; $i++) {
-					if (isset($compareTo[$key][$i])) {
-						$def = isset($default[$key][$i]) 
-								 ? $default[$key][$i]
-								 : null;
-
-						$comp = $compareTo[$key][$i];
-
-						$new = $comp;
-
-						$which = 'changed';
-
-						if (is_null($def)) {
-							$which = 'new';
-						}
-						elseif ($def == $comp) {
-							$which = 'same';
-						}
-
-						$result[$key][] = [
-								"same" 		=> $def,
-								"new" 		=> $new,
-								"changed" => $comp,
-								"which" 	=> $which
-							];
-					}
-				}
-			}
-		}
-
-		return $result;
 	}
 
 
