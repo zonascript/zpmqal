@@ -2,7 +2,7 @@
 <html lang="en-US" dir="ltr">
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 	<head>
-		<title>Flights</title>
+		<title>Flights | {{ $package->uid }} {{ $package->title }}</title>
 		@include('subway.pages.home_partials.head')
 		<style>
 			#map_canvas{
