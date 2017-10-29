@@ -734,7 +734,8 @@ class PackageModel extends Model
 				$string = ucfirst(strtolower($string));
 
 				if ($route->drop_off == 'hotel' && !is_null($next)) {
-					$from = $next->accomo()->name;
+					$from = $route->accomo()->name;
+					$to = $next->accomo()->name;
 				}
 
 				$data[] = $string.' from '.$from.' to '.$to.'.'; 
