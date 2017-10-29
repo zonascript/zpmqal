@@ -724,24 +724,20 @@ class PackageModel extends Model
 
 			if ($route->is_drop_off) {
 				$string = $route->drop_off_mode.' transfer';
-				$from = $route->mode;
-				$to = $route->drop_off;
 
+				$from = ($route->checkMode('hotel') && $route->drop_off != 'hotel')
+							? $route->accomo()->name
+							: $route->mode;
 
+				$to = ($route->drop_off == 'hotel' && !is_null($next))
+						? $next->accomo()->name
+						: $route->drop_off;
 				
 				if ($route->drop_off_mode == 'selfdrive') {
 					$string = 'Self drive';
 				}
 
 				$string = ucfirst(strtolower($string));
-
-				if ($route->checkMode('hotel') && $route->drop_off != 'hotel') {
-					$from = $route->accomo()->name;
-				}
-					
-				if ($route->drop_off == 'hotel' && !is_null($next)) {
-					$to = $next->accomo()->name;
-				}
 
 				$data[] = $string.' from '.$from.' to '.$to.'.'; 
 			}
