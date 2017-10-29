@@ -216,6 +216,14 @@ class ActivitiesController extends Controller
 	}
 
 
+	public function destroyImage($id, $iid)
+	{
+		ImageController::call()->destroy($iid);
+	
+		return redirect()->back();
+	}
+
+
 	public function deactivate($id)
 	{
 		$activity = $this->model()->findOrFail($id);

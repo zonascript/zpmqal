@@ -83,19 +83,30 @@ class AgentActivityModel extends Model
 
 	public function images()
 	{
-		return $this->morphMany('App\Models\CommonApp\ImageModel', 'connectable');
+		$result = $this->morphMany(
+									'App\Models\CommonApp\ImageModel', 
+									'connectable'
+								);
+
+		return $result->where('is_active', 1);
 	}
 
 
 	public function destination()
 	{
-		return $this->belongsTo('App\Models\CommonApp\DestinationModel', 'destination_code');
+		return $this->belongsTo(
+								'App\Models\CommonApp\DestinationModel', 
+								'destination_code'
+							);
 	}
 
 
 	public function status()
 	{
-		return $this->belongsTo('App\Models\CommonApp\IndicationModel', 'is_active');
+		return $this->belongsTo(
+								'App\Models\CommonApp\IndicationModel', 
+								'is_active'
+							);
 	}
 
 

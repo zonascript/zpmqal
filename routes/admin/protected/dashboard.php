@@ -38,6 +38,7 @@
 			Route::get('activity/location', 'ActivitiesController@showLocation');
 
 			Route::group(['prefix' => 'activity'], function(){
+				Route::post('{id}/delete/{iid}', 'ActivitiesController@destroyImage');
 				Route::post('store_ranks', 'ActivitiesController@storeOrUpdateRanks');
 				Route::get('store/{id?}', 'ActivitiesController@createOrEdit');
 				Route::post('store', 'ActivitiesController@storeOrUpdate');
