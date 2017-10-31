@@ -36,16 +36,9 @@ class PackageModel extends Model
 
 	public function setTokenAttribute()
 	{
-		$this->attributes['token'] = new_token();
-	}
-
-	public function getTokenAttribute($value)
-	{
-		if (is_null($value)) {
-			$this->setTokenAttribute();
-			$this->save(); 
+		if (is_null($this->token)) {
+			$this->attributes['token'] = new_token();
 		}
-		return $value;
 	}
 
 	public function getUidAttribute()
@@ -257,12 +250,20 @@ class PackageModel extends Model
 
 	public function roomGuest()
 	{
-		return $this->hasOne('App\Models\B2bApp\RoomGuestModel', 'package_id')->with('childAge');
+		return $this->hasOne(
+											'App\Models\B2bApp\RoomGuestModel', 
+											'package_id'
+										)
+									->with('childAge');
 	}
 
 	public function roomGuests()
 	{
-		return $this->hasMany('App\Models\B2bApp\RoomGuestModel', 'package_id')->with('childAge');
+		return $this->hasMany(
+											'App\Models\B2bApp\RoomGuestModel', 
+											'package_id'
+										)
+									->with('childAge');
 	}
 
 
@@ -296,6 +297,29 @@ class PackageModel extends Model
 											PackageNoteModel::class,
 											'package_note_id'
 										);
+	}
+
+
+	public function routeRoomMap()
+	{
+		return $this->hasOne(
+												'App\Models\B2bApp\RouteRoomMapModel', 
+												'package_id'
+											);
+	}
+
+
+
+	public function newOrOldRouteRoomMap($isDefault = 0)
+	{
+		$routeRoomMap = $this->routeRoomMap;
+		if (is_null($routeRoomMap)) {
+			$routeRoomMap = new RouteRoomMapModel;
+			$routeRoomMap->package_id = $this->id;
+			$routeRoomMap->is_default = $isDefault;
+			$routeRoomMap->save();
+		}
+		return $routeRoomMap;
 	}
 
 
@@ -404,6 +428,27 @@ class PackageModel extends Model
 
 		return $this; 
 	}
+
+
+	public function roomGuestsOrDefault()
+	{
+		return (isset($this->routeRoomMap->roomGuests) 
+				&& $this->routeRoomMap->roomGuests
+									->pluck('guest_details')->count())
+
+				 ? $this->routeRoomMap->roomGuests
+									->pluck('guest_details')
+
+				 : collect([[
+				 		"id"			 => null,
+						"adults"	 => 2, 
+						"kids" 		 => 0,
+						"kids_age" => collect([])
+					]]);
+	}
+
+
+
 
 	/*
 	| this function is to get all hotels which is belongs to this package
@@ -792,12 +837,16 @@ class PackageModel extends Model
 		return $result;
 	}
 
+	protected static function boot()
+  {
+    parent::boot();
 
-	public function __construct(array $attributes = [])
-	{
-		$this->setTokenAttribute();
-		parent::__construct($attributes);
-	}
+    static::created(function($package){
+    	$package->newOrOldRouteRoomMap(1);
+    	$package->token = ''; // setting token
+    	$package->save();
+    });
+  }
 
 }
 

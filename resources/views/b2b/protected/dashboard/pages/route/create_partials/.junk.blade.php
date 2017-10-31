@@ -34,4 +34,30 @@
 		/*}*/
 	});
 
+		$('#btn-addDestination').click(function(){
+		if (postRoute()) {
+			saveDate();
+			savePackageTitle();
+			savePackageReq();
+			/*var totalDestination = $('.destinationClass').children().length;*/
+			var destinationListHtml = $('#destinationListHtml').html();
+			var data_destination_count = addDestCount();
+			var destinationId = 'destination'+data_destination_count;
+			var inputDestinationId = 'inputDestination'+data_destination_count;
+
+			destinationListHtml = destinationListHtml.replace('data_destination_count', data_destination_count);
+			destinationListHtml = destinationListHtml.replace('selectNight_temp', 'selectNight');
+			destinationListHtml = destinationListHtml.replace('destinationList_temp', 'destinationList');
+			destinationListHtml = destinationListHtml.replace('destination_count', destinationId);
+			destinationListHtml = destinationListHtml.replace('inputDestination_count', inputDestinationId);
+			
+			/*$('.destinationClass').append(destinationListHtml);*/
+			$(this).closest('.destinationList').after(destinationListHtml);
+			
+			/*if(totalDestination == 1){
+				$('#btn-removeDestination, #pipeSaprDestination').show();
+			}*/
+		}
+	});
+
 </script>

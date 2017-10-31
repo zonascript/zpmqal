@@ -1,5 +1,12 @@
 <script>
-	var windata = { is_date_saved : {{ $package->is_start_date_set }} }
+	var windata = { 
+			is_date_saved : {{ $package->is_start_date_set }},
+			is_guest_detail_changed : 1,
+			no_of_room : {{ $package->roomGuestsOrDefault()->count() }},
+			guest_details : {!! $package->roomGuestsOrDefault()->toJson() !!},
+			remove_rooms : [],
+			route_order : []
+		}
 
 	{{-- bootstrap-daterangepicker --}}
 
@@ -20,6 +27,8 @@
 			var time = $(this).val();
 			initTimePicker(this, {now: time});
 		});
+
+		reOrderRoute();
 
 	});
 
@@ -69,12 +78,10 @@
 					action: function(){
 						$('#show_req').text($('#confirm_package_req').val());
 						$('#show_req').attr('data-saved', 0);
-						checkStartDate();
 						clickTitlePopUp();
 					}
 				},
 				cancel: function () {
-					checkStartDate();
 					clickTitlePopUp();
 				}
 			}
@@ -98,9 +105,11 @@
 					action: function(){
 						$('#package_title').text($('#confirm_package_title').val());
 						$('#package_title').attr('data-saved', 0);
+						$('#startDate').click();
 					}
 				},
 				cancel: function () {
+					$('#startDate').click();
 				}
 			}
 		});
@@ -117,13 +126,15 @@
 		}
 		
 		$(parant).remove();
+		reOrderRoute();
 	});
 
 
 
 	{{-- Adding or Removing-Destination --}}
 
-	$('#btn-addDestination').click(function(){
+
+	$(document).on('click', '.btn-add-route', function(){
 		if (postRoute()) {
 			saveDate();
 			savePackageTitle();
@@ -140,14 +151,10 @@
 			destinationListHtml = destinationListHtml.replace('destination_count', destinationId);
 			destinationListHtml = destinationListHtml.replace('inputDestination_count', inputDestinationId);
 			
-			$('.destinationClass').append(destinationListHtml);
-			
-			/*if(totalDestination == 1){
-				$('#btn-removeDestination, #pipeSaprDestination').show();
-			}*/
+			$(this).closest('.destinationList').after(destinationListHtml);
+			reOrderRoute();
 		}
 	});
-
 
 	{{-- /Adding or Removing-Destination --}}
 
@@ -237,18 +244,6 @@
 	});
 
 	{{-- /form submition --}}
-
-
-	$(document).on('click', '.btn-child', function () {
-		var id = $(this).attr('field');
-		var val = $(id).val();
-		childAgeElem(this, val, 4);
-	});
-
-	$(document).on('click change', '.btn-number, .age-elem', function () {
-		addInactiveClass(this);
-	});
-
 
 </script>
 

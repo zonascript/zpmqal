@@ -15,7 +15,7 @@
 	{{-- Destination Html --}}
 
 	<div id="destinationListHtml">
-		<div id="destination_count" class="col-md-12 col-sm-12 col-xs-12 form-group-self destinationList_temp no-rid" data-destination="data_destination_count" data-rid="">
+		<div id="destination_count" class="col-md-12 col-sm-12 col-xs-12 form-group-self destinationList_temp no-rid" data-destination="data_destination_count" data-rid="" data-order="">
 			<div class="col-md-2 col-sm-2 col-xs-12">
 				<select class="form-control nopadding p-left-10 mode inctv" required="" data-parsley-type="integer" data-parsley-gt="0">
 					<option value="" selected>Select Mode</option>
@@ -32,9 +32,18 @@
 				<div class="row location-input-div"></div>
 			</div>
 			<div class="col-md-1 col-sm-1 col-xs-12 text-center">
-				<a class="rmv-destlist cursor-pointer">
-					<i class="fa fa-times-circle font-size-30 m-top-2"></i>
-				</a>
+				<div class="row">
+					<div class="col-md-6 col-sm-6 col-xs-6 text-center">
+						<a class="rmv-destlist cursor-pointer">
+							<i class="fa fa-times-circle font-size-30 m-top-2"></i>
+						</a>
+					</div>
+					<div class="col-md-6 col-sm-6 col-xs-6 text-center">
+						<a class="btn-add-route green cursor-pointer">
+							<i class="fa fa-plus-square font-size-30 m-top-2"></i>
+						</a>
+					</div>
+				</div>
 			</div>
 
 				{{-- <div class="col-md-4 col-sm-4 col-xs-12">

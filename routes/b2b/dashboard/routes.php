@@ -13,7 +13,9 @@
 		Route::post('{rid}/d', 'RouteController@deleteRow');
 		Route::post('{pToken}/r', 'RouteController@storeRow');
 		Route::post('{pToken}/u', 'RouteController@packageUpdate');
+		Route::post('{pToken}/ro', 'RouteController@routeOrder');
 		Route::post('{pToken}/ua', 'RouteController@updatePackageAttibutes');
+		Route::post('{pToken}/cur', 'RouteController@createOrUpdateRoom');
 		Route::post('{pToken}/room', 'RouteController@storeRoom');
 		Route::post('{gid}/removeroom', 'RouteController@removeRoom');
 

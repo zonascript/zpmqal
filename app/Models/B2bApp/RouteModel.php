@@ -119,6 +119,7 @@ class RouteModel extends Model
 		return $this->checkMode('flight') ? false : true;
 	}
 
+
 	public function getStartDateAttribute($value)
 	{
 		return is_null($value) ? '0000-00-00' :$value;
@@ -260,6 +261,30 @@ class RouteModel extends Model
 	public function routes()
 	{
 		return $this->hasMany(RouteModel::class, 'package_id', 'package_id');
+	}
+
+
+	public function roomGuests()
+	{
+		return $this->hasMany(
+											'App\Models\B2bApp\RoomGuestModel',
+											'route_room_map_id', 'route_room_map_id'
+										);
+
+		/*return $this->hasManyThrough(
+											'App\Models\B2bApp\RoomGuestModel',
+											'App\Models\B2bApp\RouteRoomMapModel',
+											'id', 'route_room_map_id', 'route_room_map_id', 'id'
+										);*/
+	}
+
+
+	public function routeRoomMap()
+	{
+		return $this->belongsTo(
+											'App\Models\B2bApp\RouteRoomMapModel',
+											'route_room_map_id'
+										);
 	}
 
 

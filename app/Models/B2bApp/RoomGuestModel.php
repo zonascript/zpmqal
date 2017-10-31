@@ -7,7 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class RoomGuestModel extends Model
 {
 	protected $table = 'room_guests';
-	protected $hidden = ['created_at', 'updated_at'];
+	protected $hidden = ['created_at', 'updated_at', 'guest_details'];
+
+	public function getGuestDetailsAttribute()
+	{
+		return collect([
+				'id' 			 => $this->id,
+				'adults' 	 => $this->no_of_adult,
+				'kids' 		 => $this->childAge->pluck('details')->count(),
+				'kids_age' => $this->childAge->pluck('details')
+			]);
+	}
 
 	public function childAge()
 	{
@@ -21,6 +31,18 @@ class RoomGuestModel extends Model
 	}
 
 
+	public function routes()
+	{
+		return $this->hasMany(
+											'App\Models\B2bApp\RouteModel',
+											'route_room_map_id', 'route_room_map_id'
+										);
+	}
+
+
+
+
+
 	public function scopeByUser($query)
 	{
 		return $query->whereHas('package', function ($q){
@@ -31,11 +53,7 @@ class RoomGuestModel extends Model
 
 	public function childAgeIds()
 	{
-		$ids = [];
-		foreach ($this->childAge as $value) {
-			$ids[] = ['id' => $value->id, 'age' => $value->age];
-		}
-		return $ids;
+		return $this->childAge->pluck('details');
 	}
 
 

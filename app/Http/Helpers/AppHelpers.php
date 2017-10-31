@@ -115,6 +115,17 @@ function getPax($roomGuests){
 }
 
 
+if (!function_exists('temp_guest_details')) {
+	function temp_guest_details(){
+		return [
+						"adults" => 2, 
+						"kids" => 0,
+						"kids_age" => []
+					];
+	}
+}
+
+
 function getPackageId($id = 0){
 	return 'FGF'.str_pad($id, 5, '0', STR_PAD_LEFT);
 }

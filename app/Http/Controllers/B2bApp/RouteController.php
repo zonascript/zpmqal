@@ -8,6 +8,8 @@ use App\Http\Controllers\B2bApp\ClientController;
 use App\Http\Controllers\B2bApp\PackageController;
 use App\Http\Controllers\B2bApp\RoomGuestsController;
 use App\Models\B2bApp\PackageActivityModel;
+use App\Models\B2bApp\RoomGuestModel;
+use App\Models\B2bApp\ChildAgeModel;
 use App\Models\B2bApp\RouteModel;
 use App\Traits\CallTrait;
 
@@ -125,7 +127,13 @@ class RouteController extends Controller
 		$package = PackageController::call()->model()
 							 ->byUser()->byToken($pToken)->first();
 
+		$mappingId = isset($route->route_room_map_id) 
+							&& $route->route_room_map_id != 0
+							 ? $route->route_room_map_id
+							 : $package->newOrOldRouteRoomMap()->id;
+
 		$route->package_id = $package->id;
+		$route->route_room_map_id = $mappingId;
 		$route->mode = $request->mode;
 		$route->origin = isset($request->origin) ? $request->origin : '';
 		$route->origin_code = isset($request->origin_code) 
@@ -184,6 +192,7 @@ class RouteController extends Controller
 		$childAge = is_array($request->children_age) 
 							? $request->children_age
 							: [];
+
 		$room = new Request([
 				'package_id' => $package->id,
 				'rooms' => $request->rooms,
@@ -203,6 +212,62 @@ class RouteController extends Controller
 	}
 
 
+	public function createOrUpdateRoom($pToken, Request $request)
+	{
+		$guestDetails = $request->get('rooms', []);
+		$removeRooms = $request->get('remove_rooms', []);
+		$package = PackageController::call()->model()
+							 ->byUser()->byToken($pToken)
+							   ->firstOrFail();
+
+		$mapModel = $package->newOrOldRouteRoomMap();
+		// removing rooms form database
+		foreach ($removeRooms as $roomGuestId) {
+			$roomGuest = $mapModel->roomGuests
+									->where('id', $roomGuestId)->first();
+
+			if (!is_null($roomGuest)) {
+				$roomGuest->childAge()->delete();
+				$roomGuest->delete();
+				$mapModel->refresh();
+			}
+		}
+
+		foreach ($guestDetails as $guestDetail) {
+			$guestDetail = collect($guestDetail);
+			$roomGuest = $mapModel->roomGuests
+									->where('id', $guestDetail->pull('id'))
+										->first();
+
+			if (is_null($roomGuest)) $roomGuest = new RoomGuestModel;
+
+			$roomGuest->package_id = $package->id;
+			$roomGuest->route_room_map_id = $mapModel->id;
+			$roomGuest->no_of_adult = $guestDetail->get('adults', 2);
+			$roomGuest->save();
+
+			foreach ($guestDetail->get('kids_age', []) as $kid) {
+				$kid = collect($kid);
+				$childAge = $roomGuest->childAge
+										->where('id', $kid->pull('id'))
+											->first();
+
+				if (is_null($childAge)) $childAge = new ChildAgeModel;
+				$childAge->room_guest_id = $roomGuest->id;
+				$childAge->age = $kid->get('age', 2);
+				$childAge->is_bed = $kid->get('is_bed', 0);
+				$childAge->save();
+			}
+		}
+		$mapModel->refresh();
+
+		$result = $mapModel->roomGuests
+							->pluck('guest_details')->toArray();
+
+		return json_encode(['status' => 200, 'response' => $result]);
+	}
+
+
 	public function removeRoom($id)
 	{
 		RoomGuestsController::call()->destroy($id);
@@ -212,6 +277,30 @@ class RouteController extends Controller
 							]);
 	}
 
+
+
+	public function routeOrder($pToken, Request $request)
+	{
+		$package = PackageController::call()->model()
+							 ->byUser()->byToken($pToken)
+							   ->firstOrFail();
+
+		if (isset($request->order) && is_array($request->order)) {
+			foreach ($request->order as $value) {
+				if (isset($value['rid']) && isset($value['order'])) {
+					$route = $package->routes
+									->where('id', $value['rid'])
+										->first();
+					if (!is_null($route)) {
+						$route->order = $value['order'];
+						$route->save();
+					}
+				}
+			}
+		}
+
+		return json_encode(['status' => 200, 'response' => 'done']);
+	}
 
 
 	public function inactiveByPackageId($pid)

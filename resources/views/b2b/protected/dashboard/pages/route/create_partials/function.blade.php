@@ -363,7 +363,7 @@
 		var count = parseInt($('#btn-addRoom').attr('data-count'), 10);
 		count++;
 		$('#btn-addRoom').attr('data-count', count);
-		var html = '{!! myView($viewPath.'.create_partials.room_temp') !!}';
+		var html = '{!! myView($viewPath.'.create_partials.rooms.room_temp') !!}';
 		$('#room').append(html);
 	}
 
@@ -423,32 +423,39 @@
 		}
 	}
 
-
-	function childAgeElem(thisObj, count, max) {
-		var childAgeHtml = $('#age_temp').html();
-		var roomGuests = $(thisObj).closest('.room-guest');
-		var childAgeBox = $(roomGuests).find('.age');
-		if (childAgeBox.children().length <= max) {
-			if ((count-1) < childAgeBox.children().length) {
-				childAgeBox.children().eq(count).remove();
-			}
-			else{
-				$(childAgeBox).append(childAgeHtml);
-			}
-		}
-	}
-
-
-	function addInactiveClass(thisObj) {
-		$(thisObj).closest('.room-guest').addClass('inctv');
-		return false;
-	}
-
 	function setAgeId(thisObj, data) {
 		$(thisObj).find('.age-elem').each(function (i, v) {
 			var value = data[i];
 			$(this).attr('data-id', value.id);
 		});
 		return false;
+	}
+
+
+	function reOrderRoute() {
+		var route_order = [];
+		$('.destinationList').each(function (i, v) {
+			var order = i+1;
+			var rid = $(v).attr('data-rid');
+			$(v).attr('data-order', order);
+			route_order.push({"order" : order, "rid" : rid});
+		});
+
+		windata.route_order = route_order;
+		syncRouteOrder();
+	}
+
+
+	function syncRouteOrder() {
+		var data = {"_token" : csrf_token, "order" : windata.route_order };
+		$.ajax({
+			url : "{{url('dashboard/package/route/'.$package->token.'/ro')}}",
+			type : "post",
+			dataType : 'JSON',
+			data : data,
+			success : function (response) {
+				// body...
+			}
+		})
 	}
 </script>

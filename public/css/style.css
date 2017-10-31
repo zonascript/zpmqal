@@ -172,7 +172,7 @@
 
 .panel_toolbox1{ min-width: 10px}
 
-.black{ color: #000; }
+.black{ color: #000 !important;}
 
 .bg-color-gray{ background-color: #ebebeb !important; }
 .bg-color-white{ background-color: #ffffff !important; }
@@ -1152,4 +1152,8 @@ body {font-family:Helvetica,Arial,sans-serif;}
     border-right:1px solid grey;
     margin-right:20px;
     padding-right:20px;
+}
+
+.jconfirm-scrollpane{
+	overflow: unset !important;
 }
