@@ -789,8 +789,8 @@
                     </div>
                     <div class="col-md-4">
                         <h4>Have Questions?</h4>
-                        <h4 class="text-color">+1-202-555-0173</h4>
-                        <h4><a href="{{ url('traveler') }}/#" class="text-color">support@traveler.com</a></h4>
+                        <h4 class="text-color">+91-11-45611178</h4>
+                        <h4><a href="{{ url('traveler') }}/#" class="text-color">support@flygoldfinch.com</a></h4>
                         <p>24/7 Dedicated Customer Support</p>
                     </div>
 

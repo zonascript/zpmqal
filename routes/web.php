@@ -34,6 +34,11 @@ Route::group(['domain' => env('HOTELS_DOMAIN')], function () {
 });
 
 
+Route::group(['domain' => 'test.hotels.flygoldfinch.com'], function () {
+	include('traveler.php');
+});
+
+
 if (env('IS_LOCALHOST')) {
 	include('mylocal/web.php');
 }
