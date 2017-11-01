@@ -29,9 +29,9 @@ Route::group(['domain' => env('ITINERARY_DOMAIN')], function () {
 	include('itinerary.php');
 });
 
-Route::group(['domain' => env('HOTELS_DOMAIN')], function () {
-	include('traveler.php');
-});
+// Route::group(['domain' => env('HOTELS_DOMAIN')], function () {
+// 	include('traveler.php');
+// });
 
 
 Route::group(['domain' => 'test.hotels.flygoldfinch.com'], function () {
