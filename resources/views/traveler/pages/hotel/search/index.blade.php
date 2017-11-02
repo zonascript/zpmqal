@@ -21,21 +21,28 @@
 				<div class="nav-drop booking-sort">
           <h5 class="booking-sort-title"><a href="#">Sort: Aviability<i class="fa fa-angle-down"></i><i class="fa fa-angle-up"></i></a></h5>
           <ul class="nav-drop-menu">
-            <li><a href="#">Price (low to high)</a>
-            </li>
-            <li><a href="#">Price (hight to low)</a>
-            </li>
-            <li><a href="#">Ranking</a>
-            </li>
-            <li><a href="#">Distance</a>
-            </li>
-            <li><a href="#">Number of Reviews</a>
-            </li>
+            <li><a href="#">Price (low to high)</a></li>
+            <li><a href="#">Price (hight to low)</a></li>
+            <li><a href="#">Ranking</a></li>
+            <li><a href="#">Distance</a></li>
+            <li><a href="#">Number of Reviews</a></li>
           </ul>
       	</div>
-				<ul id="app" class="booking-list">
-					@include('traveler.pages.hotel.search.item')
-				</ul>
+      	<div id="app" v-cloak>
+					<ul v-if="is_got_api_rep && hotels.length > 0" class="booking-list">
+						@include('traveler.pages.hotel.search.item')
+					</ul>
+
+					<ul v-if="is_got_api_rep && hotels.length == 0" class="booking-list">
+						<li><h2>Result not found.</h2></li>
+					</ul>
+					
+					<ul v-else class="booking-list">
+						<li class="text-center">
+							<i class="fa fa-refresh fa-spin m-top-100 font-size-100"></i>
+						</li>
+					</ul>
+      	</div>
 				{{-- @include('traveler.pages.hotel.search.pagination') --}}
 			</div>
 		</div>
@@ -55,6 +62,7 @@
       
       data: {
          search: '',
+         is_got_api_rep : 0,
          id: '',
          hotels: []
       },
@@ -65,6 +73,7 @@
 			  .then(function (response) {
 			    // console.log(response);
 		  		self.hotels = response.data.hotels
+		  		self.is_got_api_rep = 1
 		  		self.id = response.data.id
 		  		self.$nextTick(function(){
 			  		initNiceScroll();
